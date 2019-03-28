@@ -1,0 +1,46 @@
+/*
+ *This code represents the use case of a user selecting a game to play
+ * The game data is loaded via extreme and the data module
+ * The game engine is created with the necessary data
+ * The game loop begins and each time it runs it updates the game engine and updates the display
+ */
+
+
+public Class Runner{
+        private String myGameToLoad;
+        private DataManager myGmeLoader;
+        private Engine myGameEngine;
+        private List<GameObject> myGameObjects;
+        private Timeline myAnimation;
+        private static final int FRAMES_PER_SECOND = 60;
+        private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+        private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+
+        public Runner(String filePath){
+            myGameToLoad = filePath;
+            myGameLoader = new DataManager();
+            myGameObjects = myGameLoader.loadGame(myGameToLoad);
+            setUpGame(myGameObjects);
+        }
+
+        private void setUpGame(List<GameObject> myObjects){
+            myGameEngine = new Engine(myObjects);
+            makeAnimation();
+        }
+
+        private void step(double elapsedTime){
+            myGameEngine.updateState();
+            for(GameObject object : myGameObjects){
+                object.display;
+            }
+        }
+
+        private void makeAnimtation(){
+            var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
+            myAnimation = new Timeline();
+            myAnimation.setCycleCount(Timeline.INDEFINITE);
+            myAnimation.getKeyFrames().add(frame);
+            myAnimation.play();
+        }
+
+}
