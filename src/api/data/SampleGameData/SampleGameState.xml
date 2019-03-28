@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file will contain any necessary information needed to reload a game that a user paused and exited out of and
+ be updated whenever the user has exited the game. A game's default state xml file, at a restart or prior to its first
+ play will be at checkPoint 0, full time left, a current score of 0, and the maximum lives left-->
+<data media="State">
+    <title>SampleGame</title>
+    <checkPoint>1</checkPoint>
+    <timeLeft>5000</timeLeft>
+    <currentScore>200</currentScore>
+    <livesLeft>2</livesLeft>
+</data>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<data media="style">
+    <title>SampleGame</title>
+    <GameAggregate>
+        <GameObject>
+            <Name>Mario</Name>
+            <CollisionWith>Goomba</CollisionWith>
+            <CollisionType>Side</CollisionType>
+            <CollisionResponse>DecrementLife</CollisionResponse>
+            <CollisionWith>Goomba</CollisionWith>
+            <CollisionType>Below</CollisionType>
+            <CollisionResponse>increasePoints</CollisionResponse>
+        </GameObject>
+        <GameObject>
+            <Name>Goomba</Name>
+            <CollisionWith>Mario</CollisionWith>
+            <CollisionType>Side</CollisionType>
+            <CollisionResponse>TurnAround</CollisionResponse>
+            <CollisionWith>Mario</CollisionWith>
+            <CollisionType>Above</CollisionType>
+            <CollisionResponse>Die</CollisionResponse>
+        </GameObject>
+        <GameObject>
+            <Name>Block</Name>
+            <CollisionWith>Mario</CollisionWith>
+            <CollisionType>Above</CollisionType>
+            <CollisionResponse>Die</CollisionResponse>
+        </GameObject>
+    </GameAggregate>
+</data>

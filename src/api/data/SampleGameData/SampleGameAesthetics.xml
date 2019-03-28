@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This is information only the runner will need to know, as no logic will be necessary from the engine in regards
+to theses particular display features -->
+<data media="Aesthetics">
+    <title>SampleGame</title>
+    <timer>10000</timer>
+    <backgroundImage>happyField.jpg</backgroundImage>
+    <song>dopeBeatz.mp3</song>
+</data>

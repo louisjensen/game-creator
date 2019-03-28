@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- These xml files will be used by the game center to display basic information about a game, including an associated
+image, their top score, and  their current checkpoint-->
+<data media="Display">
+    <title>SampleGame</title>
+    <imageName>SampleGame.jpg</imageName>
+    <playedYet>1</playedYet>
+    <highScore>520</highScore>
+    <edges>basic</edges>
+    <numberOfCheckpoints>2</numberOfCheckpoints>
+    <currentCheckpoint>1</currentCheckpoint>
+</data>
+
