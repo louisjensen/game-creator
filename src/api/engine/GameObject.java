@@ -1,4 +1,4 @@
 package api.engine;
 
-public class GameObject {
+public abstract class GameObject {
 }

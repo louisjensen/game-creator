@@ -1,4 +1,7 @@
 package api.engine;
 
-public class VisualState {
+import java.util.Collection;
+
+public abstract class VisualState {
+    abstract Collection<GameObject> getGameObjects();
 }
