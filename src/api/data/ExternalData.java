@@ -34,4 +34,10 @@ public interface ExternalData {
      * resume playing the game
      */
     void saveGame(String gameName);
+    /*
+     * This method will create a folder when a user starts building a new game, and populate it with the xml files, along
+     * with their basic outlines, that it will absolutely need for a game. This folder is where authoring will store information
+     * from the user's design inputs so that it can be loaded across any platforms that would need access to data
+     */
+    void createFolder(String folderName);
 }
