@@ -1,0 +1,90 @@
+//This is example code used to display how on a high level the authoring environment
+//will go about saving the game the user creates
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+/*
+This is a surrogate class for the entire Authoring module. It is likely that this will reside in one
+of the higher up classes in the hierarchy
+ */
+public class AuthoringMain {
+    //instance of Data used to save and load games
+    private Data myData;
+
+    //this is a list of every GameObject created by the author
+    private List<GameObject> myGameObjects;
+
+    //name of the Game input by the player
+    private String myName;
+
+    AuthoringMain() {
+        myData = new Data();
+        myGameObjects = new ArrayList<>();
+
+        //This will be gotten through user input into a textfield at the opening
+        //of a new game authoring environment
+        myName = "Game";
+
+        /*
+
+
+        Main part of initializing authoring and creating the authoring environment
+        allowing for user input etc.
+
+
+         */
+
+        //This method will be called on the event of the user selecting "File" and then "Save"
+        saveGame();
+    }
+
+    //This will be a method that will call the necessary save methods on the
+    //Authoring's instance of Data to save the game
+    private void saveGame() {
+        myData.createFolder(myName);
+        for(int k = 0; k < myGameObjects.size(); k++){
+            myData.saveGame(myName, myGameObjects.get(k));
+        }
+    }
+
+    /*
+    This is a class that will be abstract and passed up through exporting from the
+    Engine to the Runner, which will add any necessary variables specific to the Runner and
+    then that new abstract class will be passed to Authoring. In Authoring, we will
+    create the concrete implementation below. Every object will be a GameObject.
+     */
+    class GameObject {
+
+    }
+
+    /*
+    This is a module that will have the following methods available through its exported API.
+    It will also need to export a concrete class that we can create an instance of and then use
+     */
+    class Data {
+
+        /*
+         * In the Data API
+         * This method will create a folder when a user starts building a new game, and populate it with the xml files, along
+         * with their basic outlines, that it will absolutely need for a game. This folder is where authoring will store information
+         * from the user's design inputs so that it can be loaded across any platforms that would need access to data
+         */
+        void createFolder(String folderName) {
+        }
+
+        /*
+         * In the Data API
+         * This method will save the current state of the game (if the user has reached a checkpoint, it will store the current
+         * score, time, hero lives, hero position, etc. so that the user may continue wherever they left off if they choose to
+         * resume playing the game
+         *
+         * GameName is the name of the game and the folder to be saved to
+         * saveables is a list of objects to be serialized and saved to the current folder
+         */
+        void saveGame(String gameName, Object o) {
+        }
+
+    }
+}
