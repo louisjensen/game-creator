@@ -41,7 +41,7 @@ The game runner will be different for each game as it will show the game that th
 
 
 ## Design Details
-*This section describes each module introduced in the Overview in detail (as well as any other sub-modules that may be needed but are not significant to include in a high-level description of the program). Describe how each module handles specific features given in the assignment specification, what resources it might use, how it collaborates with other modules, and how each could be extended to include additional requirements (from the assignment specification or discussed by your team). Look for opportunities to share APIs between your sub-teams (e.g., authoring and player front ends or authoring and engine back ends) that may themselves be separate modules (like Java and OpenJFX are composed of several modules). Note, each sub-team should have its own external and internal APIs. Finally, justify the decision to create each module with respect to the design's key goals, principles, and abstractions.*
+*This section describes each module introduced in the Overview in detail (as well as any other sub-modules that may be needed but are not significant to include in a high-level description of the program). Describe how each module handles specific features given in the assignment specification, what resources it might use, how it collaborates with other modules, and how each could be extended to include additional requirements (from the assignment specification or discussed by your team). Look for opportunities to share APIs between your sub-teams (e.g., authoring and player front ends or authoring and engine back ends) that may themselves be separate modules (like Java and OpenJFX are composed of several modules). Note, each sub-team should have its own authoring.center.data.engine.runner.launcher.external and authoring.center.data.engine.runner.launcher.internal APIs. Finally, justify the decision to create each module with respect to the design's key goals, principles, and abstractions.*
 
 ### Modules
 * **Authoring**
@@ -137,7 +137,7 @@ Describe three example games from your genre in detail that differ significantly
 *Overview*
 * Some vertical and some horizontal scrolling
 * Checkpoints on each screen
-* Main mechanics that differ from Super Mario Bros. and VVVVVV are wall-clinging and dashing
+* launcher.Main mechanics that differ from Super Mario Bros. and VVVVVV are wall-clinging and dashing
 
 *Operation*
 *For the sake of these examples, "player_character" and "wall" are established object types defined by the user in the authoring environment.*
