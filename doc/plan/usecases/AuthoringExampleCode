@@ -30,7 +30,7 @@ public class AuthoringMain {
         /*
 
 
-        Main part of initializing authoring and creating the authoring environment
+        launcher.Main part of initializing authoring and creating the authoring environment
         allowing for user input etc.
 
 
