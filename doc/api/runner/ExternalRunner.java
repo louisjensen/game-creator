@@ -7,7 +7,7 @@ public interface ExternalRunner {
      * are working on and see if they wish to make further edits, also avialable to game
      * center to run whatever game the user selects
      * @param filePath path to files of the game that has been created to play
-     * @throws InvalidFileException thrown if the files given to run do not create a valid game
+     * @throws Exception thrown if the files given to run do not create a valid game
      */
-    void run(String filePath) throws InvalidFileException;
+    void run(String filePath) throws Exception;
 }
