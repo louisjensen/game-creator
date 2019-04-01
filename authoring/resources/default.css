@@ -17,6 +17,11 @@
     -fx-text-alignment: center;
 }
 
+.prop-label {
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
+}
+
 .combo-box {
 
 }
