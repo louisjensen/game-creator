@@ -180,4 +180,8 @@ public class AssetManager extends Stage {
         }
 
     }
+
+    private void handleClose(){
+        this.close();
+    }
 }
