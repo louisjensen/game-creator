@@ -1,7 +1,7 @@
 package ui.manager;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -9,10 +9,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ui.TestEntity;
@@ -29,6 +26,13 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+/**
+ * @author Carrie Hunner
+ * This Class creates an AssetManger Stage
+ * by calling showAndReturn(), the stage is displayed and
+ * will return a String of the filename of the user's
+ * selected asset
+ */
 public class AssetManager extends Stage {
 
     private TestEntity myEntity;
@@ -52,11 +56,16 @@ public class AssetManager extends Stage {
     private static final int STAGE_WIDTH = 400;
     private static final int STAGE_HEIGHT = 300;
     private static final int IMAGE_SCROLLPANE_HEIGHT = 130;
+    private static final int MAX_NUM_COLS = 4;
+    private static final int IMAGE_SUBPANE_SIZE = 60;
     private static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
+
+    private int myGridCellSize;
 
     public AssetManager(TestEntity entity) {
         myEntity = entity;
 
+        calcSizes();
         initializeVariables();
         initializeStage();
         fillImageExtensionSet();
@@ -76,6 +85,10 @@ public class AssetManager extends Stage {
         myBorderPane.setCenter(vbox);
     }
 
+    private void calcSizes() {
+
+    }
+
     private HBox createButtonPane() {
         String buttonString = myResources.getString(BUTTON_INFO);
         String[] buttonInfo = buttonString.split(",");
@@ -88,24 +101,35 @@ public class AssetManager extends Stage {
     }
 
     private void drawImageScrollPane() {
-        HBox hbox = new HBox();
-        //hbox.setPadding(INSETS);
-        hbox.setSpacing(SPACING);
+        GridPane gridPane = new GridPane();
+        gridPane.setPadding(INSETS);
+        ColumnConstraints colRestraint = new ColumnConstraints(SPACING + IMAGE_SUBPANE_SIZE);
+        gridPane.getColumnConstraints().add(colRestraint);
+        RowConstraints rowRestraint = new RowConstraints(SPACING + IMAGE_SUBPANE_SIZE);
+        gridPane.getRowConstraints().add(rowRestraint);
+        gridPane.setAlignment(Pos.CENTER);
         myImagePane.setPadding(INSETS);
         myImagePane.setFitToHeight(true);
-        myImagePane.setContent(hbox);
+        myImagePane.setContent(gridPane);
         File assetFolder = new File(ASSET_IMAGE_FOLDER_PATH);
+        int row = 0;
+        int col = 0;
         for(File temp : assetFolder.listFiles()){
             try {
                 String extension = temp.getName().split("\\.")[1];
                 String lowerCaseExtension = extension.toLowerCase();
                 if(myImageExtensions.contains(lowerCaseExtension)){
                     ImageView imageView = createImageView(temp);
-                    AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
+                    AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView, IMAGE_SUBPANE_SIZE);
                     subPane.setOnMouseClicked(mouseEvent -> {
                         mySelectedImage = temp.getName();
                     });
-                    hbox.getChildren().add(subPane);
+                    if(col > MAX_NUM_COLS){
+                        col = 0;
+                        row++;
+                    }
+                    gridPane.add(subPane, col, row);
+                    col++;
                 }
             }
             catch (IndexOutOfBoundsException e){
@@ -191,10 +215,13 @@ public class AssetManager extends Stage {
         this.close();
     }
 
-
-
-    public String showAndReturn(String currentImageName){
-        mySelectedImage = currentImageName;
+    /**
+     * Displays the AssetManger and Waits
+     * @param currentImage (with extension) that is selected
+     * @return image filename (with extension) of selected image
+     */
+    public String showAndReturn(String currentImage){
+        mySelectedImage = currentImage;
         this.showAndWait();
         return mySelectedImage;
     }

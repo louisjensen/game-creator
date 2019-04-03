@@ -1,33 +1,60 @@
 package ui.panes;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class AssetImageSubPane extends VBox {
-    private static final int IMAGE_SIZE = 50;
-    private static final int PANE_SIZE = IMAGE_SIZE + 10;
-    private static String myFileName;
 
+public class AssetImageSubPane extends VBox {
+    private static final int IMAGE_OFFSET = 10;
+    private int myImageSize;
+    private int myPaneSize;
+    private static final int MAX_NUM_CHARS = 6;
+    private static final int SPACING_SCALE = 10;
     /**
      *
      * @param title
      * @param image
      */
-    public AssetImageSubPane(String title, ImageView image){
-        formatPaneAndImage(image);
-        Text text = new Text(title);
-        text.setWrappingWidth(PANE_SIZE);
+    public AssetImageSubPane(String title, ImageView image, int paneSize){
+
+        myPaneSize = paneSize;
+        myImageSize = paneSize - IMAGE_OFFSET;
+
+
+        Text text = new Text(cutText(title));
+
+        //text.setWrappingWidth(myImageSize);
+
+
+        System.out.println(text.getText());
         this.getChildren().add(image);
         this.getChildren().add(text);
+        double spacing = paneSize/SPACING_SCALE;
+        this.setPadding(new Insets(spacing, spacing, spacing, spacing));
+        formatPaneAndImage(image);
+    }
+
+    private String cutText(String input){
+        String result;
+        if(input.length() >= MAX_NUM_CHARS){
+            result = input.substring(0, MAX_NUM_CHARS);
+        }
+        else{
+            result = input;
+        }
+        return result;
     }
 
     private void formatPaneAndImage(ImageView image) {
         this.setAlignment(Pos.CENTER);
-        this.setMaxSize(PANE_SIZE, PANE_SIZE);
-        this.setPrefSize(PANE_SIZE, PANE_SIZE);
-        image.setFitWidth(IMAGE_SIZE);
-        image.setFitHeight(IMAGE_SIZE);
+        this.setMaxSize(myPaneSize, myPaneSize);
+        this.setPrefSize(myImageSize, myImageSize);
+        image.setFitWidth(myImageSize);
+        image.setFitHeight(myImageSize);
     }
 }
