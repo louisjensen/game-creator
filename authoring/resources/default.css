@@ -18,7 +18,7 @@
 }
 
 .prop-label {
-    -fx-font-size: 14;
+    -fx-font-size: 12;
     -fx-font-weight: normal;
 }
 
@@ -29,6 +29,8 @@
 .titled-pane {
     -fx-collapsible: false;
     -fx-animated: false;
+    -fx-pref-width: 300;
+    -fx-pref-height: 200;
 }
 
 .list-view {
