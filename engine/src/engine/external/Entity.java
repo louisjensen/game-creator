@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Entity {
-    private Map<Class<?>, Component<?>> myComponents;
+    private Map<Class<? extends Component>, Component<?>> myComponents;
 
     public Entity() {
         myComponents = new HashMap<>();
@@ -28,6 +28,10 @@ public class Entity {
 
     public boolean hasComponents(Class<? extends Component> component) {
         return hasComponents(Arrays.asList(component));
+    }
+
+    public Component<?> getComponent(Class<? extends Component> clazz) {
+        return myComponents.get(clazz);
     }
 
 
