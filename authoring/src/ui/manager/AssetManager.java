@@ -1,5 +1,6 @@
 package ui.manager;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -8,6 +9,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -35,7 +37,7 @@ public class AssetManager extends Stage {
     private BorderPane myBorderPane;
     private ScrollPane myImagePane;
     private HBox myButtonHBox;
-    private Image mySelectedImage;
+    private String mySelectedImage;
 
     private static final String EXTENSION_RESOURCE_KEY = "AcceptableImageExtensions";
     private static final String BUNDLE_NAME = "AssetManager";
@@ -45,6 +47,7 @@ public class AssetManager extends Stage {
     private static final String BUTTON_INFO = "Buttons";
     private static final String IO_ERROR = "IOError";
     private static final String ERROR_HEADER = "ErrorHeader";
+    private static final String EXTENSION_PREFIX = "*.";
     private static final double SPACING = 10;
     private static final int STAGE_WIDTH = 400;
     private static final int STAGE_HEIGHT = 300;
@@ -93,13 +96,15 @@ public class AssetManager extends Stage {
         myImagePane.setContent(hbox);
         File assetFolder = new File(ASSET_IMAGE_FOLDER_PATH);
         for(File temp : assetFolder.listFiles()){
-            System.out.println(temp.getName());
             try {
                 String extension = temp.getName().split("\\.")[1];
                 String lowerCaseExtension = extension.toLowerCase();
                 if(myImageExtensions.contains(lowerCaseExtension)){
                     ImageView imageView = createImageView(temp);
                     AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
+                    subPane.setOnMouseClicked(mouseEvent -> {
+                        mySelectedImage = temp.getName();
+                    });
                     hbox.getChildren().add(subPane);
                 }
             }
@@ -158,9 +163,10 @@ public class AssetManager extends Stage {
     private void handleBrowse(){
         Stage stage = new Stage();
         FileChooser chooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG files (*.PNG)", "*.PNG");
-        FileChooser.ExtensionFilter extFilter2 = new FileChooser.ExtensionFilter("JPEG files (*.JPG)", "*.JPG");
-        chooser.getExtensionFilters().addAll(extFilter2, extFilter);
+        for(String s : myImageExtensions){
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(s,EXTENSION_PREFIX + s);
+            chooser.getExtensionFilters().add(extFilter);
+        }
         File selectedFile = chooser.showOpenDialog(stage);
         try {
             BufferedImage image = ImageIO.read(selectedFile);
@@ -183,5 +189,13 @@ public class AssetManager extends Stage {
 
     private void handleClose(){
         this.close();
+    }
+
+
+
+    public String showAndReturn(String currentImageName){
+        mySelectedImage = currentImageName;
+        this.showAndWait();
+        return mySelectedImage;
     }
 }

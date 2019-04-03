@@ -12,16 +12,13 @@ public class AssetImageSubPane extends VBox {
 
     /**
      *
-     * @param filename
+     * @param title
      * @param image
      */
-    public AssetImageSubPane(String filename, ImageView image){
+    public AssetImageSubPane(String title, ImageView image){
         formatPaneAndImage(image);
-        String titleNoExtension = filename.split("\\.")[0];
-        Text text = new Text(titleNoExtension);
+        Text text = new Text(title);
         text.setWrappingWidth(PANE_SIZE);
-        myFileName = filename;
-        System.out.println("Filename Saved: " + myFileName);
         this.getChildren().add(image);
         this.getChildren().add(text);
     }
@@ -33,14 +30,4 @@ public class AssetImageSubPane extends VBox {
         image.setFitWidth(IMAGE_SIZE);
         image.setFitHeight(IMAGE_SIZE);
     }
-
-    /**
-     * Called by the asset manager when this pane is clicked
-     * @return String filename of the file including the extension
-     */
-    public String getAssetFileName(){
-        System.out.println("Filename returned by subpane: " + myFileName);
-        return myFileName;
-    }
-
 }
