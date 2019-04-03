@@ -1,6 +1,9 @@
 package ui.manager;
 
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -13,9 +16,7 @@ import ui.panes.AssetImageSubPane;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -29,8 +30,13 @@ public class AssetManager extends Stage {
     private static final String EXTENSION_RESOURCE_KEY = "AcceptableImageExtensions";
     private static final String BUNDLE_NAME = "AssetManager";
     private static final String ASSET_IMAGE_FOLDER_PATH = "authoring/Assets/Images";
-    private static final int WIDTH = 200;
-    private static final int HEIGHT = 300;
+    private static final String IMAGES_TITLE_KEY = "ImagesTitle";
+
+    private static final double SPACING = 10;
+    private static final int STAGE_WIDTH = 400;
+    private static final int STAGE_HEIGHT = 300;
+    private static final int IMAGE_SCROLLPANE_HEIGHT = 130;
+    private static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
 
     public AssetManager(TestEntity entity) {
         myEntity = entity;
@@ -40,13 +46,23 @@ public class AssetManager extends Stage {
         fillImageExtensionSet();
 
         VBox vbox = new VBox();
-        HBox hbox = generateImageDisplayHBox();
-        vbox.getChildren().add(hbox);
+        ScrollPane imagePane = generateImageDisplayHBox();
+        TitledPane imageTitlePane = new TitledPane();
+        imageTitlePane.setPrefHeight(IMAGE_SCROLLPANE_HEIGHT);
+        imageTitlePane.setContent(imagePane);
+        imageTitlePane.setText(myResources.getString(IMAGES_TITLE_KEY));
+        vbox.getChildren().add(imageTitlePane);
         myBorderPane.setCenter(vbox);
     }
 
-    private HBox generateImageDisplayHBox() {
+    private ScrollPane generateImageDisplayHBox() {
         HBox hbox = new HBox();
+        //hbox.setPadding(INSETS);
+        hbox.setSpacing(SPACING);
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setPadding(INSETS);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setContent(hbox);
         File assetFolder = new File(ASSET_IMAGE_FOLDER_PATH);
         for(File temp : assetFolder.listFiles()){
             System.out.println(temp.getName());
@@ -64,7 +80,8 @@ public class AssetManager extends Stage {
                 //this catch should be empty
             }
         }
-        return hbox;
+
+        return scrollPane;
     }
 
     private ImageView createImageView(File temp) {
@@ -86,8 +103,8 @@ public class AssetManager extends Stage {
 
     private void initializeStage(){
         this.setResizable(false);
-        this.setWidth(WIDTH);
-        this.setHeight(HEIGHT);
+        this.setWidth(STAGE_WIDTH);
+        this.setHeight(STAGE_HEIGHT);
         Scene scene = new Scene(myBorderPane);
         this.setScene(scene);
     }

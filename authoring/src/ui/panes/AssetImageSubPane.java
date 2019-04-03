@@ -10,16 +10,18 @@ public class AssetImageSubPane extends VBox {
     private static final int PANE_SIZE = IMAGE_SIZE + 10;
 
     public AssetImageSubPane(String title, ImageView image){
+        formatPaneAndImage(image);
+        Text text = new Text(title);
+        this.getChildren().add(image);
+        this.getChildren().add(text);
+    }
+
+    private void formatPaneAndImage(ImageView image) {
+        this.setAlignment(Pos.CENTER);
         this.setMaxSize(PANE_SIZE, PANE_SIZE);
         this.setPrefSize(PANE_SIZE, PANE_SIZE);
         image.setFitWidth(IMAGE_SIZE);
         image.setFitHeight(IMAGE_SIZE);
-
-
-        Text text = new Text(title);
-        this.setAlignment(Pos.CENTER);
-        this.getChildren().add(image);
-        this.getChildren().add(text);
     }
 
 }
