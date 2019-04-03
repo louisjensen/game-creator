@@ -30,18 +30,18 @@
     -fx-padding: 5;
 }
 
-.combo-box {
+.combo-box, .combo-box-popup .list-cell  {
     -fx-background-color: #606060;
     -fx-text-fill: white;
 }
 
-.combo-box-popup {
-    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0  );
+.combo-box:hover, .combo-box .list-cell:hover, .combo-box:focused, .button:hover,
+    .combo-box-popup .list-cell:hover, .text-field:focused, .text-field:hover{
+    -fx-background-color: #555555;
 }
 
-.combo-box-popup .list-cell {
-    -fx-background-color: #505050;
-    -fx-text-fill: white;
+.combo-box-popup {
+    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0  );
 }
 
 .combo-box .list-cell {
@@ -82,9 +82,12 @@
     -fx-text-fill: white;
 }
 
-
 .scroll-bar {
     -fx-background-color: #303030;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #484848;
 }
 
 .scroll-bar *.thumb {
