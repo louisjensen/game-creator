@@ -23,37 +23,37 @@ public class AssetManager extends Stage {
 
     private TestEntity myEntity;
     private ResourceBundle myResources;
-    private static final String BUNDLE_NAME = "AssetManager";
     private Set<String> myImageExtensions;
-    private String EXTENSION_RESOURCE_KEY = "AcceptableImageExtensions";
+    private BorderPane myBorderPane;
+
+    private static final String EXTENSION_RESOURCE_KEY = "AcceptableImageExtensions";
+    private static final String BUNDLE_NAME = "AssetManager";
+    private static final String ASSET_IMAGE_FOLDER_PATH = "authoring/Assets/Images";
+    private static final int WIDTH = 200;
+    private static final int HEIGHT = 300;
 
     public AssetManager(TestEntity entity) {
         myEntity = entity;
-        myResources = ResourceBundle.getBundle(BUNDLE_NAME);
-        myImageExtensions = new HashSet<>();
+
+        initializeVariables();
+        initializeStage();
         fillImageExtensionSet();
 
         VBox vbox = new VBox();
-        Scene scene = new Scene(vbox);
-        this.setScene(scene);
-        this.setResizable(false);
-        HBox hbox = new HBox();
+        HBox hbox = generateImageDisplayHBox();
+        vbox.getChildren().add(hbox);
+        myBorderPane.setCenter(vbox);
+    }
 
-        File assetFolder = new File("authoring/Assets/Images");
-        System.out.println("Made it past filepath");
+    private HBox generateImageDisplayHBox() {
+        HBox hbox = new HBox();
+        File assetFolder = new File(ASSET_IMAGE_FOLDER_PATH);
         for(File temp : assetFolder.listFiles()){
             System.out.println(temp.getName());
             try {
                 String extension = temp.getName().split("\\.")[1];
                 if(myImageExtensions.contains(extension)){
-                    ImageView imageView = new ImageView();
-                    Image image = null;
-                    try {
-                        image = new Image( new FileInputStream(temp.getPath()));
-                    } catch (FileNotFoundException e) {
-                        //TODO DEAL WITH THIS
-                    }
-                    imageView.setImage(image);
+                    ImageView imageView = createImageView(temp);
                     AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
                     hbox.getChildren().add(subPane);
                 }
@@ -63,10 +63,33 @@ public class AssetManager extends Stage {
                 //this file should be skipped over and nothing should happen
                 //this catch should be empty
             }
-
-
         }
-        vbox.getChildren().add(hbox);
+        return hbox;
+    }
+
+    private ImageView createImageView(File temp) {
+        ImageView imageView = new ImageView();
+        try {
+            Image image = new Image( new FileInputStream(temp.getPath()));
+            imageView.setImage(image);
+        } catch (FileNotFoundException e) {
+            //TODO DEAL WITH THIS
+        }
+        return imageView;
+    }
+
+    private void initializeVariables(){
+        myResources = ResourceBundle.getBundle(BUNDLE_NAME);
+        myImageExtensions = new HashSet<>();
+        myBorderPane = new BorderPane();
+    }
+
+    private void initializeStage(){
+        this.setResizable(false);
+        this.setWidth(WIDTH);
+        this.setHeight(HEIGHT);
+        Scene scene = new Scene(myBorderPane);
+        this.setScene(scene);
     }
 
     private void fillImageExtensionSet(){
