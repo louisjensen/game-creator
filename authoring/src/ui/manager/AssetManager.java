@@ -55,17 +55,15 @@ public class AssetManager extends Stage {
     private static final double SPACING = 10;
     private static final int STAGE_WIDTH = 400;
     private static final int STAGE_HEIGHT = 300;
-    private static final int IMAGE_SCROLLPANE_HEIGHT = 130;
     private static final int MAX_NUM_COLS = 4;
     private static final int IMAGE_SUBPANE_SIZE = 60;
+    private static final int BUTTON_SPACING = 20;
     private static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
-
-    private int myGridCellSize;
+    private static final int BUTTON_PANE_HEIGHT = 60;
 
     public AssetManager(TestEntity entity) {
         myEntity = entity;
 
-        calcSizes();
         initializeVariables();
         initializeStage();
         fillImageExtensionSet();
@@ -77,7 +75,6 @@ public class AssetManager extends Stage {
         createButtonPane();
 
         TitledPane imageTitlePane = new TitledPane();
-        imageTitlePane.setPrefHeight(IMAGE_SCROLLPANE_HEIGHT);
         imageTitlePane.setContent(myImagePane);
         imageTitlePane.setText(myResources.getString(IMAGES_TITLE_KEY));
         vbox.getChildren().add(imageTitlePane);
@@ -85,31 +82,25 @@ public class AssetManager extends Stage {
         myBorderPane.setCenter(vbox);
     }
 
-    private void calcSizes() {
 
-    }
-
-    private HBox createButtonPane() {
+    private void createButtonPane() {
         String buttonString = myResources.getString(BUTTON_INFO);
         String[] buttonInfo = buttonString.split(",");
+        myButtonHBox.setSpacing(BUTTON_SPACING);
+        myButtonHBox.setAlignment(Pos.CENTER);
+        myButtonHBox.setPrefHeight(BUTTON_PANE_HEIGHT);
         for(String s : buttonInfo){
             String[] textAndMethod = s.split(" ");
             Button button = makeButton(textAndMethod[0], textAndMethod[1]);
             myButtonHBox.getChildren().add(button);
         }
-        return myButtonHBox;
+
     }
 
     private void drawImageScrollPane() {
-        GridPane gridPane = new GridPane();
-        gridPane.setPadding(INSETS);
-        ColumnConstraints colRestraint = new ColumnConstraints(SPACING + IMAGE_SUBPANE_SIZE);
-        gridPane.getColumnConstraints().add(colRestraint);
-        RowConstraints rowRestraint = new RowConstraints(SPACING + IMAGE_SUBPANE_SIZE);
-        gridPane.getRowConstraints().add(rowRestraint);
-        gridPane.setAlignment(Pos.CENTER);
+        GridPane gridPane = createAndFormatGirdPane();
         myImagePane.setPadding(INSETS);
-        myImagePane.setFitToHeight(true);
+
         myImagePane.setContent(gridPane);
         File assetFolder = new File(ASSET_IMAGE_FOLDER_PATH);
         int row = 0;
@@ -138,6 +129,17 @@ public class AssetManager extends Stage {
                 //this catch should be empty
             }
         }
+    }
+
+    private GridPane createAndFormatGirdPane() {
+        GridPane gridPane = new GridPane();
+        gridPane.setPadding(INSETS);
+        ColumnConstraints colRestraint = new ColumnConstraints(SPACING + IMAGE_SUBPANE_SIZE);
+        gridPane.getColumnConstraints().add(colRestraint);
+        RowConstraints rowRestraint = new RowConstraints(SPACING + IMAGE_SUBPANE_SIZE);
+        gridPane.getRowConstraints().add(rowRestraint);
+        gridPane.setAlignment(Pos.TOP_CENTER);
+        return gridPane;
     }
 
     private ImageView createImageView(File temp) {
