@@ -16,6 +16,7 @@ public class PaneTester extends Application {
     @Override
     public void start(Stage testStage) {
         testStage.setTitle("Pane Test");
+        testStage.setResizable(false);
         LabelManager testLabels = new LabelManager();
         addTestLabels(testLabels);
         try {
@@ -23,6 +24,8 @@ public class PaneTester extends Application {
                     new PropertiesPane("Object", new TestEntity(), "object_properties_list", testLabels);
             PropertiesPane testPaneLvl =
                     new PropertiesPane("Level", new TestLevel(), "level_properties_list", testLabels);
+            PropertiesPane testPaneIns =
+                    new PropertiesPane("Instance", new TestEntity(), "instance_properties_list", testLabels);
 
             Scene testScene = new Scene(testPaneObj);
 

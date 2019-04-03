@@ -2,6 +2,7 @@ package ui.panes;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -32,20 +33,23 @@ class PropertiesPane extends TitledPane {
         this.setContent(createPropertiesGrid());
     }
 
-    private GridPane createPropertiesGrid() throws UIException {
+    private ScrollPane createPropertiesGrid() throws UIException {
         GridPane gridlist = new GridPane();
+        gridlist.getStyleClass().add("prop-grid");
+        ScrollPane scrollpane = new ScrollPane(gridlist);
         ResourceBundle bundle = ResourceBundle.getBundle(myPropFile);
         Enumeration propNames = bundle.getKeys(); //TODO make ordered
         while (propNames.hasMoreElements()) {
-            String name = (String)propNames.nextElement();
+            String name = (String) propNames.nextElement();
             String value = bundle.getString(name);
             gridlist.add(createProperty(name, value), 0, gridlist.getRowCount());
         }
-        return gridlist;
+        return scrollpane;
     }
 
     private VBox createProperty(String name, String info) throws UIException { //TODO make more readable
         VBox newProp = new VBox();
+        newProp.getStyleClass().add("prop-cell");
         Label propName = new Label(name);
         propName.getStyleClass().add("prop-label");
         String[] sep = info.split(":");

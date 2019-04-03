@@ -1,13 +1,9 @@
 .root {
-    -fx-background-color: gray;
-}
 
-.pane {
-    -fx-background-color: lightgray;
 }
 
 .scroll-pane {
-
+    -fx-background: transparent;
 }
 
 .label {
@@ -15,15 +11,41 @@
     -fx-font-weight: bold;
     -fx-font-size: 18;
     -fx-text-alignment: center;
+    -fx-text-fill: white;
+}
+
+.prop-cell {
+    -fx-background-color: transparent;
+}
+
+.prop-grid {
+    -fx-vgap: 8;
+    -fx-padding: 10;
+    -fx-grid-lines-visible: false;
 }
 
 .prop-label {
     -fx-font-size: 12;
     -fx-font-weight: normal;
+    -fx-padding: 5;
 }
 
 .combo-box {
+    -fx-background-color: #606060;
+    -fx-text-fill: white;
+}
 
+.combo-box-popup {
+    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0  );
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: #505050;
+    -fx-text-fill: white;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: white;
 }
 
 .titled-pane {
@@ -31,37 +53,40 @@
     -fx-animated: false;
     -fx-pref-width: 300;
     -fx-pref-height: 200;
+    -fx-max-height: 200;
+    -fx-max-width: 300;
+    -fx-backgound: #505050;
+    -fx-text-fill: white;
 }
 
-.list-view {
-    -fx-pref-width: 300;
-    -fx-pref-height: 200;
+.titled-pane *.content {
+    -fx-background: #404040;
+    -fx-border-color: #303030;
 }
 
-.list-cell {
-    -fx-background-color: #545454;
-    -fx-text-fill: #c6c6c6;
+.titled-pane .title {
+    -fx-background-color: #505050;
+    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0 );
 }
 
-.accordion {
-
+.text-field {
+    -fx-background-color: #606060;
+    -fx-text-fill: white;
 }
 
 .button {
     -fx-font-size: 12;
     -fx-min-width: 70;
-    -fx-min-height: 30;
+    -fx-min-height: 20;
+    -fx-background-color: #606060;
+    -fx-text-fill: white;
 }
 
 
 .scroll-bar {
-
+    -fx-background-color: #303030;
 }
 
-.menu {
-
-}
-
-.menu-bar {
-
+.scroll-bar *.thumb {
+    -fx-background-color: #505050;
 }
