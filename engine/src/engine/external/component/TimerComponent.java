@@ -1,6 +1,6 @@
 package engine.external.component;
 
-public class TimerComponent<Integer> extends Component<Integer> {
+public class TimerComponent extends Component<Integer> {
 
     public TimerComponent (Integer value){
         super(value);

@@ -1,6 +1,8 @@
 package engine.external.component;
 
-public class VelocityComponent<Point3D> extends Component<Point3D> {
+import javafx.geometry.Point3D;
+
+public class VelocityComponent extends Component<Point3D> {
 
     public VelocityComponent (Point3D point){
         super(point);
