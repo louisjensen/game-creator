@@ -17,7 +17,7 @@ public class ComboBoxProperty extends ComboBox<String> implements ControlPropert
     }
 
     @Override
-    public void setAction(Propertable propertable, String propLabel) {
+    public void setAction(Propertable propertable, String propLabel, String action) {
         this.setOnAction(e -> updateProperty(propertable, propLabel, this.getValue()));
     }
 
