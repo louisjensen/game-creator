@@ -1,10 +1,8 @@
 package ui.panes;
 
+import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.VBox;
-
-import java.util.List;
 
 public class EntityMenu extends TitledPane {
     private Accordion myAccordion;
@@ -18,13 +16,10 @@ public class EntityMenu extends TitledPane {
         this.setContent(myAccordion);
     }
 
-    public void addDropDown(String title, List<TitledPane> contents){
+    public void addDropDown(String title, Node contents){
         TitledPane newTitled = new TitledPane();
-        Accordion tempAccordion = new Accordion();
-        tempAccordion.getPanes().addAll(contents);
         newTitled.setText(title);
-
-        newTitled.setContent(tempAccordion);
+        newTitled.setContent(contents);
         myAccordion.getPanes().add(newTitled);
     }
 }

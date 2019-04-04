@@ -1,5 +1,6 @@
 package ui.panes;
 
+import javafx.scene.control.Accordion;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -38,7 +39,9 @@ public class NewEntityTypePane extends VBox{
                 tempTitledPane.setText(contentDefaultInfo[0]);
                 subPanes.add(tempTitledPane);
             }
-            myEntityMenu.addDropDown(s1, subPanes);
+            Accordion tempAccordion = new Accordion();
+            tempAccordion.getPanes().addAll(subPanes);
+            myEntityMenu.addDropDown(s1, tempAccordion);
         }
 
     }
