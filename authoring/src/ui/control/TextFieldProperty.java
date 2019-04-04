@@ -61,7 +61,7 @@ public class TextFieldProperty extends TextField implements ControlProperty {
             if (newVal.matches(bundle.getString(key))) {
                 return true;
             } else {
-                ErrorBox error = new ErrorBox("Variable Error", "Invalid variable declaration");
+                ErrorBox error = new ErrorBox("Variable Error", "Invalid variable, refer to documentation for syntax");
                 error.display();
             }
         }

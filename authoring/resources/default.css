@@ -90,6 +90,22 @@
     -fx-background-color: #484848;
 }
 
-.scroll-bar *.thumb {
+.scroll-bar .thumb {
     -fx-background-color: #505050;
+}
+
+.dialog-pane {
+    -fx-border-color: #303030;
+    -fx-background-color: #404040;
+}
+
+.dialog-pane .content {
+    -fx-padding: 10;
+    -fx-background-color: #404040;
+    -fx-font-size: 12;
+    -fx-font-weight: normal;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #404040;
 }
