@@ -13,12 +13,10 @@ public class AssetManagerTester extends Application {
     @Override
     public void start(Stage testStage) {
         AssetManager temp = new AssetManager(new TestEntity());
-        String selected = temp.showAndReturn("flappy_bird.png");
         NewEntityTypePane entityTypePane = new NewEntityTypePane();
         Scene scene = new Scene(entityTypePane, 600, 600);
         testStage.setScene(scene);
         testStage.show();
-        System.out.println("Selected Image: " + selected);
     }
 
     public static void main(String[] args) {
