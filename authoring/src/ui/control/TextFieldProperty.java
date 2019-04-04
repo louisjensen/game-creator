@@ -1,28 +1,23 @@
 package ui.control;
 
 import javafx.scene.control.TextField;
-import ui.TestEntity;
-
-import java.lang.reflect.Method;
+import ui.Propertable;
+import ui.manager.LabelManager;
 
 public class TextFieldProperty extends TextField implements ControlProperty {
 
-    public TextFieldProperty() {
-
-    }
-
     @Override
-    public void populateValue(String newVal) {
+    public void populateValue(String type, String newVal, LabelManager labels) {
         this.setText(newVal);
     }
 
     @Override
-    public void setAction(TestEntity entity, String action) {
-        try {
-            Method m = TestEntity.class.getDeclaredMethod(action);
-            //this.setOnAction((oldVal, newVal) -> m.invoke(entity, ));
-        } catch (Exception e) {
+    public void setAction(Propertable propertable, String propLabel) {
+        this.focusedProperty().addListener(e -> checkAndUpdateProperty(propertable, propLabel, this.getText()));
+    }
 
-        }
+    private void checkAndUpdateProperty(Propertable prop, String propLabel, String value) {
+        //TODO add reversion when it's a bad value
+        prop.getPropertyMap().put(propLabel, value);
     }
 }

@@ -14,6 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ui.TestEntity;
 import ui.panes.AssetImageSubPane;
+import ui.Propertable;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -33,7 +34,6 @@ import java.util.Set;
  */
 public class AssetManager extends Stage {
 
-    private TestEntity myEntity;
     private ResourceBundle myResources;
     private Set<String> myImageExtensions;
     private BorderPane myBorderPane;
@@ -60,9 +60,11 @@ public class AssetManager extends Stage {
     private static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
     private static final int BUTTON_PANE_HEIGHT = 60;
 
-    public AssetManager(TestEntity entity) {
+    private Propertable myProp;
+
+    public AssetManager(Propertable prop) {
         //TODO: integrate in entity
-        myEntity = entity;
+        myProp = prop;
         initializeVariables();
         initializeStage();
         fillImageExtensionSet();
@@ -238,5 +240,9 @@ public class AssetManager extends Stage {
         mySelectedImage = currentImage;
         this.showAndWait();
         return mySelectedImage;
+    }
+
+    private void setImageToSelected(String resourceName) {
+        myProp.getPropertyMap().put("Image", resourceName);
     }
 }
