@@ -12,9 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ui.TestEntity;
-import ui.panes.AssetImageSubPane;
 import ui.Propertable;
+import ui.panes.AssetImageSubPane;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -33,7 +32,6 @@ import java.util.Set;
  * It displays all of the Images available in the Assets/Images folders
  */
 public class AssetManager extends Stage {
-
     private ResourceBundle myResources;
     private Set<String> myImageExtensions;
     private BorderPane myBorderPane;
@@ -58,7 +56,6 @@ public class AssetManager extends Stage {
     private static final int IMAGE_SUBPANE_SIZE = 60;
     private static final int BUTTON_SPACING = 20;
     private static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
-    private static final int BUTTON_PANE_HEIGHT = 60;
 
     private Propertable myProp;
 
@@ -70,6 +67,7 @@ public class AssetManager extends Stage {
         fillImageExtensionSet();
         drawImageScrollPane();
         createButtonPane();
+        formatButtonHBox();
         fillBorderPane();
     }
 
@@ -84,7 +82,6 @@ public class AssetManager extends Stage {
     private void createButtonPane() {
         String buttonString = myResources.getString(BUTTON_INFO);
         String[] buttonInfo = buttonString.split(",");
-        formatButtonHBox();
         for(String s : buttonInfo){
             String[] textAndMethod = s.split(" ");
             Button button = makeButton(textAndMethod[0], textAndMethod[1]);
@@ -96,8 +93,6 @@ public class AssetManager extends Stage {
     private void formatButtonHBox() {
         myButtonHBox.setSpacing(BUTTON_SPACING);
         myButtonHBox.setAlignment(Pos.CENTER);
-        myButtonHBox.setPrefHeight(BUTTON_PANE_HEIGHT);
-        myButtonHBox.setMinHeight(BUTTON_PANE_HEIGHT);
     }
 
     private void drawImageScrollPane() {
@@ -171,6 +166,8 @@ public class AssetManager extends Stage {
         this.setWidth(STAGE_WIDTH);
         this.setHeight(STAGE_HEIGHT);
         Scene scene = new Scene(myBorderPane);
+        scene.getStylesheets().add("default.css");
+        myImageTitledPane.getStyleClass().add("asset-manager");
         this.setScene(scene);
     }
 
