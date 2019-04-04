@@ -3,12 +3,16 @@ package ui.panes;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-
+/**
+ * @author Carrie Hunner
+ * This class creates a small pane consisting of an ImageView
+ * and then text acting as a title below it.
+ * The text can be no longer than a set length and will be cut short
+ * before being displayed to prevent formatting problems.
+ */
 public class AssetImageSubPane extends VBox {
     private static final int IMAGE_OFFSET = 10;
     private int myImageSize;
@@ -16,9 +20,11 @@ public class AssetImageSubPane extends VBox {
     private static final int MAX_NUM_CHARS = 6;
     private static final int SPACING_SCALE = 10;
     /**
-     *
-     * @param title
-     * @param image
+     * Creates a SubPane that consists of an ImageView and
+     * then text acting as a title below it
+     * @param title String of the name associated with the image
+     * @param image ImageView to be displayed
+     * @param paneSize Desired size of the pane
      */
     public AssetImageSubPane(String title, ImageView image, int paneSize){
 

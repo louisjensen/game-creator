@@ -211,7 +211,6 @@ public class AssetManager extends Stage {
             //TODO: Test that this works
             createAndDisplayAlert();
         }
-
     }
 
     private void createAndDisplayAlert() {
