@@ -17,6 +17,10 @@ public class AssetManagerTester extends Application {
         Scene scene = new Scene(entityTypePane, 600, 600);
         testStage.setScene(scene);
         testStage.show();
+        Stage viewerStage = new Stage();
+        Scene viewerScene = new Scene(new Viewer(), 500, 500);
+        viewerStage.setScene(viewerScene);
+        viewerStage.show();
     }
 
     public static void main(String[] args) {
