@@ -23,7 +23,7 @@ public class ButtonProperty extends Button implements ControlProperty {
      * @param action Class name of new stage to open
      */
     @Override
-    public void setAction(Propertable prop, String action) throws UIException {
+    public void setAction(Propertable prop, String propLabel, String action) throws UIException {
         try {
             Class<?> clazz = Class.forName(action);
             Constructor<?> constructor = clazz.getConstructor(Propertable.class);

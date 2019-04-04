@@ -9,6 +9,7 @@ import java.util.Map;
 
 /**
  * This class keeps track of valid labels for Object Type, Group, etc. in Authoring Environment
+ * @author Harry Ross
  */
 public class LabelManager {
 
@@ -16,7 +17,7 @@ public class LabelManager {
 
     public LabelManager() {
         myLabelGroups = new HashMap<>();
-        myLabelGroups.put("Object", FXCollections.observableArrayList(new ArrayList<>()));
+        myLabelGroups.put("Label", FXCollections.observableArrayList(new ArrayList<>()));
         myLabelGroups.put("Group", FXCollections.observableArrayList(new ArrayList<>()));
     }
 

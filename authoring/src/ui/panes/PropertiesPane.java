@@ -7,16 +7,18 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import ui.Propertable;
-import ui.TestEntity;
 import ui.UIException;
 import ui.control.ControlProperty;
 import ui.manager.LabelManager;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
+/**
+ * @author Harry Ross
+ */
 class PropertiesPane extends TitledPane {
 
     private Propertable myProp;
@@ -38,16 +40,21 @@ class PropertiesPane extends TitledPane {
         gridlist.getStyleClass().add("prop-grid");
         ScrollPane scrollpane = new ScrollPane(gridlist);
         ResourceBundle bundle = ResourceBundle.getBundle(myPropFile);
-        Enumeration propNames = bundle.getKeys(); //TODO make ordered
-        while (propNames.hasMoreElements()) {
-            String name = (String) propNames.nextElement();
-            String value = bundle.getString(name);
-            gridlist.add(createProperty(name, value), 0, gridlist.getRowCount());
+        ArrayList<String> types = Collections.list(bundle.getKeys());
+        Collections.sort(types);
+        for (String type : types) {
+            try {
+                String name = type.split("\\.")[1];
+                String value = bundle.getString(type);
+                gridlist.add(createProperty(name, value), 0, gridlist.getRowCount());
+            } catch (IndexOutOfBoundsException e) {
+                throw new UIException("Invalid properties file");
+            }
         }
         return scrollpane;
     }
 
-    private VBox createProperty(String name, String info) throws UIException { //TODO make more readable
+    private VBox createProperty(String name, String info) throws UIException {
         VBox newProp = new VBox();
         newProp.getStyleClass().add("prop-cell");
         Label propName = new Label(name);
@@ -61,7 +68,7 @@ class PropertiesPane extends TitledPane {
                     (ControlProperty) constructor.newInstance() : (ControlProperty) constructor.newInstance(sep[1]);
             newProp.getChildren().addAll(propName, (Node) instance);
             instance.populateValue(name, myProp.getPropertyMap().get(name), myLabelManager);
-            instance.setAction(myProp, sep[2]);
+            instance.setAction(myProp, name, sep[2]);
         } catch (Exception e) {
             throw new UIException("Error creating properties controls");
         }

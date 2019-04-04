@@ -8,5 +8,5 @@ public interface ControlProperty {
 
     void populateValue(String type, String newValue, LabelManager labels);
 
-    void setAction(Propertable propertable, String action) throws UIException;
+    void setAction(Propertable propertable, String label, String action) throws UIException;
 }
