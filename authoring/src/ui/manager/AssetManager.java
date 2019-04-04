@@ -29,9 +29,7 @@ import java.util.Set;
 /**
  * @author Carrie Hunner
  * This Class creates an AssetManger Stage
- * by calling showAndReturn(), the stage is displayed and
- * will return a String of the filename of the user's
- * selected asset
+ * It displays all of the Images available in the Assets/Images folders
  */
 public class AssetManager extends Stage {
 
@@ -39,9 +37,10 @@ public class AssetManager extends Stage {
     private ResourceBundle myResources;
     private Set<String> myImageExtensions;
     private BorderPane myBorderPane;
-    private ScrollPane myImagePane;
+    private ScrollPane myImageScrollPane;
     private HBox myButtonHBox;
     private String mySelectedImage;
+    private TitledPane myImageTitledPane;
 
     private static final String EXTENSION_RESOURCE_KEY = "AcceptableImageExtensions";
     private static final String BUNDLE_NAME = "AssetManager";
@@ -62,22 +61,19 @@ public class AssetManager extends Stage {
     private static final int BUTTON_PANE_HEIGHT = 60;
 
     public AssetManager(TestEntity entity) {
+        //TODO: integrate in entity
         myEntity = entity;
-
         initializeVariables();
         initializeStage();
         fillImageExtensionSet();
-
-        VBox vbox = new VBox();
-        myImagePane = new ScrollPane();
         drawImageScrollPane();
-        myButtonHBox = new HBox();
         createButtonPane();
+        fillBorderPane();
+    }
 
-        TitledPane imageTitlePane = new TitledPane();
-        imageTitlePane.setContent(myImagePane);
-        imageTitlePane.setText(myResources.getString(IMAGES_TITLE_KEY));
-        vbox.getChildren().add(imageTitlePane);
+    private void fillBorderPane() {
+        VBox vbox = new VBox();
+        vbox.getChildren().add(myImageTitledPane);
         vbox.getChildren().add(myButtonHBox);
         myBorderPane.setCenter(vbox);
     }
@@ -86,9 +82,7 @@ public class AssetManager extends Stage {
     private void createButtonPane() {
         String buttonString = myResources.getString(BUTTON_INFO);
         String[] buttonInfo = buttonString.split(",");
-        myButtonHBox.setSpacing(BUTTON_SPACING);
-        myButtonHBox.setAlignment(Pos.CENTER);
-        myButtonHBox.setPrefHeight(BUTTON_PANE_HEIGHT);
+        formatButtonHBox();
         for(String s : buttonInfo){
             String[] textAndMethod = s.split(" ");
             Button button = makeButton(textAndMethod[0], textAndMethod[1]);
@@ -97,11 +91,17 @@ public class AssetManager extends Stage {
 
     }
 
-    private void drawImageScrollPane() {
-        GridPane gridPane = createAndFormatGirdPane();
-        myImagePane.setPadding(INSETS);
+    private void formatButtonHBox() {
+        myButtonHBox.setSpacing(BUTTON_SPACING);
+        myButtonHBox.setAlignment(Pos.CENTER);
+        myButtonHBox.setPrefHeight(BUTTON_PANE_HEIGHT);
+        myButtonHBox.setMinHeight(BUTTON_PANE_HEIGHT);
+    }
 
-        myImagePane.setContent(gridPane);
+    private void drawImageScrollPane() {
+        GridPane gridPane = createAndFormatGridPane();
+        myImageScrollPane.setPadding(INSETS);
+        myImageScrollPane.setContent(gridPane);
         File assetFolder = new File(ASSET_IMAGE_FOLDER_PATH);
         int row = 0;
         int col = 0;
@@ -131,7 +131,7 @@ public class AssetManager extends Stage {
         }
     }
 
-    private GridPane createAndFormatGirdPane() {
+    private GridPane createAndFormatGridPane() {
         GridPane gridPane = new GridPane();
         gridPane.setPadding(INSETS);
         ColumnConstraints colRestraint = new ColumnConstraints(SPACING + IMAGE_SUBPANE_SIZE);
@@ -157,6 +157,11 @@ public class AssetManager extends Stage {
         myResources = ResourceBundle.getBundle(BUNDLE_NAME);
         myImageExtensions = new HashSet<>();
         myBorderPane = new BorderPane();
+        myImageScrollPane = new ScrollPane();
+        myButtonHBox = new HBox();
+        myImageTitledPane = new TitledPane();
+        myImageTitledPane.setContent(myImageScrollPane);
+        myImageTitledPane.setText(myResources.getString(IMAGES_TITLE_KEY));
     }
 
     private void initializeStage(){
@@ -204,17 +209,25 @@ public class AssetManager extends Stage {
             drawImageScrollPane();
         } catch (IOException e) {
             //TODO: Test that this works
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(myResources.getString(ERROR_HEADER));
-            alert.setHeaderText(null);
-            alert.setContentText(myResources.getString(IO_ERROR));
-            alert.showAndWait();
+            createAndDisplayAlert();
         }
 
     }
 
+    private void createAndDisplayAlert() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(myResources.getString(ERROR_HEADER));
+        alert.setHeaderText(null);
+        alert.setContentText(myResources.getString(IO_ERROR));
+        alert.showAndWait();
+    }
+
     private void handleClose(){
         this.close();
+    }
+
+    private void handleApply(){
+        //TODO: add method to set Entity's image
     }
 
     /**
