@@ -1,8 +1,10 @@
 package ui_components.header;
 
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -29,8 +31,16 @@ public class HeaderBar {
         Text title = new Text("ByteMe Game Center");
         title.setFont(Font.font(TITLE_FONT, TITLE_FONT_SIZE));
         title.setFill(FONT_COLOR);
-        BorderPane.setAlignment(title, Pos.CENTER);
-        myHeaderLayout = new BorderPane(title);
+        BorderPane.setAlignment(title, Pos.TOP_CENTER);
+        Node userDisplay = myCurrentUser.getDisplay();
+        BorderPane.setAlignment(userDisplay, Pos.TOP_RIGHT);
+        StackPane headerLayout = new StackPane();
+        BorderPane titleLayout = new BorderPane();
+        BorderPane userLayout = new BorderPane();
+        titleLayout.setCenter(title);
+        userLayout.setRight(userDisplay);
+        headerLayout.getChildren().addAll(titleLayout, userLayout);
+        myHeaderLayout = headerLayout;
     }
 
 }
