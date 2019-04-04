@@ -34,11 +34,11 @@ import java.util.Set;
 public class AssetManager extends Stage {
     private ResourceBundle myResources;
     private Set<String> myImageExtensions;
-    private BorderPane myBorderPane;
     private ScrollPane myImageScrollPane;
     private HBox myButtonHBox;
     private String mySelectedImage;
     private TitledPane myImageTitledPane;
+    private VBox myOuterVBox;
 
     private static final String EXTENSION_RESOURCE_KEY = "AcceptableImageExtensions";
     private static final String BUNDLE_NAME = "AssetManager";
@@ -67,21 +67,19 @@ public class AssetManager extends Stage {
         fillImageExtensionSet();
         drawImageScrollPane();
         createButtonPane();
-        formatButtonHBox();
-        fillBorderPane();
+        fillVBox();
     }
 
-    private void fillBorderPane() {
-        VBox vbox = new VBox();
-        vbox.getChildren().add(myImageTitledPane);
-        vbox.getChildren().add(myButtonHBox);
-        myBorderPane.setCenter(vbox);
+    private void fillVBox() {
+        myOuterVBox.getChildren().add(myImageTitledPane);
+        myOuterVBox.getChildren().add(myButtonHBox);
     }
 
 
     private void createButtonPane() {
         String buttonString = myResources.getString(BUTTON_INFO);
         String[] buttonInfo = buttonString.split(",");
+        formatButtonHBox();
         for(String s : buttonInfo){
             String[] textAndMethod = s.split(" ");
             Button button = makeButton(textAndMethod[0], textAndMethod[1]);
@@ -91,6 +89,7 @@ public class AssetManager extends Stage {
     }
 
     private void formatButtonHBox() {
+        myButtonHBox.setFillHeight(true);
         myButtonHBox.setSpacing(BUTTON_SPACING);
         myButtonHBox.setAlignment(Pos.CENTER);
     }
@@ -135,7 +134,7 @@ public class AssetManager extends Stage {
         gridPane.getColumnConstraints().add(colRestraint);
         RowConstraints rowRestraint = new RowConstraints(SPACING + IMAGE_SUBPANE_SIZE);
         gridPane.getRowConstraints().add(rowRestraint);
-        gridPane.setAlignment(Pos.TOP_CENTER);
+        gridPane.setAlignment(Pos.CENTER);
         return gridPane;
     }
 
@@ -153,7 +152,8 @@ public class AssetManager extends Stage {
     private void initializeVariables(){
         myResources = ResourceBundle.getBundle(BUNDLE_NAME);
         myImageExtensions = new HashSet<>();
-        myBorderPane = new BorderPane();
+        myOuterVBox = new VBox();
+        myOuterVBox.setPrefHeight(STAGE_HEIGHT);
         myImageScrollPane = new ScrollPane();
         myButtonHBox = new HBox();
         myImageTitledPane = new TitledPane();
@@ -165,7 +165,7 @@ public class AssetManager extends Stage {
         this.setResizable(false);
         this.setWidth(STAGE_WIDTH);
         this.setHeight(STAGE_HEIGHT);
-        Scene scene = new Scene(myBorderPane);
+        Scene scene = new Scene(myOuterVBox);
         scene.getStylesheets().add("default.css");
         myImageTitledPane.getStyleClass().add("asset-manager");
         this.setScene(scene);
