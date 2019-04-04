@@ -1,22 +1,30 @@
 package center.external;
 
 import javafx.application.Application;
-import javafx.scene.Group;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import ui_components.header.HeaderBar;
 
 public class CenterMain extends Application {
-    private static final double STAGE_SIZE = 400;
-    private static final Color BACKGROUND_COLOR = Color.LIGHTBLUE;
+    private static final double STAGE_WIDTH = 1250;
+    private static final double STAGE_HEIGHT = 750;
+    private static final Color BACKGROUND_COLOR = Color.rgb(46, 43, 51);
 
     public static void main(String[] args){
         launch(args);
     }
 
     public void start (Stage myStage) throws Exception {
-        Group myNode = new Group();
-        Scene myScene = new Scene(myNode, STAGE_SIZE, STAGE_SIZE, BACKGROUND_COLOR);
+        BorderPane root = new BorderPane();
+        HeaderBar myHeader = new HeaderBar();
+        Pane layout = myHeader.getHeaderLayout();
+        BorderPane.setAlignment(layout, Pos.TOP_CENTER);
+        root.setTop(layout);
+        Scene myScene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT, BACKGROUND_COLOR);
         myStage.setScene(myScene);
         myStage.show();
     }
