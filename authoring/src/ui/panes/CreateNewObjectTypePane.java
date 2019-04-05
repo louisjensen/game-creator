@@ -1,5 +1,9 @@
 package ui.panes;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -16,19 +20,39 @@ public class CreateNewObjectTypePane extends Stage {
     private ResourceBundle myWindowResources;
     private ResourceBundle myTypeResources;
     private String[] myTypes;
+    private ComboBox myTypeOfComboBox;
+    private ComboBox myBasedOnComboBox;
+    private TextField myTextField;
 
-    private static final int STAGE_HEIGHT = 400;
-    private static final int STAGE_WIDTH = 500;
+    private static final Insets INSETS = new Insets(50,50,50,50);
+    private static final int STAGE_HEIGHT = 300;
+    private static final int STAGE_WIDTH = 400;
+    private static final int GRIDPANE_GAP = 10;
+    private static final int INPUT_WIDTH = 100;
     private static final String STYLE_SHEET = "default.css";
     private static final String WINDOW_RESOURCES = "new_object_window";
     private static final String TYPE_RESOURCES = "default_entity_type";
 
     public CreateNewObjectTypePane(){
-        myGridPane = new GridPane();
+        initializeGridPane();
+        initializeVariables();
         myWindowResources = ResourceBundle.getBundle(WINDOW_RESOURCES);
         myTypeResources = ResourceBundle.getBundle(TYPE_RESOURCES);
         createContent();
         initializeAndDisplayStage();
+    }
+
+    private void initializeVariables() {
+        myBasedOnComboBox = new ComboBox();
+        myTypeOfComboBox = new ComboBox();
+        myTextField = new TextField();
+    }
+
+    private void initializeGridPane(){
+        myGridPane = new GridPane();
+        myGridPane.setAlignment(Pos.TOP_CENTER);
+        myGridPane.setHgap(GRIDPANE_GAP);
+        myGridPane.setVgap(GRIDPANE_GAP);
     }
 
     private void createContent() {
@@ -41,27 +65,40 @@ public class CreateNewObjectTypePane extends Stage {
     }
 
     private void createAndAddBasedOnDropDown() {
-        ComboBox comboBox = new ComboBox();
-        myGridPane.add(comboBox, 1, myGridPane.getRowCount());
+        myBasedOnComboBox.setPrefWidth(INPUT_WIDTH);
+        myGridPane.add(myBasedOnComboBox, 1, myGridPane.getRowCount()-1);
+    }
+
+    private void populateBasedOnDropDown(String s) {
+        String[] dropDownContent = myTypeResources.getString(s).split(",");
+        myBasedOnComboBox.getItems().clear();
+        myBasedOnComboBox.getItems().addAll(dropDownContent);
     }
 
     private void createAndAddLabel(String s) {
         Label label = new Label(s);
+        label.setAlignment(Pos.CENTER);
         int numRows = myGridPane.getRowCount();
         myGridPane.add(label, 0, numRows+1);
-
     }
 
     private void createAndAddTextField(){
-        TextField textField = new TextField();
-        myGridPane.add(textField, 1, myGridPane.getRowCount());
+        myTextField.setPrefWidth(INPUT_WIDTH);
+        myGridPane.add(myTextField, 1, myGridPane.getRowCount()-1);
     }
 
     private void createAndAddTypeOfOnDropDown(){
         String[] types = myTypeResources.getString("Tabs").split(",");
-        ComboBox comboBox = new ComboBox();
-        comboBox.getItems().addAll(types);
-        myGridPane.add(comboBox, 1, myGridPane.getRowCount());
+        myTypeOfComboBox.getItems().addAll(types);
+        myTypeOfComboBox.setPrefWidth(INPUT_WIDTH);
+        myGridPane.add(myTypeOfComboBox, 1, myGridPane.getRowCount()-1);
+        myTypeOfComboBox.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                System.out.println("Registered change");
+                populateBasedOnDropDown((String) t1);
+            }
+        });
     }
     private void initializeAndDisplayStage() {
         this.setWidth(STAGE_WIDTH);
