@@ -5,13 +5,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.lang.reflect.Method;
 import java.util.ResourceBundle;
 
 
@@ -23,8 +23,9 @@ public class CreateNewObjectTypePane extends Stage {
     private ComboBox myTypeOfComboBox;
     private ComboBox myBasedOnComboBox;
     private TextField myTextField;
+    private HBox myButtonPane;
 
-    private static final Insets INSETS = new Insets(50,50,50,50);
+    private static final Insets INSETS = new Insets(10,10,10,10);
     private static final int STAGE_HEIGHT = 300;
     private static final int STAGE_WIDTH = 400;
     private static final int GRIDPANE_GAP = 10;
@@ -46,6 +47,7 @@ public class CreateNewObjectTypePane extends Stage {
         myBasedOnComboBox = new ComboBox();
         myTypeOfComboBox = new ComboBox();
         myTextField = new TextField();
+        myButtonPane = new HBox();
     }
 
     private void initializeGridPane(){
@@ -62,6 +64,31 @@ public class CreateNewObjectTypePane extends Stage {
         createAndAddTypeOfOnDropDown();
         createAndAddLabel(myWindowResources.getString("Label3"));
         createAndAddBasedOnDropDown();
+        createButtonPane();
+    }
+
+    private void createButtonPane() {
+        String[] buttons = myWindowResources.getString("Buttons").split(",");
+        for(String s : buttons){
+            String[] info = s.split(" ");
+            myButtonPane.getChildren().add(makeButton(info[0], info[1]));
+        }
+        myButtonPane.setPadding(INSETS);
+        myButtonPane.setAlignment(Pos.CENTER);
+        myButtonPane.setSpacing(GRIDPANE_GAP);
+    }
+
+    private Button makeButton(String text, String methodName){
+        Button button = new Button();
+        button.setOnMouseClicked(e -> {
+            try {
+                Method buttonMethod = this.getClass().getDeclaredMethod(methodName);
+                buttonMethod.invoke(this);
+            } catch (Exception e1) {
+                button.setText(myWindowResources.getString("ButtonFail"));
+            }});
+        button.setText(text);
+        return button;
     }
 
     private void createAndAddBasedOnDropDown() {
@@ -105,7 +132,9 @@ public class CreateNewObjectTypePane extends Stage {
         this.setHeight(STAGE_HEIGHT);
         TitledPane titledPane = new TitledPane();
         titledPane.setText(myWindowResources.getString("Title"));
-        titledPane.setContent(myGridPane);
+        VBox contents = new VBox();
+        contents.getChildren().addAll(myGridPane, myButtonPane);
+        titledPane.setContent(contents);
         titledPane.setCollapsible(false);
         Scene scene = new Scene(titledPane);
         scene.getStylesheets().add(STYLE_SHEET);
