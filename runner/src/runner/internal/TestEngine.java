@@ -21,11 +21,25 @@ public class TestEngine {
         for(Entity entity : myEntities){
             PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
             Point3D position = (Point3D) positionComponent.getValue();
-            double x = position.getX() + 2;
+            double x = position.getX() + 1;
             double y = position.getY();// + velocityComponent.getValue().getY();
             double z = position.getZ();
 
             positionComponent.setValue(new Point3D(x, y, z));
+        }
+    }
+
+    private void moveRandom(){
+        int move = 1;
+        for(Entity entity : myEntities){
+            PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
+            Point3D position = (Point3D) positionComponent.getValue();
+            double x = position.getX() + move;
+            double y = position.getY() + move;// + velocityComponent.getValue().getY();
+            double z = position.getZ();
+
+            positionComponent.setValue(new Point3D(x, y, z));
+            move*=-1;
         }
     }
 }
