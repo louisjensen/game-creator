@@ -19,7 +19,6 @@ public class RunnerTester extends Application {
         addDummyEntities();
         System.out.println("testing");
         GameRunner runner = new GameRunner(myDummyEntities, 400, 200, primaryStage);
-        runner.display();
     }
 
     private void addDummyEntities() {

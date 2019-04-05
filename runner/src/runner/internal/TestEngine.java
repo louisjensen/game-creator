@@ -21,7 +21,7 @@ public class TestEngine {
         for(Entity entity : myEntities){
             PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
             Point3D position = (Point3D) positionComponent.getValue();
-            double x = position.getX() + 5;
+            double x = position.getX() + 2;
             double y = position.getY();// + velocityComponent.getValue().getY();
             double z = position.getZ();
 
