@@ -23,6 +23,8 @@ public class CenterMain extends Application {
         HeaderBar myHeader = new HeaderBar();
         Pane layout = myHeader.getHeaderLayout();
         BorderPane.setAlignment(layout, Pos.TOP_CENTER);
+        root.setStyle("-fx-background-color: transparent;");
+        layout.setStyle("-fx-background-color: transparent;");
         root.setTop(layout);
         Scene myScene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT, BACKGROUND_COLOR);
         myStage.setScene(myScene);

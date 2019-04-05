@@ -47,12 +47,9 @@ public class UserPane {
     }
 
     private VBox makeButtonList() { // todo: figure out the issue where making buttons changes the background color
-        Text profileButton = new Text("Profile"); // todo: make these buttons
-        profileButton.setFill(Color.WHITE);
-        Text settingsButton = new Text("Settings");
-        settingsButton.setFill(Color.WHITE);
-        Text logOutButton = new Text ("Log Out");
-        logOutButton.setFill(Color.WHITE);
+        Button profileButton = new Button("Profile"); // todo: make these buttons
+        Button settingsButton = new Button("Settings");
+        Button logOutButton = new Button("Log Out");
         VBox buttonList = new VBox();
         buttonList.getChildren().addAll(profileButton, settingsButton, logOutButton);
         return buttonList;
