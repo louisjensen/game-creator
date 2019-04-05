@@ -51,13 +51,8 @@ public class GameRunner {
     private void showEntities(GraphicsContext graphics){
         for(Entity entity : myEntities){
             PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
-
-            System.out.println(positionComponent);
             Point3D position = (Point3D) positionComponent.getValue();
-            Double xPosition = position.getX();
-            Double yPosition = position.getY();
-
-            graphics.drawImage(new Image("basketball.png", 50, 50, true, true), xPosition, yPosition);
+            graphics.drawImage(new Image("basketball.png", 50, 50, true, true), position.getX(), position.getY());
         }
     }
 }
