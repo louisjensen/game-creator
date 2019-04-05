@@ -2,19 +2,14 @@ package runner.external;
 
 import engine.external.Entity;
 import engine.external.PositionComponent;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import runner.internal.TestEngine;
@@ -79,9 +74,7 @@ public class GameRunner {
         return map;
     }
 
-    int x = 0;
     private void step (double elapsedTime) {
-        System.out.println(x); x++;
         myTestEngine.update();
         updateMap();
         showEntities();
