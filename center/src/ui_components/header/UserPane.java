@@ -17,7 +17,7 @@ public class UserPane {
     private Pane myUserDisplay;
 
     public UserPane(String username) {
-        // todo: make this actyally use username
+        // todo: make this actually use username
     }
 
     public UserPane() {
