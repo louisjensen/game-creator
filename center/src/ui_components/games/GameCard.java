@@ -97,7 +97,7 @@ public class GameCard {
 
     private void addTitleContent(BorderPane foreground) {
         Text title = new Text("Title Text");
-        title.setFont(new Font(32));
+        title.setFont(new Font(24));
         BorderPane titlePane = new BorderPane();
         titlePane.setCenter(title);
         foreground.setTop(titlePane);

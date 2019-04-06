@@ -1,6 +1,7 @@
 package center.external;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -10,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ui_components.games.GameCard;
 import ui_components.games.GameList;
+import ui_components.games.GamePane;
 import ui_components.header.HeaderBar;
 
 public class CenterMain extends Application {
@@ -29,8 +31,7 @@ public class CenterMain extends Application {
         root.setStyle("-fx-background-color: transparent;");
         layout.setStyle("-fx-background-color: transparent;");
         root.setTop(layout);
-        GameList gameList = new GameList(5);
-        root.setCenter(gameList.getDisplay());
+        root.setCenter((new GamePane()).getDisplay());
         Scene myScene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT, BACKGROUND_COLOR);
         myStage.setScene(myScene);
         myStage.show();
