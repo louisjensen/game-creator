@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.AnnotatedArrayType;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -37,7 +36,8 @@ public class AssetManager extends Stage {
     private Set<String> myImageExtensions;
     private ScrollPane myImageScrollPane;
     private HBox myButtonHBox;
-    private String mySelectedImage;
+    private String mySelectedImageName;
+    private ImageView mySelectedImageView;
     private TitledPane myImageTitledPane;
     private VBox myOuterVBox;
 
@@ -67,7 +67,7 @@ public class AssetManager extends Stage {
      * a new type before the entity actually needs to be made and kept track of
      */
     public AssetManager(){
-        mySelectedImage = "";
+        mySelectedImageName = "";
         initializeVariables();
         initializeStage();
         fillImageExtensionSet();
@@ -124,7 +124,8 @@ public class AssetManager extends Stage {
                     ImageView imageView = createImageView(temp);
                     AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView, IMAGE_SUBPANE_SIZE);
                     subPane.setOnMouseClicked(mouseEvent -> {
-                        mySelectedImage = temp.getName();
+                        mySelectedImageName = temp.getName();
+                        mySelectedImageView = imageView;
                     });
                     if(col > MAX_NUM_COLS){
                         col = 0;
@@ -235,7 +236,7 @@ public class AssetManager extends Stage {
     }
 
     private void handleClose(){
-        if(!mySelectedImage.equals("")){
+        if(!mySelectedImageName.equals("")){
             this.close();
         }
         else{
@@ -251,9 +252,9 @@ public class AssetManager extends Stage {
      * Displays the AssetManger and Waits
      * @return image filename (with extension) of selected image
      */
-    public String showAndReturn(){
-        this.showAndWait();
-        return ASSET_IMAGE_FOLDER_PATH + "/" + mySelectedImage;
+    public ImageView getImagePath(){
+        ImageView imageView = mySelectedImageView;
+        return imageView;
     }
 
     private void setImageToSelected(String resourceName) {
