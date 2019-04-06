@@ -7,12 +7,16 @@ import ui.ErrorBox;
 import ui.TestEntity;
 import ui.UIException;
 import ui.manager.AssetManager;
+import ui.manager.LabelManager;
+import ui.manager.ObjectManager;
 
 public class AssetManagerTester extends Application {
 
     @Override
     public void start(Stage testStage) {
-        AssetManager temp = new AssetManager(new TestEntity());
+        LabelManager labelmanager = new LabelManager();
+        ObjectManager manager = new ObjectManager(labelmanager);
+        AssetManager temp = new AssetManager(new TestEntity("object1", manager));
         String selected = temp.showAndReturn("flappy_bird.png");
         System.out.println("Selected Image: " + selected);
     }
