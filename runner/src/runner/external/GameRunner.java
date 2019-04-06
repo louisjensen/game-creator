@@ -9,6 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -45,6 +46,7 @@ public class GameRunner {
         myGroup = new Group();
         myScene = new Scene(myGroup, mySceneWidth, mySceneHeight);
         myScene.setFill(Color.BEIGE);
+        myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         myEntitiesAndNodes = initializeMap();
         showEntities();
         myStage.setScene(myScene);
@@ -55,6 +57,12 @@ public class GameRunner {
         myAnimation.getKeyFrames().add(frame);
         myAnimation.play();
         myStage.show();
+    }
+
+    private void handleKeyInput(KeyCode code) {
+        //Need to decide how to pass info to engine
+        //Could be method myEngine.handleKeyInput(code) ?
+        System.out.println(code);
     }
 
     private HashMap<Entity, Node> initializeMap() {
@@ -90,7 +98,7 @@ public class GameRunner {
         Node toEdit = (Node) myEntitiesAndNodes.get(entity);
         PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
         Point3D position = (Point3D) positionComponent.getValue();
-        System.out.println(position.getX());
+       // System.out.println(position.getX());
         toEdit.setLayoutX(position.getX());
         toEdit.setLayoutY(position.getY());
         return toEdit;
@@ -108,7 +116,7 @@ public class GameRunner {
         myGroup.getChildren().clear();
         for(Entity entity : myEntities){
             Node toAdd = (Node) myEntitiesAndNodes.get(entity);
-            System.out.println(toAdd.getLayoutX());
+         //   System.out.println(toAdd.getLayoutX());
             myGroup.getChildren().add((Node) myEntitiesAndNodes.get(entity));
         }
     }
