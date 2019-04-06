@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ui.ErrorBox;
 import ui.Propertable;
 import ui.Utility;
 import ui.panes.AssetImageSubPane;
@@ -209,7 +210,9 @@ public class AssetManager extends Stage {
             drawImageScrollPane();
         } catch (IOException e) {
             //TODO: Test that this works
-            createAndDisplayAlert(myResources.getString(IO_ERROR));
+            String[] text = myResources.getString(IO_ERROR).split(",");
+            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
+            errorBox.display();
         }
     }
 
@@ -226,7 +229,9 @@ public class AssetManager extends Stage {
             this.close();
         }
         else{
-            createAndDisplayAlert(myResources.getString("NOIMAGE"));
+            String[] text = myResources.getString("NOIMAGE").split(",");
+            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
+            errorBox.display();
         }
     }
 
