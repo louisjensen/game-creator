@@ -1,5 +1,6 @@
 package ui.panes;
 
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -36,6 +37,7 @@ class PropertiesPane extends TitledPane {
     }
 
     private ScrollPane createPropertiesGrid() throws UIException {
+        Platform.runLater(() -> this.requestFocus());
         GridPane gridlist = new GridPane();
         gridlist.getStyleClass().add("prop-grid");
         ScrollPane scrollpane = new ScrollPane(gridlist);

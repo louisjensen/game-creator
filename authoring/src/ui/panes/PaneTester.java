@@ -7,6 +7,7 @@ import ui.ErrorBox;
 import ui.TestEntity;
 import ui.TestLevel;
 import ui.UIException;
+import ui.manager.GroupManager;
 import ui.manager.LabelManager;
 import ui.manager.ObjectManager;
 
@@ -32,16 +33,32 @@ public class PaneTester extends Application {
                     new PropertiesPane("Level", new TestLevel("Level_1", manager), "level_properties_list", testLabels);
             PropertiesPane testPaneIns =
                     new PropertiesPane("Instance", obj1, "instance_properties_list", testLabels);
+            GroupManager testCreateGroup = new GroupManager(manager);
 
-            Scene testScene = new Scene(testPaneLvl);
+            Scene testScene = new Scene(testPaneObj);
+            testCreateGroup.show();
 
             testScene.getStylesheets().add(TEST_STYLESHEET);
             testStage.setScene(testScene);
+            Scene testScene2 = new Scene(testPaneIns);
+            Scene testScene3 = new Scene(testPaneLvl);
+
+            Stage testStage2 = new Stage();
+            testStage2.setScene(testScene2);
+            testStage2.setResizable(false);
+            Stage testStage3 = new Stage();
+            testStage3.setScene(testScene3);
+            testStage3.setResizable(false);
+            testScene2.getStylesheets().add(TEST_STYLESHEET);
+            testScene3.getStylesheets().add(TEST_STYLESHEET);
+            testStage2.show();
+            testStage3.show();
+
+            testStage.show();
         } catch (UIException e) {
             ErrorBox errorbox = new ErrorBox("Test", e.getMessage());
             errorbox.display();
         }
-        testStage.show();
     }
 
     private void addTestLabels(LabelManager testLabels) {
@@ -65,6 +82,10 @@ public class PaneTester extends Application {
         manager.addEntity(d);
         manager.addEntity(e);
         manager.addEntity(f);
+        a.getPropertyMap().put("Group", "Enemies");
+        b.getPropertyMap().put("Group", "Platforms");
+        c.getPropertyMap().put("Group", "Enemies");
+        d.getPropertyMap().put("Group", "Platforms");
         return f;
     }
 

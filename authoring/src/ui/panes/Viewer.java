@@ -1,73 +1,65 @@
 package ui.panes;
 
-import javafx.event.EventHandler;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.*;
+import javafx.scene.shape.Line;
 
 
-public class Viewer extends Pane {
+public class Viewer extends ScrollPane {
+    private StackPane myStackPane;
+    private static final int CELL_SIZE = 50;
+    private int myRoomWidth;
+    private int myRoomHeight;
 
-    public Viewer(){
-        this.setMinHeight(500);
-        this.setMinWidth(500);
 
-        Rectangle rect = new Rectangle();
-        rect.setHeight(100);
-        rect.setWidth(100);
-        this.getChildren().add(rect);
-        rect.setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                System.out.println("Drag detected");
-                Dragboard db = rect.startDragAndDrop(TransferMode.MOVE);
-                ClipboardContent content = new ClipboardContent();
-                try {
-                    Image image = new Image(new FileInputStream("authoring/assets/images/mario_block.png"), 50, 50, false, false);
-                    content.putImage(image);
-                    db.setContent(content);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-
-        this.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                dragEvent.acceptTransferModes(TransferMode.ANY);
-            }
-        });
-        this.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                System.out.println("onDragDropped");
-                /* if there is a string data on dragboard, read it and use it */
-                Dragboard db = dragEvent.getDragboard();
-                boolean success = false;
-                if (db.hasImage()) {
-                    ImageView view = new ImageView(db.getImage());
-                    view.setFitWidth(50);
-                    view.setFitHeight(50);
-                    addImage(view);
-                    view.setX(dragEvent.getX() - 25);
-                    view.setY(dragEvent.getY() - 25);
-                }
-                /* let the source know whether the string was successfully
-                 * transferred and used */
-                dragEvent.setDropCompleted(success);
-
-            }
-        });
+    public Viewer(int roomWidth, int roomHeight){
+        myStackPane = new StackPane();
+        setRoomSize(roomWidth, roomHeight);
+        addGridLines();
+        this.setContent(myStackPane);
     }
 
-    private void addImage(ImageView image){
-        this.getChildren().add(image);
+    /**
+     * Sets the size of the room (the size of the entire level)
+     * @param width Desired width of the level
+     * @param height Desired height of the level
+     */
+    public void setRoomSize(int width, int height){
+        myStackPane.setPrefWidth(width);
+        myStackPane.setPrefHeight(height);
+        myRoomWidth = width;
+        myRoomHeight = height;
     }
+
+    private void addGridLines(){
+        Pane linesPane = new Pane();
+        linesPane.setPrefHeight(myRoomHeight);
+        linesPane.setPrefWidth(myRoomWidth);
+        addHorizontalLines(linesPane);
+        addVerticalLines(linesPane);
+        myStackPane.getChildren().add(linesPane);
+    }
+
+    private void addHorizontalLines(Pane pane) {
+        int x1 = 0;
+        int x2 = myRoomWidth;
+        for(int k = 0; k < myRoomHeight/CELL_SIZE; k++){
+            int y = k * CELL_SIZE;
+            Line tempLine = new Line(x1, y, x2, y);
+            pane.getChildren().add(tempLine);
+            System.out.println("Y Coordinate: " + y);
+            //System.out.println("Drew line");
+        }
+    }
+
+    private void addVerticalLines(Pane pane){
+        int y1 = 0;
+        int y2 = myRoomHeight;
+        for(int k = 0; k < myRoomWidth/CELL_SIZE; k++){
+            int x = k * CELL_SIZE;
+            Line tempLine = new Line(x, y1, x, y2);
+            pane.getChildren().add(tempLine);
+        }
+    }
+
 }

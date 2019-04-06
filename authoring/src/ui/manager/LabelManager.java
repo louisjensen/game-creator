@@ -22,7 +22,7 @@ public class LabelManager {
     }
 
     public void addLabel(String labelGroup, String labelName) {
-        if (myLabelGroups.containsKey(labelGroup) && !myLabelGroups.get(labelGroup).contains(labelName))
+        if (myLabelGroups.containsKey(labelGroup) && !myLabelGroups.get(labelGroup).contains(labelName) && labelName != null) //Checks to make sure it isn't already here
             myLabelGroups.get(labelGroup).add(labelName);
     }
 
@@ -32,7 +32,6 @@ public class LabelManager {
     }
 
     public ObservableList<String> getLabels(String labelGroup) {
-        return (myLabelGroups.containsKey(labelGroup)) ?
-                FXCollections.unmodifiableObservableList(myLabelGroups.get(labelGroup)) : null;
+        return myLabelGroups.getOrDefault(labelGroup, null);
     }
 }

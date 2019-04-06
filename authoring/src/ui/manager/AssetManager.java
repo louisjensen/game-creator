@@ -12,7 +12,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ui.ErrorBox;
 import ui.Propertable;
+import ui.Utility;
 import ui.panes.AssetImageSubPane;
 
 import javax.imageio.ImageIO;
@@ -21,7 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -36,7 +37,8 @@ public class AssetManager extends Stage {
     private Set<String> myImageExtensions;
     private ScrollPane myImageScrollPane;
     private HBox myButtonHBox;
-    private String mySelectedImage;
+    private String mySelectedImageName;
+    private ImageView mySelectedImageView;
     private TitledPane myImageTitledPane;
     private VBox myOuterVBox;
 
@@ -44,11 +46,12 @@ public class AssetManager extends Stage {
     private static final String BUNDLE_NAME = "AssetManager";
     private static final String ASSET_IMAGE_FOLDER_PATH = "authoring/Assets/Images";
     private static final String IMAGES_TITLE_KEY = "ImagesTitle";
-    private static final String BUTTON_FAIL_KEY = "ButtonFailText";
     private static final String BUTTON_INFO = "Buttons";
     private static final String IO_ERROR = "IOError";
     private static final String ERROR_HEADER = "ErrorHeader";
     private static final String EXTENSION_PREFIX = "*.";
+    private static final String DEFAULT_STYLE_SHEET = "default.css";
+    private static final String ASSET_SPECIFIC_SHEET = "asset-manager";
     private static final double SPACING = 10;
     private static final int STAGE_WIDTH = 400;
     private static final int STAGE_HEIGHT = 300;
@@ -59,9 +62,12 @@ public class AssetManager extends Stage {
 
     private Propertable myProp;
 
-    public AssetManager(Propertable prop) {
-        //TODO: integrate in entity
-        myProp = prop;
+    /**
+     * This default Constructor is needed when the user is choosing an image for
+     * a new type before the entity actually needs to be made and kept track of
+     */
+    public AssetManager(){
+        mySelectedImageName = "";
         initializeVariables();
         initializeStage();
         fillImageExtensionSet();
@@ -69,6 +75,15 @@ public class AssetManager extends Stage {
         createButtonPane();
         fillVBox();
     }
+
+    public AssetManager(Propertable prop) {
+        super();
+        //TODO: integrate in entity
+        myProp = prop;
+
+    }
+
+
 
     private void fillVBox() {
         myOuterVBox.getChildren().add(myImageTitledPane);
@@ -82,7 +97,7 @@ public class AssetManager extends Stage {
         formatButtonHBox();
         for(String s : buttonInfo){
             String[] textAndMethod = s.split(" ");
-            Button button = makeButton(textAndMethod[0], textAndMethod[1]);
+            Button button = Utility.makeButon(this, textAndMethod[1], textAndMethod[0]);
             myButtonHBox.getChildren().add(button);
         }
 
@@ -109,7 +124,8 @@ public class AssetManager extends Stage {
                     ImageView imageView = createImageView(temp);
                     AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView, IMAGE_SUBPANE_SIZE);
                     subPane.setOnMouseClicked(mouseEvent -> {
-                        mySelectedImage = temp.getName();
+                        mySelectedImageName = temp.getName();
+                        mySelectedImageView = imageView;
                     });
                     if(col > MAX_NUM_COLS){
                         col = 0;
@@ -166,8 +182,8 @@ public class AssetManager extends Stage {
         this.setWidth(STAGE_WIDTH);
         this.setHeight(STAGE_HEIGHT);
         Scene scene = new Scene(myOuterVBox);
-        scene.getStylesheets().add("default.css");
-        myImageTitledPane.getStyleClass().add("asset-manager");
+        scene.getStylesheets().add(DEFAULT_STYLE_SHEET);
+        myImageTitledPane.getStyleClass().add(ASSET_SPECIFIC_SHEET);
         this.setScene(scene);
     }
 
@@ -175,19 +191,6 @@ public class AssetManager extends Stage {
         for(String s: myResources.getString(EXTENSION_RESOURCE_KEY).split(",")){
             myImageExtensions.add(s);
         }
-    }
-
-    private Button makeButton(String text, String methodName){
-        Button temp = new Button();
-        temp.setText(text);
-        temp.setOnMouseClicked(e -> {
-            try {
-                Method method = this.getClass().getDeclaredMethod(methodName);
-                method.invoke(this);
-            } catch (Exception e1) {
-                temp.setText(myResources.getString(BUTTON_FAIL_KEY));
-            }});
-        return temp;
     }
 
     private void handleBrowse(){
@@ -201,27 +204,35 @@ public class AssetManager extends Stage {
         try {
             BufferedImage image = ImageIO.read(selectedFile);
             File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + "/" + selectedFile.getName());
-            System.out.println(selectedFile.getPath());
             String[] split = selectedFile.getPath().split("\\.");
             String extension = split[split.length-1];
             ImageIO.write(image, extension, saveToFile);
             drawImageScrollPane();
         } catch (IOException e) {
             //TODO: Test that this works
-            createAndDisplayAlert();
+            String[] text = myResources.getString(IO_ERROR).split(",");
+            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
+            errorBox.display();
         }
     }
 
-    private void createAndDisplayAlert() {
+    private void createAndDisplayAlert(String contentText) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(myResources.getString(ERROR_HEADER));
-        alert.setHeaderText(null);
-        alert.setContentText(myResources.getString(IO_ERROR));
-        alert.showAndWait();
+        alert.setHeaderText(contentText);
+        alert.setContentText(null);
+        alert.show();
     }
 
     private void handleClose(){
-        this.close();
+        if(!mySelectedImageName.equals("")){
+            this.close();
+        }
+        else{
+            String[] text = myResources.getString("NOIMAGE").split(",");
+            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
+            errorBox.display();
+        }
     }
 
     private void handleApply(){
@@ -230,13 +241,11 @@ public class AssetManager extends Stage {
 
     /**
      * Displays the AssetManger and Waits
-     * @param currentImage (with extension) that is selected
      * @return image filename (with extension) of selected image
      */
-    public String showAndReturn(String currentImage){
-        mySelectedImage = currentImage;
-        this.showAndWait();
-        return mySelectedImage;
+    public ImageView getImagePath(){
+        ImageView imageView = mySelectedImageView;
+        return imageView;
     }
 
     private void setImageToSelected(String resourceName) {

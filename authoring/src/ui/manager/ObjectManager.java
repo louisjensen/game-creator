@@ -1,5 +1,6 @@
 package ui.manager;
 
+import javafx.collections.ListChangeListener;
 import ui.TestEntity;
 
 import java.util.HashSet;
@@ -19,6 +20,7 @@ public class ObjectManager {
     public ObjectManager(LabelManager labelManager) {
         myEntities = new HashSet<>();
         myManager = labelManager;
+        labelManager.getLabels("Group").addListener((ListChangeListener) (change -> groupRemoveAction(change)));
     }
 
     public void addEntity(TestEntity entity) {
@@ -35,6 +37,28 @@ public class ObjectManager {
         }
         if (property.equals("Label"))
             myManager.removeLabel(property, objectLabel); // Remove old label from LabelManager if a label was just propagated
+    }
+
+    private void groupRemoveAction(ListChangeListener.Change<String> change) { //TODO remove duplication
+        change.next();
+        if (change.wasReplaced()) {
+            for (TestEntity entity : myEntities) {
+                if (entity.getPropertyMap().get("Group") != null &&
+                        entity.getPropertyMap().get("Group").equals(change.getRemoved().get(0)))
+                    entity.getPropertyMap().put("Group", change.getAddedSubList().get(0));
+            }
+        }
+        else if (change.wasRemoved()) {
+            for (TestEntity entity : myEntities) {
+                if (entity.getPropertyMap().get("Group") != null &&
+                        entity.getPropertyMap().get("Group").equals(change.getRemoved().get(0)))
+                    entity.getPropertyMap().put("Group", null);
+            }
+        }
+    }
+
+    LabelManager getLabelManager() {
+        return myManager;
     }
 
 }
