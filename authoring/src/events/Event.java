@@ -59,4 +59,13 @@ public abstract class Event implements IEvent {
         //TODO: implement
         actions.forEach(action -> action.accept(entity));
     }
+
+    public void setActions(List<Consumer<Entity>> actionsToAdd){
+        actions.addAll(actionsToAdd);
+    }
+
+    protected void setConditions(List<Condition> conditionsToAdd){
+        conditions.addAll(conditionsToAdd);
+    }
+
 }
