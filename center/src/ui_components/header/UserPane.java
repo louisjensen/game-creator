@@ -12,7 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class UserPane {
-    private static final String IMAGE_PATH = "center/profile_information/images/default.png";
+    private static final String IMAGE_PATH = "center/data/profile_information/images/default.png";
     private String myName;
     private Pane myUserDisplay;
 
