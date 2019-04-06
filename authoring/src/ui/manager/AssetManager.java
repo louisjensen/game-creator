@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.AnnotatedArrayType;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -61,13 +62,6 @@ public class AssetManager extends Stage {
 
     private Propertable myProp;
 
-    public AssetManager(Propertable prop) {
-        super();
-        //TODO: integrate in entity
-        myProp = prop;
-
-    }
-
     /**
      * This default Constructor is needed when the user is choosing an image for
      * a new type before the entity actually needs to be made and kept track of
@@ -80,6 +74,15 @@ public class AssetManager extends Stage {
         createButtonPane();
         fillVBox();
     }
+
+    public AssetManager(Propertable prop) {
+        super();
+        //TODO: integrate in entity
+        myProp = prop;
+
+    }
+
+
 
     private void fillVBox() {
         myOuterVBox.getChildren().add(myImageTitledPane);
@@ -241,13 +244,11 @@ public class AssetManager extends Stage {
 
     /**
      * Displays the AssetManger and Waits
-     * @param currentImage (with extension) that is selected
      * @return image filename (with extension) of selected image
      */
-    public String showAndReturn(String currentImage){
-        mySelectedImage = currentImage;
+    public String showAndReturn(){
         this.showAndWait();
-        return mySelectedImage;
+        return ASSET_IMAGE_FOLDER_PATH + "/" + mySelectedImage;
     }
 
     private void setImageToSelected(String resourceName) {
