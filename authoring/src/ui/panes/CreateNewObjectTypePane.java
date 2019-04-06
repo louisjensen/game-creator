@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ui.Utility;
 
 import java.lang.reflect.Method;
 import java.util.ResourceBundle;
@@ -71,11 +72,16 @@ public class CreateNewObjectTypePane extends Stage {
         String[] buttons = myWindowResources.getString("Buttons").split(",");
         for(String s : buttons){
             String[] info = s.split(" ");
-            myButtonPane.getChildren().add(makeButton(info[0], info[1]));
+            myButtonPane.getChildren().add(Utility.makeButon(this, info[1], info[0]));
         }
         myButtonPane.setPadding(INSETS);
         myButtonPane.setAlignment(Pos.CENTER);
         myButtonPane.setSpacing(GRIDPANE_GAP);
+    }
+
+    private void handleCloseButton(){
+        System.out.println("Handle close button method called");
+        this.close();
     }
 
     private Button makeButton(String text, String methodName){
