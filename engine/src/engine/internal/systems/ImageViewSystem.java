@@ -3,6 +3,7 @@ package engine.internal.systems;
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.ImageViewComponent;
+import engine.internal.Engine;
 import javafx.geometry.Point3D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,8 +11,8 @@ import javafx.scene.image.ImageView;
 import java.util.Collection;
 
 public class ImageViewSystem extends System {
-    public ImageViewSystem(Collection<Class<? extends Component>> requiredComponents){
-        super(requiredComponents);
+    public ImageViewSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine){
+        super(requiredComponents, engine);
     }
 
     @Override

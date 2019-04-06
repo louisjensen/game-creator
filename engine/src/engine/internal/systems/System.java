@@ -2,6 +2,7 @@ package engine.internal.systems;
 
 import engine.external.Entity;
 import engine.external.component.*;
+import engine.internal.Engine;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,6 +11,7 @@ import java.util.jar.Attributes;
 public abstract class System {
     protected final Class<? extends Component> POSITION_COMPONENT_CLASS = PositionComponent.class;
     protected final Class<? extends Component> VELOCITY_COMPONENT_CLASS = VelocityComponent.class;
+    protected final Class<? extends Component> COLLIDED_COMPONENT_CLASS = CollidedComponent.class;
     protected final Class<? extends Component> COLLISION_COMPONENT_CLASS = CollisionComponent.class;
     protected final Class<? extends Component> DESTROY_COMPONENT_CLASS = DestroyComponent.class;
     protected final Class<? extends Component> DIRECTION_COMPONENT_CLASS = DirectionComponent.class;
@@ -29,9 +31,11 @@ public abstract class System {
 
     private Collection<Class<? extends Component>> myRequiredComponents;
     private Collection<Entity> myEntities;
+    protected Engine myEngine;
 
-    public System(Collection<Class<? extends Component>> requiredComponents) {
+    public System(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         myRequiredComponents = requiredComponents;
+        myEngine = engine;
     }
 
     public void update(Collection<Entity> entities) {

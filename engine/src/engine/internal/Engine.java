@@ -12,8 +12,8 @@ import java.util.Collections;
 public class Engine {
     //TODO: Read from external source file instead of hardcoding final variables for system initialization
     private final Collection<Class<? extends Component>> MOVEMENT_SYSTEM_COMPONENTS = Arrays.asList(VelocityComponent.class, PositionComponent.class);
-    private final Collection<Class<? extends Component>> COLLISION_SYSTEM_COMPONENTS = Arrays.asList(CollisionComponent.class, ImageViewComponent.class);
     private final Collection<Class<? extends Component>> CONTACT_SYSTEM_COMPONENTS = Arrays.asList(CollisionComponent.class, ImageViewComponent.class);
+    private final Collection<Class<? extends Component>> COLLISION_SYSTEM_COMPONENTS = Arrays.asList(CollisionComponent.class, ImageViewComponent.class);
     private final Collection<Class<? extends Component>> HEALTH_SYSTEM_COMPONENTS = Arrays.asList(HealthComponent.class);
     private final Collection<Class<? extends Component>> CLEANUP_SYSTEM_COMPONENTS = Arrays.asList(DestroyComponent.class);
     private final Collection<Class<? extends Component>> IMAGEVIEW_SYSTEM_COMPONENTS = Arrays.asList(SpriteComponent.class, PositionComponent.class);
@@ -22,7 +22,6 @@ public class Engine {
     private MovementSystem myMovementSystem;
     private ImageViewSystem myImageViewSystem;
     private CollisionSystem myCollisionSystem;
-    private ContactSystem myContactSystem;
     private HealthSystem myHealthSystem;
     private EventHandlerSystem myEventHandlerSystem;
     private CleanupSystem myCleanupSystem;
@@ -37,7 +36,6 @@ public class Engine {
     public Collection<Entity> updateState(){
         myMovementSystem.update(myEntities);
         myImageViewSystem.update(myEntities);
-        myContactSystem.update(myEntities);
         myCollisionSystem.update(myEntities);
         myHealthSystem.update(myEntities);
         myCleanupSystem.update(myEntities);
@@ -51,11 +49,10 @@ public class Engine {
     }
 
     private void initSystems(){
-        myMovementSystem = new MovementSystem(MOVEMENT_SYSTEM_COMPONENTS);
-        myImageViewSystem = new ImageViewSystem(IMAGEVIEW_SYSTEM_COMPONENTS);
-        myCollisionSystem = new CollisionSystem(COLLISION_SYSTEM_COMPONENTS);
-        myContactSystem = new ContactSystem(CONTACT_SYSTEM_COMPONENTS);
-        myHealthSystem = new HealthSystem(HEALTH_SYSTEM_COMPONENTS);
-        myCleanupSystem = new CleanupSystem(CLEANUP_SYSTEM_COMPONENTS);
+        myMovementSystem = new MovementSystem(MOVEMENT_SYSTEM_COMPONENTS, this);
+        myImageViewSystem = new ImageViewSystem(IMAGEVIEW_SYSTEM_COMPONENTS, this);
+        myCollisionSystem = new CollisionSystem(COLLISION_SYSTEM_COMPONENTS, this);
+        myHealthSystem = new HealthSystem(HEALTH_SYSTEM_COMPONENTS, this);
+        myCleanupSystem = new CleanupSystem(CLEANUP_SYSTEM_COMPONENTS, this);
     }
 }
