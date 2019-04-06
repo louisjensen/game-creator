@@ -1,25 +1,25 @@
 package ui.panes;
 
-import javafx.scene.Node;
-import javafx.scene.control.Accordion;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 public class EntityMenu extends TitledPane {
-    private Accordion myAccordion;
+    private VBox myVBox;
 
     public EntityMenu(String title, int prefHeight, int prefWidth){
         this.setText(title);
         this.setCollapsible(false);
         this.setPrefHeight(prefHeight);
         this.setPrefWidth(prefWidth);
-        myAccordion = new Accordion();
-        this.setContent(myAccordion);
+        myVBox = new VBox();
+        this.setContent(myVBox);
     }
 
-    public void addDropDown(String title, Node contents){
+    public void addDropDown(String title, Pane contents){
         TitledPane newTitled = new TitledPane();
         newTitled.setText(title);
         newTitled.setContent(contents);
-        myAccordion.getPanes().add(newTitled);
+        myVBox.getChildren().add(newTitled);
     }
 }
