@@ -62,8 +62,17 @@ public class AssetManager extends Stage {
     private Propertable myProp;
 
     public AssetManager(Propertable prop) {
+        super();
         //TODO: integrate in entity
         myProp = prop;
+
+    }
+
+    /**
+     * This default Constructor is needed when the user is choosing an image for
+     * a new type before the entity actually needs to be made and kept track of
+     */
+    public AssetManager(){
         initializeVariables();
         initializeStage();
         fillImageExtensionSet();
