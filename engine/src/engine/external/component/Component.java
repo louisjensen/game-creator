@@ -1,4 +1,4 @@
-package engine.external;
+package engine.external.component;
 
 public abstract class Component<T> {
     private T myValue;
