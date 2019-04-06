@@ -9,6 +9,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import ui_components.Utilities;
+
+import java.util.ResourceBundle;
 
 public class HeaderBar {
     private Pane myHeaderLayout;
@@ -16,8 +19,10 @@ public class HeaderBar {
     private static final String TITLE_FONT = "Arial";
     private static final int TITLE_FONT_SIZE = 50;
     private static final Paint FONT_COLOR = Color.WHITE;
+    private ResourceBundle myLanguageBundle;
 
     public HeaderBar() {
+        myLanguageBundle = ResourceBundle.getBundle("languages/English");
         myHeaderLayout = new BorderPane();
         myCurrentUser = new UserPane();
         initializeLayouts();
@@ -28,7 +33,7 @@ public class HeaderBar {
     }
 
     private void initializeLayouts() {
-        Text title = new Text("ByteMe Game Center");
+        Text title = new Text(Utilities.getValue(myLanguageBundle, "titleText"));
         title.setFont(Font.font(TITLE_FONT, TITLE_FONT_SIZE));
         title.setFill(FONT_COLOR);
         BorderPane.setAlignment(title, Pos.TOP_CENTER);

@@ -1,18 +1,9 @@
 package center.external;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import ui_components.games.GameCard;
-import ui_components.games.GameList;
-import ui_components.games.GamePane;
-import ui_components.header.HeaderBar;
+import ui_components.CenterView;
 
 public class CenterMain extends Application {
     private static final double STAGE_WIDTH = 1250;
@@ -24,16 +15,8 @@ public class CenterMain extends Application {
     }
 
     public void start (Stage myStage) throws Exception {
-        BorderPane root = new BorderPane();
-        HeaderBar myHeader = new HeaderBar();
-        Pane layout = myHeader.getHeaderLayout();
-        BorderPane.setAlignment(layout, Pos.TOP_CENTER);
-        root.setStyle("-fx-background-color: transparent;");
-        layout.setStyle("-fx-background-color: transparent;");
-        root.setTop(layout);
-        root.setCenter((new GamePane()).getDisplay());
-        Scene myScene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT, BACKGROUND_COLOR);
-        myStage.setScene(myScene);
+        CenterView view = new CenterView();
+        myStage.setScene(view.getScene());
         myStage.show();
     }
 }
