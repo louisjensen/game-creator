@@ -2,7 +2,6 @@ package ui_components.games;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 
 public class GameList {
     private Pane myDisplay;
-    private ArrayList<String> gameNames = new ArrayList<String>(); // todo: use this to populate cards instead of a number of games
+    private ArrayList<String> gameNames = new ArrayList<>(); // todo: use this to populate cards instead of a number of games
     private static final double CARD_H_OFFSET = 50;
     private static final double CARD_V_OFFSET = 50;
     private static final int NUM_CARDS_DISPLAYED = 3;

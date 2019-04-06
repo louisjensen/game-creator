@@ -8,18 +8,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import ui_components.Utilities;
+
+import java.util.ResourceBundle;
 
 public class GamePane {
     private Pane myDisplay;
+    private ResourceBundle myResources;
 
     public GamePane() {
+        myResources = ResourceBundle.getBundle("languages/English");
         initializeDisplay();
     }
 
     private void initializeDisplay() {
         BorderPane gamePane = new BorderPane();
         gamePane.setPadding(new Insets(10, 100, 100, 100));
-        Text subtitle = new Text("All Games");
+        Text subtitle = new Text(Utilities.getValue(myResources, "gamePaneTitle"));
         subtitle.setFill(Color.WHITE);
         subtitle.setTextAlignment(TextAlignment.CENTER);
         BorderPane.setAlignment(subtitle, Pos.CENTER);
