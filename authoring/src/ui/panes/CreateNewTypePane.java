@@ -6,17 +6,25 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import ui.Utility;
+import ui.manager.AssetManager;
 
 import java.lang.reflect.Method;
 import java.util.ResourceBundle;
 
 
-public class CreateNewObjectTypePane extends Stage {
+public class CreateNewTypePane extends Stage {
     private GridPane myGridPane;
     private ResourceBundle myWindowResources;
     private ResourceBundle myTypeResources;
@@ -25,17 +33,19 @@ public class CreateNewObjectTypePane extends Stage {
     private ComboBox myBasedOnComboBox;
     private TextField myTextField;
     private HBox myButtonPane;
+    private Pane mySelectedImagePane;
 
     private static final Insets INSETS = new Insets(10,10,10,10);
     private static final int STAGE_HEIGHT = 300;
     private static final int STAGE_WIDTH = 400;
     private static final int GRIDPANE_GAP = 10;
     private static final int INPUT_WIDTH = 100;
+    private static final int PICTURE_SIZE = 50;
     private static final String STYLE_SHEET = "default.css";
     private static final String WINDOW_RESOURCES = "new_object_window";
     private static final String TYPE_RESOURCES = "default_entity_type";
 
-    public CreateNewObjectTypePane(String isANewTypeOf, String isBasedOn){
+    public CreateNewTypePane(String isANewTypeOf, String isBasedOn){
         initializeGridPane();
         initializeVariables();
         myWindowResources = ResourceBundle.getBundle(WINDOW_RESOURCES);
@@ -49,6 +59,7 @@ public class CreateNewObjectTypePane extends Stage {
         myTypeOfComboBox = new ComboBox();
         myTextField = new TextField();
         myButtonPane = new HBox();
+        mySelectedImagePane = new Pane();
     }
 
     private void initializeGridPane(){
@@ -65,7 +76,27 @@ public class CreateNewObjectTypePane extends Stage {
         createAndAddTypeOfOnDropDown(isANewTypeOf);
         createAndAddLabel(myWindowResources.getString("Label3"));
         createAndAddBasedOnDropDown(isBasedOn);
+        createAssetManagerButtonPane();
         createButtonPane();
+    }
+
+    private void createAssetManagerButtonPane() {
+        String[] buttonResources = myWindowResources.getString("AssetButton").split(",");
+        Button button = Utility.makeButon(this, buttonResources[1], buttonResources[0]);
+        myGridPane.add(button, 0, myGridPane.getRowCount());
+
+        Rectangle imagePlaceholder = new Rectangle(PICTURE_SIZE, PICTURE_SIZE);
+        mySelectedImagePane.getChildren().add(imagePlaceholder);
+        myGridPane.add(mySelectedImagePane, 1, myGridPane.getRowCount()-1);
+
+    }
+
+    private void openAssetManager(){
+        AssetManager assetManager = new AssetManager();
+        assetManager.showAndWait();
+        ImageView imageView = assetManager.getImagePath();
+        mySelectedImagePane.getChildren().clear();
+        mySelectedImagePane.getChildren().add(imageView);
     }
 
     private void createButtonPane() {
@@ -147,6 +178,6 @@ public class CreateNewObjectTypePane extends Stage {
         Scene scene = new Scene(titledPane);
         scene.getStylesheets().add(STYLE_SHEET);
         this.setScene(scene);
-        this.showAndWait();
+        this.show();
     }
 }
