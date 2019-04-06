@@ -67,6 +67,7 @@ public class AssetManager extends Stage {
      * a new type before the entity actually needs to be made and kept track of
      */
     public AssetManager(){
+        mySelectedImage = "";
         initializeVariables();
         initializeStage();
         fillImageExtensionSet();
@@ -215,27 +216,31 @@ public class AssetManager extends Stage {
         try {
             BufferedImage image = ImageIO.read(selectedFile);
             File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + "/" + selectedFile.getName());
-            System.out.println(selectedFile.getPath());
             String[] split = selectedFile.getPath().split("\\.");
             String extension = split[split.length-1];
             ImageIO.write(image, extension, saveToFile);
             drawImageScrollPane();
         } catch (IOException e) {
             //TODO: Test that this works
-            createAndDisplayAlert();
+            createAndDisplayAlert(myResources.getString(IO_ERROR));
         }
     }
 
-    private void createAndDisplayAlert() {
+    private void createAndDisplayAlert(String contentText) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(myResources.getString(ERROR_HEADER));
-        alert.setHeaderText(null);
-        alert.setContentText(myResources.getString(IO_ERROR));
-        alert.showAndWait();
+        alert.setHeaderText(contentText);
+        alert.setContentText(null);
+        alert.show();
     }
 
     private void handleClose(){
-        this.close();
+        if(!mySelectedImage.equals("")){
+            this.close();
+        }
+        else{
+            createAndDisplayAlert(myResources.getString("NOIMAGE"));
+        }
     }
 
     private void handleApply(){
