@@ -14,11 +14,20 @@ public class AssetManagerTester extends Application {
 
     @Override
     public void start(Stage testStage) {
-        LabelManager labelmanager = new LabelManager();
-        ObjectManager manager = new ObjectManager(labelmanager);
-        AssetManager temp = new AssetManager(new TestEntity("object1", manager));
-        String selected = temp.showAndReturn("flappy_bird.png");
-        System.out.println("Selected Image: " + selected);
+        //AssetManager temp = new AssetManager();
+        //temp.show();
+        CreateNewTypePane newObjectTypePane = new CreateNewTypePane("Obstacles", "Platform");
+        newObjectTypePane.show();
+        DefaultTypesPane entityTypePane = new DefaultTypesPane();
+        entityTypePane.setPrefSize(300, 600);
+        Scene scene = new Scene(entityTypePane, 600, 600);
+        //scene.getStylesheets().add("default.css");
+        testStage.setScene(scene);
+        testStage.show();
+        //Stage viewerStage = new Stage();
+        //Scene viewerScene = new Scene(new Viewer(1000, 1000), 500, 500);
+        //viewerStage.setScene(viewerScene);
+        //viewerStage.show();
     }
 
     public static void main(String[] args) {

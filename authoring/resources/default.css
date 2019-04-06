@@ -69,6 +69,21 @@
     -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0 );
 }
 
+.asset-manager {
+    -fx-pref-height: 225;
+    -fx-pref-width: 400;
+    -fx-max-height: 225;
+    -fx-max-width: 400;
+}
+
+.asset-manager-labels  {
+    -fx-font-family: Verdana;
+    -fx-font-weight: normal;
+    -fx-font-size: 10;
+    -fx-text-alignment: center;
+    -fx-text-fill: white;
+}
+
 .text-field {
     -fx-background-color: #606060;
     -fx-text-fill: white;

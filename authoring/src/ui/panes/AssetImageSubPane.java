@@ -2,6 +2,7 @@ package ui.panes;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -32,7 +33,8 @@ public class AssetImageSubPane extends VBox {
         myImageSize = paneSize - IMAGE_OFFSET;
 
 
-        Text text = new Text(cutText(title));
+        Label text = new Label(cutText(title));
+        text.getStyleClass().add("asset-manager-labels");
 
         //text.setWrappingWidth(myImageSize);
 
