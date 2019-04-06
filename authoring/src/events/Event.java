@@ -1,5 +1,13 @@
-package engine.external;
+package events;
 
+
+import engine.external.Entity;
+import engine.external.IEvent;
+import engine.external.component.NameComponent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Events are intended for creating/handling custom logic that is specific to a game, and cannot be reasonably anticipated by the engine beforehand
@@ -7,23 +15,48 @@ package engine.external;
  * @author Lucas Liu
  * @author Feroze Mohideen
  */
-public abstract class Event {
-    //TODO: Constructor
-    //TODO: store conditions
+public abstract class Event implements IEvent {
+    private List<Consumer<Entity>> actions;
+    private List<Condition> conditions;
+    private String myType;
 
-    public void execute() {
-        if (conditionsMet()) {
-            executeActions();
+    //this is the name that the event is attached to
+    public Event(String name) {
+        myType = name;
+    }
+
+    @Override
+    public void execute(List<Entity> entities) {
+        List<Entity> filtered_entities = filter(entities);
+        for (Entity e : filtered_entities) {
+            if (conditionsMet(e)) {
+                executeActions(e);
+            }
         }
     }
 
-    private boolean conditionsMet() {
-        //TODO: implement
-        return false;
+    private List<Entity> filter(List<Entity> entities) {
+        List<Entity> filtered_entities = new ArrayList<>();
+        for (Entity entity : entities) {
+            if (entity.getComponent(NameComponent.class).getValue().equals(myType)) {
+                filtered_entities.add(entity);
+            }
+        }
+        return filtered_entities;
     }
 
-    private void executeActions() {
-        //TODO: implement
+    private boolean conditionsMet(Entity entity) {
+        //TODO: make this sexier
+        for (Condition condition: conditions) {
+            if (!condition.getPredicate().test(entity)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    private void executeActions(Entity entity) {
+        //TODO: implement
+        actions.forEach(action -> action.accept(entity));
     }
 }
