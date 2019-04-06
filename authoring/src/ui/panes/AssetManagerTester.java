@@ -13,7 +13,7 @@ public class AssetManagerTester extends Application {
     @Override
     public void start(Stage testStage) {
         //AssetManager temp = new AssetManager(new TestEntity());
-        CreateNewObjectTypePane newObjectTypePane = new CreateNewObjectTypePane();
+        CreateNewObjectTypePane newObjectTypePane = new CreateNewObjectTypePane("Obstacles", "Platform");
         NewEntityTypePane entityTypePane = new NewEntityTypePane();
         Scene scene = new Scene(entityTypePane, 600, 600);
         testStage.setScene(scene);

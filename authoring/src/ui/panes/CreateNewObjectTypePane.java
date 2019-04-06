@@ -35,12 +35,12 @@ public class CreateNewObjectTypePane extends Stage {
     private static final String WINDOW_RESOURCES = "new_object_window";
     private static final String TYPE_RESOURCES = "default_entity_type";
 
-    public CreateNewObjectTypePane(){
+    public CreateNewObjectTypePane(String isANewTypeOf, String isBasedOn){
         initializeGridPane();
         initializeVariables();
         myWindowResources = ResourceBundle.getBundle(WINDOW_RESOURCES);
         myTypeResources = ResourceBundle.getBundle(TYPE_RESOURCES);
-        createContent();
+        createContent(isANewTypeOf, isBasedOn);
         initializeAndDisplayStage();
     }
 
@@ -58,13 +58,13 @@ public class CreateNewObjectTypePane extends Stage {
         myGridPane.setVgap(GRIDPANE_GAP);
     }
 
-    private void createContent() {
+    private void createContent(String isANewTypeOf, String isBasedOn) {
         createAndAddLabel(myWindowResources.getString("Label1"));
         createAndAddTextField();
         createAndAddLabel(myWindowResources.getString("Label2"));
-        createAndAddTypeOfOnDropDown();
+        createAndAddTypeOfOnDropDown(isANewTypeOf);
         createAndAddLabel(myWindowResources.getString("Label3"));
-        createAndAddBasedOnDropDown();
+        createAndAddBasedOnDropDown(isBasedOn);
         createButtonPane();
     }
 
@@ -97,8 +97,9 @@ public class CreateNewObjectTypePane extends Stage {
         return button;
     }
 
-    private void createAndAddBasedOnDropDown() {
+    private void createAndAddBasedOnDropDown(String isBasedOn) {
         myBasedOnComboBox.setPrefWidth(INPUT_WIDTH);
+        myBasedOnComboBox.setValue(isBasedOn);
         myGridPane.add(myBasedOnComboBox, 1, myGridPane.getRowCount()-1);
     }
 
@@ -120,7 +121,7 @@ public class CreateNewObjectTypePane extends Stage {
         myGridPane.add(myTextField, 1, myGridPane.getRowCount()-1);
     }
 
-    private void createAndAddTypeOfOnDropDown(){
+    private void createAndAddTypeOfOnDropDown(String initialTypeOf){
         String[] types = myTypeResources.getString("Tabs").split(",");
         myTypeOfComboBox.getItems().addAll(types);
         myTypeOfComboBox.setPrefWidth(INPUT_WIDTH);
@@ -132,6 +133,7 @@ public class CreateNewObjectTypePane extends Stage {
                 populateBasedOnDropDown((String) t1);
             }
         });
+        myTypeOfComboBox.setValue(initialTypeOf);
     }
     private void initializeAndDisplayStage() {
         this.setWidth(STAGE_WIDTH);
