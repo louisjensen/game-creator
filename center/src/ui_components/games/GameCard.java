@@ -42,7 +42,6 @@ public class GameCard {
 
     private StackPane fillCardContents() throws FileNotFoundException {
         StackPane cardContents = new StackPane();
-        cardContents.setBackground(Background.EMPTY);
         addBackground(cardContents);
         addForeGround(cardContents);
         return cardContents;

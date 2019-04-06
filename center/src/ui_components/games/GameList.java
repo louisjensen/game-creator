@@ -1,5 +1,9 @@
 package ui_components.games;
 
+import javafx.geometry.Insets;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 
@@ -29,7 +33,15 @@ public class GameList {
             GameCard c = new GameCard();
             gameList.getChildren().add(c.getDisplay());
         }
-        myDisplay = gameList;
+        ScrollPane scroller = new ScrollPane();
+        scroller.setPadding(new Insets(10, 10, 10, 10));
+        scroller.setContent(gameList);
+        scroller.setStyle("-fx-background-color: transparent;");
+        scroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroller.setMinHeight(GameCard.DISPLAY_HEIGHT * 2);
+        BorderPane content = new BorderPane(scroller);
+        myDisplay = content;
     }
 
 }
