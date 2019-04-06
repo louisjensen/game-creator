@@ -1,12 +1,9 @@
 package ui_components.header;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import ui_components.Utilities;
 
 import java.io.FileInputStream;
@@ -15,6 +12,7 @@ import java.util.ResourceBundle;
 
 public class UserPane {
     private static final String IMAGE_PATH = "center/data/profile_information/images/default.png";
+    public static final int IMAGE_SIZE = 75;
     private String myName;
     private Pane myUserDisplay;
     private ResourceBundle myLanguageBundle;
@@ -45,7 +43,7 @@ public class UserPane {
         Image icon = new Image(new FileInputStream(IMAGE_PATH));
         ImageView profilePicture = new ImageView(icon);
         profilePicture.setPreserveRatio(true);
-        profilePicture.setFitWidth(75);
+        profilePicture.setFitWidth(IMAGE_SIZE);
         myUserDisplay = new HBox();
         myUserDisplay.getChildren().add(profilePicture);
         myUserDisplay.getChildren().add(buttons);
