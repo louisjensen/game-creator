@@ -2,7 +2,6 @@ package ui_components.games;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -10,8 +9,9 @@ import javafx.scene.layout.Pane;
 import java.util.ArrayList;
 
 public class GameList {
+    public static final int SCROLLER_PADDING = 10;
     private Pane myDisplay;
-    private ArrayList<String> gameNames = new ArrayList<String>(); // todo: use this to populate cards instead of a number of games
+    private ArrayList<String> gameNames = new ArrayList<>(); // todo: use this to populate cards instead of a number of games
     private static final double CARD_H_OFFSET = 50;
     private static final double CARD_V_OFFSET = 50;
     private static final int NUM_CARDS_DISPLAYED = 3;
@@ -34,7 +34,7 @@ public class GameList {
             gameList.getChildren().add(c.getDisplay());
         }
         ScrollPane scroller = new ScrollPane();
-        scroller.setPadding(new Insets(10, 10, 10, 10));
+        scroller.setPadding(new Insets(SCROLLER_PADDING, SCROLLER_PADDING, SCROLLER_PADDING, SCROLLER_PADDING));
         scroller.setContent(gameList);
         scroller.setStyle("-fx-background-color: transparent;");
         scroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
