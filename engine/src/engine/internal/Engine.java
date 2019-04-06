@@ -1,10 +1,12 @@
 package engine.internal;
 
 import engine.external.Entity;
+import engine.external.IEvent;
 import engine.external.Level;
 import engine.external.component.*;
 import engine.internal.systems.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,8 +19,10 @@ public class Engine {
     private final Collection<Class<? extends Component>> HEALTH_SYSTEM_COMPONENTS = Arrays.asList(HealthComponent.class);
     private final Collection<Class<? extends Component>> CLEANUP_SYSTEM_COMPONENTS = Arrays.asList(DestroyComponent.class);
     private final Collection<Class<? extends Component>> IMAGEVIEW_SYSTEM_COMPONENTS = Arrays.asList(SpriteComponent.class, PositionComponent.class);
+    private final Collection<Class<? extends Component>> EVENTHANDLER_SYSTEM_COMPONENTS = new ArrayList<>();
 
     protected Collection<Entity> myEntities;
+    protected Collection<IEvent> myEvents;
     private MovementSystem myMovementSystem;
     private ImageViewSystem myImageViewSystem;
     private CollisionSystem myCollisionSystem;
@@ -29,6 +33,7 @@ public class Engine {
 
     public Engine(Level level){
         myEntities = level.getEntities();
+        myEvents = level.getEvents();
         initSystems();
     }
 
@@ -54,5 +59,6 @@ public class Engine {
         myCollisionSystem = new CollisionSystem(COLLISION_SYSTEM_COMPONENTS, this);
         myHealthSystem = new HealthSystem(HEALTH_SYSTEM_COMPONENTS, this);
         myCleanupSystem = new CleanupSystem(CLEANUP_SYSTEM_COMPONENTS, this);
+        myEventHandlerSystem = new EventHandlerSystem(EVENTHANDLER_SYSTEM_COMPONENTS, this, myEvents);
     }
 }
