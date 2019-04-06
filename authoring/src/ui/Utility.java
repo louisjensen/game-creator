@@ -1,8 +1,19 @@
 package ui;
 
+import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -12,6 +23,7 @@ import java.util.ResourceBundle;
  */
 public class Utility {
     private static final String RESOURCE = "utility";
+    private static final String DEFAULT_STYLESHEET = "default.css";
 
     /**
      * Creates and returns a Button
@@ -25,7 +37,7 @@ public class Utility {
      * @param buttonText Text to be displayed on the button
      * @return A Button with the above parameters
      */
-    public static Button makeButon(Object o, String methodName, String buttonText){
+    public static Button makeButton(Object o, String methodName, String buttonText){
         ResourceBundle resources = ResourceBundle.getBundle(RESOURCE);
         Button button = new Button();
         button.setOnMouseClicked(e -> {
@@ -55,6 +67,47 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    public static Scene createDialogPane(Node topContent, Node centerContent, List<Button> buttonsList) {
+        if (topContent == null)
+            topContent = new HBox();
+        if (centerContent == null)
+            centerContent = new HBox();
+
+        BorderPane content = new BorderPane(centerContent, topContent, null, createButtonBar(buttonsList), null);
+        Scene scene = new Scene(content);
+
+        scene.getStylesheets().add(DEFAULT_STYLESHEET);
+        content.getStyleClass().add("dialog-window");
+        content.getCenter().getStyleClass().add("center-pane");
+        content.getTop().getStyleClass().add("top-pane");
+
+        return scene;
+    }
+
+    public static Node createButtonBar(List<Button> buttonList) {
+        HBox rtn = new HBox();
+        rtn.getChildren().addAll(buttonList);
+        rtn.getStyleClass().add("buttons-bar");
+        if (!buttonList.isEmpty())
+            Platform.runLater(() -> buttonList.get(0).requestFocus());
+        return rtn;
+    }
+
+    /**
+     * Passed a Map where keys are CSS selectors for label and values are label text
+     */
+    public static Node createLabelsGroup(Map<String, List<String>> labels) {
+        VBox labelBox = new VBox();
+        for (String labelType : labels.keySet()) {
+            for (String newLabelText : labels.get(labelType)) {
+                Label newLabel = new Label(newLabelText);
+                newLabel.getStyleClass().add(labelType);
+                labelBox.getChildren().add(newLabel);
+            }
+        }
+        return labelBox;
     }
 
 }

@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -82,7 +81,7 @@ public class CreateNewTypePane extends Stage {
 
     private void createAssetManagerButtonPane() {
         String[] buttonResources = myWindowResources.getString("AssetButton").split(",");
-        Button button = Utility.makeButon(this, buttonResources[1], buttonResources[0]);
+        Button button = Utility.makeButton(this, buttonResources[1], buttonResources[0]);
         myGridPane.add(button, 0, myGridPane.getRowCount());
 
         Rectangle imagePlaceholder = new Rectangle(PICTURE_SIZE, PICTURE_SIZE);
@@ -103,7 +102,7 @@ public class CreateNewTypePane extends Stage {
         String[] buttons = myWindowResources.getString("Buttons").split(",");
         for(String s : buttons){
             String[] info = s.split(" ");
-            myButtonPane.getChildren().add(Utility.makeButon(this, info[1], info[0]));
+            myButtonPane.getChildren().add(Utility.makeButton(this, info[1], info[0]));
         }
         myButtonPane.setPadding(INSETS);
         myButtonPane.setAlignment(Pos.CENTER);

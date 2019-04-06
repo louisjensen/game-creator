@@ -30,8 +30,6 @@ public class TestEntity implements Propertable {
         myPropertyMap.put("XScale", "1.0");
         myPropertyMap.put("YScale", "1.0");
         myPropertyMap.put("Label", label);
-
-        myPropertyMap.put("Image", "sprite1.png"); //TODO This would not be here in real version
         addPropertyListeners();
     }
 
@@ -40,7 +38,7 @@ public class TestEntity implements Propertable {
            propagateChanges(change.getKey(),  change.getValueRemoved(), change.getValueAdded()));
     }
 
-    private void propagateChanges(String key, String oldVal, String newVal) { // At this point value is known valid or untaken label
+    private void propagateChanges(String key, String oldVal, String newVal) { // At this point value is assumed valid or untaken label
         if (key.equals("Label")) // If we're changing the label, preserve old label for propagation purposes
             myObjectManager.propagate(oldVal, key, newVal);
         else if (key.equals("Image") || key.equals("Group")) // If we're changing the Image or Group, just do it
