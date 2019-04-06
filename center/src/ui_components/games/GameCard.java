@@ -21,6 +21,7 @@ public class GameCard {
     public static final int BUTTON_WIDTH = 100;
     public static final int HORIZONTAL_BUTTON_SPACING = 15;
     public static final int SUBTITLE_FONT_SIZE = 24;
+
     private Pane myDisplay;
     public static final double DISPLAY_WIDTH = 300;
     public static final double DISPLAY_HEIGHT = 300;
@@ -38,7 +39,8 @@ public class GameCard {
 
     private void initializeDisplay() {
         BorderPane tempDisplay = new BorderPane();
-        StackPane cardContents = fillCardContents();
+        StackPane cardContents = null;
+        cardContents = fillCardContents();
         tempDisplay.setCenter(cardContents);
         myDisplay = tempDisplay;
     }

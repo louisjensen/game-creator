@@ -17,7 +17,6 @@ public class UserPane {
     private Pane myUserDisplay;
     private ResourceBundle myLanguageBundle;
 
-
     public UserPane(String username) {
         // todo: make this actually use username
     }
