@@ -3,6 +3,7 @@ package ui.control;
 import javafx.scene.control.TextField;
 import ui.ErrorBox;
 import ui.Propertable;
+import ui.Utility;
 import ui.manager.LabelManager;
 
 import java.util.ResourceBundle;
@@ -56,15 +57,6 @@ public class TextFieldProperty extends TextField implements ControlProperty {
     private boolean isValidValue(String key, String newVal) {
         if (key.equals("Label") && myLabelManager.getLabels("Label").contains(newVal))
             return false;
-        ResourceBundle bundle = ResourceBundle.getBundle(PROP_SYNTAX);
-        if (bundle.containsKey(key)) { // Label matches syntax, valid
-            if (newVal.matches(bundle.getString(key))) {
-                return true;
-            } else {
-                ErrorBox error = new ErrorBox("Variable Error", "Invalid variable, refer to documentation for syntax");
-                error.display();
-            }
-        }
-        return false;
+        return Utility.isValidValue(key, newVal, PROP_SYNTAX);
     }
 }
