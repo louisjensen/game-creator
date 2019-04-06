@@ -49,6 +49,8 @@ public class AssetManager extends Stage {
     private static final String IO_ERROR = "IOError";
     private static final String ERROR_HEADER = "ErrorHeader";
     private static final String EXTENSION_PREFIX = "*.";
+    private static final String DEFAULT_STYLE_SHEET = "default.css";
+    private static final String ASSET_SPECIFIC_SHEET = "asset-manager";
     private static final double SPACING = 10;
     private static final int STAGE_WIDTH = 400;
     private static final int STAGE_HEIGHT = 300;
@@ -166,8 +168,8 @@ public class AssetManager extends Stage {
         this.setWidth(STAGE_WIDTH);
         this.setHeight(STAGE_HEIGHT);
         Scene scene = new Scene(myOuterVBox);
-        scene.getStylesheets().add("default.css");
-        myImageTitledPane.getStyleClass().add("asset-manager");
+        scene.getStylesheets().add(DEFAULT_STYLE_SHEET);
+        myImageTitledPane.getStyleClass().add(ASSET_SPECIFIC_SHEET);
         this.setScene(scene);
     }
 
