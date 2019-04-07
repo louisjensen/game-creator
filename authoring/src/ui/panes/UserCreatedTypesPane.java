@@ -3,6 +3,7 @@ package ui.panes;
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.NameComponent;
+import engine.external.component.SizeComponent;
 import engine.external.component.SpriteComponent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
@@ -48,13 +49,24 @@ public class UserCreatedTypesPane extends VBox {
         String label = (String) entity.getComponent(new NameComponent("").getClass()).getValue();
         String imageName = (String) entity.getComponent(new SpriteComponent("").getClass()).getValue();
         System.out.println(imageName);
+        double size = (Double) entity.getComponent(new SizeComponent(25.0).getClass()).getValue();
         try {
-            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), new Entity());
+            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), new Entity(), (int) size, (int) size);
             ImageView imageView = new ImageView(imageWithEntity);
             UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageView, label, entity);
             List<Pane> paneList = new ArrayList<>();
             paneList.add(subPane);
             myEntityMenu.addToDropDown(category, paneList);
+            imageView.setOnDragDetected(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    System.out.println("Drag detected");
+                    Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(imageWithEntity);
+                    db.setContent(content);
+                }
+            });
         } catch (FileNotFoundException e) {
             //TODO: deal with this
             e.printStackTrace();

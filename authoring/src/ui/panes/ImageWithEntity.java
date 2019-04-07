@@ -7,8 +7,8 @@ import java.io.FileInputStream;
 
 public class ImageWithEntity extends Image {
     private Entity myEntity;
-    public ImageWithEntity(FileInputStream s, Entity entity) {
-        super(s);
+    public ImageWithEntity(FileInputStream s, Entity entity, int width, int height) {
+        super(s, width, height, false, false);
         myEntity = entity;
     }
 
