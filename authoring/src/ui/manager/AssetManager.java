@@ -97,7 +97,7 @@ public class AssetManager extends Stage {
         formatButtonHBox();
         for(String s : buttonInfo){
             String[] textAndMethod = s.split(" ");
-            Button button = Utility.makeButon(this, textAndMethod[1], textAndMethod[0]);
+            Button button = Utility.makeButton(this, textAndMethod[1], textAndMethod[0]);
             myButtonHBox.getChildren().add(button);
         }
 
@@ -122,7 +122,7 @@ public class AssetManager extends Stage {
                 String lowerCaseExtension = extension.toLowerCase();
                 if(myImageExtensions.contains(lowerCaseExtension)){
                     ImageView imageView = createImageView(temp);
-                    AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView, IMAGE_SUBPANE_SIZE);
+                    AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
                     subPane.setOnMouseClicked(mouseEvent -> {
                         mySelectedImageName = temp.getName();
                         mySelectedImageView = imageView;
@@ -203,7 +203,7 @@ public class AssetManager extends Stage {
         File selectedFile = chooser.showOpenDialog(stage);
         try {
             BufferedImage image = ImageIO.read(selectedFile);
-            File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + "/" + selectedFile.getName());
+            File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
             String[] split = selectedFile.getPath().split("\\.");
             String extension = split[split.length-1];
             ImageIO.write(image, extension, saveToFile);
@@ -240,12 +240,20 @@ public class AssetManager extends Stage {
     }
 
     /**
-     * Displays the AssetManger and Waits
-     * @return image filename (with extension) of selected image
+     * Gets the ImageView associated with the selected image
+     * @return ImageView of the selected image
      */
     public ImageView getImagePath(){
         ImageView imageView = mySelectedImageView;
         return imageView;
+    }
+
+    /**
+     * Gets the Name of the selected image
+     * @return String of the selected image name
+     */
+    public String getImageName(){
+        return  mySelectedImageName;
     }
 
     private void setImageToSelected(String resourceName) {
