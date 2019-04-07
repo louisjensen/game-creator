@@ -13,7 +13,7 @@ public class AssetManagerTester extends Application {
         //temp.show();
         UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane();
         DefaultTypesPane entityTypePane = new DefaultTypesPane(userCreatedTypesPane);
-        Viewer viewer = new Viewer(1000, 1000);
+        Viewer viewer = new Viewer(200, 500);
         HBox hBox = new HBox();
         hBox.getChildren().addAll(viewer, entityTypePane, userCreatedTypesPane);
         entityTypePane.setPrefSize(300, 600);

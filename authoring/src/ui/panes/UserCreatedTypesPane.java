@@ -65,6 +65,9 @@ public class UserCreatedTypesPane extends VBox {
                     ClipboardContent content = new ClipboardContent();
                     content.putImage(imageWithEntity);
                     db.setContent(content);
+                    System.out.println(imageWithEntity.getWidth());
+                    db.setDragView(imageWithEntity, 0, 0);
+
                 }
             });
         } catch (FileNotFoundException e) {
