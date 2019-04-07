@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class CreateNewTypePane extends Stage {
+public class CreateNewTypeWindow extends Stage {
     private GridPane myGridPane;
     private ResourceBundle myWindowResources;
     private ResourceBundle myTypeResources;
@@ -47,7 +47,7 @@ public class CreateNewTypePane extends Stage {
     private static final String WINDOW_RESOURCES = "new_object_window";
     private static final String TYPE_RESOURCES = "default_entity_type";
 
-    public CreateNewTypePane(String isANewTypeOf, String isBasedOn){
+    public CreateNewTypeWindow(String isANewTypeOf, String isBasedOn){
         initializeGridPane();
         initializeVariables();
         myWindowResources = ResourceBundle.getBundle(WINDOW_RESOURCES);

@@ -6,9 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.WindowEvent;
 import ui.DefaultTypesFactory;
-import ui.manager.AssetManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +25,6 @@ public class DefaultTypesPane extends VBox{
 
     private static final String RESOURCE = "default_entity_type";
     private static final String TITLE_KEY = "DefaultTitle";
-    private static final String TABS = "Tabs";
-    private static final String TABS_REGEX = ",";
 
     /**
      * Creates a new pane to display the default types
@@ -53,11 +49,12 @@ public class DefaultTypesPane extends VBox{
                 pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
-                        CreateNewTypePane createNewTypePane = new CreateNewTypePane(s1, s2);
-                        createNewTypePane.showAndWait();
-                        Entity entity = createNewTypePane.getUserCreatedEntity();
+                        CreateNewTypeWindow createNewTypeWindow = new CreateNewTypeWindow(s1, s2);
+                        createNewTypeWindow.showAndWait();
+                        Entity entity = createNewTypeWindow.getUserCreatedEntity();
                         if(entity != null){
                             System.out.println("Not null");
+                            myUserCreatedTypesPane.addUserDefinedType(s1, entity);
                         }
                         else{
                             System.out.println("Null");
