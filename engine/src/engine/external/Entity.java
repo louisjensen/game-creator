@@ -22,7 +22,6 @@ public class Entity {
         myComponents.remove(component.getClass());
     }
 
-<<<<<<< HEAD
     /*
      * Added this in to test to see whether I was correctly reloading the components in of an entity - can certainly
      * delete later on
@@ -33,7 +32,6 @@ public class Entity {
             System.out.println(c.getValue());
     }
 
-=======
     public boolean hasComponents(Collection<Class<? extends Component>> components) {
         return myComponents.keySet().containsAll(components);
     }
@@ -47,5 +45,4 @@ public class Entity {
     }
 
 
->>>>>>> a9d6947959d1e07ccb527edff68a793a268460d9
 }
