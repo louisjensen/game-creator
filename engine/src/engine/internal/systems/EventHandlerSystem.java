@@ -17,7 +17,7 @@ import java.util.Collection;
  */
 public class EventHandlerSystem extends System {
     Collection<IEvent> myEvents;
-
+    
     public EventHandlerSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine, Collection<IEvent> events) {
         super(requiredComponents, engine);
         myEvents = events;
