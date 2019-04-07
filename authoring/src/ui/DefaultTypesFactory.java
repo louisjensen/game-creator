@@ -86,10 +86,12 @@ public class DefaultTypesFactory {
         NameComponent nameComponent = new NameComponent("Cloud");
         VelocityComponent velocityComponent = new VelocityComponent(new Point3D(10, 0, 0));
         VisibilityComponent visibilityComponent = new VisibilityComponent(true);
+        SizeComponent sizeComponent = new SizeComponent(100.0);
         cloud.addComponent(gravityComponent);
         cloud.addComponent(nameComponent);
         cloud.addComponent(velocityComponent);
         cloud.addComponent(visibilityComponent);
+        cloud.addComponent(sizeComponent);
         return cloud;
     }
 
@@ -109,15 +111,19 @@ public class DefaultTypesFactory {
         Entity hero = new Entity();
         NameComponent nameComponent = new NameComponent("Hero");
         GravityComponent gravityComponent = new GravityComponent(9.8);
+        SizeComponent sizeComponent = new SizeComponent(75.0);
         hero.addComponent(nameComponent);
         hero.addComponent(gravityComponent);
+        hero.addComponent(sizeComponent);
         return hero;
     }
 
     private Entity createGrow(){
         Entity grow = new Entity();
         VisibilityComponent visibilityComponent = new VisibilityComponent(true);
+        SizeComponent sizeComponent = new SizeComponent(25.0);
         grow.addComponent(visibilityComponent);
+        grow.addComponent(sizeComponent);
         return grow;
     }
 }
