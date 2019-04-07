@@ -18,7 +18,7 @@ public class DefaultTypesFactory {
     private ResourceBundle myResources;
     private List<String> myCategoriesList;
 
-    private static final String RESOURCES = "dedault_types_factory";
+    private static final String RESOURCES = "default_types_factory";
 
     public DefaultTypesFactory(){
         myResources = ResourceBundle.getBundle(RESOURCES);
@@ -68,7 +68,9 @@ public class DefaultTypesFactory {
         for(String s1 : myResources.keySet()){
             HashMap<String, String> basedOnToMethod = new HashMap<>();
             String[] defaultTypes = myResources.getString(s1).split(",");
+            System.out.println("Made it past split");
             for(String s2 : defaultTypes){
+                System.out.println(s2);
                 String[] nameToMethod = s2.split(" ");
                 String typeName = nameToMethod[0];
                 String method = nameToMethod[1];
