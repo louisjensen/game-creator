@@ -53,8 +53,10 @@ public class GroupManager extends Stage {
         return contentBox;
     }
 
-    private void addNewLabel(String newLabel) {
+    private void addNewLabel(String newLabel, Stage stage) {
         myObjectManager.getLabelManager().addLabel("Group", newLabel);
+        if (stage != null)
+            stage.close();
     }
 
     private void editLabel(ListView.EditEvent<String> event) {
@@ -78,10 +80,8 @@ public class GroupManager extends Stage {
         newGroupField.setPromptText("New Group Name...");
         HBox centerContent = new HBox(newGroupField);
 
-        Button addButton = new Button("Add Group");
-        addButton.setOnAction(event -> { addNewLabel(newGroupField.getText()); prompt.close();});
-        Button cancelButton = new Button("Cancel");
-        cancelButton.setOnAction(event -> prompt.close());
+        Button addButton = Utility.makeButton(this, "addNewLabel", "Add Group", newGroupField.getText(), prompt);
+        Button cancelButton = Utility.makeButton(prompt, "close", "Cancel");
 
         prompt.setScene(Utility.createDialogPane(null, centerContent, new ArrayList<>(Arrays.asList(addButton, cancelButton))));
         prompt.showAndWait();

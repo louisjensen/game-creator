@@ -5,16 +5,15 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Carrie Hunner
@@ -53,6 +52,41 @@ public class Utility {
         return button;
     }
 
+    public static Button makeButton(Object o, String methodName, String buttonText, Object... methodParams){
+        ResourceBundle resources = ResourceBundle.getBundle(RESOURCE);
+        Button button = new Button();
+        AtomicReference<Method> reference = findMethod(o, methodName, methodParams);
+        button.setOnAction(e -> {
+            try {
+                reference.get().setAccessible(true);
+                reference.get().invoke(o, methodParams);
+            } catch (Exception e1) {
+                button.setText(resources.getString("ButtonFail"));
+            }});
+        button.setText(buttonText);
+        return button;
+    }
+
+    private static AtomicReference<Method> findMethod(Object o, String methodName, Object[] methodParams) {
+        final AtomicReference<Method> reference = new AtomicReference<>();
+        for (Method m : o.getClass().getDeclaredMethods()) {
+            if (m.getName().equals(methodName) && m.getParameterCount() == methodParams.length) {
+                boolean signatureMatch = true;
+                for (int i = 0; i < methodParams.length; i++) { // Check each parameter type, break if bad
+                    if (!methodParams[i].getClass().equals(m.getParameterTypes()[i])) {
+                        signatureMatch = false;
+                        break;
+                    }
+                }
+                if (signatureMatch) {
+                    reference.set(m);
+                    break;
+                }
+            }
+        }
+        return reference;
+    }
+
     /**
      * Check validity of new value from based on regex syntax from properties file
      */
@@ -69,19 +103,19 @@ public class Utility {
         return false;
     }
 
-    public static Scene createDialogPane(Node topContent, Node centerContent, List<Button> buttonsList) {
-        if (topContent == null)
-            topContent = new HBox();
-        if (centerContent == null)
-            centerContent = new HBox();
+    public static Scene createDialogPane(Node header, Node content, List<Button> buttonsList) {
+        if (header == null)
+            header = new HBox();
+        if (content == null)
+            content = new HBox();
 
-        BorderPane content = new BorderPane(centerContent, topContent, null, createButtonBar(buttonsList), null);
-        Scene scene = new Scene(content);
+        BorderPane borderPane = new BorderPane(content, header, null, createButtonBar(buttonsList), null);
+        Scene scene = new Scene(borderPane);
 
         scene.getStylesheets().add(DEFAULT_STYLESHEET);
-        content.getStyleClass().add("dialog-window");
-        content.getCenter().getStyleClass().add("center-pane");
-        content.getTop().getStyleClass().add("top-pane");
+        borderPane.getStyleClass().add("dialog-window");
+        borderPane.getCenter().getStyleClass().add("center-pane");
+        borderPane.getTop().getStyleClass().add("top-pane");
 
         return scene;
     }
