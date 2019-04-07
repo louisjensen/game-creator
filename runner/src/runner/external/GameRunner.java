@@ -89,18 +89,18 @@ public class GameRunner {
 
     private void updateMap(){
         for(Entity entity : myEntities){
-            myEntitiesAndNodes.put(entity, updatedNode(entity));
+            myEntitiesAndNodes.put(entity, updateNode(entity));
         }
     }
 
-    private Node updatedNode(Entity entity) {
-        Node toEdit = (Node) myEntitiesAndNodes.get(entity);
+    private Node updateNode(Entity entity) {
+        Node toUpdate = (Node) myEntitiesAndNodes.get(entity);
         PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
         Point3D position = (Point3D) positionComponent.getValue();
        // System.out.println(position.getX());
-        toEdit.setLayoutX(position.getX());
-        toEdit.setLayoutY(position.getY());
-        return toEdit;
+        toUpdate.setLayoutX(position.getX());
+        toUpdate.setLayoutY(position.getY());
+        return toUpdate;
     }
 
     private void printEntityLocations(){
