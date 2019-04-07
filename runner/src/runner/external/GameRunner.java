@@ -77,7 +77,6 @@ public class GameRunner {
             image.setLayoutX(position.getX());
             image.setLayoutY(position.getY());
             map.put(entity, image);
-
         }
         return map;
     }
