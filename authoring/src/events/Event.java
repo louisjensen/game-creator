@@ -18,7 +18,7 @@ import java.util.function.Consumer;
  * @author Feroze Mohideen
  */
 public abstract class Event implements IEvent {
-    private List<Class<? extends Event>> eventsList= new ArrayList<>(); //list of all events
+    //private List<Class<? extends Event>> eventsList= new ArrayList<>(); //list of all events
     private List<Consumer<Entity>> actions;
     private List<Condition> conditions;
     private String myType;
@@ -69,12 +69,12 @@ public abstract class Event implements IEvent {
         conditions.addAll(conditionsToAdd);
     }
 
-    /**
-     * Get the list of available Events to display to the user in the authoring environment
-     * @return an unmodifiable List of the subclasses of Event
-     */
-    public List<Class<? extends Event>> getEventsList(){
-        return Collections.unmodifiableList(eventsList);
-    }
+//    /**
+//     * Get the list of available Events to display to the user in the authoring environment
+//     * @return an unmodifiable List of the subclasses of Event
+//     */
+//    public List<Class<? extends Event>> getEventsList(){
+//        return Collections.unmodifiableList(eventsList);
+//    }
 
 }
