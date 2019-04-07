@@ -3,11 +3,17 @@ package ui.panes;
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.NameComponent;
+import engine.external.component.SpriteComponent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import ui.DefaultTypesFactory;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,6 +27,7 @@ public class UserCreatedTypesPane extends VBox {
     private ResourceBundle myResources;
     private DefaultTypesFactory myDefaultTypesFactory;
     private static final String RESOURCE = "default_entity_type";
+    private static final String ASSET_IMAGE_FOLDER_PATH = "authoring/Assets/Images";
 
     public UserCreatedTypesPane(){
         myResources = ResourceBundle.getBundle(RESOURCE);
@@ -38,13 +45,22 @@ public class UserCreatedTypesPane extends VBox {
     }
 
     public void addUserDefinedType(String category, Entity entity){
-        Pane pane = new Pane();
-        Label label = new Label();
-        Component nameComponent = entity.getComponent(new NameComponent("").getClass());
-        label.setText((String) nameComponent.getValue());
-        pane.getChildren().add(label);
-        List<Pane> paneList = new ArrayList<>();
-        paneList.add(pane);
-        myEntityMenu.addToDropDown(category, paneList);
+        String label = (String) entity.getComponent(new NameComponent("").getClass()).getValue();
+        String imageName = (String) entity.getComponent(new SpriteComponent("").getClass()).getValue();
+        System.out.println(imageName);
+        try {
+            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), new Entity());
+            ImageView imageView = new ImageView(imageWithEntity);
+            UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageView, label, entity);
+            List<Pane> paneList = new ArrayList<>();
+            paneList.add(subPane);
+            myEntityMenu.addToDropDown(category, paneList);
+        } catch (FileNotFoundException e) {
+            //TODO: deal with this
+            e.printStackTrace();
+        }
+
+
+
     }
 }
