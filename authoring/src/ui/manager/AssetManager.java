@@ -97,7 +97,7 @@ public class AssetManager extends Stage {
         formatButtonHBox();
         for(String s : buttonInfo){
             String[] textAndMethod = s.split(" ");
-            Button button = Utility.makeButon(this, textAndMethod[1], textAndMethod[0]);
+            Button button = Utility.makeButton(this, textAndMethod[1], textAndMethod[0]);
             myButtonHBox.getChildren().add(button);
         }
 

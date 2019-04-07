@@ -22,7 +22,8 @@ public class LabelManager {
     }
 
     public void addLabel(String labelGroup, String labelName) {
-        if (myLabelGroups.containsKey(labelGroup) && !myLabelGroups.get(labelGroup).contains(labelName) && labelName != null) //Checks to make sure it isn't already here
+        if (myLabelGroups.containsKey(labelGroup) &&
+                !myLabelGroups.get(labelGroup).contains(labelName) && labelName != null) //Checks to make sure it isn't already here
             myLabelGroups.get(labelGroup).add(labelName);
     }
 
