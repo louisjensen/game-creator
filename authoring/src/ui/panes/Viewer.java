@@ -1,6 +1,11 @@
 package ui.panes;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
 
@@ -14,9 +19,38 @@ public class Viewer extends ScrollPane {
 
     public Viewer(int roomWidth, int roomHeight){
         myStackPane = new StackPane();
+        myStackPane.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                dragEvent.acceptTransferModes(TransferMode.ANY);
+            }
+        });
+        myStackPane.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                Dragboard db = dragEvent.getDragboard();
+                boolean success = false;
+                if (db.hasImage()) {
+                    ImageView view = new ImageView(db.getImage());
+                    view.setFitWidth(50);
+                    view.setFitHeight(50);
+                    view.setX(dragEvent.getX());
+                    view.setY(dragEvent.getY());
+                    addImage(view);
+
+                }
+                /* let the source know whether the string was successfully
+                 * transferred and used */
+                dragEvent.setDropCompleted(success);
+            }
+        });
         setRoomSize(roomWidth, roomHeight);
         addGridLines();
         this.setContent(myStackPane);
+    }
+
+    private void addImage(ImageView imageView){
+        myStackPane.getChildren().add(imageView);
     }
 
     /**
