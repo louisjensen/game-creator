@@ -13,8 +13,9 @@ public class AssetManagerTester extends Application {
         //temp.show();
         UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane();
         DefaultTypesPane entityTypePane = new DefaultTypesPane(userCreatedTypesPane);
+        Viewer viewer = new Viewer(1000, 1000);
         HBox hBox = new HBox();
-        hBox.getChildren().addAll(entityTypePane, userCreatedTypesPane);
+        hBox.getChildren().addAll(viewer, entityTypePane, userCreatedTypesPane);
         entityTypePane.setPrefSize(300, 600);
         Scene scene = new Scene(hBox, 600, 600);
         //scene.getStylesheets().add("default.css");
