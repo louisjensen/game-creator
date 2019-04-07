@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -34,13 +35,8 @@ public class Viewer extends ScrollPane {
                 boolean success = false;
                 if (db.hasImage()) {
                     ImageView view = new ImageView(db.getImage());
-
-                    System.out.println("Mouse X" + dragEvent.getX());
-                    System.out.println("Mouse Y: " + dragEvent.getY());
                     view.setTranslateX(snapToGrid(dragEvent.getX()));
                     view.setTranslateY(snapToGrid(dragEvent.getY()));
-                    System.out.println("View X: " + view.getTranslateX());
-                    System.out.println("View Y: " + view.getTranslateY());
                     addImage(view);
 
                 }
