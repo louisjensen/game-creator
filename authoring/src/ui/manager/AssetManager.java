@@ -203,7 +203,7 @@ public class AssetManager extends Stage {
         File selectedFile = chooser.showOpenDialog(stage);
         try {
             BufferedImage image = ImageIO.read(selectedFile);
-            File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + "/" + selectedFile.getName());
+            File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
             String[] split = selectedFile.getPath().split("\\.");
             String extension = split[split.length-1];
             ImageIO.write(image, extension, saveToFile);
