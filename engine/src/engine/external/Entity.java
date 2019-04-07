@@ -1,5 +1,6 @@
 package engine.external;
 
+import engine.external.component.Component;
 
 import java.util.Arrays;
 import java.util.Collection;

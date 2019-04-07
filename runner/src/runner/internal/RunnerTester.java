@@ -1,8 +1,8 @@
 package runner.internal;
 
-import engine.external.Component;
+import engine.external.component.Component;
 import engine.external.Entity;
-import engine.external.PositionComponent;
+import engine.external.component.PositionComponent;
 import javafx.application.Application;
 import javafx.geometry.Point3D;
 import javafx.stage.Stage;
@@ -25,9 +25,9 @@ public class RunnerTester extends Application {
         Entity dummy1 = new Entity();
         Entity dummy2 = new Entity();
         Entity dummy3 = new Entity();
-        dummy1.addComponent(new PositionComponent<>(new Point3D(20.0, 20.0, 0.0)));
-        dummy2.addComponent(new PositionComponent<>(new Point3D(50.0, 50.0, 0.0)));
-        dummy3.addComponent(new PositionComponent<>(new Point3D(80.0, 80.0, 0.0)));
+        dummy1.addComponent(new PositionComponent(new Point3D(20.0, 20.0, 0.0)));
+        dummy2.addComponent(new PositionComponent(new Point3D(50.0, 50.0, 0.0)));
+        dummy3.addComponent(new PositionComponent(new Point3D(80.0, 80.0, 0.0)));
 
         myDummyEntities.add(dummy1);
         myDummyEntities.add(dummy2);

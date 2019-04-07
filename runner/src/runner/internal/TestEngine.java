@@ -1,7 +1,7 @@
 package runner.internal;
 
 import engine.external.Entity;
-import engine.external.PositionComponent;
+import engine.external.component.PositionComponent;
 import javafx.geometry.Point3D;
 
 import java.util.List;

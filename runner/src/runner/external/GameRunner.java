@@ -1,7 +1,7 @@
 package runner.external;
 
 import engine.external.Entity;
-import engine.external.PositionComponent;
+import engine.external.component.PositionComponent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point3D;
