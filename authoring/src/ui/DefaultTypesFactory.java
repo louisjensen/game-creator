@@ -113,4 +113,11 @@ public class DefaultTypesFactory {
         hero.addComponent(gravityComponent);
         return hero;
     }
+
+    private Entity createGrow(){
+        Entity grow = new Entity();
+        VisibilityComponent visibilityComponent = new VisibilityComponent(true);
+        grow.addComponent(visibilityComponent);
+        return grow;
+    }
 }

@@ -1,10 +1,12 @@
 package ui.panes;
 
+import engine.external.Entity;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.WindowEvent;
 import ui.DefaultTypesFactory;
 import ui.manager.AssetManager;
 
@@ -52,7 +54,14 @@ public class DefaultTypesPane extends VBox{
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         CreateNewTypePane createNewTypePane = new CreateNewTypePane(s1, s2);
-                        createNewTypePane.show();
+                        createNewTypePane.showAndWait();
+                        Entity entity = createNewTypePane.getUserCreatedEntity();
+                        if(entity != null){
+                            System.out.println("Not null");
+                        }
+                        else{
+                            System.out.println("Null");
+                        }
                     }
                 });
                 labelsList.add(pane);

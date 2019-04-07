@@ -240,12 +240,20 @@ public class AssetManager extends Stage {
     }
 
     /**
-     * Displays the AssetManger and Waits
-     * @return image filename (with extension) of selected image
+     * Gets the ImageView associated with the selected image
+     * @return ImageView of the selected image
      */
     public ImageView getImagePath(){
         ImageView imageView = mySelectedImageView;
         return imageView;
+    }
+
+    /**
+     * Gets the Name of the selected image
+     * @return String of the selected image name
+     */
+    public String getImageName(){
+        return  mySelectedImageName;
     }
 
     private void setImageToSelected(String resourceName) {

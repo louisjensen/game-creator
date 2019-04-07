@@ -1,15 +1,14 @@
 package ui.panes;
 
+import engine.external.Entity;
+import engine.external.component.NameComponent;
+import engine.external.component.SpriteComponent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -21,7 +20,6 @@ import ui.DefaultTypesFactory;
 import ui.Utility;
 import ui.manager.AssetManager;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -30,14 +28,14 @@ public class CreateNewTypePane extends Stage {
     private GridPane myGridPane;
     private ResourceBundle myWindowResources;
     private ResourceBundle myTypeResources;
-    private String[] myTypes;
     private ComboBox myTypeOfComboBox;
     private ComboBox myBasedOnComboBox;
     private TextField myTextField;
     private HBox myButtonPane;
     private Pane mySelectedImagePane;
     private DefaultTypesFactory myDefaultTypesFactory;
-    private boolean isImageChosen;
+    private String mySelectedImageName;
+    private Entity myUserCreatedEntity;
 
     private static final Insets INSETS = new Insets(10,10,10,10);
     private static final int STAGE_HEIGHT = 300;
@@ -58,6 +56,15 @@ public class CreateNewTypePane extends Stage {
         initializeAndDisplayStage();
     }
 
+    /**
+     * Gets the entity defined by the user
+     * Called by DefaultTypesPane when this stage is closed
+     * @return Entity defined by the user
+     */
+    public Entity getUserCreatedEntity(){
+        return  myUserCreatedEntity;
+    }
+
     private void initializeVariables() {
         myBasedOnComboBox = new ComboBox();
         myTypeOfComboBox = new ComboBox();
@@ -65,7 +72,8 @@ public class CreateNewTypePane extends Stage {
         myButtonPane = new HBox();
         mySelectedImagePane = new Pane();
         myDefaultTypesFactory = new DefaultTypesFactory();
-        isImageChosen = false;
+        mySelectedImageName = "";
+        myUserCreatedEntity = null;
     }
 
     private void initializeGridPane(){
@@ -103,7 +111,7 @@ public class CreateNewTypePane extends Stage {
         ImageView imageView = assetManager.getImagePath();
         mySelectedImagePane.getChildren().clear();
         mySelectedImagePane.getChildren().add(imageView);
-        isImageChosen = true;
+        mySelectedImageName = assetManager.getImageName();
     }
 
     private void createButtonPane() {
@@ -126,6 +134,12 @@ public class CreateNewTypePane extends Stage {
         String typeLabel = myTextField.getText();
         String typeOf = (String) myTypeOfComboBox.getValue();
         String basedOn = (String) myBasedOnComboBox.getValue();
+
+        Entity entity = myDefaultTypesFactory.getDefaultEntity(typeOf, basedOn);
+        entity.addComponent(new NameComponent(typeLabel));
+        entity.addComponent(new SpriteComponent(mySelectedImageName));
+        myUserCreatedEntity = entity;
+        this.close();
     }
 
 
@@ -179,6 +193,5 @@ public class CreateNewTypePane extends Stage {
         Scene scene = new Scene(titledPane);
         scene.getStylesheets().add(STYLE_SHEET);
         this.setScene(scene);
-        this.show();
     }
 }
