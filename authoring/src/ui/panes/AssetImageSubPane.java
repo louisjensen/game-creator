@@ -4,8 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.layout.GridPane;
 
 /**
  * @author Carrie Hunner
@@ -14,10 +13,10 @@ import javafx.scene.text.Text;
  * The text can be no longer than a set length and will be cut short
  * before being displayed to prevent formatting problems.
  */
-public class AssetImageSubPane extends VBox {
+public class AssetImageSubPane extends GridPane {
     private static final int IMAGE_OFFSET = 10;
+    private static final int IMAGE_SIZE = 50;
     private int myImageSize;
-    private int myPaneSize;
     private static final int MAX_NUM_CHARS = 6;
     private static final int SPACING_SCALE = 10;
     /**
@@ -25,14 +24,9 @@ public class AssetImageSubPane extends VBox {
      * then text acting as a title below it
      * @param title String of the name associated with the image
      * @param image ImageView to be displayed
-     * @param paneSize Desired size of the pane
      */
-    public AssetImageSubPane(String title, ImageView image, int paneSize){
-
-        myPaneSize = paneSize;
-        myImageSize = paneSize - IMAGE_OFFSET;
-
-
+    public AssetImageSubPane(String title, ImageView image){
+        myImageSize = IMAGE_SIZE - IMAGE_OFFSET;
         Label text = new Label(cutText(title));
         text.getStyleClass().add("asset-manager-labels");
 
@@ -40,10 +34,8 @@ public class AssetImageSubPane extends VBox {
 
 
         System.out.println(text.getText());
-        this.getChildren().add(image);
-        this.getChildren().add(text);
-        double spacing = paneSize/SPACING_SCALE;
-        this.setPadding(new Insets(spacing, spacing, spacing, spacing));
+        this.add(image, 0, 0);
+        this.add(text, 0, 1);
         formatPaneAndImage(image);
     }
 
@@ -60,7 +52,9 @@ public class AssetImageSubPane extends VBox {
 
     private void formatPaneAndImage(ImageView image) {
         this.setAlignment(Pos.CENTER);
-        this.setMaxSize(myPaneSize, myPaneSize);
+        this.setVgap(SPACING_SCALE);
+        this.setHgap(SPACING_SCALE);
+        this.setPadding(new Insets(SPACING_SCALE, SPACING_SCALE, SPACING_SCALE, SPACING_SCALE));
         this.setPrefSize(myImageSize, myImageSize);
         image.setFitWidth(myImageSize);
         image.setFitHeight(myImageSize);

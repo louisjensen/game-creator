@@ -122,7 +122,7 @@ public class AssetManager extends Stage {
                 String lowerCaseExtension = extension.toLowerCase();
                 if(myImageExtensions.contains(lowerCaseExtension)){
                     ImageView imageView = createImageView(temp);
-                    AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView, IMAGE_SUBPANE_SIZE);
+                    AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
                     subPane.setOnMouseClicked(mouseEvent -> {
                         mySelectedImageName = temp.getName();
                         mySelectedImageView = imageView;
