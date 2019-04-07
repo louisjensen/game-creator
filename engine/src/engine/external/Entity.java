@@ -1,10 +1,14 @@
 package engine.external;
 
+import engine.external.component.Component;
+
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Entity {
-    private Map<Class<?>, Component<?>> myComponents;
+    private Map<Class<? extends Component>, Component<?>> myComponents;
 
     public Entity() {
         myComponents = new HashMap<>();
@@ -18,6 +22,7 @@ public class Entity {
         myComponents.remove(component.getClass());
     }
 
+<<<<<<< HEAD
     /*
      * Added this in to test to see whether I was correctly reloading the components in of an entity - can certainly
      * delete later on
@@ -28,4 +33,19 @@ public class Entity {
             System.out.println(c.getValue());
     }
 
+=======
+    public boolean hasComponents(Collection<Class<? extends Component>> components) {
+        return myComponents.keySet().containsAll(components);
+    }
+
+    public boolean hasComponents(Class<? extends Component> component) {
+        return hasComponents(Arrays.asList(component));
+    }
+
+    public Component<?> getComponent(Class<? extends Component> clazz) {
+        return myComponents.get(clazz);
+    }
+
+
+>>>>>>> a9d6947959d1e07ccb527edff68a793a268460d9
 }

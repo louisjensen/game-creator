@@ -6,7 +6,6 @@ module authoring {
     requires javafx.graphics;
     requires javafx.controls;
     requires javafx.media;
-    requires xstream;
     requires java.desktop;
 
 
