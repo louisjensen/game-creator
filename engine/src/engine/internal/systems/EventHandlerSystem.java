@@ -18,13 +18,8 @@ import java.util.Collection;
 public class EventHandlerSystem extends System {
     Collection<IEvent> myEvents;
 
-    //TODO: feed Constructor a list of Events, not Components
-    public EventHandlerSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
-        super(requiredComponents, engine);
-    }
-
     public EventHandlerSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine, Collection<IEvent> events) {
-        this(requiredComponents, engine);
+        super(requiredComponents, engine);
         myEvents = events;
     }
 
