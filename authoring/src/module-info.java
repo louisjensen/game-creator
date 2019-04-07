@@ -6,8 +6,10 @@ module authoring {
     requires javafx.graphics;
     requires javafx.controls;
     requires javafx.media;
-    requires java.desktop;
     requires xstream;
+    requires java.desktop;
+
+
 
     exports authoring.external;
     exports ui.panes;

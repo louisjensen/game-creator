@@ -1,10 +1,22 @@
 .root {
+<<<<<<< HEAD
     -fx-background-color: #303030;
     -fx-text-fill: white;
 }
 
 .scroll-pane {
     -fx-background: transparent;
+=======
+    -fx-background-color: gray;
+}
+
+.pane {
+    -fx-background-color: lightgray;
+}
+
+.scroll-pane {
+
+>>>>>>> f35106b314b62b90136d234d7773905850d73789
 }
 
 .label {
@@ -12,6 +24,7 @@
     -fx-font-weight: bold;
     -fx-font-size: 18;
     -fx-text-alignment: center;
+<<<<<<< HEAD
     -fx-text-fill: white;
 }
 
@@ -50,11 +63,23 @@
 
 .combo-box .list-cell {
     -fx-text-fill: white;
+=======
+}
+
+.prop-label {
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
+}
+
+.combo-box {
+
+>>>>>>> f35106b314b62b90136d234d7773905850d73789
 }
 
 .titled-pane {
     -fx-collapsible: false;
     -fx-animated: false;
+<<<<<<< HEAD
     -fx-pref-width: 300;
     -fx-pref-height: 200;
     -fx-max-height: 200;
@@ -169,4 +194,39 @@
     -fx-alignment: center;
     -fx-padding: 15;
     -fx-spacing: 20;
+=======
+}
+
+.list-view {
+    -fx-pref-width: 300;
+    -fx-pref-height: 200;
+}
+
+.list-cell {
+    -fx-background-color: #545454;
+    -fx-text-fill: #c6c6c6;
+}
+
+.accordion {
+
+}
+
+.button {
+    -fx-font-size: 12;
+    -fx-min-width: 70;
+    -fx-min-height: 30;
+}
+
+
+.scroll-bar {
+
+}
+
+.menu {
+
+}
+
+.menu-bar {
+
+>>>>>>> f35106b314b62b90136d234d7773905850d73789
 }

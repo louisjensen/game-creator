@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Entity {
+
     private Map<Class<? extends Component>, Component<?>> myComponents;
 
     public Entity() {
