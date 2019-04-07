@@ -3,6 +3,7 @@ package launcher;
 import javafx.application.Application;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import manager.SceneManager;
 import page.WelcomePage;
 
 public class Main extends Application {
@@ -10,8 +11,8 @@ public class Main extends Application {
         launch(args);
     }
     public void start (Stage myStage) throws Exception {
-        WelcomePage myPage = new WelcomePage();
-        myPage.render(myStage);
+        SceneManager myScene = new SceneManager();
+        myScene.render(myStage);
     }
 
 }

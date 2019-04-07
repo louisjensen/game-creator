@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import manager.SwitchToUserOptions;
 
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
@@ -17,15 +18,16 @@ public class EnterGameButton extends SceneSwitchButton {
     public EnterGameButton(String label) {
         super(label);
     }
-    public EnterGameButton(String label, CredentialValidator userName, CredentialValidator passWord){
+    public EnterGameButton(String label, CredentialValidator userName, CredentialValidator passWord, SwitchToUserOptions mySwitch){
         super(label);
         userNameAccessor = userName;
         passWordAccessor = passWord;
+        this.getStylesheets().add("default.css");
         this.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (validateUserCredentials()){
-                    changeColor();
+                    mySwitch.switchPage();
                 }
 
             }
