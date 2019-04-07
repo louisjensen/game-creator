@@ -3,10 +3,8 @@ package factory;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import data.external.DataManager;
-import engine.external.Component;
 import engine.external.Entity;
-import engine.external.HealthComponent;
-import engine.external.VisibilityComponent;
+import engine.external.component.HealthComponent;
 import runner.external.Game;
 
 
