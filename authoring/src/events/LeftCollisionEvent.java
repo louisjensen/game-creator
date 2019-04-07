@@ -1,6 +1,6 @@
 package events;
 
-import actions.setVelocityAction;
+import actions.VelocityAction;
 import engine.external.Entity;
 import engine.external.component.PositionComponent;
 import javafx.geometry.Point3D;
