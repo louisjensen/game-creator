@@ -49,8 +49,8 @@ public class GroupManager extends Stage {
 
         Scene scene = new Scene(bp);
         scene.getStylesheets().add(DEFAULT_STYLESHEET);
-        bp.getTop().getStyleClass().add("top-pane");
-        bp.getCenter().getStyleClass().add("center-pane");
+        bp.getTop().getStyleClass().add("top-page");
+        bp.getCenter().getStyleClass().add("center-page");
         subLabel.getStyleClass().add("sub-label");
         this.setScene(scene);
     }
@@ -94,7 +94,7 @@ public class GroupManager extends Stage {
         newGroupField.setPromptText("New Group Name...");
         centerContent.getChildren().add(newGroupField);
         content.setCenter(centerContent);
-        content.getCenter().getStyleClass().add("center-pane");
+        content.getCenter().getStyleClass().add("center-page");
 
         Button addButton = new Button("Add Group");
         addButton.setOnAction(event -> { addNewLabel(newGroupField.getText()); prompt.close();});

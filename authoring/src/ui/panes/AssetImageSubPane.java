@@ -9,7 +9,7 @@ import javafx.scene.text.Text;
 
 /**
  * @author Carrie Hunner
- * This class creates a small pane consisting of an ImageView
+ * This class creates a small page consisting of an ImageView
  * and then text acting as a title below it.
  * The text can be no longer than a set length and will be cut short
  * before being displayed to prevent formatting problems.
@@ -25,7 +25,7 @@ public class AssetImageSubPane extends VBox {
      * then text acting as a title below it
      * @param title String of the name associated with the image
      * @param image ImageView to be displayed
-     * @param paneSize Desired size of the pane
+     * @param paneSize Desired size of the page
      */
     public AssetImageSubPane(String title, ImageView image, int paneSize){
 

@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 
 /**
  * @author Carrie Hunner
- * This class creates the pane displaying the default types
+ * This class creates the page displaying the default types
  * provided
  */
 public class DefaultTypesPane extends VBox{
@@ -22,7 +22,7 @@ public class DefaultTypesPane extends VBox{
     private static final String TABS_REGEX = ",";
 
     /**
-     * Creates a new pane to display the default types
+     * Creates a new page to display the default types
      */
     public DefaultTypesPane()     {
         myResources = ResourceBundle.getBundle(RESOURCE);

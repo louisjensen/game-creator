@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 /**
  * @author Carrie Hunner
- * This is a pane that will display all of the types created by the user
+ * This is a page that will display all of the types created by the user
  */
 public class UserCreatedTypesPane extends VBox {
     private EntityMenu myEntityMenu;
