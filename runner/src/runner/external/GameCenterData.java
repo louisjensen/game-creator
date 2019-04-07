@@ -1,11 +1,12 @@
 package runner.external;
 
 public class GameCenterData {
-    private String folderName;
-    private String gameTitle;
-    private String gameImageLocation;
-    private String gameDescription;
+    private String myFolderName;
+    private String myTitle;
+    private String myImageLocation;
+    private String myDescription;
 
-    
+
+
 
 }
