@@ -8,6 +8,9 @@ import ui.manager.LabelManager;
 
 import java.lang.reflect.Constructor;
 
+/**
+ * @author Harry Ross
+ */
 public class ButtonProperty extends Button implements ControlProperty {
 
     public ButtonProperty(String label) {

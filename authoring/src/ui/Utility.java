@@ -16,11 +16,13 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * @author Carrie Hunner
+ * @author Carrie
+ * @author Harry Ross
  * This class was created to provide general methods that can be used across the UI.
  * It's a place to hold reflection code that may be needed across multiple classes.
  */
 public class Utility {
+
     private static final String RESOURCE = "utility";
     private static final String DEFAULT_STYLESHEET = "default.css";
 
@@ -67,18 +69,26 @@ public class Utility {
         return button;
     }
 
+    /**
+     * Locates method with signature corresponding with given parameters, including superclasses, returns reference
+     * to method
+     * @param o Object to locate found method within class of
+     * @param methodName String name of method to locate
+     * @param methodParams Parameters to be used in search for correct method signature
+     * @return Reference to found method
+     */
     private static AtomicReference<Method> findMethod(Object o, String methodName, Object[] methodParams) {
         final AtomicReference<Method> reference = new AtomicReference<>();
         for (Method m : o.getClass().getDeclaredMethods()) {
             if (m.getName().equals(methodName) && m.getParameterCount() == methodParams.length) {
-                boolean signatureMatch = true;
-                for (int i = 0; i < methodParams.length; i++) { // Check each parameter type, break if bad
-                    if (!methodParams[i].getClass().equals(m.getParameterTypes()[i])) {
-                        signatureMatch = false;
+                boolean matchesSignature = true;
+                for (int i = 0; i < methodParams.length; i++) {
+                    if (!m.getParameterTypes()[i].isAssignableFrom(methodParams[i].getClass())) {
+                        matchesSignature = false;
                         break;
                     }
                 }
-                if (signatureMatch) {
+                if (matchesSignature) {
                     reference.set(m);
                     break;
                 }

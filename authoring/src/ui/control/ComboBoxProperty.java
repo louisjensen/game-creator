@@ -4,6 +4,9 @@ import javafx.scene.control.ComboBox;
 import ui.Propertable;
 import ui.manager.LabelManager;
 
+/**
+ * @author Harry Ross
+ */
 public class ComboBoxProperty extends ComboBox<String> implements ControlProperty {
 
     public ComboBoxProperty(String prompt) {

@@ -1,5 +1,7 @@
 package ui.manager;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -16,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * @author Harry Ross
+ */
 public class GroupManager extends Stage {
 
     private ObjectManager myObjectManager;
@@ -53,8 +58,8 @@ public class GroupManager extends Stage {
         return contentBox;
     }
 
-    private void addNewLabel(String newLabel, Stage stage) {
-        myObjectManager.getLabelManager().addLabel("Group", newLabel);
+    private void addLabel(StringProperty newLabelProp, Stage stage) {
+        myObjectManager.getLabelManager().addLabel("Group", newLabelProp.getValue());
         if (stage != null)
             stage.close();
     }
@@ -80,7 +85,7 @@ public class GroupManager extends Stage {
         newGroupField.setPromptText("New Group Name...");
         HBox centerContent = new HBox(newGroupField);
 
-        Button addButton = Utility.makeButton(this, "addNewLabel", "Add Group", newGroupField.getText(), prompt);
+        Button addButton = Utility.makeButton(this, "addLabel", "Add Group", newGroupField.textProperty(), prompt);
         Button cancelButton = Utility.makeButton(prompt, "close", "Cancel");
 
         prompt.setScene(Utility.createDialogPane(null, centerContent, new ArrayList<>(Arrays.asList(addButton, cancelButton))));
