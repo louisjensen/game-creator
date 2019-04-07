@@ -1,43 +1,41 @@
 package ui.manager;
 
-import javafx.application.Platform;
-import javafx.scene.Scene;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldListCell;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ui.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
+/**
+ * @author Harry Ross
+ */
 public class GroupManager extends Stage {
 
     private ObjectManager myObjectManager;
     private ListView<String> myListView;
-    private static final String DEFAULT_STYLESHEET = "default.css";
 
     public GroupManager(ObjectManager objectManager) {
         this.setResizable(false);
         this.setTitle("Group Manager");
         myObjectManager = objectManager;
         myListView = new ListView<>();
-        ScrollPane scrollpane = new ScrollPane(createContent());
-        BorderPane bp = new BorderPane();
-        bp.getStyleClass().add("group-manager");
-        bp.setCenter(new HBox(scrollpane));
+        ScrollPane scrollpane = new ScrollPane(createListContent());
 
-        VBox instructions = new VBox();
-        Label mainLabel = new Label("Add or Remove a Group");
-        Label subLabel = new Label("Double-click a Group to rename");
-        instructions.getChildren().addAll(mainLabel, subLabel);
-        bp.setTop(instructions);
+        Map<String, List<String>> instructions = new TreeMap<>();
+        instructions.put("label", new ArrayList<>(Collections.singletonList("Add or Remove a Group")));
+        instructions.put("sub-label", new ArrayList<>(Collections.singletonList("Double-click a Group to rename")));
 
         Button addButton = new Button("Add");
         addButton.setOnAction(event -> newGroupPrompt());
@@ -45,17 +43,12 @@ public class GroupManager extends Stage {
         removeButton.setOnAction(event -> removeLabel());
         Button okButton = new Button("Close");
         okButton.setOnAction(event -> this.close());
-        bp.setBottom(createButtonBar(new ArrayList<>(Arrays.asList(addButton, removeButton, okButton))));
 
-        Scene scene = new Scene(bp);
-        scene.getStylesheets().add(DEFAULT_STYLESHEET);
-        bp.getTop().getStyleClass().add("top-page");
-        bp.getCenter().getStyleClass().add("center-page");
-        subLabel.getStyleClass().add("sub-label");
-        this.setScene(scene);
+        this.setScene(Utility.createDialogPane(Utility.createLabelsGroup(instructions), new HBox(scrollpane),
+                new ArrayList<>(Arrays.asList(addButton, removeButton, okButton))));
     }
 
-    private HBox createContent() { //TODO clean up
+    private HBox createListContent() {
         HBox contentBox = new HBox();
         contentBox.getChildren().add(myListView);
         myListView.setEditable(true);
@@ -65,8 +58,10 @@ public class GroupManager extends Stage {
         return contentBox;
     }
 
-    private void addNewLabel(String newLabel) {
-        myObjectManager.getLabelManager().addLabel("Group", newLabel);
+    private void addLabel(StringProperty newLabelProp, Stage stage) {
+        myObjectManager.getLabelManager().addLabel("Group", newLabelProp.getValue());
+        if (stage != null)
+            stage.close();
     }
 
     private void editLabel(ListView.EditEvent<String> event) {
@@ -82,36 +77,18 @@ public class GroupManager extends Stage {
     }
 
     private void newGroupPrompt() {
-        BorderPane content = new BorderPane();
-        Scene newGroup = new Scene(content);
         Stage prompt = new Stage();
-        prompt.setScene(newGroup);
         prompt.setResizable(false);
         prompt.setTitle("New Group");
 
-        HBox centerContent = new HBox();
         TextField newGroupField = new TextField();
         newGroupField.setPromptText("New Group Name...");
-        centerContent.getChildren().add(newGroupField);
-        content.setCenter(centerContent);
-        content.getCenter().getStyleClass().add("center-page");
+        HBox centerContent = new HBox(newGroupField);
 
-        Button addButton = new Button("Add Group");
-        addButton.setOnAction(event -> { addNewLabel(newGroupField.getText()); prompt.close();});
-        Button cancelButton = new Button("Cancel");
-        cancelButton.setOnAction(event -> prompt.close());
-        content.setBottom(createButtonBar(new ArrayList<>(Arrays.asList(addButton, cancelButton))));
+        Button addButton = Utility.makeButton(this, "addLabel", "Add Group", newGroupField.textProperty(), prompt);
+        Button cancelButton = Utility.makeButton(prompt, "close", "Cancel");
 
-        newGroup.getStylesheets().add(DEFAULT_STYLESHEET);
+        prompt.setScene(Utility.createDialogPane(null, centerContent, new ArrayList<>(Arrays.asList(addButton, cancelButton))));
         prompt.showAndWait();
-    }
-
-    private HBox createButtonBar(List<Button> buttonList) {
-        HBox rtn = new HBox();
-        rtn.getChildren().addAll(buttonList);
-        rtn.getStyleClass().add("buttons-bar");
-        if (!buttonList.isEmpty())
-            Platform.runLater(() -> buttonList.get(0).requestFocus());
-        return rtn;
     }
 }
