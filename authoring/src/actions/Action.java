@@ -11,9 +11,7 @@ import java.util.function.Consumer;
 public abstract class Action {
     private List<Class<? extends Action>> actionsList= new ArrayList<>();
 
-    public Action(){
-        actionsList.add(getClass());
-    }
+    public Action(){}
 
     protected Consumer<Entity> makeValueAction(Object newValue, Class<? extends Component> componentClass) {
         return (Consumer<Entity>) (entity) -> {
@@ -23,10 +21,11 @@ public abstract class Action {
     }
 
     /**
-     * Ger the list of available Actions to display to the user in the authoring environment
+     * Get the list of available Actions to display to the user in the authoring environment
      * @return an unmodifiable List of the subclasses of Action
      */
     public List<Class<? extends Action>> getActionList(){
+
         return Collections.unmodifiableList(actionsList);
     }
 }
