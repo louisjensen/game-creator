@@ -3,7 +3,9 @@ package runner.internal;
 import engine.external.Level;
 import engine.external.component.Component;
 import engine.external.Entity;
-import engine.external.component.PositionComponent;
+import engine.external.component.XPositionComponent;
+import engine.external.component.YPositionComponent;
+import engine.external.component.ZPositionComponent;
 import javafx.application.Application;
 import javafx.geometry.Point3D;
 import javafx.stage.Stage;
@@ -36,13 +38,23 @@ public class RunnerTester extends Application {
         Entity dummy1 = new Entity();
         Entity dummy2 = new Entity();
         Entity dummy3 = new Entity();
-        dummy1.addComponent(new PositionComponent(new Point3D(20.0, 20.0, 0.0)));
-        dummy2.addComponent(new PositionComponent(new Point3D(110.0, -20.0, 0.0)));
-        dummy3.addComponent(new PositionComponent(new Point3D(80.0, 130.0, 0.0)));
+//        //TODO refactor
+//        dummy1.addComponent(new PositionComponent(new Point3D(20.0, 20.0, 0.0)));
+//        dummy2.addComponent(new PositionComponent(new Point3D(110.0, -20.0, 0.0)));
+//        dummy3.addComponent(new PositionComponent(new Point3D(80.0, 130.0, 0.0)));
 
         level.addEntity(dummy1);
         level.addEntity(dummy2);
         level.addEntity(dummy3);
+
+        //TODO: Hey Ryan, the Position Component has been decomposed into XPositionComponent, YPositionComponent, ZPositionComponent. Please refactor accordingly :)
+//        dummy1.addComponent(new PositionComponent(new Point3D(20.0, 20.0, 0.0)));
+//        dummy2.addComponent(new PositionComponent(new Point3D(50.0, 50.0, 0.0)));
+//        dummy3.addComponent(new PositionComponent(new Point3D(80.0, 80.0, 0.0)));
+//
+//        myDummyEntities.add(dummy1);
+//        myDummyEntities.add(dummy2);
+//        myDummyEntities.add(dummy3);
     }
 
 }
