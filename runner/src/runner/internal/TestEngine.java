@@ -4,9 +4,11 @@ import engine.external.Entity;
 import engine.external.Level;
 import engine.external.component.PositionComponent;
 import javafx.geometry.Point3D;
+import javafx.scene.input.KeyCode;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class TestEngine {
     private Collection<Entity> myEntities;
@@ -15,7 +17,7 @@ public class TestEngine {
         myEntities = level.getEntities();
     }
 
-    public Collection<Entity> updateState(){
+    public Collection<Entity> updateState(Collection<KeyCode> keys){
         moveStuffRight();
         return myEntities;
     }

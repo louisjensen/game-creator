@@ -98,7 +98,7 @@ public class GameRunner {
     }
 
     private void step (double elapsedTime) {
-        myEntities = myTestEngine.updateState();
+        myEntities = myTestEngine.updateState(myCurrentKeys);
         updateMap();
         showEntities();
         printKeys();
