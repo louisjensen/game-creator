@@ -1,7 +1,9 @@
 package ui;
 
+import events.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import ui.manager.ObjectManager;
 
@@ -47,5 +49,9 @@ public class TestEntity implements Propertable {
 
     public Map<String, String> getPropertyMap() {
         return myPropertyMap;
+    }
+
+    public ObservableList<Event> getEvents() {
+        return myObjectManager.getEvents(this.myPropertyMap.get("Label"));
     }
 }
