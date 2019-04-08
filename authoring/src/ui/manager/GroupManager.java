@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import ui.EntityField;
 import ui.Utility;
 
 import java.util.ArrayList;
@@ -52,13 +53,13 @@ public class GroupManager extends Stage {
         contentBox.getChildren().add(myListView);
         myListView.setEditable(true);
         myListView.setCellFactory(TextFieldListCell.forListView());
-        myListView.setItems(myObjectManager.getLabelManager().getLabels("Group"));
+        myListView.setItems(myObjectManager.getLabelManager().getLabels(EntityField.GROUP));
         myListView.setOnEditCommit(event -> editLabel(event));
         return contentBox;
     }
 
     private void addLabel(StringProperty newLabelProp, Stage stage) {
-        myObjectManager.getLabelManager().addLabel("Group", newLabelProp.getValue());
+        myObjectManager.getLabelManager().addLabel(EntityField.GROUP, newLabelProp.getValue());
         if (stage != null)
             stage.close();
     }
@@ -71,7 +72,7 @@ public class GroupManager extends Stage {
     private void removeLabel() {
         if (!myListView.getSelectionModel().getSelectedItems().isEmpty()) {
             String badLabel = myListView.getSelectionModel().getSelectedItems().get(0);
-            myObjectManager.getLabelManager().removeLabel("Group", badLabel);
+            myObjectManager.getLabelManager().removeLabel(EntityField.GROUP, badLabel);
         }
     }
 

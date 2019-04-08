@@ -1,10 +1,12 @@
 package ui.panes;
 
+import engine.external.Entity;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import ui.EntityField;
 import ui.ErrorBox;
 import ui.AuthoringEntity;
 import ui.AuthoringLevel;
@@ -91,11 +93,11 @@ public class AssetManagerTester extends Application {
     }
 
     private void addTestLabels(LabelManager testLabels) {
-        testLabels.addLabel("Group", "Enemies");
-        testLabels.addLabel("Group", "Platforms");
-        testLabels.addLabel("Label", "Mario");
-        testLabels.addLabel("Label", "Goomba");
-        testLabels.addLabel("Label", "Brick_Block");
+        testLabels.addLabel(EntityField.GROUP, "Enemies");
+        testLabels.addLabel(EntityField.GROUP, "Platforms");
+        testLabels.addLabel(EntityField.LABEL, "Mario");
+        testLabels.addLabel(EntityField.LABEL, "Goomba");
+        testLabels.addLabel(EntityField.LABEL, "Brick_Block");
     }
 
     private AuthoringEntity populateTestObjects(ObjectManager manager) {
@@ -111,10 +113,10 @@ public class AssetManagerTester extends Application {
         manager.addEntity(d);
         manager.addEntity(e);
         manager.addEntity(f);
-        a.getPropertyMap().put("Group", "Enemies");
-        b.getPropertyMap().put("Group", "Platforms");
-        c.getPropertyMap().put("Group", "Enemies");
-        d.getPropertyMap().put("Group", "Platforms");
+        a.getPropertyMap().put(EntityField.GROUP, "Enemies");
+        b.getPropertyMap().put(EntityField.GROUP, "Platforms");
+        c.getPropertyMap().put(EntityField.GROUP, "Enemies");
+        d.getPropertyMap().put(EntityField.GROUP, "Platforms");
         return f;
     }
 

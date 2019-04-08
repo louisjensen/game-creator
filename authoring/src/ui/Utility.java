@@ -99,10 +99,10 @@ public class Utility {
     /**
      * Check validity of new value from based on regex syntax from properties file
      */
-    public static boolean isValidValue(String key, String newVal, String syntaxResource) {
+    public static boolean isValidValue(Enum key, String newVal, String syntaxResource) {
         ResourceBundle bundle = ResourceBundle.getBundle(syntaxResource);
-        if (bundle.containsKey(key)) { // Label matches syntax, valid
-            if (newVal.matches(bundle.getString(key))) {
+        if (bundle.containsKey(key.name())) { // Label matches syntax, valid
+            if (newVal.matches(bundle.getString(key.name()))) {
                 return true;
             } else {
                 ErrorBox error = new ErrorBox("Variable Error", "Invalid variable, refer to documentation for syntax");

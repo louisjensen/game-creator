@@ -13,26 +13,30 @@ import java.util.Map;
  */
 public class AuthoringLevel implements Propertable {
 
-    private ObservableMap<String, String> myPropertyMap;
+    private ObservableMap<Enum, String> myPropertyMap;
     private ObjectManager myObjectManager;
 
-    private static final List<String> PROP_VAR_NAMES =
-            Arrays.asList("Label", "Height", "Width", "Background", "Music");
+    private static final List<? extends Enum> PROP_VAR_NAMES = Arrays.asList(LevelField.values());
     private static final Double DEFAULT_ROOM_SIZE = 500.0;
 
     public AuthoringLevel(String label, ObjectManager manager) {
         myObjectManager = manager;
         myPropertyMap = FXCollections.observableHashMap();
-        for (String name : PROP_VAR_NAMES)
+        for (Enum name : PROP_VAR_NAMES)
             myPropertyMap.put(name, null);
-        myPropertyMap.put("Label", label);
-        myPropertyMap.put("Height", DEFAULT_ROOM_SIZE.toString());
-        myPropertyMap.put("Width", DEFAULT_ROOM_SIZE.toString());
+        myPropertyMap.put(LevelField.LABEL, label);
+        myPropertyMap.put(LevelField.HEIGHT, DEFAULT_ROOM_SIZE.toString());
+        myPropertyMap.put(LevelField.WIDTH, DEFAULT_ROOM_SIZE.toString());
         addPropertyListener();
     }
 
-    public Map<String, String> getPropertyMap() {
+    public Map<Enum, String> getPropertyMap() {
         return myPropertyMap;
+    }
+
+    @Override
+    public Class<? extends Enum> getEnumClass() {
+        return LevelField.class;
     }
 
     private void addPropertyListener() {

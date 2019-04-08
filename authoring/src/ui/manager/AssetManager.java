@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ui.EntityField;
 import ui.ErrorBox;
 import ui.Propertable;
 import ui.Utility;
@@ -257,6 +258,6 @@ public class AssetManager extends Stage {
     }
 
     private void setImageToSelected(String resourceName) {
-        myProp.getPropertyMap().put("Image", resourceName);
+        myProp.getPropertyMap().put(EntityField.IMAGE, resourceName);
     }
 }

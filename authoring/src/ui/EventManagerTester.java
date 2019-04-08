@@ -22,8 +22,8 @@ public class EventManagerTester extends Application {
     }
 
     private void addTestLabels(LabelManager testLabels) {
-        testLabels.addLabel("Group", "Enemies");
-        testLabels.addLabel("Group", "Platforms");
+        testLabels.addLabel(EntityField.GROUP, "Enemies");
+        testLabels.addLabel(EntityField.GROUP, "Platforms");
     }
 
     private AuthoringEntity populateTestObjects(ObjectManager manager) {

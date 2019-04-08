@@ -8,6 +8,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import ui.EntityField;
 import ui.Propertable;
 import ui.AuthoringEntity;
 import ui.Utility;
@@ -45,12 +46,12 @@ public class EventManager extends Stage {
 
     private Scene createPane() {
         Map<String, List<String>> description = new LinkedHashMap<>();
-        description.put("label", new ArrayList<>(Collections.singletonList("Manage " + myEntity.getPropertyMap().get("Label") + " Events")));
-        description.put("sub-label", new ArrayList<>(Collections.singletonList("Add or Remove Events for " + myEntity.getPropertyMap().get("Label"))));
+        description.put("label", new ArrayList<>(Collections.singletonList("Manage " + myEntity.getPropertyMap().get(EntityField.LABEL) + " Events")));
+        description.put("sub-label", new ArrayList<>(Collections.singletonList("Add or Remove Events for " + myEntity.getPropertyMap().get(EntityField.LABEL))));
 
         Button addButton = Utility.makeButton(this, "addEvent", "Add");
         Button removeButton = Utility.makeButton(this, "removeEvent", "Remove");
-        Button closeButton = Utility.makeButton(this, "close", "Close");
+        Button closeButton = Utility.makeButton(this, "closeWindow", "Close");
 
         return Utility.createDialogPane(Utility.createLabelsGroup(description), createContent(), Arrays.asList(addButton, removeButton, closeButton));
     }
@@ -65,4 +66,7 @@ public class EventManager extends Stage {
         // We have to allow for the user to select a gridpane cell to remove, maybe replace entirely with listview to make that easier??
     }
 
+    public void closeWindow() {
+        this.close();
+    }
 }
