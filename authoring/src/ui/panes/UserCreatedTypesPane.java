@@ -27,11 +27,18 @@ public class UserCreatedTypesPane extends VBox {
     private EntityMenu myEntityMenu;
     private ResourceBundle myResources;
     private DefaultTypesFactory myDefaultTypesFactory;
+    private DataFormat myDataFormat;
     private static final String RESOURCE = "default_entity_type";
     private static final String ASSET_IMAGE_FOLDER_PATH = "authoring/Assets/Images";
 
-    public UserCreatedTypesPane(){
+    /**
+     *
+     * @param dataFormat This must be the same dataformat passed into the Viewer
+     *                   this allows these two panes to pass an entity
+     */
+    public UserCreatedTypesPane(DataFormat dataFormat){
         myResources = ResourceBundle.getBundle(RESOURCE);
+        myDataFormat = dataFormat;
         String title = myResources.getString("UserCreatedTitle");
         myEntityMenu = new EntityMenu(title);
         myDefaultTypesFactory = new DefaultTypesFactory();
@@ -51,22 +58,21 @@ public class UserCreatedTypesPane extends VBox {
         System.out.println(imageName);
         double size = (Double) entity.getComponent(new SizeComponent(25.0).getClass()).getValue();
         try {
-            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), new Entity(), (int) size, (int) size);
-            ImageView imageView = new ImageView(imageWithEntity);
-            UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageView, label, entity);
+            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), entity, (int) size, (int) size);
+            UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, entity);
             List<Pane> paneList = new ArrayList<>();
             paneList.add(subPane);
             myEntityMenu.addToDropDown(category, paneList);
-            imageView.setOnDragDetected(new EventHandler<MouseEvent>() {
+            imageWithEntity.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     System.out.println("Drag detected");
-                    Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE);
+                    Dragboard db = imageWithEntity.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent content = new ClipboardContent();
-                    content.putImage(imageWithEntity);
+                    //content.putImage(imageWithEntity);
+                    content.put(myDataFormat, imageWithEntity.getEntity());
                     db.setContent(content);
-                    System.out.println(imageWithEntity.getWidth());
-                    db.setDragView(imageWithEntity, 0, 0);
+                    db.setDragView(imageWithEntity.getImage(), 0, 0);
 
                 }
             });

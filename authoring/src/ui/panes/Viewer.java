@@ -1,5 +1,9 @@
 package ui.panes;
 
+import engine.external.Entity;
+import engine.external.component.PositionComponent;
+import engine.external.component.SizeComponent;
+import engine.external.component.SpriteComponent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
@@ -10,6 +14,11 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
+import ui.Utility;
+
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.util.ResourceBundle;
 
 
 public class Viewer extends ScrollPane {
@@ -17,11 +26,22 @@ public class Viewer extends ScrollPane {
     private static final int CELL_SIZE = 50;
     private int myRoomWidth;
     private int myRoomHeight;
+    private DataFormat myDataFormat;
+    private ResourceBundle myGeneralResources;
 
 
-    public Viewer(int roomWidth, int roomHeight){
+    /**
+     *
+     * @param roomWidth
+     * @param roomHeight
+     * @param dataFormat This needs to be the same dataformat passed into the UserCreatedTypesPane
+     *                   this allows for entities to be passed between these two panes
+     */
+    public Viewer(int roomWidth, int roomHeight, DataFormat dataFormat){
         myStackPane = new StackPane();
+        myDataFormat = dataFormat;
         myStackPane.setAlignment(Pos.TOP_LEFT);
+        myGeneralResources = ResourceBundle.getBundle("authoring_general");
         myStackPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
@@ -33,15 +53,12 @@ public class Viewer extends ScrollPane {
             public void handle(DragEvent dragEvent) {
                 Dragboard db = dragEvent.getDragboard();
                 boolean success = false;
-                if (db.hasImage()) {
-                    ImageView view = new ImageView(db.getImage());
-                    view.setTranslateX(snapToGrid(dragEvent.getX()));
-                    view.setTranslateY(snapToGrid(dragEvent.getY()));
-                    addImage(view);
-
+                System.out.println(db.getContentTypes());
+                if (db.hasContent(dataFormat)) {
+                    Entity entity = (Entity) db.getContent(myDataFormat);
+                    addImage(Utility.createImageWithEntity(entity));
+                    success = true;
                 }
-                /* let the source know whether the string was successfully
-                 * transferred and used */
                 dragEvent.setDropCompleted(success);
             }
         });
@@ -69,7 +86,7 @@ public class Viewer extends ScrollPane {
 
     }
 
-    private void addImage(ImageView imageView){
+    private void addImage(ImageWithEntity imageView){
         myStackPane.getChildren().add(imageView);
     }
 
