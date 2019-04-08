@@ -244,7 +244,7 @@ public class AssetManager extends Stage {
      * Gets the ImageView associated with the selected image
      * @return ImageView of the selected image
      */
-    public ImageView getImagePath(){
+    public ImageView getImageView(){
         ImageView imageView = mySelectedImageView;
         return imageView;
     }
