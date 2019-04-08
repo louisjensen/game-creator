@@ -29,7 +29,7 @@ USE_CASES
 * Write back to an XML file that game center will be able to access and display in a Scores menu
 
 ## 7. Load a published game into authoring environment
-* Read in the files associated with that game folder into objects in the authoring environment so that they are displayed properly within the scope of the scrollable pane and mutable in the edittable tabs 
+* Read in the files associated with that game folder into objects in the authoring environment so that they are displayed properly within the scope of the scrollable page and mutable in the edittable tabs 
 * Be able to overrwrite virutally any information that was previously stored in the game files, whether it be for the display, engine, or runner
 
 ## 8. User uploads new image file to be used in the game
@@ -144,14 +144,14 @@ USE_CASES
 
 # Authoring
 ## 27. Create a new object type
-* User will select the object option from the "Create New Type" pane
+* User will select the object option from the "Create New Type" page
 * A small window will appear and they will select from a dropdown first, what the new object's name is, then what object type the created object is, and lastly what this new object type is based on
 * Once they select create, their new object will appear in the "Created Object Types" library
 
 ## 28. Add Single Object Event
 * The user will right click on an object already displayed on the scene
 * They will then select "Edit Events"
-* From this pane they will select the "+" option
+* From this page they will select the "+" option
 * From here they can select the type of Event from a dropdown
 * Next they will select the desired action from a second dropdown
 * Lastly they will select "Apply" for the event to be saved
@@ -159,15 +159,15 @@ USE_CASES
 ## 29. Add Two-Object Event
 * The user will right click on an object already displayed on the scene
 * They will then select "Edit Events"
-* From this pane they will select the "+" option
+* From this page they will select the "+" option
 * From here they can select the type of Event from a dropdown
-* They can then select, from a dropdown, either a Group (specified by a label in the properties pane), a Type (Hero, Villain, etc), or a specific instance (hero1) with which that event occurs
+* They can then select, from a dropdown, either a Group (specified by a label in the properties page), a Type (Hero, Villain, etc), or a specific instance (hero1) with which that event occurs
 * Next they will select the desired action, from a dropdown, when the event occurs
 * Lastly they will select "Apply" for the event to be saved
 
 ## 30. Edit Object Size
 * The user will select the desired object on the "Viewer" with a left mouse click
-* They can then go to the "Properties" pane in the lower right corner of the screen
+* They can then go to the "Properties" page in the lower right corner of the screen
 * Scrolling to the "Size" section, there will be numbers that they can select and then type in new values for the width and height
     * Note: The object will snap its upper left corner to the grid so all objects are aligned
 

@@ -3,5 +3,6 @@ module runner {
     requires data;
     requires javafx.graphics;
     exports runner.external;
+    requires xstream;
     exports runner.internal to javafx.graphics;
 }

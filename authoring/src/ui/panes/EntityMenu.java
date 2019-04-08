@@ -1,6 +1,7 @@
 package ui.panes;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -11,9 +12,7 @@ import java.util.Map;
 
 public class EntityMenu extends TitledPane {
     private VBox myVBox;
-    private Map<String, VBox> myMap;
-    private static final int WIDTH = 300;
-    private static final int HEIGHT = 600;
+    private Map<String, ListView> myMap;
 
     public EntityMenu(String title){
         this.setText(title);
@@ -27,14 +26,14 @@ public class EntityMenu extends TitledPane {
         TitledPane newTitled = new TitledPane();
         newTitled.setAlignment(Pos.CENTER);
         newTitled.setText(title);
-        VBox vBox = new VBox();
-        newTitled.setContent(vBox);
-        myMap.put(title, vBox);
+        ListView listView = new ListView();
+        newTitled.setContent(listView);
+        myMap.put(title, listView);
         myVBox.getChildren().add(newTitled);
     }
 
     public void addToDropDown(String category, List<Pane> contentToAdd){
-        VBox vBox = myMap.get(category);
-        vBox.getChildren().addAll(contentToAdd);
+        ListView vBox = myMap.get(category);
+        vBox.getItems().addAll(contentToAdd);
     }
 }
