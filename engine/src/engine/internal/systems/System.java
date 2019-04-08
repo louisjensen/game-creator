@@ -43,11 +43,9 @@ public abstract class System {
         myInputs = new ArrayList<>();
     }
 
-    public void update(Collection<Entity> entities, Collection<KeyCode>... inputs) {
+    public void update(Collection<Entity> entities, Collection<KeyCode> inputs) {
         myEntities = new ArrayList<>();
-        if(inputs.length!=0){
-            myInputs = inputs[0];
-        }
+        myInputs = inputs;
         for (Entity e: entities) {
             if (filter(e)) {
                 myEntities.add(e);

@@ -5,22 +5,16 @@ import engine.external.IEvent;
 import engine.external.Level;
 import engine.external.component.*;
 import engine.internal.systems.*;
+import engine.internal.systems.System;
 import javafx.scene.input.KeyCode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public class Engine {
-    //TODO: Read from external source file instead of hardcoding final variables for system initialization
-    private final Collection<Class<? extends Component>> MOVEMENT_SYSTEM_COMPONENTS = Arrays.asList(XVelocityComponent.class,YVelocityComponent.class, XPositionComponent.class, YPositionComponent.class, ZPositionComponent.class);
-    private final Collection<Class<? extends Component>> CONTACT_SYSTEM_COMPONENTS = Arrays.asList(CollisionComponent.class, ImageViewComponent.class);
-    private final Collection<Class<? extends Component>> COLLISION_SYSTEM_COMPONENTS = Arrays.asList(CollisionComponent.class, ImageViewComponent.class);
-    private final Collection<Class<? extends Component>> HEALTH_SYSTEM_COMPONENTS = Arrays.asList(HealthComponent.class);
-    private final Collection<Class<? extends Component>> CLEANUP_SYSTEM_COMPONENTS = Arrays.asList(DestroyComponent.class);
-    private final Collection<Class<? extends Component>> IMAGEVIEW_SYSTEM_COMPONENTS = Arrays.asList(SpriteComponent.class, XPositionComponent.class, YPositionComponent.class, ZPositionComponent.class);
-    private final Collection<Class<? extends Component>> EVENTHANDLER_SYSTEM_COMPONENTS = new ArrayList<>();
+    //TODO: Exception Handling
+    private final ResourceBundle SYSTEM_COMPONENTS_RESOURCES = ResourceBundle.getBundle("SystemRequiredComponents.properties");
+
 
     protected Collection<Entity> myEntities;
     protected Collection<IEvent> myEvents;
@@ -30,23 +24,18 @@ public class Engine {
     private HealthSystem myHealthSystem;
     private EventHandlerSystem myEventHandlerSystem;
     private CleanupSystem myCleanupSystem;
+    private List<System> mySystems;
 
-
-    public Engine(Level level){
+    public Engine(Level level) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
         myEntities = level.getEntities();
         myEvents = level.getEvents();
         initSystems();
     }
 
-    // TODO: decide how inputs will be passed in from Runner
     public Collection<Entity> updateState(Collection<KeyCode> inputs){
-        myMovementSystem.update(myEntities);
-        myImageViewSystem.update(myEntities);
-        myCollisionSystem.update(myEntities);
-        myHealthSystem.update(myEntities);
-        myCleanupSystem.update(myEntities);
-        myEventHandlerSystem.update(myEntities, inputs);
-
+        for(System system :mySystems) {
+            system.update(myEntities,inputs);
+        }
         return this.getEntities();
     }
 
@@ -54,12 +43,26 @@ public class Engine {
         return Collections.unmodifiableCollection(myEntities);
     }
 
-    private void initSystems(){
-        myMovementSystem = new MovementSystem(MOVEMENT_SYSTEM_COMPONENTS, this);
-        myImageViewSystem = new ImageViewSystem(IMAGEVIEW_SYSTEM_COMPONENTS, this);
-        myCollisionSystem = new CollisionSystem(COLLISION_SYSTEM_COMPONENTS, this);
-        myHealthSystem = new HealthSystem(HEALTH_SYSTEM_COMPONENTS, this);
-        myCleanupSystem = new CleanupSystem(CLEANUP_SYSTEM_COMPONENTS, this);
-        myEventHandlerSystem = new EventHandlerSystem(EVENTHANDLER_SYSTEM_COMPONENTS, this, myEvents);
+    private void initSystems() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        mySystems = Arrays.asList(myMovementSystem,myImageViewSystem,myCollisionSystem,myHealthSystem,myEventHandlerSystem,myCleanupSystem);
+        for (System system:mySystems){
+            initSystem(system);
+        }
+    }
+
+    private void initSystem(System system) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+        Class systemClazz = system.getClass();
+        Collection<Class<?extends Component>> systemComponents = retrieveComponentClasses(systemClazz);
+        system = (System) systemClazz.getConstructor().newInstance(systemComponents,this);
+    }
+
+    @SuppressWarnings({"unchecked"})
+    private Collection<Class<? extends Component>> retrieveComponentClasses(Class systemClazz) throws ClassNotFoundException {
+        String[] componentArr = SYSTEM_COMPONENTS_RESOURCES.getStringArray(systemClazz.getSimpleName());
+        ArrayList<Class<? extends Component>> componentList = new ArrayList<>();
+        for(String component:componentArr){
+            componentList.add((Class<? extends Component>)Class.forName(component));
+        }
+        return componentList;
     }
 }
