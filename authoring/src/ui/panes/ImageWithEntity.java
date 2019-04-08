@@ -18,7 +18,7 @@ public class ImageWithEntity extends ImageView {
      * Returns AuthoringEntity associated with this object
      * @return AuthoringEntity
      */
-    public AuthoringEntity getEntity(){
+    public AuthoringEntity getAuthoringEntity(){
         return myAuthoringEntity;
     }
 
