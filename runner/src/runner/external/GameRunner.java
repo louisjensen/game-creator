@@ -38,6 +38,7 @@ public class GameRunner {
     private Map myEntitiesAndNodes;
     private List<Level> myLevels;
     private Game myGame;
+    private Set<KeyCode> myCurrentKeys;
 
 
     public GameRunner(Game game) {
@@ -57,9 +58,11 @@ public class GameRunner {
         myGroup = new Group();
         myScene = new Scene(myGroup, mySceneWidth, mySceneHeight);
         myScene.setFill(Color.BEIGE);
-        myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        myScene.setOnKeyPressed(e -> handleKeyPress(e.getCode()));
+        myScene.setOnKeyReleased(e -> handleKeyRelease(e.getCode()));
         myEntitiesAndNodes = initializeMap();
         showEntities();
+        myCurrentKeys = new HashSet<KeyCode>();
         myStage.setScene(myScene);
         myTestEngine = new TestEngine(myLevels.get(0));
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
@@ -70,10 +73,12 @@ public class GameRunner {
         myStage.show();
     }
 
-    private void handleKeyInput(KeyCode code) {
-        //Need to decide how to pass info to engine
-        //Could be method myEngine.handleKeyInput(code) ?
-        System.out.println(code);
+    private void handleKeyPress(KeyCode code) {
+        myCurrentKeys.add(code);
+    }
+
+    private void handleKeyRelease(KeyCode code){
+        myCurrentKeys.remove(code);
     }
 
     private HashMap<Entity, Node> initializeMap() {
@@ -96,6 +101,11 @@ public class GameRunner {
         myEntities = myTestEngine.updateState();
         updateMap();
         showEntities();
+        printKeys();
+    }
+
+    private void printKeys() {
+        System.out.println(myCurrentKeys);
     }
 
     private void updateMap(){
