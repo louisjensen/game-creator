@@ -26,8 +26,7 @@ public class EventHandlerSystem extends System {
     @Override
     protected void run() {
         for (IEvent e : myEvents) {
-            e.execute(new ArrayList<>(this.getEntities()));
-
+            e.execute(new ArrayList<>(this.getEntities()),this.getKeyCodes());
         }
     }
 }

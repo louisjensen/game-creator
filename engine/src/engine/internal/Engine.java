@@ -5,6 +5,7 @@ import engine.external.IEvent;
 import engine.external.Level;
 import engine.external.component.*;
 import engine.internal.systems.*;
+import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,13 +39,13 @@ public class Engine {
     }
 
     // TODO: decide how inputs will be passed in from Runner
-    public Collection<Entity> updateState(){
+    public Collection<Entity> updateState(Collection<KeyCode> inputs){
         myMovementSystem.update(myEntities);
         myImageViewSystem.update(myEntities);
         myCollisionSystem.update(myEntities);
         myHealthSystem.update(myEntities);
         myCleanupSystem.update(myEntities);
-        myEventHandlerSystem.update(myEntities);
+        myEventHandlerSystem.update(myEntities, inputs);
 
         return this.getEntities();
     }
