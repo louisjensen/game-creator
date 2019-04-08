@@ -2,16 +2,16 @@ package events;
 
 
 import actions.Action;
+import conditions.Condition;
 import engine.external.Entity;
-import engine.external.IEvent;
+import engine.external.IEventEngine;
 import engine.external.component.NameComponent;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Events are intended for creating/handling custom logic that is specific to a game, and cannot be reasonably anticipated by the engine beforehand
@@ -19,15 +19,16 @@ import java.util.function.Consumer;
  * @author Lucas Liu
  * @author Feroze Mohideen
  */
-public abstract class Event implements IEvent {
+public class Event implements IEventEngine, IEventAuthoring {
     //private List<Class<? extends Event>> eventsList= new ArrayList<>(); //list of all events
-    private List<Consumer<Entity>> actions;
-    private List<Condition> conditions;
-    private List<KeyCode> inputs;
+    private List<Action> actions = new ArrayList<>();
+    private List<Condition> conditions = new ArrayList<>();
+    private List<KeyCode> inputs = new ArrayList<>();
     private String myType;
 
     //this is the name that the event is attached to
-    public Event(String name) { myType = name; }
+    public Event(String name) { myType = name;
+    }
 
     //need to make this method take in keycode inputs as well
     @Override
@@ -62,24 +63,31 @@ public abstract class Event implements IEvent {
     }
 
     private void executeActions(Entity entity) {
-        //TODO: implement
-        actions.forEach(action -> action.accept(entity));
+        actions.forEach(action -> action.getAction().accept(entity));
     }
 
-    public void setActions(List<Consumer<Entity>> actionsToAdd){
+    public void addActions(List<Action> actionsToAdd){
         actions.addAll(actionsToAdd);
     }
 
-    protected void setConditions(List<Condition> conditionsToAdd){
+    public void addActions(Action action) { addActions(Arrays.asList(action));}
+
+    public void addConditions(List<Condition> conditionsToAdd){
         conditions.addAll(conditionsToAdd);
     }
 
-//    /**
-//     * Get the list of available Events to display to the user in the authoring environment
-//     * @return an unmodifiable List of the subclasses of Event
-//     */
-//    public List<Class<? extends Event>> getEventsList(){
-//        return Collections.unmodifiableList(eventsList);
-//    }
+    public void addConditions(Condition condition) { addConditions(Arrays.asList(condition));}
+
+    public void setConditions(List<Condition> newSetOfConditions) { conditions = newSetOfConditions;}
+
+    public void setActions(List<Action> newSetOfActions){
+        actions = newSetOfActions;
+    }
+
+    public void removeActions(List<Action> actionsToRemove){
+        actions.removeAll(actionsToRemove);
+    }
+
+
 
 }

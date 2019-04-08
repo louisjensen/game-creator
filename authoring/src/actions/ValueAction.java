@@ -1,16 +1,10 @@
 package actions;
 
-import engine.external.Entity;
 import engine.external.component.ValueComponent;
 
-import java.util.function.Consumer;
-
-public class ValueAction extends Action {
-
-    public ValueAction(){ super();}
-
-    public Consumer<Entity> makeValueAction(double newValue) {
-        return makeValueAction(newValue, ValueComponent.class);
+public class ValueAction extends NumericAction {
+    public ValueAction(ModifyType type, Double newValue){
+        setAction(type, newValue, ValueComponent.class);
     }
 
 }
