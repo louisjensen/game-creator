@@ -1,15 +1,14 @@
 package ui.panes;
 
+import engine.external.Entity;
+import engine.external.component.NameComponent;
+import engine.external.component.SpriteComponent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -17,23 +16,26 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import ui.DefaultTypesFactory;
 import ui.Utility;
 import ui.manager.AssetManager;
 
-import java.lang.reflect.Method;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class CreateNewTypePane extends Stage {
+public class CreateNewTypeWindow extends Stage {
     private GridPane myGridPane;
     private ResourceBundle myWindowResources;
     private ResourceBundle myTypeResources;
-    private String[] myTypes;
     private ComboBox myTypeOfComboBox;
     private ComboBox myBasedOnComboBox;
     private TextField myTextField;
     private HBox myButtonPane;
     private Pane mySelectedImagePane;
+    private DefaultTypesFactory myDefaultTypesFactory;
+    private String mySelectedImageName;
+    private Entity myUserCreatedEntity;
 
     private static final Insets INSETS = new Insets(10,10,10,10);
     private static final int STAGE_HEIGHT = 300;
@@ -45,7 +47,7 @@ public class CreateNewTypePane extends Stage {
     private static final String WINDOW_RESOURCES = "new_object_window";
     private static final String TYPE_RESOURCES = "default_entity_type";
 
-    public CreateNewTypePane(String isANewTypeOf, String isBasedOn){
+    public CreateNewTypeWindow(String isANewTypeOf, String isBasedOn){
         initializeGridPane();
         initializeVariables();
         myWindowResources = ResourceBundle.getBundle(WINDOW_RESOURCES);
@@ -54,12 +56,24 @@ public class CreateNewTypePane extends Stage {
         initializeAndDisplayStage();
     }
 
+    /**
+     * Gets the entity defined by the user
+     * Called by DefaultTypesPane when this stage is closed
+     * @return Entity defined by the user
+     */
+    public Entity getUserCreatedEntity(){
+        return  myUserCreatedEntity;
+    }
+
     private void initializeVariables() {
         myBasedOnComboBox = new ComboBox();
         myTypeOfComboBox = new ComboBox();
         myTextField = new TextField();
         myButtonPane = new HBox();
         mySelectedImagePane = new Pane();
+        myDefaultTypesFactory = new DefaultTypesFactory();
+        mySelectedImageName = "";
+        myUserCreatedEntity = null;
     }
 
     private void initializeGridPane(){
@@ -82,7 +96,7 @@ public class CreateNewTypePane extends Stage {
 
     private void createAssetManagerButtonPane() {
         String[] buttonResources = myWindowResources.getString("AssetButton").split(",");
-        Button button = Utility.makeButon(this, buttonResources[1], buttonResources[0]);
+        Button button = Utility.makeButton(this, buttonResources[1], buttonResources[0]);
         myGridPane.add(button, 0, myGridPane.getRowCount());
 
         Rectangle imagePlaceholder = new Rectangle(PICTURE_SIZE, PICTURE_SIZE);
@@ -97,13 +111,14 @@ public class CreateNewTypePane extends Stage {
         ImageView imageView = assetManager.getImagePath();
         mySelectedImagePane.getChildren().clear();
         mySelectedImagePane.getChildren().add(imageView);
+        mySelectedImageName = assetManager.getImageName();
     }
 
     private void createButtonPane() {
         String[] buttons = myWindowResources.getString("Buttons").split(",");
         for(String s : buttons){
             String[] info = s.split(" ");
-            myButtonPane.getChildren().add(Utility.makeButon(this, info[1], info[0]));
+            myButtonPane.getChildren().add(Utility.makeButton(this, info[1], info[0]));
         }
         myButtonPane.setPadding(INSETS);
         myButtonPane.setAlignment(Pos.CENTER);
@@ -115,18 +130,18 @@ public class CreateNewTypePane extends Stage {
         this.close();
     }
 
-    private Button makeButton(String text, String methodName){
-        Button button = new Button();
-        button.setOnMouseClicked(e -> {
-            try {
-                Method buttonMethod = this.getClass().getDeclaredMethod(methodName);
-                buttonMethod.invoke(this);
-            } catch (Exception e1) {
-                button.setText(myWindowResources.getString("ButtonFail"));
-            }});
-        button.setText(text);
-        return button;
+    private void handleCreateButton(){
+        String typeLabel = myTextField.getText();
+        String typeOf = (String) myTypeOfComboBox.getValue();
+        String basedOn = (String) myBasedOnComboBox.getValue();
+
+        Entity entity = myDefaultTypesFactory.getDefaultEntity(typeOf, basedOn);
+        entity.addComponent(new NameComponent(typeLabel));
+        entity.addComponent(new SpriteComponent(mySelectedImageName));
+        myUserCreatedEntity = entity;
+        this.close();
     }
+
 
     private void createAndAddBasedOnDropDown(String isBasedOn) {
         myBasedOnComboBox.setPrefWidth(INPUT_WIDTH);
@@ -135,7 +150,7 @@ public class CreateNewTypePane extends Stage {
     }
 
     private void populateBasedOnDropDown(String s) {
-        String[] dropDownContent = myTypeResources.getString(s).split(",");
+        List<String> dropDownContent = myDefaultTypesFactory.getTypes(s);
         myBasedOnComboBox.getItems().clear();
         myBasedOnComboBox.getItems().addAll(dropDownContent);
     }
@@ -178,6 +193,5 @@ public class CreateNewTypePane extends Stage {
         Scene scene = new Scene(titledPane);
         scene.getStylesheets().add(STYLE_SHEET);
         this.setScene(scene);
-        this.show();
     }
 }

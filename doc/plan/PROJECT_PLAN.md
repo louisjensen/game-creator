@@ -51,7 +51,7 @@ Project Plan
     * Be able to reload a previous game into authoring to edit
 * Authoring Environment
     * able to create a reusable object, such as a power block
-    * Users can drag and drop onto a scrollable pane
+    * Users can drag and drop onto a scrollable page
     * Upload a new image
     * Ability to respond to basic events
     * Save a created game that can then be run by runner

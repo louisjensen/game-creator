@@ -4,6 +4,9 @@ import ui.Propertable;
 import ui.UIException;
 import ui.manager.LabelManager;
 
+/**
+ * @author Harry Ross
+ */
 public interface ControlProperty {
 
     void populateValue(String type, String newValue, LabelManager labels);

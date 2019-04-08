@@ -3,9 +3,11 @@ package engine.internal.systems;
 import engine.external.Entity;
 import engine.external.component.*;
 import engine.internal.Engine;
+import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.jar.Attributes;
 
 public abstract class System {
@@ -30,25 +32,27 @@ public abstract class System {
     protected final Class<? extends Component> VISIBILITY_COMPONENT_CLASS = VisibilityComponent.class;
 
 
-
-
     private Collection<Class<? extends Component>> myRequiredComponents;
     private Collection<Entity> myEntities;
+    private Collection<KeyCode> myInputs;
     protected Engine myEngine;
 
     public System(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         myRequiredComponents = requiredComponents;
         myEngine = engine;
+        myInputs = new ArrayList<>();
     }
 
-    public void update(Collection<Entity> entities) {
+    public void update(Collection<Entity> entities, Collection<KeyCode> inputs) {
         myEntities = new ArrayList<>();
+        myInputs = inputs;
         for (Entity e: entities) {
             if (filter(e)) {
                 myEntities.add(e);
             }
         }
         run();
+        myInputs.clear();
     }
 
 
@@ -61,6 +65,10 @@ public abstract class System {
 
     protected Collection<Entity> getEntities() {
         return myEntities;
+    }
+
+    protected Collection<KeyCode> getKeyCodes(){
+        return myInputs;
     }
 
 }

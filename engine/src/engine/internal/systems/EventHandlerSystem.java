@@ -17,7 +17,7 @@ import java.util.Collection;
  */
 public class EventHandlerSystem extends System {
     Collection<IEvent> myEvents;
-
+    
     public EventHandlerSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine, Collection<IEvent> events) {
         super(requiredComponents, engine);
         myEvents = events;
@@ -26,8 +26,7 @@ public class EventHandlerSystem extends System {
     @Override
     protected void run() {
         for (IEvent e : myEvents) {
-            e.execute(new ArrayList<>(this.getEntities()));
-
+            e.execute(new ArrayList<>(this.getEntities()),this.getKeyCodes());
         }
     }
 }

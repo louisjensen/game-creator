@@ -5,6 +5,7 @@ import engine.external.component.Component;
 import java.util.*;
 
 public class Entity {
+
     private Map<Class<? extends Component>, Component<?>> myComponents;
 
     public Entity() {
@@ -29,6 +30,16 @@ public class Entity {
 
     public void removeComponent(Component<?> component) {
         removeComponent(Arrays.asList(component));
+    }
+
+    /*
+     * Added this in to test to see whether I was correctly reloading the components in of an entity - can certainly
+     * delete later on
+     * @author Anna
+     */
+    public void printMyComponents(){
+        for (Component<?> c: myComponents.values())
+            System.out.println(c.getValue());
     }
 
     public boolean hasComponents(Collection<Class<? extends Component>> components) {
