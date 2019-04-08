@@ -113,6 +113,18 @@ public class Utility {
         return false;
     }
 
+    public static Scene createGeneralPane(Node header, Node content, List<Node> myNodes){
+        HBox userControls = new HBox();
+        userControls.getChildren().addAll(myNodes);
+        BorderPane borderPane = new BorderPane(content, header, null, userControls, null);
+        borderPane.getStylesheets().add("default.css");
+        borderPane.getStyleClass().add("dialog-window");
+        borderPane.getCenter().getStyleClass().add("center-pane");
+        borderPane.getTop().getStyleClass().add("top-pane");
+        return new Scene(borderPane);
+
+    }
+
     public static Scene createDialogPane(Node header, Node content, List<Button> buttonsList) {
         if (header == null)
             header = new HBox();

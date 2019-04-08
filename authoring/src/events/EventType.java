@@ -1,5 +1,8 @@
 package events;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum EventType {
     COLLISION ("Collision", LeftCollisionEvent.class),
     CONDITION ("Conditional", ConditionalEvent.class),
@@ -11,6 +14,9 @@ public enum EventType {
     EventType(String displayName, Class<?> className) {
         this.displayName = displayName;
         this.className = className;
+    }
+    public List<String> getAllDisplayNames(){
+        return Arrays.asList(COLLISION.displayName,CONDITION.displayName,TIMER.displayName, GENESIS.displayName);
     }
 
 
