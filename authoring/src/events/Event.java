@@ -8,6 +8,7 @@ import engine.external.component.NameComponent;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -30,7 +31,8 @@ public abstract class Event implements IEvent {
 
     //need to make this method take in keycode inputs as well
     @Override
-    public void execute(List<Entity> entities) {
+    public void execute(List<Entity> entities, Collection<KeyCode> inputs) {
+        //TODO: do something with the inputs
         List<Entity> filtered_entities = filter(entities);
         for (Entity e : filtered_entities) {
             if (conditionsMet(e)) {
