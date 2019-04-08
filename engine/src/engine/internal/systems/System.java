@@ -24,7 +24,8 @@ public abstract class System {
     protected final Class<? extends Component> HEALTH_COMPONENT_CLASS = HealthComponent.class;
     protected final Class<? extends Component> IMAGEVIEW_COMPONENT_CLASS = ImageViewComponent.class;
     protected final Class<? extends Component> NAME_COMPONENT_CLASS = NameComponent.class;
-    protected final Class<? extends Component> SIZE_COMPONENT_CLASS = SizeComponent.class;
+    protected final Class<? extends Component> WIDTH_COMPONENT_CLASS = WidthComponent.class;
+    protected final Class<? extends Component> HEIGHT_COMPONENT_CLASS = HeightComponent.class;
     protected final Class<? extends Component> SOUND_COMPONENT_CLASS = SoundComponent.class;
     protected final Class<? extends Component> SPRITE_COMPONENT_CLASS = SpriteComponent.class;
     protected final Class<? extends Component> TIMER_COMPONENT_CLASS = TimerComponent.class;
