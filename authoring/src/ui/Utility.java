@@ -1,15 +1,9 @@
 package ui;
 
 import engine.external.Entity;
-<<<<<<< HEAD
-import engine.external.component.NameComponent;
-import engine.external.component.SizeComponent;
-import engine.external.component.SpriteComponent;
-=======
 import engine.external.component.HeightComponent;
 import engine.external.component.SpriteComponent;
 import engine.external.component.WidthComponent;
->>>>>>> 42fa2f3dec18cce1ab4af560974577922a2ea23f
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -173,20 +167,10 @@ public class Utility {
         ResourceBundle utilityResources = ResourceBundle.getBundle(RESOURCE);
         String imageName = (String) entity.getComponent(new SpriteComponent("").getClass()).getValue();
         String imagePath = generalResources.getString("images_filepath");
-<<<<<<< HEAD
-        Double size = (Double) entity.getComponent(new SizeComponent(0.0).getClass()).getValue();
-        System.out.println(imageName);
-        System.out.println(imagePath);
-        System.out.println(size);
-        try {
-            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(imagePath + imageName), entity, size, size);
-=======
         Double width = (Double) entity.getComponent(new WidthComponent(0.0).getClass()).getValue();
         Double height = (Double) entity.getComponent(new HeightComponent(0.0).getClass()).getValue();
         try {
             ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(imagePath + imageName), entity, width, height);
->>>>>>> 42fa2f3dec18cce1ab4af560974577922a2ea23f
-
             System.out.println("Returning the entity next");
             return imageWithEntity;
         } catch (FileNotFoundException e) {
