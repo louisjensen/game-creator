@@ -87,13 +87,15 @@ public class DefaultTypesFactory {
         //TODO: refactor code to use XPositionComponent, YPositionComponent, ZPositionComponent :)
     //  VelocityComponent velocityComponent = new VelocityComponent(new Point3D(10, 0, 0));
         VisibilityComponent visibilityComponent = new VisibilityComponent(true);
-        SizeComponent sizeComponent = new SizeComponent(100.0);
+        //TODO: refactor code to use Width/HeightComponent:)
+    //    SizeComponent sizeComponent = new SizeComponent(100.0);
         cloud.addComponent(gravityComponent);
         cloud.addComponent(nameComponent);
         //TODO: refactor code to use XPositionComponent, YPositionComponent, ZPositionComponent :)
     //    cloud.addComponent(velocityComponent);
         cloud.addComponent(visibilityComponent);
-        cloud.addComponent(sizeComponent);
+        //TODO: refactor code to use Width/HeightComponent :)
+    //    cloud.addComponent(sizeComponent);
         return cloud;
     }
 
@@ -101,10 +103,11 @@ public class DefaultTypesFactory {
         Entity block = new Entity();
         NameComponent nameComponent = new NameComponent("Block");
         VisibilityComponent visibilityComponent = new VisibilityComponent(true);
-        SizeComponent sizeComponent = new SizeComponent(50.0);
+        //TODO: refactor code to use WidthComponent and SizeComponent :)
+    //    SizeComponent sizeComponent = new SizeComponent(50.0);
         block.addComponent(nameComponent);
         block.addComponent(visibilityComponent);
-        block.addComponent(sizeComponent);
+    //   block.addComponent(sizeComponent);
         return block;
     }
 
@@ -113,19 +116,21 @@ public class DefaultTypesFactory {
         Entity hero = new Entity();
         NameComponent nameComponent = new NameComponent("Hero");
         GravityComponent gravityComponent = new GravityComponent(9.8);
-        SizeComponent sizeComponent = new SizeComponent(75.0);
+    //    SizeComponent sizeComponent = new SizeComponent(75.0);
         hero.addComponent(nameComponent);
         hero.addComponent(gravityComponent);
-        hero.addComponent(sizeComponent);
+    //    hero.addComponent(sizeComponent);
         return hero;
     }
 
     private Entity createGrow(){
         Entity grow = new Entity();
         VisibilityComponent visibilityComponent = new VisibilityComponent(true);
-        SizeComponent sizeComponent = new SizeComponent(25.0);
+        //TODO: refactor code to use WidthComponent and SizeComponent :)
+    //    SizeComponent sizeComponent = new SizeComponent(25.0);
         grow.addComponent(visibilityComponent);
-        grow.addComponent(sizeComponent);
+        //TODO: refactor code to use WidthComponent and SizeComponent :)
+    //    grow.addComponent(sizeComponent);
         return grow;
     }
 }
