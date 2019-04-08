@@ -5,6 +5,7 @@ import engine.external.component.ImageViewComponent;
 import engine.external.component.NameComponent;
 import engine.external.component.PositionComponent;
 import engine.external.component.SizeComponent;
+import engine.external.component.SpriteComponent;
 import events.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
@@ -53,7 +54,7 @@ public class AuthoringEntity implements Propertable {
         myBackingEntity = basis;
         myObjectManager = manager;
         myPropertyMap.put(EntityField.LABEL, (String) basis.getComponent(NameComponent.class).getValue());
-        myPropertyMap.put(EntityField.IMAGE, ((ImageView) (basis.getComponent(ImageViewComponent.class).getValue())).getImage().getUrl());
+        myPropertyMap.put(EntityField.IMAGE, (String) basis.getComponent(SpriteComponent.class).getValue());
         myPropertyMap.put(EntityField.X, ("" + ((Point3D) (basis.getComponent(PositionComponent.class).getValue())).getX()));
         myPropertyMap.put(EntityField.Y, ("" + ((Point3D) (basis.getComponent(PositionComponent.class).getValue())).getY()));
         myPropertyMap.put(EntityField.XSCALE, ("" + (basis.getComponent(SizeComponent.class).getValue()))); //TODO update these for new components
