@@ -3,7 +3,8 @@ package ui.panes;
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.NameComponent;
-import engine.external.component.SizeComponent;
+import engine.external.component.HeightComponent;
+import engine.external.component.WidthComponent;
 import engine.external.component.SpriteComponent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
@@ -56,9 +57,10 @@ public class UserCreatedTypesPane extends VBox {
         String label = (String) entity.getComponent(new NameComponent("").getClass()).getValue();
         String imageName = (String) entity.getComponent(new SpriteComponent("").getClass()).getValue();
         System.out.println(imageName);
-        double size = (Double) entity.getComponent(new SizeComponent(25.0).getClass()).getValue();
+        double width = (Double) entity.getComponent(new WidthComponent(0.0).getClass()).getValue();
+        double height = (Double) entity.getComponent(new HeightComponent(0.0).getClass()).getValue();
         try {
-            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), entity, (int) size, (int) size);
+            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), entity, width, height);
             UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, entity);
             List<Pane> paneList = new ArrayList<>();
             paneList.add(subPane);

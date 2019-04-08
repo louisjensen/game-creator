@@ -1,23 +1,18 @@
 package ui.panes;
 
 import engine.external.Entity;
-import engine.external.component.PositionComponent;
-import engine.external.component.SizeComponent;
-import engine.external.component.SpriteComponent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 import ui.Utility;
 
-import java.io.*;
-import java.nio.ByteBuffer;
 import java.util.ResourceBundle;
 
 

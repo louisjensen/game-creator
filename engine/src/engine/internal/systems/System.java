@@ -3,14 +3,19 @@ package engine.internal.systems;
 import engine.external.Entity;
 import engine.external.component.*;
 import engine.internal.Engine;
+import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.jar.Attributes;
 
 public abstract class System {
-    protected final Class<? extends Component> POSITION_COMPONENT_CLASS = PositionComponent.class;
-    protected final Class<? extends Component> VELOCITY_COMPONENT_CLASS = VelocityComponent.class;
+    protected final Class<? extends Component> X_POSITION_COMPONENT_CLASS = XPositionComponent.class;
+    protected final Class<? extends Component> Y_POSITION_COMPONENT_CLASS = YPositionComponent.class;
+    protected final Class<? extends Component> Z_POSITION_COMPONENT_CLASS = ZPositionComponent.class;
+    protected final Class<? extends Component> X_VELOCITY_COMPONENT_CLASS = XVelocityComponent.class;
+    protected final Class<? extends Component> Y_VELOCITY_COMPONENT_CLASS = YVelocityComponent.class;
     protected final Class<? extends Component> COLLIDED_COMPONENT_CLASS = CollidedComponent.class;
     protected final Class<? extends Component> COLLISION_COMPONENT_CLASS = CollisionComponent.class;
     protected final Class<? extends Component> DESTROY_COMPONENT_CLASS = DestroyComponent.class;
@@ -19,7 +24,8 @@ public abstract class System {
     protected final Class<? extends Component> HEALTH_COMPONENT_CLASS = HealthComponent.class;
     protected final Class<? extends Component> IMAGEVIEW_COMPONENT_CLASS = ImageViewComponent.class;
     protected final Class<? extends Component> NAME_COMPONENT_CLASS = NameComponent.class;
-    protected final Class<? extends Component> SIZE_COMPONENT_CLASS = SizeComponent.class;
+    protected final Class<? extends Component> WIDTH_COMPONENT_CLASS = WidthComponent.class;
+    protected final Class<? extends Component> HEIGHT_COMPONENT_CLASS = HeightComponent.class;
     protected final Class<? extends Component> SOUND_COMPONENT_CLASS = SoundComponent.class;
     protected final Class<? extends Component> SPRITE_COMPONENT_CLASS = SpriteComponent.class;
     protected final Class<? extends Component> TIMER_COMPONENT_CLASS = TimerComponent.class;
@@ -27,25 +33,27 @@ public abstract class System {
     protected final Class<? extends Component> VISIBILITY_COMPONENT_CLASS = VisibilityComponent.class;
 
 
-
-
     private Collection<Class<? extends Component>> myRequiredComponents;
     private Collection<Entity> myEntities;
+    private Collection<KeyCode> myInputs;
     protected Engine myEngine;
 
     public System(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         myRequiredComponents = requiredComponents;
         myEngine = engine;
+        myInputs = new ArrayList<>();
     }
 
-    public void update(Collection<Entity> entities) {
+    public void update(Collection<Entity> entities, Collection<KeyCode> inputs) {
         myEntities = new ArrayList<>();
+        myInputs = inputs;
         for (Entity e: entities) {
             if (filter(e)) {
                 myEntities.add(e);
             }
         }
         run();
+        myInputs.clear();
     }
 
 
@@ -58,6 +66,10 @@ public abstract class System {
 
     protected Collection<Entity> getEntities() {
         return myEntities;
+    }
+
+    protected Collection<KeyCode> getKeyCodes(){
+        return myInputs;
     }
 
 }
