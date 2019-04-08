@@ -47,11 +47,11 @@ public class RunnerTester extends Application {
         dummy3.addComponent(new ZPositionComponent(0.0));
 
         dummy1.addComponent(new WidthComponent(50.0));
-        dummy1.addComponent(new HeightComponent(60.0));
-        dummy2.addComponent(new WidthComponent(50.0));
-        dummy2.addComponent(new HeightComponent(60.0));
-        dummy3.addComponent(new WidthComponent(50.0));
-        dummy3.addComponent(new HeightComponent(60.0));
+        dummy1.addComponent(new HeightComponent(50.0));
+        dummy2.addComponent(new WidthComponent(30.0));
+        dummy2.addComponent(new HeightComponent(30.0));
+        dummy3.addComponent(new WidthComponent(80.0));
+        dummy3.addComponent(new HeightComponent(20.0));
 
         dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
         dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
