@@ -5,9 +5,7 @@ import engine.external.Entity;
 
 import engine.external.Level;
 
-import engine.external.component.XPositionComponent;
-import engine.external.component.YPositionComponent;
-import engine.external.component.ZPositionComponent;
+import engine.external.component.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point3D;
@@ -88,17 +86,27 @@ public class GameRunner {
     private HashMap<Entity, Node> initializeMap() {
         HashMap<Entity, Node> map = new HashMap<Entity, Node>();
         for(Entity entity : myEntities){
-            //TODO: refactor code to use XPositionComponent, YPositionComponent, ZPositionComponent :)
+            XPositionComponent xPositionComponent = (XPositionComponent) entity.getComponent(XPositionComponent.class);
+            Double xPosition = (Double) xPositionComponent.getValue();
+            YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
+            Double yPosition = (Double) yPositionComponent.getValue();
+            ZPositionComponent zPositionComponent = (ZPositionComponent) entity.getComponent(ZPositionComponent.class);
+            Double zPosition = (Double) zPositionComponent.getValue();
+            WidthComponent widthComponent = (WidthComponent) entity.getComponent(WidthComponent.class);
+            Double width = (Double) widthComponent.getValue();
+            HeightComponent heightComponent = (HeightComponent) entity.getComponent(HeightComponent.class);
+            Double height = (Double) heightComponent.getValue();
+            ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
+            ImageView image = (ImageView) imageViewComponent.getValue();
 
-//            PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
-//            Point3D position = (Point3D) positionComponent.getValue();
-//            ImageView image = new ImageView("basketball.png");
-//            image.setFitWidth(50);
-//            image.setPreserveRatio(true);
-//            image.setSmooth(false);
-//            image.setLayoutX(position.getX());
-//            image.setLayoutY(position.getY());
-//            map.put(entity, image);
+            image.setFitWidth(width);
+            image.setFitHeight(height);
+            image.setSmooth(false);
+            image.setLayoutX(xPosition);
+            image.setLayoutY(yPosition);
+
+            map.put(entity, image);
+
         }
         return map;
     }
@@ -122,25 +130,23 @@ public class GameRunner {
 
     private Node updateNode(Entity entity) {
         Node toUpdate = (Node) myEntitiesAndNodes.get(entity);
-        //TODO: refactor using new components
-      //  PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
-    //    Point3D position = (Point3D) positionComponent.getValue();
-    //    toUpdate.setLayoutX(position.getX());
-        //    toUpdate.setLayoutY(position.getY());
-        //TODO: refactor code to use XPositionComponent, YPositionComponent, ZPositionComponent :)
 
-//        PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
-//        Point3D position = (Point3D) positionComponent.getValue();
-//       // System.out.println(position.getX());
-//        toUpdate.setLayoutX(position.getX());
-//        toUpdate.setLayoutY(position.getY());
+        XPositionComponent xPositionComponent = (XPositionComponent) entity.getComponent(XPositionComponent.class);
+        Double xPosition = (Double) xPositionComponent.getValue();
+        YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
+        Double yPosition = (Double) yPositionComponent.getValue();
+        ZPositionComponent zPositionComponent = (ZPositionComponent) entity.getComponent(ZPositionComponent.class);
+        Double zPosition = (Double) zPositionComponent.getValue();
+
+        toUpdate.setLayoutX(xPosition);
+        toUpdate.setLayoutY(yPosition);
+
         return toUpdate;
     }
 
     private void printEntityLocations(){
         for(Entity entity : myEntities){
             //TODO: refactor code to use XPositionComponent, YPositionComponent, ZPositionComponent :)
-
 //            PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
 //            Point3D position = (Point3D) positionComponent.getValue();
 //            System.out.println(position.getX());

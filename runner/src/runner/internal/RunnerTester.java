@@ -1,13 +1,11 @@
 package runner.internal;
 
 import engine.external.Level;
-import engine.external.component.Component;
+import engine.external.component.*;
 import engine.external.Entity;
-import engine.external.component.XPositionComponent;
-import engine.external.component.YPositionComponent;
-import engine.external.component.ZPositionComponent;
 import javafx.application.Application;
 import javafx.geometry.Point3D;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import runner.external.Game;
 import runner.external.GameRunner;
@@ -38,23 +36,33 @@ public class RunnerTester extends Application {
         Entity dummy1 = new Entity();
         Entity dummy2 = new Entity();
         Entity dummy3 = new Entity();
-//        //TODO refactor
-//        dummy1.addComponent(new PositionComponent(new Point3D(20.0, 20.0, 0.0)));
-//        dummy2.addComponent(new PositionComponent(new Point3D(110.0, -20.0, 0.0)));
-//        dummy3.addComponent(new PositionComponent(new Point3D(80.0, 130.0, 0.0)));
+        dummy1.addComponent(new XPositionComponent(30.0));
+        dummy1.addComponent(new YPositionComponent(30.0));
+        dummy1.addComponent(new ZPositionComponent(0.0));
+        dummy2.addComponent(new XPositionComponent(60.0));
+        dummy2.addComponent(new YPositionComponent(60.0));
+        dummy2.addComponent(new ZPositionComponent(0.0));
+        dummy3.addComponent(new XPositionComponent(90.0));
+        dummy3.addComponent(new YPositionComponent(90.0));
+        dummy3.addComponent(new ZPositionComponent(0.0));
+
+        dummy1.addComponent(new WidthComponent(50.0));
+        dummy1.addComponent(new HeightComponent(60.0));
+        dummy2.addComponent(new WidthComponent(50.0));
+        dummy2.addComponent(new HeightComponent(60.0));
+        dummy3.addComponent(new WidthComponent(50.0));
+        dummy3.addComponent(new HeightComponent(60.0));
+
+        dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+        dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+        dummy3.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+
 
         level.addEntity(dummy1);
         level.addEntity(dummy2);
         level.addEntity(dummy3);
 
-        //TODO: Hey Ryan, the Position Component has been decomposed into XPositionComponent, YPositionComponent, ZPositionComponent. Please refactor accordingly :)
-//        dummy1.addComponent(new PositionComponent(new Point3D(20.0, 20.0, 0.0)));
-//        dummy2.addComponent(new PositionComponent(new Point3D(50.0, 50.0, 0.0)));
-//        dummy3.addComponent(new PositionComponent(new Point3D(80.0, 80.0, 0.0)));
-//
-//        myDummyEntities.add(dummy1);
-//        myDummyEntities.add(dummy2);
-//        myDummyEntities.add(dummy3);
+
     }
 
 }
