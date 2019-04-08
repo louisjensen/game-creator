@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import ui.Propertable;
-import ui.TestEntity;
+import ui.AuthoringEntity;
 import ui.Utility;
 
 import java.util.ArrayList;
@@ -24,10 +24,10 @@ import java.util.Map;
  */
 public class EventManager extends Stage {
 
-    private TestEntity myEntity;
+    private AuthoringEntity myEntity;
 
     public EventManager(Propertable prop) { // Loads common Events for object instance based on type label
-        myEntity = (TestEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
+        myEntity = (AuthoringEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
         this.setScene(createPane());
         this.setResizable(false);
         createContent();

@@ -4,8 +4,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ui.ErrorBox;
-import ui.TestEntity;
-import ui.TestLevel;
+import ui.AuthoringEntity;
+import ui.AuthoringLevel;
 import ui.UIException;
 import ui.manager.GroupManager;
 import ui.manager.LabelManager;
@@ -25,12 +25,12 @@ public class PaneTester extends Application {
         LabelManager testLabels = new LabelManager();
         addTestLabels(testLabels);
         ObjectManager manager = new ObjectManager(testLabels);
-        TestEntity obj1 = populateTestObjects(manager);
+        AuthoringEntity obj1 = populateTestObjects(manager);
         try {
             PropertiesPane testPaneObj =
                     new PropertiesPane("Object", obj1, "object_properties_list", testLabels);
             PropertiesPane testPaneLvl =
-                    new PropertiesPane("Level", new TestLevel("Level_1", manager), "level_properties_list", testLabels);
+                    new PropertiesPane("Level", new AuthoringLevel("Level_1", manager), "level_properties_list", testLabels);
             PropertiesPane testPaneIns =
                     new PropertiesPane("Instance", obj1, "instance_properties_list", testLabels);
             GroupManager testCreateGroup = new GroupManager(manager);
@@ -69,13 +69,13 @@ public class PaneTester extends Application {
         testLabels.addLabel("Label", "Brick_Block");
     }
 
-    private TestEntity populateTestObjects(ObjectManager manager) {
-        TestEntity a = new TestEntity("object1", manager);
-        TestEntity b = new TestEntity("object2", manager);
-        TestEntity c = new TestEntity("object3", manager);
-        TestEntity d = new TestEntity("object4", manager);
-        TestEntity e = new TestEntity("object1", manager);
-        TestEntity f = new TestEntity("object1", manager);
+    private AuthoringEntity populateTestObjects(ObjectManager manager) {
+        AuthoringEntity a = new AuthoringEntity("object1", manager);
+        AuthoringEntity b = new AuthoringEntity("object2", manager);
+        AuthoringEntity c = new AuthoringEntity("object3", manager);
+        AuthoringEntity d = new AuthoringEntity("object4", manager);
+        AuthoringEntity e = new AuthoringEntity("object1", manager);
+        AuthoringEntity f = new AuthoringEntity("object1", manager);
         manager.addEntity(a);
         manager.addEntity(b);
         manager.addEntity(c);

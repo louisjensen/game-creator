@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * @author Harry Ross
  */
-public class TestLevel implements Propertable {
+public class AuthoringLevel implements Propertable {
 
     private ObservableMap<String, String> myPropertyMap;
     private ObjectManager myObjectManager;
@@ -20,7 +20,7 @@ public class TestLevel implements Propertable {
             Arrays.asList("Label", "Height", "Width", "Background", "Music");
     private static final Double DEFAULT_ROOM_SIZE = 500.0;
 
-    public TestLevel(String label, ObjectManager manager) {
+    public AuthoringLevel(String label, ObjectManager manager) {
         myObjectManager = manager;
         myPropertyMap = FXCollections.observableHashMap();
         for (String name : PROP_VAR_NAMES)

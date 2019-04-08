@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author Harry Ross
  */
-public class TestEntity implements Propertable {
+public class AuthoringEntity implements Propertable {
 
     private ObservableMap<String, String> myPropertyMap;
     private ObjectManager myObjectManager;
@@ -22,7 +22,7 @@ public class TestEntity implements Propertable {
     private static final List<String> PROP_VAR_NAMES =
             Arrays.asList("X", "Y", "XScale", "YScale", "Facing", "Label", "Group", "Image");
 
-    public TestEntity(String label, ObjectManager manager) {
+    public AuthoringEntity(String label, ObjectManager manager) {
         myObjectManager = manager;
         myPropertyMap = FXCollections.observableHashMap();
         for (String name : PROP_VAR_NAMES)

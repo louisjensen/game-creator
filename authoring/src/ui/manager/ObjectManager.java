@@ -4,7 +4,7 @@ import events.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import ui.TestEntity;
+import ui.AuthoringEntity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class ObjectManager {
 
-    private Set<TestEntity> myEntities;
+    private Set<AuthoringEntity> myEntities;
     private Map<String, ObservableList<Event>> myEventMap;
     private LabelManager myLabelManager;
 
@@ -31,7 +31,7 @@ public class ObjectManager {
         labelManager.getLabels("Group").addListener((ListChangeListener) (change -> groupRemoveAction(change)));
     }
 
-    public void addEntity(TestEntity entity) {
+    public void addEntity(AuthoringEntity entity) {
         myEntities.add(entity);
         myLabelManager.addLabel("Label", entity.getPropertyMap().get("Label"));
         myEventMap.put(entity.getPropertyMap().get("Label"), FXCollections.observableArrayList(new ArrayList<>()));
@@ -40,7 +40,7 @@ public class ObjectManager {
     //TODO remove entity??
 
     public void propagate(String objectLabel, String property, String newValue) {
-        for (TestEntity entity : myEntities) {
+        for (AuthoringEntity entity : myEntities) {
             if (entity.getPropertyMap().get("Label").equals(objectLabel)) { // Match found
                 entity.getPropertyMap().put(property, newValue);
                 myLabelManager.addLabel(property, newValue);
@@ -58,7 +58,7 @@ public class ObjectManager {
             str = change.getAddedSubList().get(0);
 
         if (change.wasReplaced() || change.wasRemoved()) {
-            for (TestEntity entity : myEntities) {
+            for (AuthoringEntity entity : myEntities) {
                 if (entity.getPropertyMap().get("Group") != null &&
                         entity.getPropertyMap().get("Group").equals(change.getRemoved().get(0)))
                     entity.getPropertyMap().put("Group", str);

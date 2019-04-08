@@ -13,7 +13,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Carrie
@@ -57,11 +56,11 @@ public class Utility {
     public static Button makeButton(Object o, String methodName, String buttonText, Object... methodParams){
         ResourceBundle resources = ResourceBundle.getBundle(RESOURCE);
         Button button = new Button();
-        AtomicReference<Method> reference = findMethod(o, methodName, methodParams);
+        Method reference = findMethod(o, methodName, methodParams);
         button.setOnAction(e -> {
             try {
-                reference.get().setAccessible(true);
-                reference.get().invoke(o, methodParams);
+                reference.setAccessible(true);
+                reference.invoke(o, methodParams);
             } catch (Exception e1) {
                 button.setText(resources.getString("ButtonFail"));
             }});
@@ -71,14 +70,14 @@ public class Utility {
 
     /**
      * Locates method with signature corresponding with given parameters, including superclasses, returns reference
-     * to method
+     * to method -- important shortcoming, cannot distinguish between overloaded methods with same superclass as parameter
      * @param o Object to locate found method within class of
      * @param methodName String name of method to locate
      * @param methodParams Parameters to be used in search for correct method signature
      * @return Reference to found method
      */
-    private static AtomicReference<Method> findMethod(Object o, String methodName, Object[] methodParams) {
-        final AtomicReference<Method> reference = new AtomicReference<>();
+    private static Method findMethod(Object o, String methodName, Object[] methodParams) {
+        Method reference = null;
         for (Method m : o.getClass().getDeclaredMethods()) {
             if (m.getName().equals(methodName) && m.getParameterCount() == methodParams.length) {
                 boolean matchesSignature = true;
@@ -89,7 +88,7 @@ public class Utility {
                     }
                 }
                 if (matchesSignature) {
-                    reference.set(m);
+                    reference = m;
                     break;
                 }
             }
@@ -130,7 +129,7 @@ public class Utility {
         return scene;
     }
 
-    public static Node createButtonBar(List<Button> buttonList) {
+    private static Node createButtonBar(List<Button> buttonList) {
         HBox rtn = new HBox();
         rtn.getChildren().addAll(buttonList);
         rtn.getStyleClass().add("buttons-bar");
