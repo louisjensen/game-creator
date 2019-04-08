@@ -1,6 +1,5 @@
 package runner.external;
 
-import data.external.DataManager;
 import engine.external.Entity;
 
 import engine.external.Level;
@@ -8,7 +7,6 @@ import engine.external.Level;
 import engine.external.component.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -32,7 +30,7 @@ public class GameRunner {
     private Stage myStage;
     private Group myGroup;
     private Scene myScene;
-    private TestEngine myTestEngine;
+    private TestEngine myEngine;
     private Timeline myAnimation;
     private static final int FRAMES_PER_SECOND = 60;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
@@ -66,7 +64,7 @@ public class GameRunner {
         showEntities();
         myCurrentKeys = new HashSet<KeyCode>();
         myStage.setScene(myScene);
-        myTestEngine = new TestEngine(myLevels.get(0));
+        myEngine = new TestEngine(myLevels.get(0));
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         myAnimation = new Timeline();
         myAnimation.setCycleCount(Timeline.INDEFINITE);
@@ -86,6 +84,7 @@ public class GameRunner {
     private HashMap<Entity, Node> initializeMap() {
         HashMap<Entity, Node> map = new HashMap<Entity, Node>();
         for(Entity entity : myEntities){
+            //Add Error checking to set defaults
             XPositionComponent xPositionComponent = (XPositionComponent) entity.getComponent(XPositionComponent.class);
             Double xPosition = (Double) xPositionComponent.getValue();
             YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
@@ -112,7 +111,7 @@ public class GameRunner {
     }
 
     private void step (double elapsedTime) {
-        myEntities = myTestEngine.updateState(myCurrentKeys);
+        myEntities = myEngine.updateState(myCurrentKeys);
         updateMap();
         showEntities();
         printKeys();
