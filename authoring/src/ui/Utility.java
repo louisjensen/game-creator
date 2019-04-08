@@ -1,5 +1,9 @@
 package ui;
 
+import engine.external.Entity;
+import engine.external.component.NameComponent;
+import engine.external.component.SizeComponent;
+import engine.external.component.SpriteComponent;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -8,7 +12,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import ui.panes.ImageWithEntity;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
@@ -153,4 +160,31 @@ public class Utility {
         return labelBox;
     }
 
+    public static ImageWithEntity createImageWithEntity(Entity entity){
+        System.out.println("Made it to utility method");
+        ResourceBundle generalResources = ResourceBundle.getBundle("authoring_general");
+        System.out.println("got general properties bundle");
+        ResourceBundle utilityResources = ResourceBundle.getBundle(RESOURCE);
+        String imageName = (String) entity.getComponent(new SpriteComponent("").getClass()).getValue();
+        String imagePath = generalResources.getString("images_filepath");
+        Double size = (Double) entity.getComponent(new SizeComponent(0.0).getClass()).getValue();
+        System.out.println(imageName);
+        System.out.println(imagePath);
+        System.out.println(size);
+        try {
+            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(imagePath + imageName), entity, size, size);
+
+            System.out.println("Returning the entity next");
+            return imageWithEntity;
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+            String[] info = utilityResources.getString("FileException").split(",");
+            ErrorBox errorBox = new ErrorBox(info[0], info[1]);
+            errorBox.display();
+            //TODO: get rid of this stack trace. rn it's just in case this happens and we need to know where
+            e.printStackTrace();
+            return new ImageWithEntity(null, new Entity(), 0.0, 0.0);
+
+        }
+    }
 }
