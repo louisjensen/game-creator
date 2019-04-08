@@ -60,7 +60,7 @@ class PropertiesPane extends TitledPane {
         VBox newProp = new VBox();
         newProp.getStyleClass().add("prop-cell");
         Label propName = new Label(name);
-        propName.getStyleClass().add("prop-label");
+        propName.getStyleClass().add("sub-label");
         String[] sep = info.split(":");
         try {
             Class<?> clazz = Class.forName(sep[0]);

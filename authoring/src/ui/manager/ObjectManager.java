@@ -39,20 +39,18 @@ public class ObjectManager {
             myManager.removeLabel(property, objectLabel); // Remove old label from LabelManager if a label was just propagated
     }
 
-    private void groupRemoveAction(ListChangeListener.Change<String> change) { //TODO remove duplication
+    private void groupRemoveAction(ListChangeListener.Change<String> change) {
         change.next();
-        if (change.wasReplaced()) {
+        String str = null;
+
+        if (change.wasReplaced())
+            str = change.getAddedSubList().get(0);
+
+        if (change.wasReplaced() || change.wasRemoved()) {
             for (TestEntity entity : myEntities) {
                 if (entity.getPropertyMap().get("Group") != null &&
                         entity.getPropertyMap().get("Group").equals(change.getRemoved().get(0)))
-                    entity.getPropertyMap().put("Group", change.getAddedSubList().get(0));
-            }
-        }
-        else if (change.wasRemoved()) {
-            for (TestEntity entity : myEntities) {
-                if (entity.getPropertyMap().get("Group") != null &&
-                        entity.getPropertyMap().get("Group").equals(change.getRemoved().get(0)))
-                    entity.getPropertyMap().put("Group", null);
+                    entity.getPropertyMap().put("Group", str);
             }
         }
     }
@@ -60,5 +58,4 @@ public class ObjectManager {
     LabelManager getLabelManager() {
         return myManager;
     }
-
 }

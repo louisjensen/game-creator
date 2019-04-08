@@ -6,6 +6,9 @@ import javafx.stage.Stage;
 import ui.Propertable;
 import ui.TestEntity;
 
+/**
+ * @author Harry Ross
+ */
 public class EventManager extends Stage {
 
     private TestEntity myEntity;

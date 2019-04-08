@@ -1,17 +1,30 @@
 package ui;
 
+import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * @author Carrie Hunner
+ * @author Carrie
+ * @author Harry Ross
  * This class was created to provide general methods that can be used across the UI.
  * It's a place to hold reflection code that may be needed across multiple classes.
  */
 public class Utility {
+
     private static final String RESOURCE = "utility";
+    private static final String DEFAULT_STYLESHEET = "default.css";
 
     /**
      * Creates and returns a Button
@@ -25,7 +38,7 @@ public class Utility {
      * @param buttonText Text to be displayed on the button
      * @return A Button with the above parameters
      */
-    public static Button makeButon(Object o, String methodName, String buttonText){
+    public static Button makeButton(Object o, String methodName, String buttonText){
         ResourceBundle resources = ResourceBundle.getBundle(RESOURCE);
         Button button = new Button();
         button.setOnMouseClicked(e -> {
@@ -39,6 +52,49 @@ public class Utility {
             }});
         button.setText(buttonText);
         return button;
+    }
+
+    public static Button makeButton(Object o, String methodName, String buttonText, Object... methodParams){
+        ResourceBundle resources = ResourceBundle.getBundle(RESOURCE);
+        Button button = new Button();
+        AtomicReference<Method> reference = findMethod(o, methodName, methodParams);
+        button.setOnAction(e -> {
+            try {
+                reference.get().setAccessible(true);
+                reference.get().invoke(o, methodParams);
+            } catch (Exception e1) {
+                button.setText(resources.getString("ButtonFail"));
+            }});
+        button.setText(buttonText);
+        return button;
+    }
+
+    /**
+     * Locates method with signature corresponding with given parameters, including superclasses, returns reference
+     * to method
+     * @param o Object to locate found method within class of
+     * @param methodName String name of method to locate
+     * @param methodParams Parameters to be used in search for correct method signature
+     * @return Reference to found method
+     */
+    private static AtomicReference<Method> findMethod(Object o, String methodName, Object[] methodParams) {
+        final AtomicReference<Method> reference = new AtomicReference<>();
+        for (Method m : o.getClass().getDeclaredMethods()) {
+            if (m.getName().equals(methodName) && m.getParameterCount() == methodParams.length) {
+                boolean matchesSignature = true;
+                for (int i = 0; i < methodParams.length; i++) {
+                    if (!m.getParameterTypes()[i].isAssignableFrom(methodParams[i].getClass())) {
+                        matchesSignature = false;
+                        break;
+                    }
+                }
+                if (matchesSignature) {
+                    reference.set(m);
+                    break;
+                }
+            }
+        }
+        return reference;
     }
 
     /**
@@ -55,6 +111,47 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    public static Scene createDialogPane(Node header, Node content, List<Button> buttonsList) {
+        if (header == null)
+            header = new HBox();
+        if (content == null)
+            content = new HBox();
+
+        BorderPane borderPane = new BorderPane(content, header, null, createButtonBar(buttonsList), null);
+        Scene scene = new Scene(borderPane);
+
+        scene.getStylesheets().add(DEFAULT_STYLESHEET);
+        borderPane.getStyleClass().add("dialog-window");
+        borderPane.getCenter().getStyleClass().add("center-pane");
+        borderPane.getTop().getStyleClass().add("top-pane");
+
+        return scene;
+    }
+
+    public static Node createButtonBar(List<Button> buttonList) {
+        HBox rtn = new HBox();
+        rtn.getChildren().addAll(buttonList);
+        rtn.getStyleClass().add("buttons-bar");
+        if (!buttonList.isEmpty())
+            Platform.runLater(() -> buttonList.get(0).requestFocus());
+        return rtn;
+    }
+
+    /**
+     * Passed a Map where keys are CSS selectors for label and values are label text
+     */
+    public static Node createLabelsGroup(Map<String, List<String>> labels) {
+        VBox labelBox = new VBox();
+        for (String labelType : labels.keySet()) {
+            for (String newLabelText : labels.get(labelType)) {
+                Label newLabel = new Label(newLabelText);
+                newLabel.getStyleClass().add(labelType);
+                labelBox.getChildren().add(newLabel);
+            }
+        }
+        return labelBox;
     }
 
 }
