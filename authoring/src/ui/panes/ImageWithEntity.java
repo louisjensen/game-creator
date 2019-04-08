@@ -6,14 +6,12 @@ import javafx.scene.image.ImageView;
 
 import java.io.FileInputStream;
 
-public class ImageWithEntity extends Image {
+public class ImageWithEntity extends ImageView {
     private Entity myEntity;
-    private ImageView myImageView;
 
-    public ImageWithEntity(FileInputStream s, Entity entity, int width, int height) {
-        super(s, width, height, false, false);
+    public ImageWithEntity(FileInputStream s, Entity entity, double width, double height) {
+        super(new Image(s, width, height, false, false));
         myEntity = entity;
-        myImageView = new ImageView(this);
     }
 
     /**
@@ -24,11 +22,4 @@ public class ImageWithEntity extends Image {
         return myEntity;
     }
 
-    /**
-     * Returns ImageView associated with this object
-     * @return ImageView
-     */
-    public ImageView getImageView(){
-        return myImageView;
-    }
 }

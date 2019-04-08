@@ -3,6 +3,7 @@ package ui.panes;
 import engine.external.Entity;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -44,10 +45,11 @@ public class AssetManagerTester extends Application {
     }
 
     private void alternateStart(Stage stage){
-        Viewer viewer = new Viewer(500, 500);
+        DataFormat dataFormat = new DataFormat("Entity");
+        Viewer viewer = new Viewer(500, 500, dataFormat);
         viewer.setMinWidth(400);
         viewer.setMinHeight(300);
-        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane();
+        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane(dataFormat);
         userCreatedTypesPane.setMinWidth(200);
         DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane);
         defaultTypesPane.setMinWidth(200);

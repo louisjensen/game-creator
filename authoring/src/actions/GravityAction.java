@@ -5,10 +5,8 @@ import engine.external.component.GravityComponent;
 
 import java.util.function.Consumer;
 
-public class GravityAction extends Action{
-    public GravityAction(){ super();}
-
-    public Consumer<Entity> makeGravityAction(double gravity) {
-        return makeValueAction(gravity, GravityComponent.class);
+public class GravityAction extends NumericAction {
+    public GravityAction(ModifyType type, Double gravity){
+        setAction(type, gravity, GravityComponent.class);
     }
 }
