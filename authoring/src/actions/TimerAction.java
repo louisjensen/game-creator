@@ -1,14 +1,9 @@
 package actions;
 
-import engine.external.Entity;
 import engine.external.component.TimerComponent;
 
-import java.util.function.Consumer;
-
-public class TimerAction extends Action {
-    public TimerAction(){ super();}
-
-    public Consumer<Entity> makeTimeAction(Integer time) {
-        return makeValueAction(time, TimerComponent.class);
+public class TimerAction extends NumericAction {
+    public TimerAction(ModifyType type, Integer time){
+        setAction(type, time, TimerComponent.class);
     }
 }

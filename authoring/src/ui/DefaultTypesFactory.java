@@ -2,7 +2,6 @@ package ui;
 
 import engine.external.Entity;
 import engine.external.component.*;
-import javafx.geometry.Point3D;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -84,14 +83,16 @@ public class DefaultTypesFactory {
         Entity cloud = new Entity();
         GravityComponent gravityComponent = new GravityComponent(0.0);
         NameComponent nameComponent = new NameComponent("Cloud");
-        VelocityComponent velocityComponent = new VelocityComponent(new Point3D(10, 0, 0));
+        XVelocityComponent xVelocityComponent = new XVelocityComponent(10.0);
         VisibilityComponent visibilityComponent = new VisibilityComponent(true);
-        SizeComponent sizeComponent = new SizeComponent(100.0);
+        WidthComponent widthComponent = new WidthComponent(100.0);
+        HeightComponent heightComponent = new HeightComponent(50.0);
         cloud.addComponent(gravityComponent);
         cloud.addComponent(nameComponent);
-        cloud.addComponent(velocityComponent);
+        cloud.addComponent(xVelocityComponent);
+        cloud.addComponent(widthComponent);
+        cloud.addComponent(heightComponent);
         cloud.addComponent(visibilityComponent);
-        cloud.addComponent(sizeComponent);
         return cloud;
     }
 
@@ -99,10 +100,12 @@ public class DefaultTypesFactory {
         Entity block = new Entity();
         NameComponent nameComponent = new NameComponent("Block");
         VisibilityComponent visibilityComponent = new VisibilityComponent(true);
-        SizeComponent sizeComponent = new SizeComponent(50.0);
+        WidthComponent widthComponent = new WidthComponent(50.0);
+        HeightComponent heightComponent = new HeightComponent(50.0);
         block.addComponent(nameComponent);
         block.addComponent(visibilityComponent);
-        block.addComponent(sizeComponent);
+        block.addComponent(widthComponent);
+        block.addComponent(heightComponent);
         return block;
     }
 
@@ -111,19 +114,25 @@ public class DefaultTypesFactory {
         Entity hero = new Entity();
         NameComponent nameComponent = new NameComponent("Hero");
         GravityComponent gravityComponent = new GravityComponent(9.8);
-        SizeComponent sizeComponent = new SizeComponent(75.0);
+        WidthComponent widthComponent = new WidthComponent(25.0);
+        HeightComponent heightComponent = new HeightComponent(75.0);
         hero.addComponent(nameComponent);
         hero.addComponent(gravityComponent);
-        hero.addComponent(sizeComponent);
+        hero.addComponent(widthComponent);
+        hero.addComponent(heightComponent);
         return hero;
     }
 
     private Entity createGrow(){
         Entity grow = new Entity();
         VisibilityComponent visibilityComponent = new VisibilityComponent(true);
-        SizeComponent sizeComponent = new SizeComponent(25.0);
+        //TODO: refactor code to use WidthComponent and SizeComponent :)
+    //    SizeComponent sizeComponent = new SizeComponent(25.0);
+        WidthComponent widthComponent = new WidthComponent(25.0);
+        HeightComponent heightComponent = new HeightComponent(25.0);
         grow.addComponent(visibilityComponent);
-        grow.addComponent(sizeComponent);
+        grow.addComponent(widthComponent);
+        grow.addComponent(heightComponent);
         return grow;
     }
 }
