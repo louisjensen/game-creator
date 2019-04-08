@@ -84,12 +84,14 @@ public class DefaultTypesFactory {
         Entity cloud = new Entity();
         GravityComponent gravityComponent = new GravityComponent(0.0);
         NameComponent nameComponent = new NameComponent("Cloud");
-        VelocityComponent velocityComponent = new VelocityComponent(new Point3D(10, 0, 0));
+        //TODO: refactor code to use XPositionComponent, YPositionComponent, ZPositionComponent :)
+    //  VelocityComponent velocityComponent = new VelocityComponent(new Point3D(10, 0, 0));
         VisibilityComponent visibilityComponent = new VisibilityComponent(true);
         SizeComponent sizeComponent = new SizeComponent(100.0);
         cloud.addComponent(gravityComponent);
         cloud.addComponent(nameComponent);
-        cloud.addComponent(velocityComponent);
+        //TODO: refactor code to use XPositionComponent, YPositionComponent, ZPositionComponent :)
+    //    cloud.addComponent(velocityComponent);
         cloud.addComponent(visibilityComponent);
         cloud.addComponent(sizeComponent);
         return cloud;
