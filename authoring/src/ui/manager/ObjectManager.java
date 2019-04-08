@@ -1,9 +1,15 @@
 package ui.manager;
 
+import events.Event;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import ui.TestEntity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -12,31 +18,36 @@ import java.util.Set;
 public class ObjectManager {
 
     private Set<TestEntity> myEntities;
-    private LabelManager myManager;
+    private Map<String, ObservableList<Event>> myEventMap;
+    private LabelManager myLabelManager;
 
     /**
      * Class that keeps track of every single instance of an Entity, across Levels, for the purposes of authoring environment
      */
     public ObjectManager(LabelManager labelManager) {
         myEntities = new HashSet<>();
-        myManager = labelManager;
+        myLabelManager = labelManager;
+        myEventMap = new HashMap<>();
         labelManager.getLabels("Group").addListener((ListChangeListener) (change -> groupRemoveAction(change)));
     }
 
     public void addEntity(TestEntity entity) {
         myEntities.add(entity);
-        myManager.addLabel("Label", entity.getPropertyMap().get("Label"));
+        myLabelManager.addLabel("Label", entity.getPropertyMap().get("Label"));
+        myEventMap.put(entity.getPropertyMap().get("Label"), FXCollections.observableArrayList(new ArrayList<>()));
     }
+
+    //TODO remove entity??
 
     public void propagate(String objectLabel, String property, String newValue) {
         for (TestEntity entity : myEntities) {
             if (entity.getPropertyMap().get("Label").equals(objectLabel)) { // Match found
                 entity.getPropertyMap().put(property, newValue);
-                myManager.addLabel(property, newValue);
+                myLabelManager.addLabel(property, newValue);
             }
         }
         if (property.equals("Label"))
-            myManager.removeLabel(property, objectLabel); // Remove old label from LabelManager if a label was just propagated
+            myLabelManager.removeLabel(property, objectLabel); // Remove old label from LabelManager if a label was just propagated
     }
 
     private void groupRemoveAction(ListChangeListener.Change<String> change) {
@@ -56,6 +67,10 @@ public class ObjectManager {
     }
 
     LabelManager getLabelManager() {
-        return myManager;
+        return myLabelManager;
+    }
+
+    public ObservableList<Event> getEvents(String objectType) {
+        return myEventMap.get(objectType);
     }
 }
