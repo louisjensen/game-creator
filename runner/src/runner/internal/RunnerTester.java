@@ -1,13 +1,13 @@
 package runner.internal;
 
-import engine.external.component.Component;
+import engine.external.Level;
+import engine.external.component.*;
 import engine.external.Entity;
-import engine.external.component.XPositionComponent;
-import engine.external.component.YPositionComponent;
-import engine.external.component.ZPositionComponent;
 import javafx.application.Application;
 import javafx.geometry.Point3D;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import runner.external.Game;
 import runner.external.GameRunner;
 
 import java.util.ArrayList;
@@ -18,24 +18,51 @@ public class RunnerTester extends Application {
 
     @Override
     public void start (Stage primaryStage) throws Exception{
-        addDummyEntities();
+        //addDummyEntities();
+        Game dummyGame = new Game();
+        initializeGame(dummyGame);
         System.out.println("testing");
-        GameRunner runner = new GameRunner(myDummyEntities, 400, 200, primaryStage);
+        GameRunner runner = new GameRunner(dummyGame);
     }
 
-    private void addDummyEntities() {
+    private void initializeGame(Game dummyGame) {
+        Level level1 = new Level();
+        addDummyEntities(level1);
+        dummyGame.addLevel(level1);
+
+    }
+
+    private void addDummyEntities(Level level) {
         Entity dummy1 = new Entity();
         Entity dummy2 = new Entity();
         Entity dummy3 = new Entity();
+        dummy1.addComponent(new XPositionComponent(30.0));
+        dummy1.addComponent(new YPositionComponent(30.0));
+        dummy1.addComponent(new ZPositionComponent(0.0));
+        dummy2.addComponent(new XPositionComponent(60.0));
+        dummy2.addComponent(new YPositionComponent(60.0));
+        dummy2.addComponent(new ZPositionComponent(0.0));
+        dummy3.addComponent(new XPositionComponent(90.0));
+        dummy3.addComponent(new YPositionComponent(90.0));
+        dummy3.addComponent(new ZPositionComponent(0.0));
 
-        //TODO: Hey Ryan, the Position Component has been decomposed into XPositionComponent, YPositionComponent, ZPositionComponent. Please refactor accordingly :)
-//        dummy1.addComponent(new PositionComponent(new Point3D(20.0, 20.0, 0.0)));
-//        dummy2.addComponent(new PositionComponent(new Point3D(50.0, 50.0, 0.0)));
-//        dummy3.addComponent(new PositionComponent(new Point3D(80.0, 80.0, 0.0)));
-//
-//        myDummyEntities.add(dummy1);
-//        myDummyEntities.add(dummy2);
-//        myDummyEntities.add(dummy3);
+        dummy1.addComponent(new WidthComponent(50.0));
+        dummy1.addComponent(new HeightComponent(50.0));
+        dummy2.addComponent(new WidthComponent(30.0));
+        dummy2.addComponent(new HeightComponent(30.0));
+        dummy3.addComponent(new WidthComponent(80.0));
+        dummy3.addComponent(new HeightComponent(20.0));
+
+        dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+        dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+        dummy3.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+
+
+        level.addEntity(dummy1);
+        level.addEntity(dummy2);
+        level.addEntity(dummy3);
+
+
     }
 
 }
