@@ -1,6 +1,8 @@
 package runner.external;
 
+import data.external.DataManager;
 import engine.external.Entity;
+import engine.external.Level;
 import engine.external.component.PositionComponent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,16 +17,14 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import runner.internal.TestEngine;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameRunner {
     /**
      * This will be the primary class that creates a new game engine
      * and displays sprites on a stage
      */
-    private List<Entity> myEntities;
+    private Collection<Entity> myEntities;
     private int mySceneWidth;
     private int mySceneHeight;
     private Stage myStage;
@@ -36,13 +36,24 @@ public class GameRunner {
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private Map myEntitiesAndNodes;
+    private List<Level> myLevels;
+    private Game myGame;
 
 
-    public GameRunner(List<Entity> entities, int width, int height, Stage stage) {
-        myEntities = entities;
-        mySceneWidth = width;
-        mySceneHeight = height;
-        myStage = stage;
+    public GameRunner(Game game) {
+       /* Actual way to get game object
+        GameRunner will have parameter String name, not Game game
+        code below
+
+        DataManager dm = new DataManager();
+        Game myGame = (Game) dm.loadGameData(name); */
+
+        myGame = game;
+        myLevels = myGame.getLevels();
+        myEntities = myLevels.get(0).getEntities();
+        mySceneWidth = myGame.getWidth();
+        mySceneHeight = myGame.getHeight();
+        myStage = new Stage();
         myGroup = new Group();
         myScene = new Scene(myGroup, mySceneWidth, mySceneHeight);
         myScene.setFill(Color.BEIGE);
@@ -50,7 +61,7 @@ public class GameRunner {
         myEntitiesAndNodes = initializeMap();
         showEntities();
         myStage.setScene(myScene);
-        myTestEngine = new TestEngine(myEntities);
+        myTestEngine = new TestEngine(myLevels.get(0));
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         myAnimation = new Timeline();
         myAnimation.setCycleCount(Timeline.INDEFINITE);
@@ -82,7 +93,7 @@ public class GameRunner {
     }
 
     private void step (double elapsedTime) {
-        myTestEngine.update();
+        myEntities = myTestEngine.updateState();
         updateMap();
         showEntities();
     }
@@ -97,7 +108,6 @@ public class GameRunner {
         Node toUpdate = (Node) myEntitiesAndNodes.get(entity);
         PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
         Point3D position = (Point3D) positionComponent.getValue();
-       // System.out.println(position.getX());
         toUpdate.setLayoutX(position.getX());
         toUpdate.setLayoutY(position.getY());
         return toUpdate;
@@ -115,7 +125,6 @@ public class GameRunner {
         myGroup.getChildren().clear();
         for(Entity entity : myEntities){
             Node toAdd = (Node) myEntitiesAndNodes.get(entity);
-         //   System.out.println(toAdd.getLayoutX());
             myGroup.getChildren().add((Node) myEntitiesAndNodes.get(entity));
         }
     }

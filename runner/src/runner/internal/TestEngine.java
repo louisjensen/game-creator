@@ -1,20 +1,23 @@
 package runner.internal;
 
 import engine.external.Entity;
+import engine.external.Level;
 import engine.external.component.PositionComponent;
 import javafx.geometry.Point3D;
 
+import java.util.Collection;
 import java.util.List;
 
 public class TestEngine {
-    private List<Entity> myEntities;
+    private Collection<Entity> myEntities;
 
-    public TestEngine(List<Entity> entities){
-        myEntities = entities;
+    public TestEngine(Level level){
+        myEntities = level.getEntities();
     }
 
-    public void update(){
+    public Collection<Entity> updateState(){
         moveStuffRight();
+        return myEntities;
     }
 
     private void moveStuffRight(){
