@@ -34,7 +34,7 @@ public class ObjectManager {
 
     public void addEntity(AuthoringEntity entity) {
         myEntities.add(entity);
-        myLabelManager.addLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL));
+        myLabelManager.addLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL)); //TODO account for adding new instance of preexisting entity
         myEventMap.put(entity.getPropertyMap().get(EntityField.LABEL), FXCollections.observableArrayList(new ArrayList<>()));
     }
 
