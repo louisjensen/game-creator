@@ -1,7 +1,7 @@
 package engine.internal;
 
 import engine.external.Entity;
-import engine.external.IEvent;
+import engine.external.IEventEngine;
 import engine.external.Level;
 import engine.external.component.*;
 import engine.internal.systems.*;
@@ -17,7 +17,7 @@ public class Engine {
 
 
     protected Collection<Entity> myEntities;
-    protected Collection<IEvent> myEvents;
+    protected Collection<IEventEngine> myEvents;
     private MovementSystem myMovementSystem;
     private ImageViewSystem myImageViewSystem;
     private CollisionSystem myCollisionSystem;

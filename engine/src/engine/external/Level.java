@@ -5,7 +5,7 @@ import java.util.HashSet;
 
 public class Level {
     private Collection<Entity> myEntities;
-    private Collection<IEvent> myEvents;
+    private Collection<IEventEngine> myEvents;
     private Level myCheckPoint;
 
     public Level(){
@@ -20,7 +20,7 @@ public class Level {
         return myEntities;
     }
 
-    public Collection<IEvent> getEvents(){
+    public Collection<IEventEngine> getEvents(){
         return myEvents;
     }
 

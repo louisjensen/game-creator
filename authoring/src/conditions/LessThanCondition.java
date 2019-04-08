@@ -1,4 +1,4 @@
-package events;
+package conditions;
 
 import engine.external.component.Component;
 
