@@ -1,6 +1,5 @@
-package ui.panes;
+package ui.main;
 
-import engine.external.Entity;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
@@ -15,8 +14,12 @@ import ui.UIException;
 import ui.manager.GroupManager;
 import ui.manager.LabelManager;
 import ui.manager.ObjectManager;
+import ui.panes.DefaultTypesPane;
+import ui.panes.PropertiesPane;
+import ui.panes.UserCreatedTypesPane;
+import ui.panes.Viewer;
 
-public class AssetManagerTester extends Application {
+public class MainGUI extends Application {
 
     @Override
     public void start(Stage testStage) {
