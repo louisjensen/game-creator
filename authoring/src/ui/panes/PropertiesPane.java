@@ -37,7 +37,7 @@ class PropertiesPane extends TitledPane {
     }
 
     private ScrollPane createPropertiesGrid() throws UIException {
-        Platform.runLater(() -> this.requestFocus());
+        Platform.runLater(this::requestFocus);
         GridPane gridlist = new GridPane();
         gridlist.getStyleClass().add("prop-grid");
         ScrollPane scrollpane = new ScrollPane(gridlist);
@@ -48,7 +48,7 @@ class PropertiesPane extends TitledPane {
             try {
                 String name = type.split("\\.")[1];
                 String value = bundle.getString(type);
-                gridlist.add(createProperty(name, value), 0, gridlist.getRowCount());
+                gridlist.add(createProperty(myProp.getEnumClass(), name, value), 0, gridlist.getRowCount());
             } catch (IndexOutOfBoundsException e) {
                 throw new UIException("Invalid properties file");
             }
@@ -56,7 +56,7 @@ class PropertiesPane extends TitledPane {
         return scrollpane;
     }
 
-    private VBox createProperty(String name, String info) throws UIException {
+    private VBox createProperty(Class<? extends Enum> enumClass, String name, String info) throws UIException {
         VBox newProp = new VBox();
         newProp.getStyleClass().add("prop-cell");
         Label propName = new Label(name);
@@ -69,8 +69,9 @@ class PropertiesPane extends TitledPane {
             ControlProperty instance = (sep[1].equals("none")) ?
                     (ControlProperty) constructor.newInstance() : (ControlProperty) constructor.newInstance(sep[1]);
             newProp.getChildren().addAll(propName, (Node) instance);
-            instance.populateValue(name, myProp.getPropertyMap().get(name), myLabelManager);
-            instance.setAction(myProp, name, sep[2]);
+            instance.populateValue(Enum.valueOf(enumClass, name.toUpperCase()),
+                    myProp.getPropertyMap().get(Enum.valueOf(enumClass, name.toUpperCase())), myLabelManager);
+            instance.setAction(myProp, Enum.valueOf(enumClass, name.toUpperCase()), sep[2]);
         } catch (Exception e) {
             throw new UIException("Error creating properties controls");
         }
