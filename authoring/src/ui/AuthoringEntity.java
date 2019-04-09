@@ -47,7 +47,7 @@ public class AuthoringEntity implements Propertable {
         this();
         myBackingEntity = basis;
         myObjectManager = manager;
-        if (basis.hasComponents(NameComponent.class))
+        if (basis.hasComponents(NameComponent.class)) // TODO try to fix this
             myPropertyMap.put(EntityField.LABEL, (String) basis.getComponent(NameComponent.class).getValue());
         if (basis.hasComponents(SpriteComponent.class))
             myPropertyMap.put(EntityField.IMAGE, (String) basis.getComponent(SpriteComponent.class).getValue());
@@ -90,7 +90,7 @@ public class AuthoringEntity implements Propertable {
             myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
     }
 
-    public Map<Enum, String> getPropertyMap() {
+    public ObservableMap<Enum, String> getPropertyMap() {
         return myPropertyMap;
     }
 
