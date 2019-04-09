@@ -1,4 +1,4 @@
-package ui_components;
+package frontend;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -7,8 +7,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import ui_components.games.GamePane;
-import ui_components.header.HeaderBar;
+import frontend.games.GamePane;
+import frontend.header.HeaderBar;
 
 public class CenterView extends Application {
     private Scene myScene;

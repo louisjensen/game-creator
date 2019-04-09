@@ -1,4 +1,4 @@
-package ui_components.games;
+package frontend.games;
 
 import data.external.DataManager;
 import javafx.geometry.Insets;

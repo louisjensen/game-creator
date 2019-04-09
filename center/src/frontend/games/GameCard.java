@@ -1,4 +1,4 @@
-package ui_components.games;
+package frontend.games;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,9 +10,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import runner.external.Game;
 import runner.external.GameCenterData;
-import ui_components.Utilities;
+import frontend.Utilities;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -96,7 +95,6 @@ public class GameCard {
             // do nothing, because in this case there would just be no image on the card which is fine
             // todo: possibly create a type of card with no image & turn this into a factory type class
         }
-        //Text imageDescription = new Text(Utilities.getValue(myLanguageBundle, "defaultGameBio"));
         Text imageDescription = new Text(myGame.getDescription());
         imageDescription.setWrappingWidth(DISPLAY_WIDTH);
         imageDescription.setTextAlignment(TextAlignment.CENTER);
