@@ -4,6 +4,7 @@ import engine.external.Entity;
 import engine.external.Level;
 import engine.external.component.*;
 import javafx.geometry.Point3D;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
@@ -66,6 +67,10 @@ public class TestEngine {
 //            Double zPosition = (Double) zPositionComponent.getValue();
 
             xPositionComponent.setValue(xPosition+1);
+
+            ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
+            ImageView image = (ImageView) imageViewComponent.getValue();
+            image.setLayoutX(image.getX()+1);
 
 
         }
