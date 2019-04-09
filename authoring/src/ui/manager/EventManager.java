@@ -9,10 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import ui.EntityField;
-import ui.Propertable;
-import ui.AuthoringEntity;
-import ui.Utility;
+import ui.*;
 import ui.panes.EventPane;
 
 import java.util.ArrayList;
@@ -29,7 +26,6 @@ public class EventManager extends Stage {
 
     private AuthoringEntity myEntity;
     private Scene myDefaultScene;
-
     public EventManager(Propertable prop) { // Loads common Events for object instance based on type label
         myEntity = (AuthoringEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
         myDefaultScene = createPane();
@@ -70,10 +66,16 @@ public class EventManager extends Stage {
     private void addEvent(ComboBox<String> myEvents) {
         myEvents.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends String> observable, String oldValue, String newValue) ->
-                        openEventOptions(myEvents.getValue()) );
+                {
+                    try {
+                        openEventOptions(myEvents.getValue());
+                    } catch (UIException e) {
+                        e.displayUIException();
+                    }
+                });
     }
 
-    private void openEventOptions(String eventName){
+    private void openEventOptions(String eventName) throws UIException {
         new EventPane(eventName, myEntity.getEvents());
     }
 
