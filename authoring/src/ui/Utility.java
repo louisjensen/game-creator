@@ -160,15 +160,15 @@ public class Utility {
         return labelBox;
     }
 
-    public static ImageWithEntity createImageWithEntity(Entity entity){
+    public static ImageWithEntity createImageWithEntity(AuthoringEntity entity){
         System.out.println("Made it to utility method");
         ResourceBundle generalResources = ResourceBundle.getBundle("authoring_general");
         System.out.println("got general properties bundle");
         ResourceBundle utilityResources = ResourceBundle.getBundle(RESOURCE);
-        String imageName = (String) entity.getComponent(new SpriteComponent("").getClass()).getValue();
+        String imageName = (String) entity.getBackingEntity().getComponent(new SpriteComponent("").getClass()).getValue();
         String imagePath = generalResources.getString("images_filepath");
-        Double width = (Double) entity.getComponent(new WidthComponent(0.0).getClass()).getValue();
-        Double height = (Double) entity.getComponent(new HeightComponent(0.0).getClass()).getValue();
+        Double width = (Double) entity.getBackingEntity().getComponent(new WidthComponent(0.0).getClass()).getValue();
+        Double height = (Double) entity.getBackingEntity().getComponent(new HeightComponent(0.0).getClass()).getValue();
         try {
             ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(imagePath + imageName), entity, width, height);
             System.out.println("Returning the entity next");
@@ -180,7 +180,7 @@ public class Utility {
             errorBox.display();
             //TODO: get rid of this stack trace. rn it's just in case this happens and we need to know where
             e.printStackTrace();
-            return new ImageWithEntity(null, new Entity(), 0.0, 0.0);
+            return null;
 
         }
     }

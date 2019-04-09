@@ -49,7 +49,8 @@ public class AssetManagerTester extends Application {
         Viewer viewer = new Viewer(500, 500, dataFormat);
         viewer.setMinWidth(400);
         viewer.setMinHeight(300);
-        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane(dataFormat);
+        ObjectManager objectManager = new ObjectManager(new LabelManager());
+        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane(dataFormat, objectManager);
         userCreatedTypesPane.setMinWidth(200);
         DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane);
         defaultTypesPane.setMinWidth(200);

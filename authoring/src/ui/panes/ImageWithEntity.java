@@ -1,25 +1,25 @@
 package ui.panes;
 
-import engine.external.Entity;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import ui.AuthoringEntity;
 
 import java.io.FileInputStream;
 
 public class ImageWithEntity extends ImageView {
-    private Entity myEntity;
+    private AuthoringEntity myAuthoringEntity;
 
-    public ImageWithEntity(FileInputStream s, Entity entity, double width, double height) {
+    public ImageWithEntity(FileInputStream s, AuthoringEntity authoringEntity, double width, double height) {
         super(new Image(s, width, height, false, false));
-        myEntity = entity;
+        myAuthoringEntity = authoringEntity;
     }
 
     /**
-     * Returns entity associated with this object
-     * @return Entity
+     * Returns AuthoringEntity associated with this object
+     * @return AuthoringEntity
      */
-    public Entity getEntity(){
-        return myEntity;
+    public AuthoringEntity getAuthoringEntity(){
+        return myAuthoringEntity;
     }
 
 }

@@ -11,6 +11,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
+import ui.AuthoringEntity;
 import ui.Utility;
 
 import java.util.ResourceBundle;
@@ -50,7 +51,7 @@ public class Viewer extends ScrollPane {
                 boolean success = false;
                 System.out.println(db.getContentTypes());
                 if (db.hasContent(dataFormat)) {
-                    Entity entity = (Entity) db.getContent(myDataFormat);
+                    AuthoringEntity entity = (AuthoringEntity) db.getContent(myDataFormat);
                     addImage(Utility.createImageWithEntity(entity));
                     success = true;
                 }
