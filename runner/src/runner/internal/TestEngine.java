@@ -16,6 +16,7 @@ import java.util.Set;
 
 public class TestEngine {
     private Collection<Entity> myEntities;
+    private int x = 1;
 
     public TestEngine(Level level){
         myEntities = level.getEntities();
@@ -29,7 +30,7 @@ public class TestEngine {
         return myEntities;
     }
 
-    int x = 1;
+
 
     private void moveStuffRight(){
         for(Entity entity : myEntities){

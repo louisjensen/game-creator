@@ -1,5 +1,6 @@
 package runner.external;
 
+import data.external.DataManager;
 import engine.external.Engine;
 import engine.external.Entity;
 
@@ -17,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import runner.internal.DummyGameObjectMaker;
 import runner.internal.TestEngine;
 
 import java.util.*;
@@ -44,15 +46,21 @@ public class GameRunner {
     private Set<KeyCode> myCurrentKeys;
 
 
-    public GameRunner(Game game) {
+
+    public GameRunner(String gameS) {
        /* Actual way to get game object
         GameRunner will have parameter String name, not Game game
-        code below
+        code below */
 
         DataManager dm = new DataManager();
-        Game myGame = (Game) dm.loadGameData(name); */
+        Game gameLoaded = (Game) dm.loadGameData(gameS);
 
-        myGame = game;
+        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
+        Game gameMade = (Game) dm2.getGame(gameS);
+
+        myGame = gameMade;
+        //myGame = gameLoaded;
+
         myLevels = myGame.getLevels();
         myEntities = myLevels.get(0).getEntities();
         mySceneWidth = myGame.getWidth();
@@ -67,11 +75,11 @@ public class GameRunner {
         showEntities();
         myCurrentKeys = new HashSet<KeyCode>();
         myStage.setScene(myScene);
-        try{
+       // try{
             myEngine = new TestEngine(myLevels.get(0));
-        } catch (Exception e){
-            myEngine = null;
-        }
+//        } catch (Exception e){
+//            myEngine = null;
+//        }
 
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         myAnimation = new Timeline();
@@ -170,6 +178,13 @@ public class GameRunner {
         myGroup.getChildren().clear();
         for(Entity entity : myEntities){
             Node toAdd = (Node) myEntitiesAndNodes.get(entity);
+            System.out.println("begin");
+            System.out.println(myGroup);
+            System.out.println(myGroup.getChildren());
+            System.out.println(myEntitiesAndNodes);
+            System.out.println(myEntitiesAndNodes.get(entity));
+            System.out.println(entity);
+            System.out.println("end");
             myGroup.getChildren().add((Node) myEntitiesAndNodes.get(entity));
         }
     }
