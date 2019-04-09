@@ -1,12 +1,15 @@
 package ui.panes;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ui.EntityField;
 import ui.ErrorBox;
 import ui.AuthoringEntity;
 import ui.AuthoringLevel;
+import ui.Propertable;
+import ui.PropertableType;
 import ui.UIException;
 import ui.manager.GroupManager;
 import ui.manager.LabelManager;
@@ -23,17 +26,16 @@ public class PaneTester extends Application {
     public void start(Stage testStage) {
         testStage.setTitle("Pane Test");
         testStage.setResizable(false);
-        LabelManager testLabels = new LabelManager();
-        addTestLabels(testLabels);
-        ObjectManager manager = new ObjectManager(testLabels);
+        ObjectManager manager = new ObjectManager();
+        addTestLabels(manager.getLabelManager());
         AuthoringEntity obj1 = populateTestObjects(manager);
+        SimpleObjectProperty<Propertable> testObj = new SimpleObjectProperty<>(obj1);
+        SimpleObjectProperty<Propertable> testLvl = new SimpleObjectProperty<>(new AuthoringLevel("Level_1", manager));
+
         try {
-            PropertiesPane testPaneObj =
-                    new PropertiesPane("Object", obj1, "object_properties_list", testLabels);
-            PropertiesPane testPaneLvl =
-                    new PropertiesPane("Level", new AuthoringLevel("Level_1", manager), "level_properties_list", testLabels);
-            PropertiesPane testPaneIns =
-                    new PropertiesPane("Instance", obj1, "instance_properties_list", testLabels);
+            PropertiesPane testPaneObj = new PropertiesPane(PropertableType.OBJECT, testObj, manager.getLabelManager());
+            PropertiesPane testPaneLvl = new PropertiesPane(PropertableType.LEVEL, testLvl, manager.getLabelManager());
+            PropertiesPane testPaneIns = new PropertiesPane(PropertableType.INSTANCE, testObj, manager.getLabelManager());
             GroupManager testCreateGroup = new GroupManager(manager);
 
             Scene testScene = new Scene(testPaneObj);

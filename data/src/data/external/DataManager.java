@@ -2,6 +2,7 @@ package data.external;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -70,7 +71,7 @@ public class DataManager implements ExternalData{
     }
 
     @Override
-    public Object loadObjectFromXML(String path) {
+    public Object loadObjectFromXML(String path) throws FileNotFoundException{
         String rawXML = readFromXML(path);
         return mySerializer.fromXML(rawXML);
     }
@@ -81,15 +82,20 @@ public class DataManager implements ExternalData{
         saveObjectToXML(path, gameObject);
     }
 
-    public Object loadGameInfo(String gameName){
+    public Object loadGameInfo(String gameName) throws FileNotFoundException{
         return loadObjectFromXML(transformGameNameToPath(gameName, GAME_INFO));
     }
 
-    public List<Object> loadGameAllGameInfoObject(){
+    public List<Object> loadAllGameInfoObjects(){
         List<String> gameNames = getGameNames();
         List<Object> gameInfoObjects = new ArrayList<>();
         for (String game : gameNames){
-            gameInfoObjects.add(loadGameInfo(game));
+//            if (loadGameInfo(game))
+            try {
+                gameInfoObjects.add(loadGameInfo(game));
+            } catch (FileNotFoundException exception){
+                // do not try to add object to the list
+            }
         }
         return gameInfoObjects;
     }
@@ -105,12 +111,12 @@ public class DataManager implements ExternalData{
     }
 
     @Override
-    public Object loadGameData(String gameName) {
+    public Object loadGameData(String gameName) throws FileNotFoundException{
 
         return loadObjectFromXML(transformGameNameToPath(gameName, GAME_DATA));
     }
 
-    private String readFromXML(String path) {
+    private String readFromXML(String path) throws FileNotFoundException {
         BufferedReader bufferedReader = null;
         FileReader fileReader = null;
         StringBuilder rawXML = new StringBuilder();
@@ -122,7 +128,8 @@ public class DataManager implements ExternalData{
                 rawXML.append(currentLine);
             }
         } catch (IOException e) {
-            System.out.println("Cannot read XML file");;
+            System.out.println("Cannot read XML file");
+            throw new FileNotFoundException();
         } finally {
             try {
                 if (bufferedReader != null) {

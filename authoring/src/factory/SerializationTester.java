@@ -6,6 +6,7 @@ import data.external.DataManager;
 import engine.external.Entity;
 import engine.external.component.HealthComponent;
 import runner.external.Game;
+import runner.external.GameCenterData;
 
 
 public class SerializationTester {
@@ -28,8 +29,8 @@ public class SerializationTester {
         Entity myMario = new Entity();
         dm.createGameFolder("RyanGame");
         dm.saveGameData("RyanGame", myMario);
-        Entity mySecondMario = (Entity)dm.loadGameData("RyanGame");
-        mySecondMario.printMyComponents();
+        //Entity mySecondMario = (Entity)dm.loadGameData("RyanGame");
+        //mySecondMario.printMyComponents();
     }
 
     public void testObjectReferences(){
@@ -40,6 +41,15 @@ public class SerializationTester {
         Entity ryan = new Entity();
         dm.createGameFolder("LucasGame");
         dm.saveGameData("LucasGame", game);
+    }
+
+    public void testGameCenterInfo() {
+        GameCenterData test = new GameCenterData();
+        test.setTitle("TESTING GAME!!!!");
+        test.setDescription("this is just a simple test");
+        DataManager dm = new DataManager();
+        dm.createGameFolder("testingGameInfo");
+        dm.saveGameInfo("testingGameInfo", test);
     }
 }
 

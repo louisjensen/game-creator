@@ -68,6 +68,7 @@ public class AssetManager extends Stage {
      * a new type before the entity actually needs to be made and kept track of
      */
     public AssetManager(){
+        myProp = null;
         mySelectedImageName = "";
         initializeVariables();
         initializeStage();
@@ -78,10 +79,8 @@ public class AssetManager extends Stage {
     }
 
     public AssetManager(Propertable prop) {
-        super();
-        //TODO: integrate in entity
+        this();
         myProp = prop;
-
     }
 
 
@@ -229,6 +228,9 @@ public class AssetManager extends Stage {
 
     private void handleClose(){
         if(!mySelectedImageName.equals("")){
+            if(myProp != null){
+                myProp.getPropertyMap().put(EntityField.IMAGE, mySelectedImageName);
+            }
             this.close();
         }
         else{
