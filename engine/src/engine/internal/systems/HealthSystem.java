@@ -1,7 +1,7 @@
 package engine.internal.systems;
 
 import engine.external.component.Component;
-import engine.internal.Engine;
+import engine.external.Engine;
 
 import java.util.Collection;
 

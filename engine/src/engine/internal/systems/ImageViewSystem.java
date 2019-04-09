@@ -3,8 +3,7 @@ package engine.internal.systems;
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.ImageViewComponent;
-import engine.internal.Engine;
-import javafx.geometry.Point3D;
+import engine.external.Engine;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 

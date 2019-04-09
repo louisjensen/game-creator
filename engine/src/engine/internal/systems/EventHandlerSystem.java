@@ -3,7 +3,7 @@ package engine.internal.systems;
 
 import engine.external.IEventEngine;
 import engine.external.component.Component;
-import engine.internal.Engine;
+import engine.external.Engine;
 
 import java.util.ArrayList;
 
