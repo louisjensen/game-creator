@@ -42,6 +42,7 @@ public class MainGUI {
 
     private static final double STAGE_MIN_HEIGHT = 600;
     private static final double STAGE_MIN_WIDTH = 955;
+    private static final double PROP_PANE_HEIGHT = 200;
     private static final String DEFAULT_STYLESHEET = "default.css"; //TODO propagate Stylesheet
     private static final String STAGE_TITLE = "ByteMe Authoring Environment";
 
@@ -78,7 +79,7 @@ public class MainGUI {
         HBox entityPaneBox = new HBox();
         entityPaneBox.getStyleClass().add("entity-pane-box");
 
-        UserCreatedTypesPane userCreatedTypesPane = createTypePanes(entityPaneBox);
+        UserCreatedTypesPane userCreatedTypesPane = createTypePanes(entityPaneBox, mainScene);
         Viewer viewer = createViewer(userCreatedTypesPane);
         createPropertiesPanes(propPaneBox, mainScene);
 
@@ -91,12 +92,13 @@ public class MainGUI {
         return mainScene;
     }
 
-    private UserCreatedTypesPane createTypePanes(HBox entityPaneBox) {
+    private UserCreatedTypesPane createTypePanes(HBox entityPaneBox, Scene mainScene) {
         UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager);
-        userCreatedTypesPane.setMinWidth(200);
         DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane);
-        defaultTypesPane.setMinWidth(200);
         entityPaneBox.getChildren().addAll(defaultTypesPane, userCreatedTypesPane);
+        entityPaneBox.prefHeightProperty().bind(mainScene.heightProperty().subtract(PROP_PANE_HEIGHT));
+        userCreatedTypesPane.prefHeightProperty().bind(entityPaneBox.heightProperty());
+        defaultTypesPane.prefHeightProperty().bind(entityPaneBox.heightProperty());
         return userCreatedTypesPane;
     }
 

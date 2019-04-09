@@ -71,7 +71,7 @@
 
 .titled-pane .title {
     -fx-background-color: #505050;
-    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 5 );
+    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0 );
 }
 
 .scroll-bar {
@@ -199,13 +199,21 @@
 }
 
 .prop-pane {
-    -fx-min-width: 350;
+    -fx-min-width: 200;
     -fx-pref-height: 200;
     -fx-max-height: 200;
 }
 
 .entity-menu {
-    -fx-pref-height: 510;
+
+}
+
+.entity-menu .titled-pane {
+    -fx-pref-width: 200;
+}
+
+.entity-menu .titled-pane .content{
+    -fx-padding: 6 0 0 0;
 }
 
 .entity-menu .list-cell{
