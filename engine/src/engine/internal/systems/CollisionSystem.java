@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class CollisionSystem extends System {
+public class CollisionSystem extends ByteMeSystem {
 
 
     public CollisionSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {

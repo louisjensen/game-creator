@@ -14,7 +14,7 @@ import java.util.Collection;
 /**
  * Checks all Events every cycle
  */
-public class EventHandlerSystem extends System {
+public class EventHandlerSystem extends ByteMeSystem {
 
     Collection<IEventEngine> myEvents;
 

@@ -6,7 +6,7 @@ import engine.external.Engine;
 
 import java.util.Collection;
 
-public class MovementSystem extends System {
+public class MovementSystem extends ByteMeSystem {
 
     public MovementSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         super(requiredComponents, engine);

@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCode;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public abstract class System {
+public abstract class ByteMeSystem {
     protected final Class<? extends Component> X_POSITION_COMPONENT_CLASS = XPositionComponent.class;
     protected final Class<? extends Component> Y_POSITION_COMPONENT_CLASS = YPositionComponent.class;
     protected final Class<? extends Component> Z_POSITION_COMPONENT_CLASS = ZPositionComponent.class;
@@ -36,7 +36,7 @@ public abstract class System {
     private Collection<KeyCode> myInputs;
     protected Engine myEngine;
 
-    public System(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
+    public ByteMeSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         myRequiredComponents = requiredComponents;
         myEngine = engine;
         myInputs = new ArrayList<>();

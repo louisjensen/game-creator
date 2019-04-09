@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.Collection;
 
-public class ImageViewSystem extends System {
+public class ImageViewSystem extends ByteMeSystem {
     public ImageViewSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine){
         super(requiredComponents, engine);
     }

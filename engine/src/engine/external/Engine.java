@@ -1,16 +1,12 @@
 package engine.external;
 
-import engine.external.Entity;
-import engine.external.IEventEngine;
-import engine.external.Level;
 import engine.external.component.*;
 import engine.internal.systems.*;
-import engine.internal.systems.System;
+import engine.internal.systems.ByteMeSystem;
 import javafx.scene.input.KeyCode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import static java.lang.System.out;
 
 public class Engine {
     //TODO: Exception Handling
@@ -25,7 +21,7 @@ public class Engine {
     private HealthSystem myHealthSystem;
     private EventHandlerSystem myEventHandlerSystem;
     private CleanupSystem myCleanupSystem;
-    private List<System> mySystems;
+    private List<ByteMeSystem> mySystems;
 
     public Engine(Level level) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
         myEntities = level.getEntities();
@@ -34,7 +30,7 @@ public class Engine {
     }
 
     public Collection<Entity> updateState(Collection<KeyCode> inputs){
-        for(System system :mySystems) {
+        for(ByteMeSystem system :mySystems) {
             system.update(myEntities,inputs);
         }
         return this.getEntities();
@@ -55,12 +51,12 @@ public class Engine {
     private void initSystem(String systemName) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
         Class systemClazz = Class.forName(this.getClass().getModule(),systemName);
         Collection<Class<?extends Component>> systemComponents = retrieveComponentClasses(systemName);
-        mySystems.add((System) systemClazz.getConstructor().newInstance(systemComponents,this));
+        mySystems.add((ByteMeSystem) systemClazz.getConstructor().newInstance(systemComponents,this));
     }
 
     @SuppressWarnings({"unchecked"})
     private Collection<Class<? extends Component>> retrieveComponentClasses(String systemName) throws ClassNotFoundException {
-        java.lang.System.out.println(systemName);
+        System.out.println(systemName);
         String[] componentArr = SYSTEM_COMPONENTS_RESOURCES.getString(systemName).split(",");
         ArrayList<Class<? extends Component>> componentList = new ArrayList<>();
         for(String component:componentArr){
