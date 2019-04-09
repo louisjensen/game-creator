@@ -52,17 +52,20 @@ public class GameRunner {
         GameRunner will have parameter String name, not Game game
         code below */
 
+        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
+        dm2.serializeObject();
+        Game gameMade = dm2.getGame(gameS);
+
         DataManager dm = new DataManager();
         Game gameLoaded = (Game) dm.loadGameData(gameS);
-
-        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
-        Game gameMade = (Game) dm2.getGame(gameS);
 
         myGame = gameMade;
         //myGame = gameLoaded;
 
+        myCurrentKeys = new HashSet<KeyCode>();
         myLevels = myGame.getLevels();
-        myEntities = myLevels.get(0).getEntities();
+        myEngine = new TestEngine(myLevels.get(0));
+        myEntities = myEngine.updateState(myCurrentKeys);
         mySceneWidth = myGame.getWidth();
         mySceneHeight = myGame.getHeight();
         myStage = new Stage();
@@ -71,15 +74,11 @@ public class GameRunner {
         myScene.setFill(Color.BEIGE);
         myScene.setOnKeyPressed(e -> handleKeyPress(e.getCode()));
         myScene.setOnKeyReleased(e -> handleKeyRelease(e.getCode()));
-        myEntitiesAndNodes = initializeMap();
+       // myEntitiesAndNodes = initializeMap();
         showEntities();
-        myCurrentKeys = new HashSet<KeyCode>();
+
         myStage.setScene(myScene);
-       // try{
-            myEngine = new TestEngine(myLevels.get(0));
-//        } catch (Exception e){
-//            myEngine = null;
-//        }
+        myEngine = new TestEngine(myLevels.get(0));
 
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         myAnimation = new Timeline();
@@ -88,6 +87,8 @@ public class GameRunner {
         myAnimation.play();
         myStage.show();
     }
+
+    private void doNothing(){}
 
     private void handleKeyPress(KeyCode code) {
         myCurrentKeys.add(code);
@@ -104,19 +105,20 @@ public class GameRunner {
 
             List<Double> xyz = getXYZasList(entity);
             WidthComponent widthComponent = (WidthComponent) entity.getComponent(WidthComponent.class);
-            Double width = (Double) widthComponent.getValue();
-            HeightComponent heightComponent = (HeightComponent) entity.getComponent(HeightComponent.class);
-            Double height = (Double) heightComponent.getValue();
-            ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
-            ImageView image = (ImageView) imageViewComponent.getValue();
-
-            image.setFitWidth(width);
-            image.setFitHeight(height);
-            image.setSmooth(false);
-            image.setLayoutX(xyz.get(0));
-            image.setLayoutY(xyz.get(1));
-
-            map.put(entity, image);
+//            Double width = (Double) widthComponent.getValue();
+//            HeightComponent heightComponent = (HeightComponent) entity.getComponent(HeightComponent.class);
+//            Double height = (Double) heightComponent.getValue();
+//            //ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
+//            //ImageView image = (ImageView) imageViewComponent.getValue();
+//            ImageView image = new ImageView("basketball.png");
+//
+//            image.setFitWidth(width);
+//            image.setFitHeight(height);
+////            image.setSmooth(false);
+//            image.setLayoutX(xyz.get(0));
+//            image.setLayoutY(xyz.get(1));
+//
+//            map.put(entity, image);
 
         }
         return map;
@@ -124,9 +126,10 @@ public class GameRunner {
 
     private void step (double elapsedTime) {
         myEntities = myEngine.updateState(myCurrentKeys);
-        updateMap();
+       // updateMap();
         showEntities();
         printKeys();
+        printEntityLocations();
     }
 
     private void printKeys() {
@@ -140,7 +143,8 @@ public class GameRunner {
     }
 
     private Node updateNode(Entity entity) {
-        Node toUpdate = (Node) myEntitiesAndNodes.get(entity);
+        Node toUpdate = (ImageView) entity.getComponent(ImageViewComponent.class).getValue();
+
 
         List<Double> xyz = getXYZasList(entity);
 
@@ -166,26 +170,28 @@ public class GameRunner {
 
     private void printEntityLocations(){
         for(Entity entity : myEntities){
-            //TODO: refactor code to use XPositionComponent, YPositionComponent, ZPositionComponent :)
-
-//            PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
-//            Point3D position = (Point3D) positionComponent.getValue();
-//            System.out.println(position.getX());
+            List<Double> xyz = getXYZasList(entity);
+            System.out.println(xyz);
         }
     }
 
     private void showEntities(){
         myGroup.getChildren().clear();
         for(Entity entity : myEntities){
-            Node toAdd = (Node) myEntitiesAndNodes.get(entity);
-            System.out.println("begin");
-            System.out.println(myGroup);
-            System.out.println(myGroup.getChildren());
-            System.out.println(myEntitiesAndNodes);
-            System.out.println(myEntitiesAndNodes.get(entity));
-            System.out.println(entity);
-            System.out.println("end");
-            myGroup.getChildren().add((Node) myEntitiesAndNodes.get(entity));
+
+//            Node toAdd = (Node) myEntitiesAndNodes.get(entity);
+//            System.out.println("begin");
+//            System.out.println(myGroup);
+//            System.out.println(myGroup.getChildren());
+//            System.out.println(myEntitiesAndNodes);
+//            System.out.println(myEntitiesAndNodes.get(entity));
+//            System.out.println(entity);
+//            System.out.println("end");
+//            myGroup.getChildren().add((Node) myEntitiesAndNodes.get(entity));
+            ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
+            ImageView image = (ImageView) imageViewComponent.getValue();
+
+            myGroup.getChildren().add(image);
         }
     }
 

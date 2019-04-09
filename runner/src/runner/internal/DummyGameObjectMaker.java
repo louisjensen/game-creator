@@ -1,5 +1,6 @@
 package runner.internal;
 
+import data.external.DataManager;
 import engine.external.Entity;
 import engine.external.Level;
 import engine.external.component.*;
@@ -43,9 +44,12 @@ public class DummyGameObjectMaker {
         dummy3.addComponent(new WidthComponent(80.0));
         dummy3.addComponent(new HeightComponent(20.0));
 
-        dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
-        dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
-        dummy3.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+        //dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+        //dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+        //dummy3.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+        dummy1.addComponent(new SpriteComponent("basketball.png"));
+        dummy2.addComponent(new SpriteComponent("basketball.png"));
+        dummy3.addComponent(new SpriteComponent("basketball.png"));
 
 
         level.addEntity(dummy1);
@@ -55,5 +59,10 @@ public class DummyGameObjectMaker {
 
     public Game getGame(String dummyString){
         return myGame;
+    }
+
+    public void serializeObject(){
+        DataManager dm = new DataManager();
+        dm.saveGameData("game1", myGame);
     }
 }
