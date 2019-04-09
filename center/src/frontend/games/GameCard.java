@@ -77,6 +77,7 @@ public class GameCard {
         readMore.setPrefWidth(BUTTON_WIDTH);
         Button play = new Button(Utilities.getValue(myLanguageBundle, "playGameButton"));
         play.setPrefWidth(BUTTON_WIDTH);
+        play.setOnAction(e -> handleButton(myGame.getFolderName()));
         HBox buttons = new HBox(readMore, play);
         buttons.setSpacing(HORIZONTAL_BUTTON_SPACING);
         buttons.setAlignment(Pos.CENTER);
@@ -85,6 +86,10 @@ public class GameCard {
         buttonPane.setCenter(buttons);
         buttonPane.setBottom(spacing);
         foreground.setBottom(buttonPane);
+    }
+
+    private void handleButton(String folderName) {
+        // todo: launch player here
     }
 
     private void addImageAndContent(BorderPane foreground) {
@@ -103,7 +108,7 @@ public class GameCard {
     }
 
     private void addImage(BorderPane contentPane) throws FileNotFoundException {
-        ImageView noGameFound = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
+        ImageView noGameFound = new ImageView(new Image(new FileInputStream(myGame.getImageLocation())));
         noGameFound.setPreserveRatio(true);
         noGameFound.setFitWidth(GAME_IMAGE_SIZE);
         BorderPane imagePane = new BorderPane();
