@@ -1,5 +1,6 @@
 package engine.internal;
 
+import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.Level;
 import engine.external.component.*;
@@ -13,10 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 
 
-public class SystemTester {
+public class EngineSystemTest {
     private Engine testEngine;
     private Level testLevel;
     private Entity entityImageView;
