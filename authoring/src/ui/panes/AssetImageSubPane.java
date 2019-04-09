@@ -29,7 +29,7 @@ public class AssetImageSubPane extends GridPane {
         myImageSize = IMAGE_SIZE - IMAGE_OFFSET;
         Label text = new Label(cutText(title));
         text.getStyleClass().add("asset-manager-labels");
-        
+
         this.add(image, 0, 0);
         this.add(text, 0, 1);
         formatPaneAndImage(image);
