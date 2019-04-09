@@ -47,14 +47,13 @@ public class Viewer extends ScrollPane {
         myStackPane.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
+                System.out.println("Drag Dropped");
                 Dragboard db = dragEvent.getDragboard();
-                boolean success = false;
-                System.out.println(db.getContentTypes());
                 AuthoringEntity authoringEntity = userCreatedTypesPane.getDraggedAuthoringEntity();
                 authoringEntity.getPropertyMap().put(EntityField.X, "" + dragEvent.getX());
                 authoringEntity.getPropertyMap().put(EntityField.Y, "" + dragEvent.getY());
+                System.out.println("Attempting to add image next");
                 addImage(Utility.createImageWithEntity(authoringEntity));
-                dragEvent.setDropCompleted(success);
             }
         });
         setRoomSize(roomWidth, roomHeight);
@@ -82,7 +81,9 @@ public class Viewer extends ScrollPane {
     }
 
     private void addImage(ImageWithEntity imageView){
+        System.out.println("AddImage called");
         myStackPane.getChildren().add(imageView);
+        System.out.println("Image added to Viewer");
     }
 
     /**
