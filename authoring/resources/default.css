@@ -199,7 +199,7 @@
 }
 
 .prop-pane {
-    -fx-min-width: 350;
+    -fx-min-width: 200;
     -fx-pref-height: 200;
     -fx-max-height: 200;
 }
