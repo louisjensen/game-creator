@@ -58,13 +58,7 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     private boolean conditionsMet(Entity entity) {
-        //TODO: make this sexier
-        for (Condition condition: conditions) {
-            if (!condition.getPredicate().test(entity)) {
-                return false;
-            }
-        }
-        return true;
+        return conditions.stream().allMatch(condition -> condition.getPredicate().test(entity));
     }
 
     private void executeActions(Entity entity) {
@@ -92,6 +86,8 @@ public class Event implements IEventEngine, IEventAuthoring {
     public void removeActions(List<Action> actionsToRemove){
         actions.removeAll(actionsToRemove);
     }
+
+    public void removeConditions(List<Condition> conditionsToRemove) { conditions.removeAll(conditionsToRemove);}
 
 
 

@@ -28,6 +28,12 @@ public interface IEventAuthoring {
     void addActions(Action action);
 
     /**
+     * Removes a set of actions associated with this event
+     * @param actionsToRemove
+     */
+    void removeActions(List<Action> actionsToRemove);
+
+    /**
      * This method allows you to set the CONDITIONS associated with an event to
      * a new list of conditions.
      * @param newSetOfConditions new list of conditions to set
@@ -42,6 +48,12 @@ public interface IEventAuthoring {
     void addConditions(List<Condition> conditionsToAdd);
 
     void addConditions(Condition condition);
+
+    /**
+     * Removes a set of conditions from the list of conditions associated with this event.
+     * @param conditionsToRemove
+     */
+    void removeConditions(List<Condition> conditionsToRemove);
 
 
 
