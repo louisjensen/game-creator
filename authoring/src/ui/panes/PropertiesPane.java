@@ -88,7 +88,7 @@ public class PropertiesPane extends TitledPane {
             ControlProperty instance = (sep[1].equals("none")) ?
                     (ControlProperty) constructor.newInstance() : (ControlProperty) constructor.newInstance(sep[1]);
             newProp.getChildren().addAll(propName, (Node) instance);
-            instance.populateValue(Enum.valueOf(enumClass, name.toUpperCase()),
+            instance.populateValue(myProp.getValue(), Enum.valueOf(enumClass, name.toUpperCase()),
                     myProp.getValue().getPropertyMap().get(Enum.valueOf(enumClass, name.toUpperCase())), myLabelManager);
             instance.setAction(myProp.getValue(), Enum.valueOf(enumClass, name.toUpperCase()), sep[2]);
         } catch (Exception e) {

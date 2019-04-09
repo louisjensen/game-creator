@@ -30,7 +30,7 @@ public class AuthoringLevel implements Propertable {
         addPropertyListener();
     }
 
-    public Map<Enum, String> getPropertyMap() {
+    public ObservableMap<Enum, String> getPropertyMap() {
         return myPropertyMap;
     }
 

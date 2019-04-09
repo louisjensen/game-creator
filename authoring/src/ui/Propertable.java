@@ -1,13 +1,13 @@
 package ui;
 
-import java.util.Map;
+import javafx.collections.ObservableMap;
 
 /**
  * @author Harry Ross
  */
 public interface Propertable {
 
-    Map<Enum, String> getPropertyMap();
+    ObservableMap<Enum, String> getPropertyMap();
 
     Class<? extends Enum> getEnumClass();
 
