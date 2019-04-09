@@ -1,13 +1,16 @@
 package ui.panes;
 
+import engine.external.Entity;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import ui.EntityField;
 import ui.ErrorBox;
-import ui.TestEntity;
-import ui.TestLevel;
+import ui.AuthoringEntity;
+import ui.AuthoringLevel;
 import ui.UIException;
 import ui.manager.GroupManager;
 import ui.manager.LabelManager;
@@ -42,22 +45,24 @@ public class AssetManagerTester extends Application {
     }
 
     private void alternateStart(Stage stage){
-        Viewer viewer = new Viewer(500, 500);
+        DataFormat dataFormat = new DataFormat("Entity");
+        Viewer viewer = new Viewer(500, 500, dataFormat);
         viewer.setMinWidth(400);
         viewer.setMinHeight(300);
-        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane();
+        ObjectManager objectManager = new ObjectManager(new LabelManager());
+        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane(dataFormat, objectManager);
         userCreatedTypesPane.setMinWidth(200);
         DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane);
         defaultTypesPane.setMinWidth(200);
         LabelManager testLabels = new LabelManager();
         addTestLabels(testLabels);
         ObjectManager manager = new ObjectManager(testLabels);
-        TestEntity obj1 = populateTestObjects(manager);
+        AuthoringEntity obj1 = populateTestObjects(manager);
         try {
             PropertiesPane testPaneObj =
                     new PropertiesPane("Object", obj1, "object_properties_list", testLabels);
             PropertiesPane testPaneLvl =
-                    new PropertiesPane("Level", new TestLevel("Level_1", manager), "level_properties_list", testLabels);
+                    new PropertiesPane("Level", new AuthoringLevel("Level_1", manager), "level_properties_list", testLabels);
             PropertiesPane testPaneIns =
                     new PropertiesPane("Instance", obj1, "instance_properties_list", testLabels);
             GroupManager testCreateGroup = new GroupManager(manager);
@@ -91,30 +96,30 @@ public class AssetManagerTester extends Application {
     }
 
     private void addTestLabels(LabelManager testLabels) {
-        testLabels.addLabel("Group", "Enemies");
-        testLabels.addLabel("Group", "Platforms");
-        testLabels.addLabel("Label", "Mario");
-        testLabels.addLabel("Label", "Goomba");
-        testLabels.addLabel("Label", "Brick_Block");
+        testLabels.addLabel(EntityField.GROUP, "Enemies");
+        testLabels.addLabel(EntityField.GROUP, "Platforms");
+        testLabels.addLabel(EntityField.LABEL, "Mario");
+        testLabels.addLabel(EntityField.LABEL, "Goomba");
+        testLabels.addLabel(EntityField.LABEL, "Brick_Block");
     }
 
-    private TestEntity populateTestObjects(ObjectManager manager) {
-        TestEntity a = new TestEntity("object1", manager);
-        TestEntity b = new TestEntity("object2", manager);
-        TestEntity c = new TestEntity("object3", manager);
-        TestEntity d = new TestEntity("object4", manager);
-        TestEntity e = new TestEntity("object1", manager);
-        TestEntity f = new TestEntity("object1", manager);
+    private AuthoringEntity populateTestObjects(ObjectManager manager) {
+        AuthoringEntity a = new AuthoringEntity("object1", manager);
+        AuthoringEntity b = new AuthoringEntity("object2", manager);
+        AuthoringEntity c = new AuthoringEntity("object3", manager);
+        AuthoringEntity d = new AuthoringEntity("object4", manager);
+        AuthoringEntity e = new AuthoringEntity("object1", manager);
+        AuthoringEntity f = new AuthoringEntity("object1", manager);
         manager.addEntity(a);
         manager.addEntity(b);
         manager.addEntity(c);
         manager.addEntity(d);
         manager.addEntity(e);
         manager.addEntity(f);
-        a.getPropertyMap().put("Group", "Enemies");
-        b.getPropertyMap().put("Group", "Platforms");
-        c.getPropertyMap().put("Group", "Enemies");
-        d.getPropertyMap().put("Group", "Platforms");
+        a.getPropertyMap().put(EntityField.GROUP, "Enemies");
+        b.getPropertyMap().put(EntityField.GROUP, "Platforms");
+        c.getPropertyMap().put(EntityField.GROUP, "Enemies");
+        d.getPropertyMap().put(EntityField.GROUP, "Platforms");
         return f;
     }
 
