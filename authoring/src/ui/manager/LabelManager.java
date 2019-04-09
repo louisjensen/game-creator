@@ -2,6 +2,7 @@ package ui.manager;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ui.EntityField;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,26 +14,26 @@ import java.util.Map;
  */
 public class LabelManager {
 
-    private Map<String, ObservableList<String>> myLabelGroups;
+    private Map<EntityField, ObservableList<String>> myLabelGroups;
 
     public LabelManager() {
         myLabelGroups = new HashMap<>();
-        myLabelGroups.put("Label", FXCollections.observableArrayList(new ArrayList<>()));
-        myLabelGroups.put("Group", FXCollections.observableArrayList(new ArrayList<>()));
+        myLabelGroups.put(EntityField.LABEL, FXCollections.observableArrayList(new ArrayList<>()));
+        myLabelGroups.put(EntityField.GROUP, FXCollections.observableArrayList(new ArrayList<>()));
     }
 
-    public void addLabel(String labelGroup, String labelName) {
+    public void addLabel(EntityField labelGroup, String labelName) {
         if (myLabelGroups.containsKey(labelGroup) &&
                 !myLabelGroups.get(labelGroup).contains(labelName) && labelName != null) //Checks to make sure it isn't already here
             myLabelGroups.get(labelGroup).add(labelName);
     }
 
-    public void removeLabel(String labelGroup, String labelName) {
+    public void removeLabel(EntityField labelGroup, String labelName) {
         if (myLabelGroups.containsKey(labelGroup))
             myLabelGroups.get(labelGroup).remove(labelName);
     }
 
-    public ObservableList<String> getLabels(String labelGroup) {
+    public ObservableList<String> getLabels(EntityField labelGroup) {
         return myLabelGroups.getOrDefault(labelGroup, null);
     }
 }

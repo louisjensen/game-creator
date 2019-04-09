@@ -61,8 +61,6 @@ public class RunnerTester extends Application {
         level.addEntity(dummy1);
         level.addEntity(dummy2);
         level.addEntity(dummy3);
-
-
     }
 
 }

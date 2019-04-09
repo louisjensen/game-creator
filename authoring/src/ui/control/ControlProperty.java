@@ -9,7 +9,7 @@ import ui.manager.LabelManager;
  */
 public interface ControlProperty {
 
-    void populateValue(String type, String newValue, LabelManager labels);
+    void populateValue(Enum type, String newValue, LabelManager labels);
 
-    void setAction(Propertable propertable, String label, String action) throws UIException;
+    void setAction(Propertable propertable, Enum label, String action) throws UIException;
 }

@@ -147,6 +147,7 @@ public class GameRunner {
     private void printEntityLocations(){
         for(Entity entity : myEntities){
             //TODO: refactor code to use XPositionComponent, YPositionComponent, ZPositionComponent :)
+
 //            PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
 //            Point3D position = (Point3D) positionComponent.getValue();
 //            System.out.println(position.getX());
