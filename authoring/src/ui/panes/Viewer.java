@@ -23,6 +23,8 @@ public class Viewer extends ScrollPane {
     private static final int CELL_SIZE = 50;
     private int myRoomWidth;
     private int myRoomHeight;
+    private boolean isDragOnView;
+    private AuthoringEntity myDraggedAuthoringEntity;
     private ObjectProperty<Propertable>  mySelectedEntity;
     private UserCreatedTypesPane myUserCreatedPane;
     private ResourceBundle myGeneralResources;
@@ -40,26 +42,41 @@ public class Viewer extends ScrollPane {
         mySelectedEntity = objectProperty;
         myStackPane.setAlignment(Pos.TOP_LEFT);
         myGeneralResources = ResourceBundle.getBundle("authoring_general");
+        setupAcceptDragEvents();
+        setupDragDropped();
+        setRoomSize(roomWidth, roomHeight);
+        addGridLines();
+        this.setContent(myStackPane);
+    }
+
+    private void setupAcceptDragEvents() {
         myStackPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
                 dragEvent.acceptTransferModes(TransferMode.ANY);
             }
         });
+    }
+
+    private void setupDragDropped() {
+
         myStackPane.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
-                AuthoringEntity authoringEntity = userCreatedTypesPane.getDraggedAuthoringEntity();
-                addImage(Utility.createImageWithEntity(authoringEntity));
+                AuthoringEntity authoringEntity;
+                if(isDragOnView){
+                    authoringEntity = myDraggedAuthoringEntity;
+                    isDragOnView = false;
+                }
+                else{
+                    authoringEntity = myUserCreatedPane.getDraggedAuthoringEntity();
+                    addImage(Utility.createImageWithEntity(authoringEntity));
+                }
                 authoringEntity.getPropertyMap().put(EntityField.X, "" + snapToGrid(dragEvent.getX()));
-                System.out.println("Just added mouse X: " + dragEvent.getX());
                 authoringEntity.getPropertyMap().put(EntityField.Y, "" + snapToGrid(dragEvent.getY()));
-                System.out.println("Just added mouse Y: " + dragEvent.getY());
+                mySelectedEntity.setValue(authoringEntity);
             }
         });
-        setRoomSize(roomWidth, roomHeight);
-        addGridLines();
-        this.setContent(myStackPane);
     }
 
     /**
@@ -86,6 +103,14 @@ public class Viewer extends ScrollPane {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 mySelectedEntity.setValue(imageView.getAuthoringEntity());
+            }
+        });
+        imageView.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Utility.setupDragAndDropImage(imageView);
+                isDragOnView = true;
+                myDraggedAuthoringEntity = imageView.getAuthoringEntity();
             }
         });
         myStackPane.getChildren().add(imageView);

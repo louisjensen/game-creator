@@ -77,11 +77,7 @@ public class UserCreatedTypesPane extends VBox {
                     AuthoringEntity copiedAuthoringEntity = new AuthoringEntity(originalAuthoringEntity, myDefaultTypesFactory.getDefaultEntity(ofType, basedOn));
                     myDraggedAuthoringEntity = copiedAuthoringEntity;
                     System.out.println("Width " + imageWithEntity.getFitWidth());
-                    Dragboard db = imageWithEntity.startDragAndDrop(TransferMode.MOVE);
-                    ClipboardContent content = new ClipboardContent();
-                    content.putImage(imageWithEntity.getImage());
-                    db.setContent(content);
-                    db.setDragView(imageWithEntity.getImage(), 0, 0);
+                    Utility.setupDragAndDropImage(imageWithEntity);
                 }
             });
         } catch (FileNotFoundException e) {

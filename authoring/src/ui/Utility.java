@@ -14,6 +14,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -212,5 +215,13 @@ public class Utility {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static void setupDragAndDropImage(ImageWithEntity imageWithEntity){
+        Dragboard db = imageWithEntity.startDragAndDrop(TransferMode.MOVE);
+        ClipboardContent content = new ClipboardContent();
+        content.putImage(imageWithEntity.getImage());
+        db.setContent(content);
+        db.setDragView(imageWithEntity.getImage(), 0, 0);
     }
 }
