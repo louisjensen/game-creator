@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import ui.AuthoringEntity;
 import ui.DefaultTypesFactory;
+import ui.Utility;
 import ui.manager.ObjectManager;
 
 import java.io.FileInputStream;
@@ -28,18 +29,17 @@ public class UserCreatedTypesPane extends VBox {
     private ResourceBundle myResources;
     private ObjectManager myObjectManager;
     private DefaultTypesFactory myDefaultTypesFactory;
-    private DataFormat myDataFormat;
+    private AuthoringEntity myDraggedAuthoringEntity;
     private static final String RESOURCE = "default_entity_type";
     private static final String ASSET_IMAGE_FOLDER_PATH = "authoring/Assets/Images";
 
+
     /**
-     *
-     * @param dataFormat This must be the same dataformat passed into the Viewer
-     *                   this allows these two panes to pass an entity
+     * Creates a pane that displayes the user created types
+     * @param objectManager
      */
-    public UserCreatedTypesPane(DataFormat dataFormat, ObjectManager objectManager){
+    public UserCreatedTypesPane(ObjectManager objectManager){
         myResources = ResourceBundle.getBundle(RESOURCE);
-        myDataFormat = dataFormat;
         myObjectManager = objectManager;
         String title = myResources.getString("UserCreatedTitle");
         myEntityMenu = new EntityMenu(title);
@@ -48,20 +48,25 @@ public class UserCreatedTypesPane extends VBox {
         this.getChildren().add(myEntityMenu);
     }
 
+    /**
+     * Used by Viewer to get the dragged AuthoringEntity
+     * @return Authoring Entity
+     */
+    public AuthoringEntity getDraggedAuthoringEntity(){
+        return myDraggedAuthoringEntity;
+    }
     private void populateCategories() {
         for(String s : myDefaultTypesFactory.getCategories()){
             myEntityMenu.addDropDown(s);
         }
     }
 
-    public void addUserDefinedType(String category, Entity entity){
-        String label = (String) entity.getComponent(new NameComponent("").getClass()).getValue();
-        String imageName = (String) entity.getComponent(new SpriteComponent("").getClass()).getValue();
-        double width = (Double) entity.getComponent(new WidthComponent(0.0).getClass()).getValue();
-        double height = (Double) entity.getComponent(new HeightComponent(0.0).getClass()).getValue();
+    public void addUserDefinedType(String category, Entity entity, String ofType, String basedOn){
+        String label = (String) entity.getComponent(NameComponent.class).getValue();
+        String imageName = (String) entity.getComponent(SpriteComponent.class).getValue();
         try {
             AuthoringEntity originalAuthoringEntity = new AuthoringEntity(entity, myObjectManager);
-            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), originalAuthoringEntity, width, height);
+            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), originalAuthoringEntity);
             UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, entity);
             List<Pane> paneList = new ArrayList<>();
             paneList.add(subPane);
@@ -69,14 +74,10 @@ public class UserCreatedTypesPane extends VBox {
             imageWithEntity.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    System.out.println("Drag detected");
-                    Dragboard db = imageWithEntity.startDragAndDrop(TransferMode.MOVE);
-                    ClipboardContent content = new ClipboardContent();
-                    //content.putImage(imageWithEntity);
-                    content.put(myDataFormat, imageWithEntity.getAuthoringEntity());
-                    db.setContent(content);
-                    db.setDragView(imageWithEntity.getImage(), 0, 0);
-
+                    AuthoringEntity copiedAuthoringEntity = new AuthoringEntity(originalAuthoringEntity, myDefaultTypesFactory.getDefaultEntity(ofType, basedOn));
+                    myDraggedAuthoringEntity = copiedAuthoringEntity;
+                    System.out.println("Width " + imageWithEntity.getFitWidth());
+                    Utility.setupDragAndDropImage(imageWithEntity);
                 }
             });
         } catch (FileNotFoundException e) {

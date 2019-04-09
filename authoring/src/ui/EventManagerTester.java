@@ -13,9 +13,8 @@ public class EventManagerTester extends Application {
 
     @Override
     public void start(Stage testStage) {
-        LabelManager testLabels = new LabelManager();
-        addTestLabels(testLabels);
-        ObjectManager manager = new ObjectManager(testLabels);
+        ObjectManager manager = new ObjectManager();
+        addTestLabels(manager.getLabelManager());
         AuthoringEntity testEntity = populateTestObjects(manager);
         EventManager testEventManager = new EventManager(testEntity);
         testEventManager.show();
