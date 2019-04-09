@@ -51,7 +51,7 @@ public class EventFactory {
         return myChoices;
     }
     public static TextField createDisappearingLabel(String textFieldInformation){
-        TextField myTextField = new TextField(textFieldInformation);
+        TextField myTextField = new TextField();
         myTextField.setPromptText(textFieldInformation);
         myTextField.setFocusTraversable(false);
         myTextField.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -65,19 +65,19 @@ public class EventFactory {
         }
 
     public static TextField createNumericOptions(String numericFieldInformation){
-        TextField textField = new TextField(numericFieldInformation);
-        textField.textProperty().addListener(new ChangeListener<String>() {
+        TextField myTextField = createDisappearingLabel(numericFieldInformation);
+        myTextField.textProperty().addListener(new ChangeListener<String>() {
             //This stops the user from entering any non-numeric value
             //@Todo Set a default value to help with error checking and guarantee that we will get a valid value from these fields
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
                                 String newValue) {
                 if (!newValue.matches("\\d*")) {
-                    textField.setText(newValue.replaceAll("[^\\d]", ""));
+                    myTextField.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
-        return textField;
+        return myTextField;
     }
 
 }

@@ -1,5 +1,6 @@
 package ui;
 
+import events.EventType;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -23,6 +24,7 @@ public class UIException extends Exception {
         popUpScene.getStylesheets().add("default.css");
         popUpWindow.setScene(popUpScene);
         popUpWindow.show();
+
     }
 
 
