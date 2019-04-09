@@ -51,8 +51,8 @@ public class AuthoringEntity implements Propertable {
         myObjectManager = manager;
         myPropertyMap.put(EntityField.LABEL, (String) basis.getComponent(NameComponent.class).getValue());
         myPropertyMap.put(EntityField.IMAGE, (String) basis.getComponent(SpriteComponent.class).getValue());
-        myPropertyMap.put(EntityField.X, ("" + ((Point3D) (basis.getComponent(XPositionComponent.class).getValue())).getX()));
-        myPropertyMap.put(EntityField.Y, ("" + ((Point3D) (basis.getComponent(YPositionComponent.class).getValue())).getY()));
+        //myPropertyMap.put(EntityField.X, ("" + ((Point3D) (basis.getComponent(XPositionComponent.class).getValue())).getX()));
+        //myPropertyMap.put(EntityField.Y, ("" + ((Point3D) (basis.getComponent(YPositionComponent.class).getValue())).getY()));
         myPropertyMap.put(EntityField.XSCALE, ("" + (basis.getComponent(WidthComponent.class).getValue()))); //TODO update these for new components
         myPropertyMap.put(EntityField.YSCALE, ("" + (basis.getComponent(HeightComponent.class).getValue())));
         addPropertyListeners();

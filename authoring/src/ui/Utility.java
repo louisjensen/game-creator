@@ -161,9 +161,7 @@ public class Utility {
     }
 
     public static ImageWithEntity createImageWithEntity(AuthoringEntity entity){
-        System.out.println("Made it to utility method");
         ResourceBundle generalResources = ResourceBundle.getBundle("authoring_general");
-        System.out.println("got general properties bundle");
         ResourceBundle utilityResources = ResourceBundle.getBundle(RESOURCE);
         String imageName = (String) entity.getBackingEntity().getComponent(new SpriteComponent("").getClass()).getValue();
         String imagePath = generalResources.getString("images_filepath");
@@ -171,7 +169,6 @@ public class Utility {
         Double height = (Double) entity.getBackingEntity().getComponent(new HeightComponent(0.0).getClass()).getValue();
         try {
             ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(imagePath + imageName), entity, width, height);
-            System.out.println("Returning the entity next");
             return imageWithEntity;
         } catch (FileNotFoundException e) {
             System.out.println("File not found");

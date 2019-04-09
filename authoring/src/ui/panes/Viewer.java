@@ -22,7 +22,7 @@ public class Viewer extends ScrollPane {
     private static final int CELL_SIZE = 50;
     private int myRoomWidth;
     private int myRoomHeight;
-    private DataFormat myDataFormat;
+    private UserCreatedTypesPane myUserCreatedPane;
     private ResourceBundle myGeneralResources;
 
 
@@ -30,12 +30,11 @@ public class Viewer extends ScrollPane {
      *
      * @param roomWidth
      * @param roomHeight
-     * @param dataFormat This needs to be the same dataformat passed into the UserCreatedTypesPane
-     *                   this allows for entities to be passed between these two panes
+     * @param userCreatedTypesPane
      */
-    public Viewer(int roomWidth, int roomHeight, DataFormat dataFormat){
+    public Viewer(int roomWidth, int roomHeight, UserCreatedTypesPane userCreatedTypesPane){
         myStackPane = new StackPane();
-        myDataFormat = dataFormat;
+        myUserCreatedPane = userCreatedTypesPane;
         myStackPane.setAlignment(Pos.TOP_LEFT);
         myGeneralResources = ResourceBundle.getBundle("authoring_general");
         myStackPane.setOnDragOver(new EventHandler<DragEvent>() {
@@ -50,11 +49,8 @@ public class Viewer extends ScrollPane {
                 Dragboard db = dragEvent.getDragboard();
                 boolean success = false;
                 System.out.println(db.getContentTypes());
-                if (db.hasContent(dataFormat)) {
-                    AuthoringEntity entity = (AuthoringEntity) db.getContent(myDataFormat);
-                    addImage(Utility.createImageWithEntity(entity));
-                    success = true;
-                }
+                AuthoringEntity authoringEntity = userCreatedTypesPane.getDraggedAuthoringEntity();
+                addImage(Utility.createImageWithEntity(authoringEntity));
                 dragEvent.setDropCompleted(success);
             }
         });
