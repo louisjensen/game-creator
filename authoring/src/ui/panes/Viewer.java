@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 import ui.AuthoringEntity;
+import ui.EntityField;
 import ui.Utility;
 
 import java.util.ResourceBundle;
@@ -50,6 +51,8 @@ public class Viewer extends ScrollPane {
                 boolean success = false;
                 System.out.println(db.getContentTypes());
                 AuthoringEntity authoringEntity = userCreatedTypesPane.getDraggedAuthoringEntity();
+                authoringEntity.getPropertyMap().put(EntityField.X, "" + dragEvent.getX());
+                authoringEntity.getPropertyMap().put(EntityField.Y, "" + dragEvent.getY());
                 addImage(Utility.createImageWithEntity(authoringEntity));
                 dragEvent.setDropCompleted(success);
             }
