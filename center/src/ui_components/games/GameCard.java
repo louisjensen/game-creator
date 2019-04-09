@@ -10,6 +10,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import runner.external.Game;
+import runner.external.GameCenterData;
 import ui_components.Utilities;
 
 import java.io.FileInputStream;
@@ -27,8 +29,10 @@ public class GameCard {
     public static final double DISPLAY_HEIGHT = 300;
     private static final String DEFAULT_IMAGE_LOCATION = "center/data/game_information/images/default_game.png";
     private ResourceBundle myLanguageBundle;
+    private GameCenterData myGame;
 
-    public GameCard() {
+    public GameCard(GameCenterData game) {
+        myGame = game;
         myLanguageBundle = ResourceBundle.getBundle("languages/English");
         initializeDisplay();
     }
@@ -92,7 +96,8 @@ public class GameCard {
             // do nothing, because in this case there would just be no image on the card which is fine
             // todo: possibly create a type of card with no image & turn this into a factory type class
         }
-        Text imageDescription = new Text(Utilities.getValue(myLanguageBundle, "defaultGameBio"));
+        //Text imageDescription = new Text(Utilities.getValue(myLanguageBundle, "defaultGameBio"));
+        Text imageDescription = new Text(myGame.getDescription());
         imageDescription.setWrappingWidth(DISPLAY_WIDTH);
         imageDescription.setTextAlignment(TextAlignment.CENTER);
         contentPane.setCenter(imageDescription);
@@ -109,7 +114,7 @@ public class GameCard {
     }
 
     private void addTitleContent(BorderPane foreground) {
-        Text title = new Text(Utilities.getValue(myLanguageBundle, "defaultGameTitle"));
+        Text title = new Text(myGame.getTitle());
         title.setFont(new Font(SUBTITLE_FONT_SIZE));
         BorderPane titlePane = new BorderPane();
         titlePane.setCenter(title);

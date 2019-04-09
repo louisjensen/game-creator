@@ -5,4 +5,5 @@ module runner {
     exports runner.external;
     requires xstream;
     exports runner.internal to javafx.graphics;
+    opens runner.external to xstream;
 }
