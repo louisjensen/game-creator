@@ -45,7 +45,8 @@ public class DefaultTypesPane extends VBox{
             List<String> specificTypes = myDefaultTypesFactory.getTypes(s1);
             for(String s2 : specificTypes){
                 Label label = new Label(s2);
-                Pane pane = new Pane(label);
+                VBox pane = new VBox(label);
+                pane.setFillWidth(true);
                 pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
