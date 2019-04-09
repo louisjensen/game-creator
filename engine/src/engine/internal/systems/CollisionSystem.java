@@ -9,8 +9,20 @@ import javafx.scene.image.ImageView;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * @author Hsingchih Tang
+ * Responsible for detecting collisions between the ImageView of two collidable Entities via JavaFX Node.intersects(),
+ * and register the two parties of every collision in each other's CollidedComponent, such that certain actions (defined
+ * in the Event tied to an Entity) could be triggered by the execute() call fied from EventHandlerSystem
+ */
 public class CollisionSystem extends VoogaSystem {
 
+    /**
+     * Accepts a reference to the Engine in charge of all Systems in current game, and a Collection of Component classes
+     * that this System would require from an Entity in order to interact with its relevant Components
+     * @param requiredComponents collection of Component classes required for an Entity to be processed by this System
+     * @param engine the main Engine which initializes all Systems for a game and makes update() calls on each game loop
+     */
     public CollisionSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         super(requiredComponents, engine);
     }
