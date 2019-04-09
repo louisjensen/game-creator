@@ -51,13 +51,13 @@ public class AuthoringEntity implements Propertable {
         myPropertyMap.put(EntityField.IMAGE, (String) basis.getComponent(SpriteComponent.class).getValue());
         myPropertyMap.put(EntityField.X, ("" + (basis.getComponent(XPositionComponent.class).getValue())));
         myPropertyMap.put(EntityField.Y, ("" + (basis.getComponent(YPositionComponent.class).getValue())));
-        myPropertyMap.put(EntityField.XSCALE, ("" + (basis.getComponent(WidthComponent.class).getValue()))); //TODO update these for new components, add Group
+        myPropertyMap.put(EntityField.XSCALE, ("" + (basis.getComponent(WidthComponent.class).getValue()))); //TODO add Group & other things??
         myPropertyMap.put(EntityField.YSCALE, ("" + (basis.getComponent(HeightComponent.class).getValue())));
         addPropertyListeners();
         myObjectManager.addEntity(this);
     }
 
-    public AuthoringEntity(AuthoringEntity copyBasis) { // Create new AuthoringEntity instance from pre-existing type
+    public AuthoringEntity(AuthoringEntity copyBasis, Entity backingEntity) { // Create new AuthoringEntity instance from pre-existing type
         this();
         myObjectManager = copyBasis.myObjectManager;
         myPropertyMap.put(EntityField.LABEL, copyBasis.myPropertyMap.get(EntityField.LABEL));
@@ -67,18 +67,9 @@ public class AuthoringEntity implements Propertable {
         myPropertyMap.put(EntityField.Y, copyBasis.myPropertyMap.get(EntityField.Y));
         myPropertyMap.put(EntityField.XSCALE, copyBasis.myPropertyMap.get(EntityField.XSCALE));
         myPropertyMap.put(EntityField.YSCALE, copyBasis.myPropertyMap.get(EntityField.YSCALE));
-        myBackingEntity = copyEntity(copyBasis);
+        myBackingEntity = backingEntity;
         addPropertyListeners();
         myObjectManager.addEntity(this);
-    }
-
-    private Entity copyEntity(AuthoringEntity copyBasis) {
-        Entity newCopy = new Entity();
-        Entity oldCopy = copyBasis.myBackingEntity;
-        // TODO copy backing entity to new reference
-        //for (Component comp : oldCopy.hasComponents())
-
-        return newCopy;
     }
 
     private void addPropertyListeners() {
