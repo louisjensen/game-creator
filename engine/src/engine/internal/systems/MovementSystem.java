@@ -2,7 +2,7 @@ package engine.internal.systems;
 
 import engine.external.Entity;
 import engine.external.component.*;
-import engine.internal.Engine;
+import engine.external.Engine;
 
 import java.util.Collection;
 
