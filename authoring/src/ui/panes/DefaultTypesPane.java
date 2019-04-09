@@ -53,11 +53,7 @@ public class DefaultTypesPane extends VBox{
                         createNewTypeWindow.showAndWait();
                         Entity entity = createNewTypeWindow.getUserCreatedEntity();
                         if(entity != null){
-                            System.out.println("Not null");
                             myUserCreatedTypesPane.addUserDefinedType(s1, entity, s1, s2);
-                        }
-                        else{
-                            System.out.println("Null");
                         }
                     }
                 });

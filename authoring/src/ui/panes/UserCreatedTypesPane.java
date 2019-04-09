@@ -76,14 +76,12 @@ public class UserCreatedTypesPane extends VBox {
             imageWithEntity.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    System.out.println("Drag detected");
                     AuthoringEntity copiedAuthoringEntity = new AuthoringEntity(originalAuthoringEntity, myDefaultTypesFactory.getDefaultEntity(ofType, basedOn));
                     myDraggedAuthoringEntity = copiedAuthoringEntity;
                     Dragboard db = imageWithEntity.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent content = new ClipboardContent();
                     content.putImage(imageWithEntity.getImage());
                     db.setContent(content);
-                    System.out.println(imageWithEntity.getAuthoringEntity().getBackingEntity().getComponent(SpriteComponent.class).getValue());
                     db.setDragView(imageWithEntity.getImage(), 0, 0);
                 }
             });

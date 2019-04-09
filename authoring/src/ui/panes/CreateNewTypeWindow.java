@@ -129,7 +129,6 @@ public class CreateNewTypeWindow extends Stage {
     }
 
     private void handleCloseButton(){
-        System.out.println("Handle close button method called");
         this.close();
     }
 
@@ -178,7 +177,6 @@ public class CreateNewTypeWindow extends Stage {
         myTypeOfComboBox.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
-                System.out.println("Registered change");
                 populateBasedOnDropDown((String) t1);
             }
         });
