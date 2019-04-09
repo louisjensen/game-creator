@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import ui.AuthoringEntity;
 import ui.DefaultTypesFactory;
+import ui.Utility;
 import ui.manager.ObjectManager;
 
 import java.io.FileInputStream;
@@ -60,7 +61,7 @@ public class UserCreatedTypesPane extends VBox {
         }
     }
 
-    public void addUserDefinedType(String category, Entity entity){
+    public void addUserDefinedType(String category, Entity entity, String ofType, String basedOn){
         String label = (String) entity.getComponent(new NameComponent("").getClass()).getValue();
         String imageName = (String) entity.getComponent(new SpriteComponent("").getClass()).getValue();
         double width = (Double) entity.getComponent(new WidthComponent(0.0).getClass()).getValue();
@@ -76,7 +77,7 @@ public class UserCreatedTypesPane extends VBox {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     System.out.println("Drag detected");
-                    AuthoringEntity copiedAuthoringEntity = new AuthoringEntity(originalAuthoringEntity);
+                    AuthoringEntity copiedAuthoringEntity = new AuthoringEntity(originalAuthoringEntity, myDefaultTypesFactory.getDefaultEntity(ofType, basedOn));
                     myDraggedAuthoringEntity = copiedAuthoringEntity;
                     Dragboard db = imageWithEntity.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent content = new ClipboardContent();
