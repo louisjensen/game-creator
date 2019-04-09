@@ -26,13 +26,13 @@ public class CleanupSystem extends VoogaSystem {
 
     /**
      * Loops through the collection of Entities, probes each Entity's DestroyComponent,
-     * and calls Engine to get rid of all Entities whose DestroyComponent hold "true" value
+     * and notifies Engine to get rid of all Entities whose DestroyComponent hold "true" value
      */
     @Override
     protected void run() {
         for(Entity entity:this.getEntities()){
             if((Boolean)entity.getComponent(DESTROY_COMPONENT_CLASS).getValue()){
-                this.myEngine.getEntities().remove(entity);
+                myEngine.removeEntity(entity);
             }
         }
     }
