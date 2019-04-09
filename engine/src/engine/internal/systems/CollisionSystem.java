@@ -1,7 +1,7 @@
 package engine.internal.systems;
 
 import engine.external.Entity;
-import engine.external.component.CollidedComponent;
+import engine.external.component.BottomCollidedComponent;
 import engine.external.component.Component;
 import engine.external.Engine;
 import javafx.scene.image.ImageView;
@@ -12,7 +12,7 @@ import java.util.HashSet;
 /**
  * @author Hsingchih Tang
  * Responsible for detecting collisions between the ImageView of two collidable Entities via JavaFX Node.intersects(),
- * and register the two parties of every collision in each other's CollidedComponent, such that certain actions (defined
+ * and register the two parties of every collision in each other's BottomCollidedComponent, such that certain actions (defined
  * in the Event tied to an Entity) could be triggered by the execute() call fied from EventHandlerSystem
  */
 public class CollisionSystem extends VoogaSystem {
@@ -45,7 +45,7 @@ public class CollisionSystem extends VoogaSystem {
 
     private void registerCollidedEntity(Entity e1, Entity e2){
         if(!e1.hasComponents(COLLIDED_COMPONENT_CLASS)){
-            e1.addComponent(new CollidedComponent(new HashSet<>()));
+            e1.addComponent(new BottomCollidedComponent(new HashSet<>()));
         }
         ((Collection<Entity>)e1.getComponent(COLLIDED_COMPONENT_CLASS).getValue()).add(e2);
     }

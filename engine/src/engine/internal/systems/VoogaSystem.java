@@ -20,7 +20,7 @@ public abstract class VoogaSystem {
     protected final Class<? extends Component> Z_POSITION_COMPONENT_CLASS = ZPositionComponent.class;
     protected final Class<? extends Component> X_VELOCITY_COMPONENT_CLASS = XVelocityComponent.class;
     protected final Class<? extends Component> Y_VELOCITY_COMPONENT_CLASS = YVelocityComponent.class;
-    protected final Class<? extends Component> COLLIDED_COMPONENT_CLASS = CollidedComponent.class;
+    protected final Class<? extends Component> COLLIDED_COMPONENT_CLASS = BottomCollidedComponent.class;
     protected final Class<? extends Component> COLLISION_COMPONENT_CLASS = CollisionComponent.class;
     protected final Class<? extends Component> DESTROY_COMPONENT_CLASS = DestroyComponent.class;
     protected final Class<? extends Component> DIRECTION_COMPONENT_CLASS = DirectionComponent.class;
