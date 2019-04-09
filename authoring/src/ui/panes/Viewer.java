@@ -1,18 +1,18 @@
 package ui.panes;
 
-import engine.external.Entity;
+import javafx.beans.property.ObjectProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 import ui.AuthoringEntity;
 import ui.EntityField;
+import ui.Propertable;
 import ui.Utility;
 
 import java.util.ResourceBundle;
@@ -23,6 +23,7 @@ public class Viewer extends ScrollPane {
     private static final int CELL_SIZE = 50;
     private int myRoomWidth;
     private int myRoomHeight;
+    private ObjectProperty<Propertable>  mySelectedEntity;
     private UserCreatedTypesPane myUserCreatedPane;
     private ResourceBundle myGeneralResources;
 
@@ -33,9 +34,10 @@ public class Viewer extends ScrollPane {
      * @param roomHeight
      * @param userCreatedTypesPane
      */
-    public Viewer(int roomWidth, int roomHeight, UserCreatedTypesPane userCreatedTypesPane){
+    public Viewer(int roomWidth, int roomHeight, UserCreatedTypesPane userCreatedTypesPane, ObjectProperty objectProperty){
         myStackPane = new StackPane();
         myUserCreatedPane = userCreatedTypesPane;
+        mySelectedEntity = objectProperty;
         myStackPane.setAlignment(Pos.TOP_LEFT);
         myGeneralResources = ResourceBundle.getBundle("authoring_general");
         myStackPane.setOnDragOver(new EventHandler<DragEvent>() {
@@ -80,6 +82,12 @@ public class Viewer extends ScrollPane {
     }
 
     private void addImage(ImageWithEntity imageView){
+        imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                mySelectedEntity.setValue(imageView.getAuthoringEntity());
+            }
+        });
         myStackPane.getChildren().add(imageView);
     }
 
