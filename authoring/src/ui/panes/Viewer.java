@@ -114,7 +114,7 @@ public class Viewer extends ScrollPane {
             Line tempLine = new Line(x1, y, x2, y);
             pane.getChildren().add(tempLine);
             System.out.println("Y Coordinate: " + y);
-            //System.out.println("Drew line");
+            //VoogaSystem.out.println("Drew line");
         }
     }
 
