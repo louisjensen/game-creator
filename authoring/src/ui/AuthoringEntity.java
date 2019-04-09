@@ -47,12 +47,18 @@ public class AuthoringEntity implements Propertable {
         this();
         myBackingEntity = basis;
         myObjectManager = manager;
-        myPropertyMap.put(EntityField.LABEL, (String) basis.getComponent(NameComponent.class).getValue());
-        myPropertyMap.put(EntityField.IMAGE, (String) basis.getComponent(SpriteComponent.class).getValue());
-        myPropertyMap.put(EntityField.X, ("" + (basis.getComponent(XPositionComponent.class).getValue())));
-        myPropertyMap.put(EntityField.Y, ("" + (basis.getComponent(YPositionComponent.class).getValue())));
-        myPropertyMap.put(EntityField.XSCALE, ("" + (basis.getComponent(WidthComponent.class).getValue()))); //TODO add Group & other things??
-        myPropertyMap.put(EntityField.YSCALE, ("" + (basis.getComponent(HeightComponent.class).getValue())));
+        if (basis.hasComponents(NameComponent.class))
+            myPropertyMap.put(EntityField.LABEL, (String) basis.getComponent(NameComponent.class).getValue());
+        if (basis.hasComponents(SpriteComponent.class))
+            myPropertyMap.put(EntityField.IMAGE, (String) basis.getComponent(SpriteComponent.class).getValue());
+        if (basis.hasComponents(XPositionComponent.class))
+            myPropertyMap.put(EntityField.X, ("" + (basis.getComponent(XPositionComponent.class).getValue())));
+        if (basis.hasComponents(YPositionComponent.class))
+            myPropertyMap.put(EntityField.Y, ("" + (basis.getComponent(YPositionComponent.class).getValue())));
+        if (basis.hasComponents(WidthComponent.class))
+            myPropertyMap.put(EntityField.XSCALE, ("" + (basis.getComponent(WidthComponent.class).getValue()))); //TODO add Group & other things??
+        if (basis.hasComponents(HeightComponent.class))
+            myPropertyMap.put(EntityField.YSCALE, ("" + (basis.getComponent(HeightComponent.class).getValue())));
         addPropertyListeners();
         myObjectManager.addEntity(this);
     }
