@@ -1,10 +1,10 @@
-package ui_components.header;
+package frontend.header;
 
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import ui_components.Utilities;
+import frontend.Utilities;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

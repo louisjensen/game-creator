@@ -1,4 +1,4 @@
-package ui_components.games;
+package frontend.games;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,9 +10,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import runner.external.Game;
 import runner.external.GameCenterData;
-import ui_components.Utilities;
+import frontend.Utilities;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -78,6 +77,7 @@ public class GameCard {
         readMore.setPrefWidth(BUTTON_WIDTH);
         Button play = new Button(Utilities.getValue(myLanguageBundle, "playGameButton"));
         play.setPrefWidth(BUTTON_WIDTH);
+        play.setOnAction(e -> handleButton(myGame.getFolderName()));
         HBox buttons = new HBox(readMore, play);
         buttons.setSpacing(HORIZONTAL_BUTTON_SPACING);
         buttons.setAlignment(Pos.CENTER);
@@ -88,6 +88,10 @@ public class GameCard {
         foreground.setBottom(buttonPane);
     }
 
+    private void handleButton(String folderName) {
+        // todo: launch player here
+    }
+
     private void addImageAndContent(BorderPane foreground) {
         BorderPane contentPane = new BorderPane();
         try {
@@ -96,7 +100,6 @@ public class GameCard {
             // do nothing, because in this case there would just be no image on the card which is fine
             // todo: possibly create a type of card with no image & turn this into a factory type class
         }
-        //Text imageDescription = new Text(Utilities.getValue(myLanguageBundle, "defaultGameBio"));
         Text imageDescription = new Text(myGame.getDescription());
         imageDescription.setWrappingWidth(DISPLAY_WIDTH);
         imageDescription.setTextAlignment(TextAlignment.CENTER);
@@ -105,7 +108,12 @@ public class GameCard {
     }
 
     private void addImage(BorderPane contentPane) throws FileNotFoundException {
-        ImageView noGameFound = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
+        ImageView noGameFound;
+        try {
+            noGameFound = new ImageView(new Image(new FileInputStream(myGame.getImageLocation())));
+        } catch (Exception e) {
+            noGameFound = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
+        }
         noGameFound.setPreserveRatio(true);
         noGameFound.setFitWidth(GAME_IMAGE_SIZE);
         BorderPane imagePane = new BorderPane();

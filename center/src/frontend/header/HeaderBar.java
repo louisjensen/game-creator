@@ -1,4 +1,4 @@
-package ui_components.header;
+package frontend.header;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import ui_components.Utilities;
+import frontend.Utilities;
 
 import java.util.ResourceBundle;
 

@@ -1,4 +1,4 @@
-package ui_components;
+package frontend;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;

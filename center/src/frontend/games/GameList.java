@@ -1,4 +1,4 @@
-package ui_components.games;
+package frontend.games;
 
 import data.external.DataManager;
 import javafx.geometry.Insets;
@@ -22,7 +22,7 @@ public class GameList {
 
     public GameList(int numGames) {
         DataManager manager = new DataManager();
-        List<Object> originalList = manager.loadGameAllGameInfoObject();
+        List<Object> originalList = manager.loadAllGameInfoObjects();
         myGames = (List<GameCenterData>) (Object) originalList;
         initializeDisplay(numGames);
     }
