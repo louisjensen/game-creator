@@ -5,7 +5,7 @@ import engine.external.Engine;
 
 import java.util.Collection;
 
-public class CleanupSystem extends ByteMeSystem {
+public class CleanupSystem extends VoogaSystem {
     public CleanupSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         super(requiredComponents, engine);
     }

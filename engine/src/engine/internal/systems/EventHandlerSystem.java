@@ -14,7 +14,7 @@ import java.util.Collection;
 /**
  * Checks all Events every cycle
  */
-public class EventHandlerSystem extends ByteMeSystem {
+public class EventHandlerSystem extends VoogaSystem {
 
     Collection<IEventEngine> myEvents;
 

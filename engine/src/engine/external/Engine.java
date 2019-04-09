@@ -2,7 +2,7 @@ package engine.external;
 
 import engine.external.component.*;
 import engine.internal.systems.*;
-import engine.internal.systems.ByteMeSystem;
+import engine.internal.systems.VoogaSystem;
 import javafx.scene.input.KeyCode;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,7 +21,7 @@ public class Engine {
     private HealthSystem myHealthSystem;
     private EventHandlerSystem myEventHandlerSystem;
     private CleanupSystem myCleanupSystem;
-    private List<ByteMeSystem> mySystems;
+    private List<VoogaSystem> mySystems;
 
     public Engine(Level level) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
         myEntities = level.getEntities();
@@ -30,7 +30,7 @@ public class Engine {
     }
 
     public Collection<Entity> updateState(Collection<KeyCode> inputs){
-        for(ByteMeSystem system :mySystems) {
+        for(VoogaSystem system :mySystems) {
             system.update(myEntities,inputs);
         }
         return this.getEntities();
@@ -51,7 +51,7 @@ public class Engine {
     private void initSystem(String systemName) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
         Class systemClazz = Class.forName(this.getClass().getModule(),systemName);
         Collection<Class<?extends Component>> systemComponents = retrieveComponentClasses(systemName);
-        mySystems.add((ByteMeSystem) systemClazz.getConstructor().newInstance(systemComponents,this));
+        mySystems.add((VoogaSystem) systemClazz.getConstructor().newInstance(systemComponents,this));
     }
 
     @SuppressWarnings({"unchecked"})
