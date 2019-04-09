@@ -1,5 +1,6 @@
 package runner.external;
 
+import engine.external.Engine;
 import engine.external.Entity;
 
 import engine.external.Level;
@@ -32,6 +33,7 @@ public class GameRunner {
     private Group myGroup;
     private Scene myScene;
     private TestEngine myEngine;
+    //private Engine myEngine;
     private Timeline myAnimation;
     private static final int FRAMES_PER_SECOND = 60;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
@@ -65,7 +67,12 @@ public class GameRunner {
         showEntities();
         myCurrentKeys = new HashSet<KeyCode>();
         myStage.setScene(myScene);
-        myEngine = new TestEngine(myLevels.get(0));
+        try{
+            myEngine = new TestEngine(myLevels.get(0));
+        } catch (Exception e){
+            myEngine = null;
+        }
+
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         myAnimation = new Timeline();
         myAnimation.setCycleCount(Timeline.INDEFINITE);
@@ -86,12 +93,8 @@ public class GameRunner {
         HashMap<Entity, Node> map = new HashMap<Entity, Node>();
         for(Entity entity : myEntities){
             //Add Error checking to set defaults
-            XPositionComponent xPositionComponent = (XPositionComponent) entity.getComponent(XPositionComponent.class);
-            Double xPosition = (Double) xPositionComponent.getValue();
-            YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
-            Double yPosition = (Double) yPositionComponent.getValue();
-            ZPositionComponent zPositionComponent = (ZPositionComponent) entity.getComponent(ZPositionComponent.class);
-            Double zPosition = (Double) zPositionComponent.getValue();
+
+            List<Double> xyz = getXYZasList(entity);
             WidthComponent widthComponent = (WidthComponent) entity.getComponent(WidthComponent.class);
             Double width = (Double) widthComponent.getValue();
             HeightComponent heightComponent = (HeightComponent) entity.getComponent(HeightComponent.class);
@@ -102,8 +105,8 @@ public class GameRunner {
             image.setFitWidth(width);
             image.setFitHeight(height);
             image.setSmooth(false);
-            image.setLayoutX(xPosition);
-            image.setLayoutY(yPosition);
+            image.setLayoutX(xyz.get(0));
+            image.setLayoutY(xyz.get(1));
 
             map.put(entity, image);
 
@@ -131,17 +134,26 @@ public class GameRunner {
     private Node updateNode(Entity entity) {
         Node toUpdate = (Node) myEntitiesAndNodes.get(entity);
 
+        List<Double> xyz = getXYZasList(entity);
+
+        toUpdate.setLayoutX(xyz.get(0));
+        toUpdate.setLayoutY(xyz.get(1));
+
+        return toUpdate;
+    }
+
+    protected List<Double> getXYZasList(Entity entity){
+        List<Double> list = new ArrayList<>();
         XPositionComponent xPositionComponent = (XPositionComponent) entity.getComponent(XPositionComponent.class);
         Double xPosition = (Double) xPositionComponent.getValue();
         YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
         Double yPosition = (Double) yPositionComponent.getValue();
         ZPositionComponent zPositionComponent = (ZPositionComponent) entity.getComponent(ZPositionComponent.class);
         Double zPosition = (Double) zPositionComponent.getValue();
-
-        toUpdate.setLayoutX(xPosition);
-        toUpdate.setLayoutY(yPosition);
-
-        return toUpdate;
+        list.add(xPosition);
+        list.add(yPosition);
+        list.add(zPosition);
+        return list;
     }
 
     private void printEntityLocations(){

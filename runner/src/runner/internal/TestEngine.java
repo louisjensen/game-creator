@@ -9,6 +9,7 @@ import engine.external.component.XPositionComponent;
 import engine.external.component.YPositionComponent;
 import engine.external.component.ZPositionComponent;
 
+import java.security.Key;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -21,20 +22,25 @@ public class TestEngine {
     }
 
     public Collection<Entity> updateState(Collection<KeyCode> keys){
+        if(keys.contains(KeyCode.SPACE)){
+            x*=-1;
+        }
         moveStuffRight();
         return myEntities;
     }
+
+    int x = 1;
 
     private void moveStuffRight(){
         for(Entity entity : myEntities){
             XPositionComponent xPositionComponent = (XPositionComponent) entity.getComponent(XPositionComponent.class);
             Double xPosition = (Double) xPositionComponent.getValue();
-            YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
-            Double yPosition = (Double) yPositionComponent.getValue();
-            ZPositionComponent zPositionComponent = (ZPositionComponent) entity.getComponent(ZPositionComponent.class);
-            Double zPosition = (Double) zPositionComponent.getValue();
+//            YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
+//            Double yPosition = (Double) yPositionComponent.getValue();
+//            ZPositionComponent zPositionComponent = (ZPositionComponent) entity.getComponent(ZPositionComponent.class);
+//            Double zPosition = (Double) zPositionComponent.getValue();
 
-            xPositionComponent.setValue(xPosition+1);
+            xPositionComponent.setValue(xPosition+x);
 
 
         }
