@@ -133,6 +133,7 @@ public class DefaultTypesFactory {
         grow.addComponent(visibilityComponent);
         grow.addComponent(widthComponent);
         grow.addComponent(heightComponent);
+        grow.addComponent(visibilityComponent);
         return grow;
     }
 }

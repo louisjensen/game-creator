@@ -83,8 +83,5 @@ public class UserCreatedTypesPane extends VBox {
             //TODO: deal with this
             e.printStackTrace();
         }
-
-
-
     }
 }
