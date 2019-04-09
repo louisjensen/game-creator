@@ -49,12 +49,13 @@ public class MainGUI extends Application {
 
     private void alternateStart(Stage stage){
         DataFormat dataFormat = new DataFormat("Entity");
-        Viewer viewer = new Viewer(500, 500, dataFormat);
+
+        ObjectManager objectManager = new ObjectManager(new LabelManager());
+        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane(objectManager);
+        userCreatedTypesPane.setMinWidth(200);
+        Viewer viewer = new Viewer(500, 500, userCreatedTypesPane);
         viewer.setMinWidth(400);
         viewer.setMinHeight(300);
-        ObjectManager objectManager = new ObjectManager(new LabelManager());
-        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane(dataFormat, objectManager);
-        userCreatedTypesPane.setMinWidth(200);
         DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane);
         defaultTypesPane.setMinWidth(200);
         LabelManager testLabels = new LabelManager();
