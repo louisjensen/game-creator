@@ -6,6 +6,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public class DataManager implements ExternalData{
     private static final String CREATED_GAMES_DIRECTORY = "created_games";
     public static final String XML_EXTENSION = ".xml";
     public static final String GAME_DATA = "game_data";
+    private static final String GAME_INFO = "game_info";
+
     private XStream mySerializer;
 
     public DataManager(){
@@ -45,6 +48,11 @@ public class DataManager implements ExternalData{
 
     }
 
+    public void createGameFolder(String folderName, String gameName){
+
+        createGameFolder(folderName);
+    }
+
     @Override
     public void createGameFolder(String folderName) {
         try {
@@ -69,8 +77,26 @@ public class DataManager implements ExternalData{
 
     @Override
     public void saveGameData(String gameName, Object gameObject) {
-        String path = transformGameNameToPath(gameName);
+        String path = transformGameNameToPath(gameName, GAME_DATA);
         saveObjectToXML(path, gameObject);
+    }
+
+    public Object loadGameInfo(String gameName){
+        return loadObjectFromXML(transformGameNameToPath(gameName, GAME_INFO));
+    }
+
+    public List<Object> loadGameAllGameInfoObject(){
+        List<String> gameNames = getGameNames();
+        List<Object> gameInfoObjects = new ArrayList<>();
+        for (String game : gameNames){
+            gameInfoObjects.add(loadGameInfo(game));
+        }
+        return gameInfoObjects;
+    }
+
+    public void saveGameInfo(String gameName, Object gameInfoObject){
+        String path = transformGameNameToPath(gameName, GAME_INFO);
+        saveObjectToXML(path, gameInfoObject);
     }
 
     @Override
@@ -80,7 +106,8 @@ public class DataManager implements ExternalData{
 
     @Override
     public Object loadGameData(String gameName) {
-        return loadObjectFromXML(transformGameNameToPath(gameName));
+
+        return loadObjectFromXML(transformGameNameToPath(gameName, GAME_DATA));
     }
 
     private String readFromXML(String path) {
@@ -111,7 +138,7 @@ public class DataManager implements ExternalData{
         return rawXML.toString();
     }
 
-    public void printGameNames(){
+    public List<String> getGameNames(){
         File file = new File(CREATED_GAMES_DIRECTORY);
         String[] directories = file.list(new FilenameFilter() {
             @Override
@@ -120,10 +147,14 @@ public class DataManager implements ExternalData{
             }
         });
         System.out.println(Arrays.toString(directories));
+        if (directories != null) {
+            return Arrays.asList(directories);
+        }
+        return new ArrayList<>();
     }
 
-    private String transformGameNameToPath(String gameName) {
-        return CREATED_GAMES_DIRECTORY + File.separator + gameName + File.separator + GAME_DATA + XML_EXTENSION;
+    private String transformGameNameToPath(String gameName, String filename) {
+        return CREATED_GAMES_DIRECTORY + File.separator + gameName + File.separator + filename + XML_EXTENSION;
     }
 
     private void writeToXML(String path, String rawXML){

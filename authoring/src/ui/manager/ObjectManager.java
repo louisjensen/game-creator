@@ -1,9 +1,16 @@
 package ui.manager;
 
+import events.Event;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import ui.TestEntity;
+import javafx.collections.ObservableList;
+import ui.AuthoringEntity;
+import ui.EntityField;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -11,35 +18,40 @@ import java.util.Set;
  */
 public class ObjectManager {
 
-    private Set<TestEntity> myEntities;
-    private LabelManager myManager;
+    private Set<AuthoringEntity> myEntities;
+    private Map<String, ObservableList<Event>> myEventMap;
+    private LabelManager myLabelManager;
 
     /**
      * Class that keeps track of every single instance of an Entity, across Levels, for the purposes of authoring environment
      */
     public ObjectManager(LabelManager labelManager) {
         myEntities = new HashSet<>();
-        myManager = labelManager;
-        labelManager.getLabels("Group").addListener((ListChangeListener) (change -> groupRemoveAction(change)));
+        myLabelManager = labelManager;
+        myEventMap = new HashMap<>();
+        labelManager.getLabels(EntityField.GROUP).addListener((ListChangeListener<? super String>) change -> groupRemoveAction(change));
     }
 
-    public void addEntity(TestEntity entity) {
+    public void addEntity(AuthoringEntity entity) {
         myEntities.add(entity);
-        myManager.addLabel("Label", entity.getPropertyMap().get("Label"));
+        myLabelManager.addLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL)); //TODO account for adding new instance of preexisting entity
+        myEventMap.put(entity.getPropertyMap().get(EntityField.LABEL), FXCollections.observableArrayList(new ArrayList<>()));
     }
 
-    public void propagate(String objectLabel, String property, String newValue) {
-        for (TestEntity entity : myEntities) {
-            if (entity.getPropertyMap().get("Label").equals(objectLabel)) { // Match found
+    //TODO remove entity??
+
+    public void propagate(String objectLabel, Enum property, String newValue) {
+        for (AuthoringEntity entity : myEntities) {
+            if (entity.getPropertyMap().get(EntityField.LABEL).equals(objectLabel)) { // Match found
                 entity.getPropertyMap().put(property, newValue);
-                myManager.addLabel(property, newValue);
+                myLabelManager.addLabel(EntityField.LABEL, newValue);
             }
         }
-        if (property.equals("Label"))
-            myManager.removeLabel(property, objectLabel); // Remove old label from LabelManager if a label was just propagated
+        if (property.equals(EntityField.LABEL))
+            myLabelManager.removeLabel(EntityField.LABEL, objectLabel); // Remove old label from LabelManager if a label was just propagated
     }
 
-    private void groupRemoveAction(ListChangeListener.Change<String> change) {
+    private void groupRemoveAction(ListChangeListener.Change<? extends String> change) {
         change.next();
         String str = null;
 
@@ -47,15 +59,19 @@ public class ObjectManager {
             str = change.getAddedSubList().get(0);
 
         if (change.wasReplaced() || change.wasRemoved()) {
-            for (TestEntity entity : myEntities) {
-                if (entity.getPropertyMap().get("Group") != null &&
-                        entity.getPropertyMap().get("Group").equals(change.getRemoved().get(0)))
-                    entity.getPropertyMap().put("Group", str);
+            for (AuthoringEntity entity : myEntities) {
+                if (entity.getPropertyMap().get(EntityField.GROUP) != null &&
+                        entity.getPropertyMap().get(EntityField.GROUP).equals(change.getRemoved().get(0)))
+                    entity.getPropertyMap().put(EntityField.GROUP, str);
             }
         }
     }
 
     LabelManager getLabelManager() {
-        return myManager;
+        return myLabelManager;
+    }
+
+    public ObservableList<Event> getEvents(String objectType) {
+        return myEventMap.get(objectType);
     }
 }

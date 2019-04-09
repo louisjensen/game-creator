@@ -2,15 +2,13 @@ package engine.internal.systems;
 
 import engine.external.Entity;
 import engine.external.component.*;
-import engine.internal.Engine;
+import engine.external.Engine;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
-import java.util.jar.Attributes;
 
-public abstract class System {
+public abstract class VoogaSystem {
     protected final Class<? extends Component> X_POSITION_COMPONENT_CLASS = XPositionComponent.class;
     protected final Class<? extends Component> Y_POSITION_COMPONENT_CLASS = YPositionComponent.class;
     protected final Class<? extends Component> Z_POSITION_COMPONENT_CLASS = ZPositionComponent.class;
@@ -38,10 +36,11 @@ public abstract class System {
     private Collection<KeyCode> myInputs;
     protected Engine myEngine;
 
-    public System(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
+
+    public VoogaSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
+        myInputs = new ArrayList<>();
         myRequiredComponents = requiredComponents;
         myEngine = engine;
-        myInputs = new ArrayList<>();
     }
 
     public void update(Collection<Entity> entities, Collection<KeyCode> inputs) {

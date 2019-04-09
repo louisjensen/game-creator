@@ -7,6 +7,8 @@ import java.util.Map;
  */
 public interface Propertable {
 
-    Map<String, String> getPropertyMap();
+    Map<Enum, String> getPropertyMap();
+
+    Class<? extends Enum> getEnumClass();
 
 }
