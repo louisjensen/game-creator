@@ -49,9 +49,9 @@ public class Viewer extends ScrollPane {
             public void handle(DragEvent dragEvent) {
                 AuthoringEntity authoringEntity = userCreatedTypesPane.getDraggedAuthoringEntity();
                 addImage(Utility.createImageWithEntity(authoringEntity));
-                authoringEntity.getPropertyMap().put(EntityField.X, "" + dragEvent.getX());
+                authoringEntity.getPropertyMap().put(EntityField.X, "" + snapToGrid(dragEvent.getX()));
                 System.out.println("Just added mouse X: " + dragEvent.getX());
-                authoringEntity.getPropertyMap().put(EntityField.Y, "" + dragEvent.getY());
+                authoringEntity.getPropertyMap().put(EntityField.Y, "" + snapToGrid(dragEvent.getY()));
                 System.out.println("Just added mouse Y: " + dragEvent.getY());
             }
         });
@@ -70,7 +70,7 @@ public class Viewer extends ScrollPane {
 
         double result;
         if(valueRemainder >= CELL_SIZE/2){
-            result = value + valueRemainder;
+            result = value + CELL_SIZE - valueRemainder;
         }
         else{
             result = value - valueRemainder;
