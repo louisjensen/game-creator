@@ -1,4 +1,4 @@
-package engine.internal;
+package engine.external;
 
 import engine.external.Entity;
 import engine.external.IEventEngine;
@@ -10,10 +10,11 @@ import javafx.scene.input.KeyCode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import static java.lang.System.out;
 
 public class Engine {
     //TODO: Exception Handling
-    private final ResourceBundle SYSTEM_COMPONENTS_RESOURCES = ResourceBundle.getBundle("SystemRequiredComponents.properties");
+    private final ResourceBundle SYSTEM_COMPONENTS_RESOURCES = ResourceBundle.getBundle("SystemRequiredComponents");
 
 
     protected Collection<Entity> myEntities;
@@ -44,21 +45,23 @@ public class Engine {
     }
 
     private void initSystems() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-        mySystems = Arrays.asList(myMovementSystem,myImageViewSystem,myCollisionSystem,myHealthSystem,myEventHandlerSystem,myCleanupSystem);
-        for (System system:mySystems){
-            initSystem(system);
+//        Collection<String> mySystemNames = SYSTEM_COMPONENTS_RESOURCES.getKeys();
+//        mySystems = Arrays.asList(myMovementSystem,myImageViewSystem,myCollisionSystem,myHealthSystem,myEventHandlerSystem,myCleanupSystem);
+        for (String systemName:SYSTEM_COMPONENTS_RESOURCES.keySet()){
+            initSystem(systemName);
         }
     }
 
-    private void initSystem(System system) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
-        Class systemClazz = system.getClass();
-        Collection<Class<?extends Component>> systemComponents = retrieveComponentClasses(systemClazz);
-        system = (System) systemClazz.getConstructor().newInstance(systemComponents,this);
+    private void initSystem(String systemName) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+        Class systemClazz = Class.forName(this.getClass().getModule(),systemName);
+        Collection<Class<?extends Component>> systemComponents = retrieveComponentClasses(systemName);
+        mySystems.add((System) systemClazz.getConstructor().newInstance(systemComponents,this));
     }
 
     @SuppressWarnings({"unchecked"})
-    private Collection<Class<? extends Component>> retrieveComponentClasses(Class systemClazz) throws ClassNotFoundException {
-        String[] componentArr = SYSTEM_COMPONENTS_RESOURCES.getStringArray(systemClazz.getSimpleName());
+    private Collection<Class<? extends Component>> retrieveComponentClasses(String systemName) throws ClassNotFoundException {
+        java.lang.System.out.println(systemName);
+        String[] componentArr = SYSTEM_COMPONENTS_RESOURCES.getString(systemName).split(",");
         ArrayList<Class<? extends Component>> componentList = new ArrayList<>();
         for(String component:componentArr){
             componentList.add((Class<? extends Component>)Class.forName(component));
