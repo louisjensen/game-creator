@@ -119,6 +119,15 @@
     -fx-background-color: #505050;
 }
 
+.context-menu {
+    -fx-background-color: #303030;
+    -fx-text-fill: white;
+}
+
+.menu-item:hover, .menu-item:focused {
+    -fx-background-color: #505050;
+}
+
 
 /* CUSTOM SELECTORS*/
 
@@ -195,13 +204,20 @@
 
 .entity-pane-box {
     -fx-spacing: 5;
-    -fx-padding: 0 0 0 5;
+    -fx-padding: 0 0 10 5;
 }
 
 .prop-pane {
     -fx-min-width: 200;
     -fx-pref-height: 200;
     -fx-max-height: 200;
+    -fx-alignment: center;
+}
+
+.prop-pane .label {
+    -fx-font-weight: normal;
+    -fx-font-size: 14;
+    -fx-text-fill: #aaaaaa;
 }
 
 .entity-menu {
@@ -232,4 +248,14 @@
 
 .entity-menu .list-cell:hover {
     -fx-background-color: #505050;
+}
+
+.viewer-scroll-pane {
+    -fx-background-color: #606060;
+    -fx-pref-height: 100;
+}
+
+.main-center-pane {
+    -fx-padding: 0 0 10 10;
+    -fx-alignment: center;
 }

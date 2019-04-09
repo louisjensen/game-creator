@@ -47,6 +47,7 @@ public class Viewer extends ScrollPane {
         setRoomSize(roomWidth, roomHeight);
         addGridLines();
         this.setContent(myStackPane);
+        this.getStyleClass().add("viewer-scroll-pane");
     }
 
     private void setupAcceptDragEvents() {
