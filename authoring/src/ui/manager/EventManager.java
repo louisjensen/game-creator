@@ -74,7 +74,7 @@ public class EventManager extends Stage {
     }
 
     private void openEventOptions(String eventName){
-        new EventPane(eventName);
+        new EventPane(eventName, myEntity.getEvents());
     }
 
 

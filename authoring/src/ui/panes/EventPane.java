@@ -1,5 +1,7 @@
 package ui.panes;
+import events.Event;
 import events.EventFactory;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -17,10 +19,13 @@ import java.util.ResourceBundle;
 public class EventPane extends Stage {
 
     private static final String myResources = "event_parameters";
+    private String myEventName;
     private EventFactory myEventFactory = new EventFactory();
     private VBox myEventParameters = new VBox();
 
-    public EventPane(String eventName) {
+
+    public EventPane(String eventName, ObservableList<Event> myEvents) {
+        myEventName = eventName;
         ResourceBundle myParameterNames = ResourceBundle.getBundle(myResources);
         String eventKey = eventName.replace(" ","");
         for (String nodeType: (myParameterNames.getString(eventKey)).split(",")) {
@@ -40,18 +45,19 @@ public class EventPane extends Stage {
             }
 
         }
-        myEventParameters.getChildren().add(makeButtons());
+        myEventParameters.getChildren().add(makeButtons(myEvents));
         myEventParameters.getStylesheets().add("default.css");
         Scene myScene = new Scene(myEventParameters);
         this.setScene(myScene);
         this.show();
     }
 
-    private Node makeButtons(){
+    private Node makeButtons(ObservableList<Event> myEvents){
         Button mySaveButton = new Button("Save");
         mySaveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                
                 //make functional interface to access level
             }
         });
