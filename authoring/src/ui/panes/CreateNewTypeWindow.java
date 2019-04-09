@@ -20,6 +20,9 @@ import ui.DefaultTypesFactory;
 import ui.Utility;
 import ui.manager.AssetManager;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -169,7 +172,7 @@ public class CreateNewTypeWindow extends Stage {
 
     private void createAndAddTypeOfOnDropDown(String initialTypeOf){
         String[] types = myTypeResources.getString("Tabs").split(",");
-        myTypeOfComboBox.getItems().addAll(types);
+        myTypeOfComboBox.getItems().addAll(Arrays.asList(types));
         myTypeOfComboBox.setPrefWidth(INPUT_WIDTH);
         myGridPane.add(myTypeOfComboBox, 1, myGridPane.getRowCount()-1);
         myTypeOfComboBox.valueProperty().addListener(new ChangeListener() {

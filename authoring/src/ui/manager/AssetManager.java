@@ -78,7 +78,7 @@ public class AssetManager extends Stage {
     }
 
     public AssetManager(Propertable prop) {
-        super();
+        this();
         //TODO: integrate in entity
         myProp = prop;
 

@@ -182,7 +182,7 @@ public class Utility {
     public static ImageWithEntity createImageWithEntity(AuthoringEntity entity){
         ResourceBundle generalResources = ResourceBundle.getBundle("authoring_general");
         ResourceBundle utilityResources = ResourceBundle.getBundle(RESOURCE);
-        String imageName = (String) entity.getBackingEntity().getComponent(new SpriteComponent("").getClass()).getValue();
+        String imageName = entity.getPropertyMap().get(EntityField.IMAGE);
         String imagePath = generalResources.getString("images_filepath");
         Double width = (Double) entity.getBackingEntity().getComponent(new WidthComponent(0.0).getClass()).getValue();
         Double height = (Double) entity.getBackingEntity().getComponent(new HeightComponent(0.0).getClass()).getValue();
