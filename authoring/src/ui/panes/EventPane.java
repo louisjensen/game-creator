@@ -34,8 +34,6 @@ public class EventPane extends Stage {
     private String myClassName;
     private EventFactory myEventFactory = new EventFactory();
     private VBox myEventParameters = new VBox();
-    private VBox myEventButtons = new VBox();
-    private VBox myEventDisplay = new VBox();
 
     public EventPane(String eventDisplayName, ObservableList<Event> myEvents) throws UIException{
         myEventName = eventDisplayName;
@@ -43,8 +41,10 @@ public class EventPane extends Stage {
         
         String eventDisplayOptions = ResourceBundle.getBundle(EVENT_PARAMETERS).getString(eventDisplayName);
         setUpEvent(eventDisplayOptions);
-        
+
+        VBox myEventButtons = new VBox();
         myEventButtons.getChildren().add(makeButtons(myEvents));
+        VBox myEventDisplay = new VBox();
         myEventDisplay.getChildren().add(myEventParameters);
         myEventDisplay.getChildren().add(myEventButtons);
         myEventDisplay.getStylesheets().add("default.css");
@@ -110,8 +110,6 @@ public class EventPane extends Stage {
 
     private void generateUserEvent(ObservableList<Event> userMadeEvents){
         ResourceBundle myConstructorResources = ResourceBundle.getBundle(EVENT_CONSTRUCTORS);
-        System.out.println(myConstructorResources.toString());
-        System.out.println(myConstructorResources.getString(myEventName));
         String[] constructorClassTypes = myConstructorResources.getString(myEventName).split(",");
         Class<?>[] constructorClassReferences = new Class<?>[constructorClassTypes.length];
         Object[] constructorParameters = new Object[constructorClassTypes.length];
