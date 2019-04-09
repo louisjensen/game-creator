@@ -62,13 +62,11 @@ public class UserCreatedTypesPane extends VBox {
     }
 
     public void addUserDefinedType(String category, Entity entity, String ofType, String basedOn){
-        String label = (String) entity.getComponent(new NameComponent("").getClass()).getValue();
-        String imageName = (String) entity.getComponent(new SpriteComponent("").getClass()).getValue();
-        double width = (Double) entity.getComponent(new WidthComponent(0.0).getClass()).getValue();
-        double height = (Double) entity.getComponent(new HeightComponent(0.0).getClass()).getValue();
+        String label = (String) entity.getComponent(NameComponent.class).getValue();
+        String imageName = (String) entity.getComponent(SpriteComponent.class).getValue();
         try {
             AuthoringEntity originalAuthoringEntity = new AuthoringEntity(entity, myObjectManager);
-            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), originalAuthoringEntity, width, height);
+            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), originalAuthoringEntity);
             UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, entity);
             List<Pane> paneList = new ArrayList<>();
             paneList.add(subPane);
@@ -78,6 +76,7 @@ public class UserCreatedTypesPane extends VBox {
                 public void handle(MouseEvent mouseEvent) {
                     AuthoringEntity copiedAuthoringEntity = new AuthoringEntity(originalAuthoringEntity, myDefaultTypesFactory.getDefaultEntity(ofType, basedOn));
                     myDraggedAuthoringEntity = copiedAuthoringEntity;
+                    System.out.println("Width " + imageWithEntity.getFitWidth());
                     Dragboard db = imageWithEntity.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent content = new ClipboardContent();
                     content.putImage(imageWithEntity.getImage());

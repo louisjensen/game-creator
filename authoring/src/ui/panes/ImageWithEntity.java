@@ -1,9 +1,12 @@
 package ui.panes;
 
+import engine.external.component.HeightComponent;
+import engine.external.component.WidthComponent;
 import javafx.collections.MapChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import ui.AuthoringEntity;
+import ui.EntityField;
 import ui.ErrorBox;
 
 import java.io.FileInputStream;
@@ -13,9 +16,11 @@ import java.util.ResourceBundle;
 public class ImageWithEntity extends ImageView {
     private AuthoringEntity myAuthoringEntity;
     private static final ResourceBundle myResources = ResourceBundle.getBundle("image_with_entity");
+    private FileInputStream myInputStream;
 
-    public ImageWithEntity(FileInputStream s, AuthoringEntity authoringEntity, double width, double height) {
-        super(new Image(s, width, height, false, false));
+    public ImageWithEntity(FileInputStream s, AuthoringEntity authoringEntity) {
+        super(new Image(s, (Double) authoringEntity.getBackingEntity().getComponent(WidthComponent.class).getValue(), (Double) authoringEntity.getBackingEntity().getComponent(HeightComponent.class).getValue(), false, false));
+        myInputStream = s;
         myAuthoringEntity = authoringEntity;
         myAuthoringEntity.getPropertyMap().addListener((MapChangeListener<Enum, String>) change -> {handleChange(change);
             System.out.println("Change observed");});
@@ -48,11 +53,27 @@ public class ImageWithEntity extends ImageView {
     }
 
     private void updateWidth(String width){
+        Double widthDouble = Double.parseDouble(width);
+        Double heightDouble = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.YSCALE));
+        System.out.println("Width: " + widthDouble);
+        System.out.println("Height: " + heightDouble);
+        replaceImage(myInputStream, widthDouble, heightDouble);
+        this.setFitWidth(widthDouble);
         System.out.println("updateWidth called");
     }
 
+    private void replaceImage(FileInputStream inputStream, Double width, Double height){
+        System.out.println("Replacing image");
+        Image image = new Image(myInputStream, width, height, false, false);
+        myInputStream = inputStream;
+        this.setImage(image);
+    }
+
     private void updateHeight(String height){
-        System.out.println("updateHeight called");
+        Double heightDouble = Double.parseDouble(height);
+        Double widthDouble = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.XSCALE));
+        replaceImage(myInputStream, widthDouble, heightDouble);
+        this.setFitWidth(heightDouble);
     }
 
     private void updateImage(String image){
