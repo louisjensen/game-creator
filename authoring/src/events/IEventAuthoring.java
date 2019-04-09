@@ -3,6 +3,7 @@ package events;
 import actions.Action;
 import conditions.Condition;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -49,6 +50,8 @@ public interface IEventAuthoring {
 
     void addConditions(Condition condition);
 
+
+    Collection<String> getAllEvents();
     /**
      * Removes a set of conditions from the list of conditions associated with this event.
      * @param conditionsToRemove
