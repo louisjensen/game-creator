@@ -16,18 +16,18 @@ public class EventManagerTester extends Application {
         LabelManager testLabels = new LabelManager();
         addTestLabels(testLabels);
         ObjectManager manager = new ObjectManager(testLabels);
-        TestEntity testEntity = populateTestObjects(manager);
+        AuthoringEntity testEntity = populateTestObjects(manager);
         EventManager testEventManager = new EventManager(testEntity);
         testEventManager.show();
     }
 
     private void addTestLabels(LabelManager testLabels) {
-        testLabels.addLabel("Group", "Enemies");
-        testLabels.addLabel("Group", "Platforms");
+        testLabels.addLabel(EntityField.GROUP, "Enemies");
+        testLabels.addLabel(EntityField.GROUP, "Platforms");
     }
 
-    private TestEntity populateTestObjects(ObjectManager manager) {
-        TestEntity a = new TestEntity("object1", manager);
+    private AuthoringEntity populateTestObjects(ObjectManager manager) {
+        AuthoringEntity a = new AuthoringEntity("object1", manager);
         manager.addEntity(a);
         return a;
     }

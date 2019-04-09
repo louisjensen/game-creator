@@ -18,7 +18,7 @@ public class ButtonProperty extends Button implements ControlProperty {
     }
 
     @Override
-    public void populateValue(String type, String newVal, LabelManager labels) {}
+    public void populateValue(Enum type, String newVal, LabelManager labels) {}
 
     /**
      * ButtonProperty action will always open another window of a certain type, passing the propertable object along with it
@@ -26,7 +26,7 @@ public class ButtonProperty extends Button implements ControlProperty {
      * @param action Class name of new stage to open
      */
     @Override
-    public void setAction(Propertable prop, String propLabel, String action) throws UIException {
+    public void setAction(Propertable prop, Enum propLabel, String action) throws UIException {
         try {
             Class<?> clazz = Class.forName(action);
             Constructor<?> constructor = clazz.getConstructor(Propertable.class);

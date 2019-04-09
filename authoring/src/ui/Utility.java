@@ -1,5 +1,9 @@
 package ui;
 
+import engine.external.Entity;
+import engine.external.component.HeightComponent;
+import engine.external.component.SpriteComponent;
+import engine.external.component.WidthComponent;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.collections.FXCollections;
@@ -13,13 +17,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import ui.panes.ImageWithEntity;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Carrie
@@ -63,11 +69,11 @@ public class Utility {
     public static Button makeButton(Object o, String methodName, String buttonText, Object... methodParams){
         ResourceBundle resources = ResourceBundle.getBundle(RESOURCE);
         Button button = new Button();
-        AtomicReference<Method> reference = findMethod(o, methodName, methodParams);
+        Method reference = findMethod(o, methodName, methodParams);
         button.setOnAction(e -> {
             try {
-                reference.get().setAccessible(true);
-                reference.get().invoke(o, methodParams);
+                reference.setAccessible(true);
+                reference.invoke(o, methodParams);
             } catch (Exception e1) {
                 button.setText(resources.getString("ButtonFail"));
             }});
@@ -77,14 +83,14 @@ public class Utility {
 
     /**
      * Locates method with signature corresponding with given parameters, including superclasses, returns reference
-     * to method
+     * to method -- important shortcoming, cannot distinguish between overloaded methods with same superclass as parameter
      * @param o Object to locate found method within class of
      * @param methodName String name of method to locate
      * @param methodParams Parameters to be used in search for correct method signature
      * @return Reference to found method
      */
-    private static AtomicReference<Method> findMethod(Object o, String methodName, Object[] methodParams) {
-        final AtomicReference<Method> reference = new AtomicReference<>();
+    private static Method findMethod(Object o, String methodName, Object[] methodParams) {
+        Method reference = null;
         for (Method m : o.getClass().getDeclaredMethods()) {
             if (m.getName().equals(methodName) && m.getParameterCount() == methodParams.length) {
                 boolean matchesSignature = true;
@@ -95,7 +101,7 @@ public class Utility {
                     }
                 }
                 if (matchesSignature) {
-                    reference.set(m);
+                    reference = m;
                     break;
                 }
             }
@@ -106,10 +112,10 @@ public class Utility {
     /**
      * Check validity of new value from based on regex syntax from properties file
      */
-    public static boolean isValidValue(String key, String newVal, String syntaxResource) {
+    public static boolean isValidValue(Enum key, String newVal, String syntaxResource) {
         ResourceBundle bundle = ResourceBundle.getBundle(syntaxResource);
-        if (bundle.containsKey(key)) { // Label matches syntax, valid
-            if (newVal.matches(bundle.getString(key))) {
+        if (bundle.containsKey(key.name())) { // Label matches syntax, valid
+            if (newVal.matches(bundle.getString(key.name()))) {
                 return true;
             } else {
                 ErrorBox error = new ErrorBox("Variable Error", "Invalid variable, refer to documentation for syntax");
@@ -173,4 +179,28 @@ public class Utility {
     }
 
 
+    public static ImageWithEntity createImageWithEntity(AuthoringEntity entity){
+        System.out.println("Made it to utility method");
+        ResourceBundle generalResources = ResourceBundle.getBundle("authoring_general");
+        System.out.println("got general properties bundle");
+        ResourceBundle utilityResources = ResourceBundle.getBundle(RESOURCE);
+        String imageName = (String) entity.getBackingEntity().getComponent(new SpriteComponent("").getClass()).getValue();
+        String imagePath = generalResources.getString("images_filepath");
+        Double width = (Double) entity.getBackingEntity().getComponent(new WidthComponent(0.0).getClass()).getValue();
+        Double height = (Double) entity.getBackingEntity().getComponent(new HeightComponent(0.0).getClass()).getValue();
+        try {
+            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(imagePath + imageName), entity, width, height);
+            System.out.println("Returning the entity next");
+            return imageWithEntity;
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+            String[] info = utilityResources.getString("FileException").split(",");
+            ErrorBox errorBox = new ErrorBox(info[0], info[1]);
+            errorBox.display();
+            //TODO: get rid of this stack trace. rn it's just in case this happens and we need to know where
+            e.printStackTrace();
+            return null;
+
+        }
+    }
 }

@@ -3,16 +3,15 @@ package ui.manager;
 import events.EventType;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import ui.EntityField;
 import ui.Propertable;
-import ui.TestEntity;
+import ui.AuthoringEntity;
 import ui.Utility;
 import ui.panes.EventPane;
 
@@ -28,16 +27,17 @@ import java.util.Map;
  */
 public class EventManager extends Stage {
 
-    private TestEntity myEntity;
+    private AuthoringEntity myEntity;
     private Scene myDefaultScene;
 
     public EventManager(Propertable prop) { // Loads common Events for object instance based on type label
-        myEntity = (TestEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
+        myEntity = (AuthoringEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
         myDefaultScene = createPane();
         this.setScene(myDefaultScene);
         this.setResizable(false);
         createContent();
     }
+
 
     private Node createContent() {
         GridPane eventsGrid = new GridPane();
@@ -51,8 +51,8 @@ public class EventManager extends Stage {
 
     private Scene createPane() {
         Map<String, List<String>> description = new LinkedHashMap<>();
-        description.put("label", new ArrayList<>(Collections.singletonList("Manage " + myEntity.getPropertyMap().get("Label") + " Events")));
-        description.put("sub-label", new ArrayList<>(Collections.singletonList("Add or Remove Events for " + myEntity.getPropertyMap().get("Label"))));
+        description.put("label", new ArrayList<>(Collections.singletonList("Manage " + myEntity.getPropertyMap().get(EntityField.LABEL) + " Events")));
+        description.put("sub-label", new ArrayList<>(Collections.singletonList("Add or Remove Events for " + myEntity.getPropertyMap().get(EntityField.LABEL))));
 
         ComboBox<String> myAddEventBox = new ComboBox<>(FXCollections.observableArrayList(EventType.allDisplayNames));
         myAddEventBox.setValue("Add Event...");
@@ -60,7 +60,7 @@ public class EventManager extends Stage {
         addEvent(myAddEventBox);
         //Button addButton = Utility.makeButton(this, "addEvent", "Add");
         Button removeButton = Utility.makeButton(this, "removeEvent", "Remove");
-        Button closeButton = Utility.makeButton(this, "closeEventManager", "Close");
+        Button closeButton = Utility.makeButton(this, "closeWindow", "Close");
 
         //Scene myScene = Utility.createDialogPane(Utility.createLabelsGroup(description), createContent(), Arrays.asList(removeButton, closeButton));
         return Utility.createGeneralPane(Utility.createLabelsGroup(description), createContent(),
@@ -78,17 +78,12 @@ public class EventManager extends Stage {
     }
 
 
-        // Open Add dialog for user to enter info, stores result in ObservableList (myEntity.getEvents())
-        // Pretty sure I'm gonna replace the gridpane with a listview to make this stuff easier
-
-
     private void removeEvent() {
         // Remove selected Event from ObservableList (myEntity.getEvents())
         // We have to allow for the user to select a gridpane cell to remove, maybe replace entirely with listview to make that easier??
     }
 
-    private void closeEventManager(){
+    public void closeWindow() {
         this.close();
     }
-
 }

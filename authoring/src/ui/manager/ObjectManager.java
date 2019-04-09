@@ -4,7 +4,8 @@ import events.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import ui.TestEntity;
+import ui.AuthoringEntity;
+import ui.EntityField;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import java.util.Set;
  */
 public class ObjectManager {
 
-    private Set<TestEntity> myEntities;
+    private Set<AuthoringEntity> myEntities;
     private Map<String, ObservableList<Event>> myEventMap;
     private LabelManager myLabelManager;
 
@@ -28,29 +29,29 @@ public class ObjectManager {
         myEntities = new HashSet<>();
         myLabelManager = labelManager;
         myEventMap = new HashMap<>();
-        labelManager.getLabels("Group").addListener((ListChangeListener) (change -> groupRemoveAction(change)));
+        labelManager.getLabels(EntityField.GROUP).addListener((ListChangeListener<? super String>) change -> groupRemoveAction(change));
     }
 
-    public void addEntity(TestEntity entity) {
+    public void addEntity(AuthoringEntity entity) {
         myEntities.add(entity);
-        myLabelManager.addLabel("Label", entity.getPropertyMap().get("Label"));
-        myEventMap.put(entity.getPropertyMap().get("Label"), FXCollections.observableArrayList(new ArrayList<>()));
+        myLabelManager.addLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL)); //TODO account for adding new instance of preexisting entity
+        myEventMap.put(entity.getPropertyMap().get(EntityField.LABEL), FXCollections.observableArrayList(new ArrayList<>()));
     }
 
     //TODO remove entity??
 
-    public void propagate(String objectLabel, String property, String newValue) {
-        for (TestEntity entity : myEntities) {
-            if (entity.getPropertyMap().get("Label").equals(objectLabel)) { // Match found
+    public void propagate(String objectLabel, Enum property, String newValue) {
+        for (AuthoringEntity entity : myEntities) {
+            if (entity.getPropertyMap().get(EntityField.LABEL).equals(objectLabel)) { // Match found
                 entity.getPropertyMap().put(property, newValue);
-                myLabelManager.addLabel(property, newValue);
+                myLabelManager.addLabel(EntityField.LABEL, newValue);
             }
         }
-        if (property.equals("Label"))
-            myLabelManager.removeLabel(property, objectLabel); // Remove old label from LabelManager if a label was just propagated
+        if (property.equals(EntityField.LABEL))
+            myLabelManager.removeLabel(EntityField.LABEL, objectLabel); // Remove old label from LabelManager if a label was just propagated
     }
 
-    private void groupRemoveAction(ListChangeListener.Change<String> change) {
+    private void groupRemoveAction(ListChangeListener.Change<? extends String> change) {
         change.next();
         String str = null;
 
@@ -58,10 +59,10 @@ public class ObjectManager {
             str = change.getAddedSubList().get(0);
 
         if (change.wasReplaced() || change.wasRemoved()) {
-            for (TestEntity entity : myEntities) {
-                if (entity.getPropertyMap().get("Group") != null &&
-                        entity.getPropertyMap().get("Group").equals(change.getRemoved().get(0)))
-                    entity.getPropertyMap().put("Group", str);
+            for (AuthoringEntity entity : myEntities) {
+                if (entity.getPropertyMap().get(EntityField.GROUP) != null &&
+                        entity.getPropertyMap().get(EntityField.GROUP).equals(change.getRemoved().get(0)))
+                    entity.getPropertyMap().put(EntityField.GROUP, str);
             }
         }
     }
