@@ -1,20 +1,31 @@
 package ui_components;
 
+import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import ui_components.games.GamePane;
 import ui_components.header.HeaderBar;
 
-public class CenterView {
+public class CenterView extends Application {
     private Scene myScene;
 
     private static final double STAGE_WIDTH = 1250;
     private static final double STAGE_HEIGHT = 750;
     private static final Color BACKGROUND_COLOR = Color.rgb(46, 43, 51);
 
+    public void start (Stage myStage) throws Exception {
+        CenterView view = new CenterView();
+        myStage.setScene(view.getScene());
+        myStage.show();
+    }
+
+    public static void main(String[] args){
+        launch(args);
+    }
 
     public CenterView() {
         initializeScene();

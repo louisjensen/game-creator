@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import runner.external.GameCenterData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GameList {
     public static final int SCROLLER_PADDING = 10;
@@ -17,11 +18,13 @@ public class GameList {
     private static final double CARD_H_OFFSET = 50;
     private static final double CARD_V_OFFSET = 50;
     private static final int NUM_CARDS_DISPLAYED = 3;
+    private List<GameCenterData> myGames;
 
     public GameList(int numGames) {
-        initializeDisplay(numGames);
         DataManager manager = new DataManager();
-        //GameCenterData data = (GameCenterData) manager.loadGameInfo();
+        List<Object> originalList = manager.loadGameAllGameInfoObject();
+        myGames = (List<GameCenterData>) (Object) originalList;
+        initializeDisplay(numGames);
     }
 
     public Pane getDisplay() {
@@ -33,8 +36,8 @@ public class GameList {
         gameList.setVgap(CARD_V_OFFSET);
         gameList.setHgap(CARD_H_OFFSET);
         gameList.setPrefWrapLength((GameCard.DISPLAY_WIDTH + CARD_H_OFFSET) * NUM_CARDS_DISPLAYED);
-        for(int i = 0; i < numGames; i++) {
-            GameCard c = new GameCard();
+        for(GameCenterData game : myGames) {
+            GameCard c = new GameCard(game);
             gameList.getChildren().add(c.getDisplay());
         }
         ScrollPane scroller = new ScrollPane();
