@@ -17,7 +17,7 @@ public class AuthoringLevel implements Propertable {
     private ObjectManager myObjectManager;
 
     private static final List<? extends Enum> PROP_VAR_NAMES = Arrays.asList(LevelField.values());
-    private static final Double DEFAULT_ROOM_SIZE = 500.0;
+    private static final Integer DEFAULT_ROOM_SIZE = 500;
 
     public AuthoringLevel(String label, ObjectManager manager) {
         myObjectManager = manager;
@@ -30,7 +30,7 @@ public class AuthoringLevel implements Propertable {
         addPropertyListener();
     }
 
-    public Map<Enum, String> getPropertyMap() {
+    public ObservableMap<Enum, String> getPropertyMap() {
         return myPropertyMap;
     }
 

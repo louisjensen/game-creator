@@ -1,5 +1,6 @@
 package ui.control;
 
+import javafx.collections.MapChangeListener;
 import javafx.scene.control.TextField;
 import ui.EntityField;
 import ui.Propertable;
@@ -13,6 +14,7 @@ public class TextFieldProperty extends TextField implements ControlProperty {
 
     private LabelManager myLabelManager;
     private String myCurrentValue;
+    private Enum myLabelGroup;
 
     private static final String PROP_SYNTAX = "property_syntax";
 
@@ -25,15 +27,23 @@ public class TextFieldProperty extends TextField implements ControlProperty {
      * Only used when creating a new TextField
      */
     @Override
-    public void populateValue(Enum labelGroup, String newVal, LabelManager labels) {
+    public void populateValue(Propertable prop, Enum labelGroup, String newVal, LabelManager labels) {
         this.setText(newVal);
         myCurrentValue = newVal;
         myLabelManager = labels;
+        myLabelGroup = labelGroup;
+        prop.getPropertyMap().addListener((MapChangeListener<? super Enum, ? super String>) change -> updateValue(change));
     }
 
     @Override
     public void setAction(Propertable propertable, Enum label, String action) {
         this.focusedProperty().addListener(e -> updateProperty(propertable, label, this.getText()));
+    }
+
+    private void updateValue(MapChangeListener.Change change) {
+        if (change.getKey().equals(myLabelGroup)) {
+            this.setText((String) change.getValueAdded());
+        }
     }
 
     private void updateProperty(Propertable prop, Enum propLabel, String value) {
