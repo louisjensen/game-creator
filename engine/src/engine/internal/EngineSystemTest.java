@@ -24,7 +24,7 @@ public class EngineSystemTest {
 
 
     @BeforeEach
-    public void setUp() throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public void setUp() {
         initEntities();
         initLevel();
         initEngine();
@@ -47,7 +47,7 @@ public class EngineSystemTest {
         testLevel.addEntity(entityMovableCollidable);
     }
 
-    private void initEngine() throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    private void initEngine() {
         testEngine = new Engine(testLevel);
     }
 
