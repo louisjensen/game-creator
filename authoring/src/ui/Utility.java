@@ -5,10 +5,15 @@ import engine.external.component.HeightComponent;
 import engine.external.component.SpriteComponent;
 import engine.external.component.WidthComponent;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -17,6 +22,7 @@ import ui.panes.ImageWithEntity;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -119,6 +125,18 @@ public class Utility {
         return false;
     }
 
+    public static Scene createGeneralPane(Node header, Node content, List<Node> myNodes){
+        HBox userControls = new HBox();
+        userControls.getChildren().addAll(myNodes);
+        BorderPane borderPane = new BorderPane(content, header, null, userControls, null);
+        borderPane.getStylesheets().add("default.css");
+        borderPane.getStyleClass().add("dialog-window");
+        borderPane.getCenter().getStyleClass().add("center-pane");
+        borderPane.getTop().getStyleClass().add("top-pane");
+        return new Scene(borderPane);
+
+    }
+
     public static Scene createDialogPane(Node header, Node content, List<Button> buttonsList) {
         if (header == null)
             header = new HBox();
@@ -136,7 +154,7 @@ public class Utility {
         return scene;
     }
 
-    private static Node createButtonBar(List<Button> buttonList) {
+    public static Node createButtonBar(List<Button> buttonList) {
         HBox rtn = new HBox();
         rtn.getChildren().addAll(buttonList);
         rtn.getStyleClass().add("buttons-bar");
@@ -159,6 +177,7 @@ public class Utility {
         }
         return labelBox;
     }
+
 
     public static ImageWithEntity createImageWithEntity(AuthoringEntity entity){
         ResourceBundle generalResources = ResourceBundle.getBundle("authoring_general");

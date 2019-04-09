@@ -28,7 +28,6 @@ public class MainGUI extends Application {
         //temp.show();
         /**
          *
-
          UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane();
          DefaultTypesPane entityTypePane = new DefaultTypesPane(userCreatedTypesPane);
          Viewer viewer = new Viewer(200, 500);
