@@ -13,10 +13,23 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class EventFactory {
+    private static final String ACTION_NAME = "actions_display";
+    private static final ResourceBundle ACTION_RESOURCES = ResourceBundle.getBundle(ACTION_NAME);
+
+    public static ComboBox<Button> createActionBox(ArrayList<String> tellAnnaToReplace){
+        Set<String> myActionsSet = ACTION_RESOURCES.keySet();
+        ArrayList<String> myActionsList = new ArrayList<>();
+        for (String s: myActionsSet){
+            myActionsList.add(s.replaceAll(","," "));
+        }
+        Collections.sort(myActionsList);
+        return createComboBox(myActionsList);
+    }
+
+
 
     public static ComboBox<Button> createComboBox(ArrayList<String> choiceBoxOptions){
         ComboBox<Button> myChoices = new ComboBox<>();
@@ -57,4 +70,5 @@ public class EventFactory {
         });
         return textField;
     }
+
 }
