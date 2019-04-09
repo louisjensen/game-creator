@@ -185,12 +185,24 @@ public class Utility {
      */
     public static ImageWithEntity createImageWithEntity(AuthoringEntity entity){
         ResourceBundle generalResources = ResourceBundle.getBundle("authoring_general");
-        ResourceBundle utilityResources = ResourceBundle.getBundle(RESOURCE);
+
         String imageName = entity.getPropertyMap().get(EntityField.IMAGE);
         String imagePath = generalResources.getString("images_filepath");
+        ImageWithEntity imageWithEntity = new ImageWithEntity(makeFileInputStream(imagePath + imageName), entity);
+        return imageWithEntity;
+
+    }
+
+    /**
+     * Attempts to create a file input stream with the given string path
+     * @param path String of the path to the desired fileinputstream file
+     * @return FileInputStream
+     */
+    public static FileInputStream makeFileInputStream(String path){
+        ResourceBundle utilityResources = ResourceBundle.getBundle(RESOURCE);
         try {
-            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(imagePath + imageName), entity);
-            return imageWithEntity;
+            FileInputStream fileInputStream = new FileInputStream(path);
+            return fileInputStream;
         } catch (FileNotFoundException e) {
             System.out.println("File not found in trying to create an image with entity in Utility");
             String[] info = utilityResources.getString("FileException").split(",");
@@ -199,7 +211,6 @@ public class Utility {
             //TODO: get rid of this stack trace. rn it's just in case this happens and we need to know where
             e.printStackTrace();
             return null;
-
         }
     }
 }

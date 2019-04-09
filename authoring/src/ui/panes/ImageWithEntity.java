@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import ui.AuthoringEntity;
 import ui.EntityField;
 import ui.ErrorBox;
+import ui.Utility;
 
 import java.io.FileInputStream;
 import java.lang.reflect.Method;
@@ -16,6 +17,7 @@ import java.util.ResourceBundle;
 public class ImageWithEntity extends ImageView {
     private AuthoringEntity myAuthoringEntity;
     private static final ResourceBundle myResources = ResourceBundle.getBundle("image_with_entity");
+    private static final ResourceBundle myGeneralResources = ResourceBundle.getBundle("authoring_general");
     private FileInputStream myInputStream;
 
     public ImageWithEntity(FileInputStream s, AuthoringEntity authoringEntity) {
@@ -55,29 +57,30 @@ public class ImageWithEntity extends ImageView {
     private void updateWidth(String width){
         Double widthDouble = Double.parseDouble(width);
         Double heightDouble = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.YSCALE));
-        System.out.println("Width: " + widthDouble);
-        System.out.println("Height: " + heightDouble);
-        replaceImage(myInputStream, widthDouble, heightDouble);
         this.setFitWidth(widthDouble);
+        this.setFitHeight(heightDouble);
         System.out.println("updateWidth called");
     }
 
-    private void replaceImage(FileInputStream inputStream, Double width, Double height){
-        System.out.println("Replacing image");
+
+    private void updateImage(String imageName){
+        System.out.println("Update Image called");
+        FileInputStream inputStream = Utility.makeFileInputStream(myGeneralResources.getString("images_filepath" + imageName));
+        Double width = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.XSCALE));
+        Double height = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.YSCALE));
         Image image = new Image(myInputStream, width, height, false, false);
+        this.setFitHeight(height);
+        this.setFitWidth(width);
         myInputStream = inputStream;
         this.setImage(image);
     }
 
     private void updateHeight(String height){
+        System.out.println("Update height called");
         Double heightDouble = Double.parseDouble(height);
         Double widthDouble = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.XSCALE));
-        replaceImage(myInputStream, widthDouble, heightDouble);
-        this.setFitWidth(heightDouble);
-    }
-
-    private void updateImage(String image){
-        System.out.println("updateImage called");
+        this.setFitHeight(heightDouble);
+        this.setFitWidth(widthDouble);
     }
     /**
      * Returns AuthoringEntity associated with this object
