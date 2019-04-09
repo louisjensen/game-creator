@@ -53,6 +53,10 @@
     -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0  );
 }
 
+.combo-box-popup .list-view {
+    -fx-background-color: #606060;
+}
+
 .combo-box .list-cell {
     -fx-text-fill: white;
 }
