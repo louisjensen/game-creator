@@ -40,7 +40,6 @@ public class CreateNewTypeWindow extends Stage {
     private String mySelectedImageName;
     private Entity myUserCreatedEntity;
 
-    private static final Insets INSETS = new Insets(10,10,10,10);
     private static final int STAGE_HEIGHT = 325;
     private static final int STAGE_WIDTH = 400;
     private static final int GRIDPANE_GAP = 10;
