@@ -8,10 +8,7 @@ import engine.external.IEventEngine;
 import engine.external.component.NameComponent;
 import javafx.scene.input.KeyCode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Events are intended for creating/handling custom logic that is specific to a game, and cannot be reasonably anticipated by the engine beforehand
@@ -20,10 +17,12 @@ import java.util.List;
  * @author Feroze Mohideen
  */
 public class Event implements IEventEngine, IEventAuthoring {
+    private final ResourceBundle EVENT_TYPES_RESOURCES = ResourceBundle.getBundle("Events");
     private List<Action> actions = new ArrayList<>();
     private List<Condition> conditions = new ArrayList<>();
     private List<KeyCode> inputs = new ArrayList<>();
     private String myType;
+
 
     /**
      * An Event is created using the name of the type of entity that this event will apply to
@@ -87,8 +86,7 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     public Collection<String> getAllEvents(){
-        //TODO: implement
-        return new ArrayList<>();
+        return EVENT_TYPES_RESOURCES.keySet();
     };
 
     public void removeConditions(List<Condition> conditionsToRemove) { conditions.removeAll(conditionsToRemove);}

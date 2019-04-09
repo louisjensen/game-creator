@@ -50,7 +50,10 @@ public interface IEventAuthoring {
 
     void addConditions(Condition condition);
 
-
+    /**
+     * Returns the set of all available events
+     * @return set of all available events
+     */
     Collection<String> getAllEvents();
     /**
      * Removes a set of conditions from the list of conditions associated with this event.
