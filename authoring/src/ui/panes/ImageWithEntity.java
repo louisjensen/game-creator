@@ -34,6 +34,7 @@ public class ImageWithEntity extends ImageView {
             String methodName = myResources.getString(change.getKey().toString());
             try {
                 Method method = this.getClass().getDeclaredMethod(methodName, String.class);
+                System.out.println("Value Added: " + change.getValueAdded());
                 method.invoke(this, change.getValueAdded());
             } catch (Exception e) {
                 //TODO: get rid of the stack trace once confirmed working
@@ -65,14 +66,14 @@ public class ImageWithEntity extends ImageView {
 
     private void updateImage(String imageName){
         System.out.println("Update Image called");
-        FileInputStream inputStream = Utility.makeFileInputStream(myGeneralResources.getString("images_filepath" + imageName));
+        FileInputStream inputStream = Utility.makeFileInputStream(myGeneralResources.getString("images_filepath") + imageName);
         Double width = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.XSCALE));
         Double height = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.YSCALE));
-        Image image = new Image(myInputStream, width, height, false, false);
+        Image image = new Image(inputStream, width, height, false, false);
+        this.setImage(image);
         this.setFitHeight(height);
         this.setFitWidth(width);
         myInputStream = inputStream;
-        this.setImage(image);
     }
 
     private void updateHeight(String height){
