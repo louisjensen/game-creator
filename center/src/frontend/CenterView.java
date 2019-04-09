@@ -20,6 +20,7 @@ public class CenterView extends Application {
     public void start (Stage myStage) throws Exception {
         CenterView view = new CenterView();
         myStage.setScene(view.getScene());
+        myStage.setResizable(false);
         myStage.show();
     }
 
