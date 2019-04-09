@@ -108,7 +108,12 @@ public class GameCard {
     }
 
     private void addImage(BorderPane contentPane) throws FileNotFoundException {
-        ImageView noGameFound = new ImageView(new Image(new FileInputStream(myGame.getImageLocation())));
+        ImageView noGameFound;
+        try {
+            noGameFound = new ImageView(new Image(new FileInputStream(myGame.getImageLocation())));
+        } catch (Exception e) {
+            noGameFound = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
+        }
         noGameFound.setPreserveRatio(true);
         noGameFound.setFitWidth(GAME_IMAGE_SIZE);
         BorderPane imagePane = new BorderPane();

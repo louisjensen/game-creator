@@ -29,8 +29,8 @@ public class SerializationTester {
         Entity myMario = new Entity();
         dm.createGameFolder("RyanGame");
         dm.saveGameData("RyanGame", myMario);
-        Entity mySecondMario = (Entity)dm.loadGameData("RyanGame");
-        mySecondMario.printMyComponents();
+        //Entity mySecondMario = (Entity)dm.loadGameData("RyanGame");
+        //mySecondMario.printMyComponents();
     }
 
     public void testObjectReferences(){
