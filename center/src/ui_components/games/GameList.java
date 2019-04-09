@@ -1,10 +1,12 @@
 package ui_components.games;
 
+import data.external.DataManager;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import runner.external.GameCenterData;
 
 import java.util.ArrayList;
 
@@ -18,6 +20,8 @@ public class GameList {
 
     public GameList(int numGames) {
         initializeDisplay(numGames);
+        DataManager manager = new DataManager();
+        //GameCenterData data = (GameCenterData) manager.loadGameInfo();
     }
 
     public Pane getDisplay() {
