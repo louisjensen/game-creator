@@ -30,7 +30,6 @@ public class EventManager extends Stage {
 
     private TestEntity myEntity;
     private Scene myDefaultScene;
-    private ChoiceBox<String> box = new ChoiceBox<>(FXCollections.observableArrayList("Asparagus"));
 
     public EventManager(Propertable prop) { // Loads common Events for object instance based on type label
         myEntity = (TestEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
@@ -55,8 +54,7 @@ public class EventManager extends Stage {
         description.put("label", new ArrayList<>(Collections.singletonList("Manage " + myEntity.getPropertyMap().get("Label") + " Events")));
         description.put("sub-label", new ArrayList<>(Collections.singletonList("Add or Remove Events for " + myEntity.getPropertyMap().get("Label"))));
 
-
-        ComboBox<String> myAddEventBox = new ComboBox<>(FXCollections.observableArrayList(EventType.COLLISION.getAllDisplayNames()));
+        ComboBox<String> myAddEventBox = new ComboBox<>(FXCollections.observableArrayList(EventType.allDisplayNames));
         myAddEventBox.setValue("Add Event...");
         myAddEventBox.getStylesheets().add("default.css");
         addEvent(myAddEventBox);
@@ -76,7 +74,7 @@ public class EventManager extends Stage {
     }
 
     private void openEventOptions(String eventName){
-        this.setScene(new EventPane(eventName));
+        new EventPane(eventName);
     }
 
 
