@@ -36,10 +36,11 @@ public abstract class VoogaSystem {
     private Collection<KeyCode> myInputs;
     protected Engine myEngine;
 
+
     public VoogaSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
+        myInputs = new ArrayList<>();
         myRequiredComponents = requiredComponents;
         myEngine = engine;
-        myInputs = new ArrayList<>();
     }
 
     public void update(Collection<Entity> entities, Collection<KeyCode> inputs) {

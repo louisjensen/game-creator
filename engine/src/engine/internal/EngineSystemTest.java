@@ -44,7 +44,7 @@ public class EngineSystemTest {
     private void initLevel(){
         testLevel = new Level();
         testLevel.addEntity(entityImageView);
-        testLevel.addEntity(entityImageView);
+        testLevel.addEntity(entityMovableCollidable);
     }
 
     private void initEngine() throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {

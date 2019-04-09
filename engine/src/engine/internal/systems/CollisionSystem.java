@@ -11,10 +11,8 @@ import java.util.HashSet;
 
 public class CollisionSystem extends VoogaSystem {
 
-
     public CollisionSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         super(requiredComponents, engine);
-
     }
 
     @Override

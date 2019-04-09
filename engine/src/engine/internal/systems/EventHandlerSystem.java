@@ -19,7 +19,6 @@ public class EventHandlerSystem extends VoogaSystem {
     Collection<IEventEngine> myEvents;
 
     public EventHandlerSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine, Collection<IEventEngine> events) {
-
         super(requiredComponents, engine);
         myEvents = events;
     }

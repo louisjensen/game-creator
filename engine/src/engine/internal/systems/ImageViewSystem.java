@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import java.util.Collection;
 
 public class ImageViewSystem extends VoogaSystem {
+
     public ImageViewSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine){
         super(requiredComponents, engine);
     }
