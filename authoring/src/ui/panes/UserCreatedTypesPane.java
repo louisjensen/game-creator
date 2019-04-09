@@ -28,18 +28,17 @@ public class UserCreatedTypesPane extends VBox {
     private ResourceBundle myResources;
     private ObjectManager myObjectManager;
     private DefaultTypesFactory myDefaultTypesFactory;
-    private DataFormat myDataFormat;
+    private AuthoringEntity myDraggedAuthoringEntity;
     private static final String RESOURCE = "default_entity_type";
     private static final String ASSET_IMAGE_FOLDER_PATH = "authoring/Assets/Images";
 
+
     /**
-     *
-     * @param dataFormat This must be the same dataformat passed into the Viewer
-     *                   this allows these two panes to pass an entity
+     * Creates a pane that displayes the user created types
+     * @param objectManager
      */
-    public UserCreatedTypesPane(DataFormat dataFormat, ObjectManager objectManager){
+    public UserCreatedTypesPane(ObjectManager objectManager){
         myResources = ResourceBundle.getBundle(RESOURCE);
-        myDataFormat = dataFormat;
         myObjectManager = objectManager;
         String title = myResources.getString("UserCreatedTitle");
         myEntityMenu = new EntityMenu(title);
@@ -48,6 +47,13 @@ public class UserCreatedTypesPane extends VBox {
         this.getChildren().add(myEntityMenu);
     }
 
+    /**
+     * Used by Viewer to get the dragged AuthoringEntity
+     * @return Authoring Entity
+     */
+    public AuthoringEntity getDraggedAuthoringEntity(){
+        return myDraggedAuthoringEntity;
+    }
     private void populateCategories() {
         for(String s : myDefaultTypesFactory.getCategories()){
             myEntityMenu.addDropDown(s);
@@ -70,13 +76,14 @@ public class UserCreatedTypesPane extends VBox {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     System.out.println("Drag detected");
+                    AuthoringEntity copiedAuthoringEntity = new AuthoringEntity(originalAuthoringEntity);
+                    myDraggedAuthoringEntity = copiedAuthoringEntity;
                     Dragboard db = imageWithEntity.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent content = new ClipboardContent();
-                    //content.putImage(imageWithEntity);
-                    content.put(myDataFormat, imageWithEntity.getAuthoringEntity());
+                    content.putImage(imageWithEntity.getImage());
                     db.setContent(content);
+                    System.out.println(imageWithEntity.getAuthoringEntity().getBackingEntity().getComponent(SpriteComponent.class).getValue());
                     db.setDragView(imageWithEntity.getImage(), 0, 0);
-
                 }
             });
         } catch (FileNotFoundException e) {

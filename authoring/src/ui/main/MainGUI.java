@@ -1,6 +1,5 @@
-package ui.panes;
+package ui.main;
 
-import engine.external.Entity;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
@@ -15,8 +14,12 @@ import ui.UIException;
 import ui.manager.GroupManager;
 import ui.manager.LabelManager;
 import ui.manager.ObjectManager;
+import ui.panes.DefaultTypesPane;
+import ui.panes.PropertiesPane;
+import ui.panes.UserCreatedTypesPane;
+import ui.panes.Viewer;
 
-public class AssetManagerTester extends Application {
+public class MainGUI extends Application {
 
     @Override
     public void start(Stage testStage) {
@@ -45,12 +48,13 @@ public class AssetManagerTester extends Application {
 
     private void alternateStart(Stage stage){
         DataFormat dataFormat = new DataFormat("Entity");
-        Viewer viewer = new Viewer(500, 500, dataFormat);
+
+        ObjectManager objectManager = new ObjectManager(new LabelManager());
+        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane(objectManager);
+        userCreatedTypesPane.setMinWidth(200);
+        Viewer viewer = new Viewer(500, 500, userCreatedTypesPane);
         viewer.setMinWidth(400);
         viewer.setMinHeight(300);
-        ObjectManager objectManager = new ObjectManager(new LabelManager());
-        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane(dataFormat, objectManager);
-        userCreatedTypesPane.setMinWidth(200);
         DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane);
         defaultTypesPane.setMinWidth(200);
         LabelManager testLabels = new LabelManager();
