@@ -4,6 +4,7 @@ module launcher {
     requires center;
     requires data;
     requires runner;
+    requires xstream;
     requires javafx.graphics;
     requires javafx.base;
     requires javafx.controls;

@@ -74,12 +74,12 @@ public class EventPane extends Stage {
     private VBox setUpActions(){
         VBox actionsPanel = new VBox();
         ComboBox<Button> myActionsListing = myEventFactory.createBoxFromResources(ACTION_LISTING);
-        myActionsListing.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                displayActionOptions(myActionsListing.getValue().getText());
-            }
-        });
+//        myActionsListing.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent mouseEvent) {
+//                displayActionOptions(myActionsListing.getValue().getText());
+//            }
+//        });
 //        List<Label> simplisticActionsListing = new ArrayList<>();
 //        for (Button b: myActionsListing.getItems()) {
 //            Label currentLabel = new Label(b.getText());

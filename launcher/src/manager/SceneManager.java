@@ -36,6 +36,12 @@ public class SceneManager {
             goToAuthoring(myCenterData);
         }
     };
+    private SwitchToUserOptions switchToGameCenter = new SwitchToUserOptions(){
+        @Override
+        public void switchPage() {
+            goToGameCenter();
+        }
+    };
 
     public void render(Stage myStage){
         makePages();
@@ -57,7 +63,11 @@ public class SceneManager {
         myScene.setRoot(myNewGamePage);
     }
     private void goToAuthoring(GameCenterData myCenter){
-        MainGUI myGUI = new MainGUI(myCenter,new Game());
+        MainGUI myGUI = new MainGUI(new Game(),myCenter);
         myGUI.launch();
+    }
+
+    private void goToGameCenter(){
+
     }
 }

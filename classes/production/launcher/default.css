@@ -137,11 +137,6 @@
     -fx-font-size: 12;
     -fx-font-weight: normal;
 }
-.welcome-label {
-    -fx-font-size: 70;
-    -fx-font-weight: heavy;
-    -fx-text-fill: pink;
-}
 
 .group-manager .top-pane {
     -fx-text-fill: white;
