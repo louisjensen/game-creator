@@ -2,8 +2,6 @@ package ui.panes;
 
 import engine.external.Entity;
 import engine.external.component.NameComponent;
-import engine.external.component.HeightComponent;
-import engine.external.component.WidthComponent;
 import engine.external.component.SpriteComponent;
 import javafx.event.EventHandler;
 import javafx.scene.input.*;
@@ -30,7 +28,7 @@ public class UserCreatedTypesPane extends VBox {
     private ResourceBundle myResources;
     private ObjectManager myObjectManager;
     private DefaultTypesFactory myDefaultTypesFactory;
-    private AuthoringEntity myDraggedAuthoringEntity;
+    private Entity myDraggedEntity;
     private static final String RESOURCE = "default_entity_type";
     private static final String ASSET_IMAGE_FOLDER_PATH = "authoring/Assets/Images";
 
@@ -50,11 +48,11 @@ public class UserCreatedTypesPane extends VBox {
     }
 
     /**
-     * Used by Viewer to get the dragged AuthoringEntity
-     * @return Authoring Entity
+     * Used by Viewer to get the dragged Entity
+     * @return Entity
      */
-    public AuthoringEntity getDraggedAuthoringEntity(){
-        return myDraggedAuthoringEntity;
+    public Entity getDraggedEntity(){
+        return myDraggedEntity;
     }
     private void populateCategories() {
         for(String s : myDefaultTypesFactory.getCategories()){
@@ -62,7 +60,7 @@ public class UserCreatedTypesPane extends VBox {
         }
     }
 
-    public void addUserDefinedType(String category, Entity entity, String ofType, String basedOn){
+    public void addUserDefinedType(String category, Entity entity,String basedOn){
         String label = (String) entity.getComponent(NameComponent.class).getValue();
         String imageName = (String) entity.getComponent(SpriteComponent.class).getValue();
         try {
@@ -72,11 +70,11 @@ public class UserCreatedTypesPane extends VBox {
             List<Pane> paneList = new ArrayList<>();
             paneList.add(subPane);
             myEntityMenu.addToDropDown(category, paneList);
-            imageWithEntity.setOnDragDetected(new EventHandler<MouseEvent>() {
+            subPane.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    AuthoringEntity copiedAuthoringEntity = new AuthoringEntity(originalAuthoringEntity, myDefaultTypesFactory.getDefaultEntity(ofType, basedOn));
-                    myDraggedAuthoringEntity = copiedAuthoringEntity;
+                    myDraggedEntity = myDefaultTypesFactory.getDefaultEntity(category, basedOn);
+                    myDraggedEntity.addComponent(new SpriteComponent(imageName));
                     System.out.println("Width " + imageWithEntity.getFitWidth());
                     Utility.setupDragAndDropImage(imageWithEntity);
                 }
