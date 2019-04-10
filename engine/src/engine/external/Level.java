@@ -15,6 +15,7 @@ public class Level implements Serializable {
     private Level myCheckPoint;
 
     /**
+     * Initialized fields for storing the Events and Entities tied to this game Level
      * No duplicate Entity objects or Event objects allowed in the same Level
      */
     public Level() {

@@ -6,6 +6,10 @@ import engine.external.Engine;
 
 import java.util.Collection;
 
+/**
+ * @author Hsingchih Tang
+ * Updates the PositionComponents for every movable Entity on each game loop based on its position and velocity values
+ */
 public class MovementSystem extends VoogaSystem {
 
     public MovementSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
