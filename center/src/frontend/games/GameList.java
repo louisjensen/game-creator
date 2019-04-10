@@ -43,9 +43,11 @@ public class GameList {
         gameList.setHgap(CARD_H_OFFSET);
         gameList.setPrefWrapLength((GameCard.DISPLAY_WIDTH + CARD_H_OFFSET) * NUM_CARDS_DISPLAYED);
         gameList.setStyle("-fx-background-color: transparent;");
+        int index = 0;
         for(GameCenterData game : myGames) {
-            GameCard c = new GameCard(game);
+            GameCard c = new GameCard(game, index);
             gameList.getChildren().add(c.getDisplay());
+            index++;
         }
         ScrollPane scroller = new ScrollPane();
         scroller.getStylesheets().add("center.css");

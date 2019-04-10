@@ -2,10 +2,6 @@
     -fx-background: transparent;
 }
 
-.scroll-pane .viewport {
-    -fx-background-color: transparent;
-}
-
 .label {
     -fx-font-family: Verdana;
     -fx-font-weight: bold;
@@ -14,9 +10,6 @@
     -fx-text-fill: white;
 }
 
-.root {
-    -fx-background-color: #303030;
-}
 .prop-cell {
     -fx-background-color: transparent;
 }
@@ -199,7 +192,39 @@
     -fx-alignment: center;
 }
 
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.root {
+    -fx-background-color: #27242d;
+}
+
 .rectangle {
     -fx-arc-width: 25;
     -fx-arc-height: 25;
+}
+
+.cardtitle {
+    -fx-font-size: 24;
+}
+
+.cardbody {
+    -fx-font-size: 14;
+}
+
+.rectangle1 {
+    -fx-fill: #aa84dc;
+}
+
+.cardtext1 {
+    -fx-fill: black;
+}
+
+.rectangle2 {
+    -fx-fill: #412472;
+}
+
+.cardtext2 {
+    -fx-fill: white;
 }
