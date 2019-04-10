@@ -1,5 +1,6 @@
 package ui.main;
 
+import data.external.DataManager;
 import factory.GameTranslator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -177,7 +178,12 @@ public class MainGUI {
     private void saveGame() {
         GameTranslator translator = new GameTranslator(myGame, myGameData, myObjectManager);
         Game exportableGame = translator.translate();
-        //TODO Serialize and export
+        GameCenterData gameData = translator.getNewGameData();
+
+        DataManager dm = new DataManager();
+        dm.createGameFolder(gameData.getFolderName());
+        dm.saveGameData(gameData.getFolderName(), exportableGame);
+        dm.saveGameInfo(gameData.getFolderName(), gameData);
     }
 
     private void openGroupManager() {
