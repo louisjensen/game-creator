@@ -123,8 +123,9 @@ public class Viewer extends ScrollPane {
                 }
                 else{
                     Entity entity = myUserCreatedPane.getDraggedEntity();
+                    authoringEntity = myUserCreatedPane.getDraggedAuthoringEntity();
                     String imageName = (String) entity.getComponent(SpriteComponent.class).getValue();
-                    authoringEntity = new AuthoringEntity(entity, myObjectManager);
+                    authoringEntity = new AuthoringEntity(authoringEntity, entity);
                     authoringEntity.getPropertyMap().put(EntityField.IMAGE, imageName);
                     addImage(Utility.createImageWithEntity(authoringEntity));
                 }
