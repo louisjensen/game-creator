@@ -8,21 +8,38 @@ import javafx.scene.input.KeyCode;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+/**
+ * @author Hsingchih Tang
+ * Game Engine class which interacts with Game Runner to maintain an ongoing game. Manages and updates Component values
+ * of all Entities, and invokes pre-defined Events for checking conditions and triggering actions on each game loop.
+ */
 public class Engine {
     private final ResourceBundle SYSTEM_COMPONENTS_RESOURCES = ResourceBundle.getBundle("SystemRequiredComponents");
     private final ResourceBundle SYSTEM_ORDER_RESOURCES = ResourceBundle.getBundle("SystemUpdateOrder");
     private final String SYSTEMS_PACKAGE_PATH = "engine.internal.systems.";
 
+    private HashMap<Integer,VoogaSystem> mySystems;
     protected Collection<Entity> myEntities;
     protected Collection<IEventEngine> myEvents;
-    private HashMap<Integer,VoogaSystem> mySystems;
 
+    /**
+     * An Engine is expected be initialized by a GameRunner and accepts a Level object containing all data (Entities and
+     * Events) defined for a specific game level. Engine retrieves the collection of Entities and Events from Level, and
+     * sets up concrete Systems for handling the Entities and Events in the game process
+     * @param level Level object of the current game to run
+     */
     public Engine(Level level){
         myEntities = level.getEntities();
         myEvents = level.getEvents();
         initSystemMap();
     }
 
+    /**
+     * Call expected to be made by GameRunner. Accepts a Collection of KeyCode inputs received from GameRunner on
+     * the front end, and invokes all Systems one by one to update Entities' status and execute Events
+     * @param inputs collection of user Keycode inputs received on this game loop
+     * @return all game Entities after being updated by Systems in current game loop
+     */
     public Collection<Entity> updateState(Collection<KeyCode> inputs){
         for(int i = 0; i<SYSTEM_ORDER_RESOURCES.keySet().size(); i++){
             mySystems.get(i).update(myEntities,inputs);
@@ -30,8 +47,19 @@ public class Engine {
         return this.getEntities();
     }
 
+    /**
+     * @return an unmodifiable collection of Entities within the currently running game
+     */
     public Collection<Entity> getEntities(){
         return Collections.unmodifiableCollection(myEntities);
+    }
+
+    /**
+     * Expected to be called by CleanupSystem for permanently removing an Entity from the running game
+     * @param e Entity to be removed
+     */
+    public void removeEntity(Entity e){
+        myEntities.remove(e);
     }
 
     private void initSystemMap() {

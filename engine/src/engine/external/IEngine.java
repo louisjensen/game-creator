@@ -7,4 +7,6 @@ public interface IEngine {
     Collection<Entity> updateState();
 
     Collection<Entity> getEntities();
+
+    Collection<Entity> removeEntity(Entity entity);
 }
