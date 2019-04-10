@@ -25,23 +25,24 @@ import ui.manager.ObjectManager;
 public class GameTranslator {
 
     private Game myGameBasis;
-    private GameCenterData myGameData;
+    private GameCenterData myOldGameData;
+    private GameCenterData myNewGameData;
     private ObjectManager myObjectManager;
 
     public GameTranslator(Game gameBasis, GameCenterData gameData, ObjectManager objectManager) {
         myGameBasis = gameBasis;
-        myGameData = gameData;
+        myOldGameData = gameData;
+        myNewGameData = new GameCenterData();
         myObjectManager = objectManager;
     }
 
     public Game translate() {
         Game translatedGame = new Game(); // Game info!!!
-        GameCenterData gameData = new GameCenterData();
 
-        gameData.setTitle(myGameData.getTitle());
-        gameData.setDescription(myGameData.getDescription());
-        gameData.setImageLocation(myGameData.getImageLocation());
-        gameData.setFolderName(myGameData.getFolderName());
+        myNewGameData.setTitle(myOldGameData.getTitle());
+        myNewGameData.setDescription(myOldGameData.getDescription());
+        myNewGameData.setImageLocation(myOldGameData.getImageLocation());
+        myNewGameData.setFolderName(myOldGameData.getFolderName());
 
         for (AuthoringLevel authLevel : myObjectManager.getLevels()) {
             translatedGame.addLevel(translateLevel(authLevel));
@@ -107,6 +108,10 @@ public class GameTranslator {
                 System.out.println("Error translating components");
             }
         }
+    }
+
+    public GameCenterData getNewGameData() {
+        return myNewGameData;
     }
 
 }
