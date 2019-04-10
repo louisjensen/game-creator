@@ -1,5 +1,6 @@
 package manager;
 
+import center.external.CenterView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import page.CreateNewGamePage;
@@ -42,16 +43,18 @@ public class SceneManager {
             goToGameCenter();
         }
     };
+    private Stage myStage;
 
     public void render(Stage myStage){
         makePages();
+        this.myStage = myStage;
         myScene = new Scene(myInitialPage,STAGE_WIDTH,STAGE_HEIGHT);
         myScene.getStylesheets().add(MY_STYLE);
         myStage.setScene(myScene);
         myStage.show();
     }
     private void makePages(){
-        myWelcomeUserPage = new WelcomeUserPage(switchToNewGamePage);
+        myWelcomeUserPage = new WelcomeUserPage(switchToNewGamePage,switchToGameCenter);
         myInitialPage = new SplashPage(switchToWelcomeUserPage);
         myNewGamePage = new CreateNewGamePage(switchToAuthoring);
     }
@@ -68,6 +71,7 @@ public class SceneManager {
     }
 
     private void goToGameCenter(){
-
+        CenterView myCenter = new CenterView();
+        myStage.setScene(myCenter.getScene());
     }
 }
