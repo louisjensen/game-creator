@@ -6,7 +6,7 @@ import engine.external.component.NameComponent;
 
 import java.util.Collection;
 
-public class CollisionCondition extends Condition<Collection<Entity>> {
+public class CollisionCondition extends Condition {
     public CollisionCondition(Class<? extends Component> directionalCollidedComponent, String entityType) {
         setPredicate(entity ->
                 ((Collection<Entity>)entity.getComponent(directionalCollidedComponent).getValue()).stream().anyMatch(entity2 ->
