@@ -45,6 +45,9 @@ public class GameTranslator {
         Entity newEntity = new Entity();
         Entity backingEntity = authEntity.getBackingEntity();
 
+        // TODO account for new property types later
+
+
 
 
         return newEntity;
