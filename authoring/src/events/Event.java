@@ -21,7 +21,7 @@ public class Event implements IEventEngine, IEventAuthoring {
     private List<Action> actions = new ArrayList<>();
     private List<Condition> conditions = new ArrayList<>();
     private String myType;
-    private Collection<KeyCode> myInputs = new ArrayList<>();
+    private Set<KeyCode> myInputs = new HashSet<>();
 
 
     /**
@@ -109,22 +109,22 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     @Override
-    public void setInputs(List<KeyCode> inputs) {
+    public void setInputs(Set<KeyCode> inputs) {
         myInputs = inputs;
     }
 
     @Override
-    public void addInputs(List<KeyCode> inputsToAdd) {
+    public void addInputs(Set<KeyCode> inputsToAdd) {
         myInputs.addAll(inputsToAdd);
     }
 
     @Override
     public void addInputs(KeyCode inputToAdd) {
-        addInputs(Arrays.asList(inputToAdd));
+        myInputs.add(inputToAdd);
     }
 
     @Override
-    public void removeInputs(List<KeyCode> inputsToRemove) {
+    public void removeInputs(Set<KeyCode> inputsToRemove) {
         myInputs.remove(inputsToRemove);
     }
 

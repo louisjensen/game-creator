@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This is the API that Authoring can refer to when constructing Events
@@ -65,14 +66,14 @@ public interface IEventAuthoring {
 
 
 
-    void setInputs(List<KeyCode> inputs);
+    void setInputs(Set<KeyCode> inputs);
 
     /**
      * Allows you to add a list of INPUTS to the current list of inputs
      * associated with this event. The next method allows you to add a single input.
      * @param
      */
-    void addInputs(List<KeyCode> inputsToAdd);
+    void addInputs(Set<KeyCode> inputsToAdd);
 
     void addInputs(KeyCode inputToAdd);
 
@@ -80,7 +81,7 @@ public interface IEventAuthoring {
      * Removes a set of required inputs from the list  associated with this event.
      * @param inputsToRemove
      */
-    void removeInputs(List<KeyCode> inputsToRemove);
+    void removeInputs(Set<KeyCode> inputsToRemove);
 
 
 }
