@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import runner.external.GameCenterData;
 import frontend.Utilities;
+import runner.external.GameRunner;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -89,7 +90,8 @@ public class GameCard {
     }
 
     private void handleButton(String folderName) {
-        // todo: launch player here
+        System.out.println("running");
+        GameRunner gameRunner = new GameRunner(folderName);
     }
 
     private void addImageAndContent(BorderPane foreground) {
