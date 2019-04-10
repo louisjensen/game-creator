@@ -8,7 +8,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import manager.SwitchToAuthoring;
 import manager.SwitchToUserOptions;
+import runner.external.GameCenterData;
 
 import java.io.File;
 
@@ -20,14 +22,14 @@ public class CreateGameDisplay extends VBox {
     private File myFile;
     private InformativeField gameName = new InformativeField(GAME_FIELD);
     private InformativeField gameDescription = new InformativeField(GAME_DESCRIPITON);
-    public CreateGameDisplay(SwitchToUserOptions sceneSwitch){
+    public CreateGameDisplay(SwitchToAuthoring sceneSwitch){
         this.getStyleClass().add("default.css");
         setUpImages(sceneSwitch);
         this.setAlignment(Pos.CENTER);
         this.setSpacing(20);
 
     }
-    private void setUpImages(SwitchToUserOptions sceneSwitch){
+    private void setUpImages(SwitchToAuthoring sceneSwitch){
         LauncherControlDisplay myCreator = new LauncherControlDisplay(FOLDER_KEY);
         myCreator.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -43,9 +45,8 @@ public class CreateGameDisplay extends VBox {
             public void handle(MouseEvent mouseEvent) {
                 DataManager dm = new DataManager();
                 dm.createGameFolder("GameOne");
-
-
-                sceneSwitch.switchPage();
+                GameCenterData myDataCenter = new GameCenterData(gameName.getTextEntered(), gameDescription.getTextEntered(), "GameOne", myFile.toURI().toString());
+                sceneSwitch.switchScene(myDataCenter);
             }
         });
 

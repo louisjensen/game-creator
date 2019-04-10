@@ -5,6 +5,8 @@ import javafx.stage.Stage;
 import page.CreateNewGamePage;
 import page.SplashPage;
 import page.WelcomeUserPage;
+import runner.external.Game;
+import runner.external.GameCenterData;
 import ui.main.MainGUI;
 
 public class SceneManager {
@@ -28,12 +30,13 @@ public class SceneManager {
             goToUserOptions();
         }
     };
-    private SwitchToUserOptions switchToAuthoring = new SwitchToUserOptions() {
+    private SwitchToAuthoring switchToAuthoring = new SwitchToAuthoring() {
         @Override
-        public void switchPage() {
-            goToAuthoring();
+        public void switchScene(GameCenterData myCenterData) {
+            goToAuthoring(myCenterData);
         }
     };
+
     public void render(Stage myStage){
         makePages();
         myScene = new Scene(myInitialPage,STAGE_WIDTH,STAGE_HEIGHT);
@@ -53,8 +56,8 @@ public class SceneManager {
     private void goToUserOptions(){
         myScene.setRoot(myNewGamePage);
     }
-    private void goToAuthoring(){
-        MainGUI myGUI = new MainGUI();
+    private void goToAuthoring(GameCenterData myCenter){
+        MainGUI myGUI = new MainGUI(myCenter,new Game());
         myGUI.launch();
     }
 }
