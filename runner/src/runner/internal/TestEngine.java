@@ -2,39 +2,75 @@ package runner.internal;
 
 import engine.external.Entity;
 import engine.external.Level;
+import engine.external.component.*;
 import javafx.geometry.Point3D;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
-import engine.external.component.XPositionComponent;
-import engine.external.component.YPositionComponent;
-import engine.external.component.ZPositionComponent;
-
+import java.security.Key;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 public class TestEngine {
     private Collection<Entity> myEntities;
+    private int x = 1;
 
     public TestEngine(Level level){
         myEntities = level.getEntities();
+        addImageViews(myEntities);
+    }
+
+    private void addImageViews(Collection<Entity> entities) {
+        for(Entity e : entities){
+            SpriteComponent spriteComponent = (SpriteComponent) e.getComponent(SpriteComponent.class);
+            String sprite = spriteComponent.getValue();
+            WidthComponent widthComponent = (WidthComponent) e.getComponent(WidthComponent.class);
+            Double width = (Double) widthComponent.getValue();
+            HeightComponent heightComponent = (HeightComponent) e.getComponent(HeightComponent.class);
+            Double height = (Double) heightComponent.getValue();
+            XPositionComponent xPositionComponent = (XPositionComponent) e.getComponent(XPositionComponent.class);
+            Double xPosition = (Double) xPositionComponent.getValue();
+            YPositionComponent yPositionComponent = (YPositionComponent) e.getComponent(YPositionComponent.class);
+            Double yPosition = (Double) yPositionComponent.getValue();
+
+            ImageView image = new ImageView(sprite);
+
+            image.setFitWidth(width);
+            image.setFitHeight(height);
+            image.setSmooth(false);
+            image.setLayoutY(yPosition);
+            image.setLayoutX(xPosition);
+
+            e.addComponent(new ImageViewComponent(image));
+        }
     }
 
     public Collection<Entity> updateState(Collection<KeyCode> keys){
+//        if(keys.contains(KeyCode.SPACE)){
+//            x*=-1;
+//        }
         moveStuffRight();
         return myEntities;
     }
+
+
 
     private void moveStuffRight(){
         for(Entity entity : myEntities){
             XPositionComponent xPositionComponent = (XPositionComponent) entity.getComponent(XPositionComponent.class);
             Double xPosition = (Double) xPositionComponent.getValue();
-            YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
-            Double yPosition = (Double) yPositionComponent.getValue();
-            ZPositionComponent zPositionComponent = (ZPositionComponent) entity.getComponent(ZPositionComponent.class);
-            Double zPosition = (Double) zPositionComponent.getValue();
+//            YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
+//            Double yPosition = (Double) yPositionComponent.getValue();
+//            ZPositionComponent zPositionComponent = (ZPositionComponent) entity.getComponent(ZPositionComponent.class);
+//            Double zPosition = (Double) zPositionComponent.getValue();
 
             xPositionComponent.setValue(xPosition+1);
+
+            ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
+            ImageView image = (ImageView) imageViewComponent.getValue();
+            image.setLayoutX(image.getX()+1);
 
 
         }
