@@ -124,10 +124,12 @@ public class CreateNewTypeWindow extends Stage {
     private void openAssetManager(){
         AssetManager assetManager = new AssetManager();
         assetManager.showAndWait();
-        ImageView imageView = assetManager.getImageView();
-        mySelectedImagePane.getChildren().clear();
-        mySelectedImagePane.getChildren().add(imageView);
-        mySelectedImageName = assetManager.getImageName();
+        if(assetManager.getImageView() != null){
+            ImageView imageView = assetManager.getImageView();
+            mySelectedImagePane.getChildren().clear();
+            mySelectedImagePane.getChildren().add(imageView);
+            mySelectedImageName = assetManager.getImageName();
+        }
     }
 
     private void createButtonPane() {
