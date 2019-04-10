@@ -1,5 +1,7 @@
 package ui.panes;
 
+import engine.external.Entity;
+import engine.external.component.SpriteComponent;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.MapChangeListener;
 import javafx.event.EventHandler;
@@ -12,6 +14,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
 import ui.*;
+import ui.manager.ObjectManager;
 
 import java.io.FileInputStream;
 import java.util.ResourceBundle;
@@ -23,6 +26,7 @@ public class Viewer extends ScrollPane {
     private Double myRoomHeight;
     private Double myRoomWidth;
     private boolean isDragOnView;
+    private ObjectManager myObjectManager;
     private ObjectProperty<Propertable> myAuthoringLevel;
     private AuthoringEntity myDraggedAuthoringEntity;
     private ObjectProperty<Propertable>  mySelectedEntity;
@@ -39,10 +43,11 @@ public class Viewer extends ScrollPane {
      * @param userCreatedTypesPane
      * @param objectProperty
      */
-    public Viewer(ObjectProperty<Propertable> authoringLevel, UserCreatedTypesPane userCreatedTypesPane, ObjectProperty objectProperty){
+    public Viewer(ObjectProperty<Propertable> authoringLevel, UserCreatedTypesPane userCreatedTypesPane, ObjectProperty objectProperty, ObjectManager objectManager){
         myStackPane = new StackPane();
         myLinesPane = new Pane();
         myBackgroundFileName = null;
+        myObjectManager = objectManager;
         myStackPane.getChildren().add(myLinesPane);
         myUserCreatedPane = userCreatedTypesPane;
         mySelectedEntity = objectProperty;
@@ -117,7 +122,10 @@ public class Viewer extends ScrollPane {
                     isDragOnView = false;
                 }
                 else{
-                    authoringEntity = myUserCreatedPane.getDraggedAuthoringEntity();
+                    Entity entity = myUserCreatedPane.getDraggedEntity();
+                    String imageName = (String) entity.getComponent(SpriteComponent.class).getValue();
+                    authoringEntity = new AuthoringEntity(entity, myObjectManager);
+                    authoringEntity.getPropertyMap().put(EntityField.IMAGE, imageName);
                     addImage(Utility.createImageWithEntity(authoringEntity));
                 }
                 authoringEntity.getPropertyMap().put(EntityField.X, "" + snapToGrid(dragEvent.getX()));
