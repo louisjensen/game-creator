@@ -14,14 +14,12 @@ import java.util.List;
 public class AuthoringLevel implements Propertable {
 
     private ObservableMap<Enum, String> myPropertyMap;
-    private ObjectManager myObjectManager;
     private List<AuthoringEntity> myEntities;
 
     private static final List<? extends Enum> PROP_VAR_NAMES = Arrays.asList(LevelField.values());
     private static final Integer DEFAULT_ROOM_SIZE = 1200;
 
-    public AuthoringLevel(String label, ObjectManager manager) {
-        myObjectManager = manager;
+    public AuthoringLevel(String label) {
         myEntities = new ArrayList<>();
         myPropertyMap = FXCollections.observableHashMap();
         for (Enum name : PROP_VAR_NAMES)

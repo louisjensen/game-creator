@@ -1,12 +1,14 @@
 package ui.manager;
 
 import events.Event;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import ui.AuthoringEntity;
 import ui.AuthoringLevel;
 import ui.EntityField;
+import ui.Propertable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,16 +26,19 @@ public class ObjectManager {
     private Map<String, ObservableList<Event>> myEventMap;
     private LabelManager myLabelManager;
     private ObservableList<AuthoringLevel> myLevels;
+    private ObjectProperty<Propertable> myCurrentLevel;
 
     /**
      * Class that keeps track of every single instance of an Entity, across Levels, for the purposes of authoring environment
+     * @author Harry Ross
      */
-    public ObjectManager() {
+    public ObjectManager(ObjectProperty<Propertable> levelProperty) {
         myEntities = new HashSet<>();
         myLabelManager = new LabelManager();
         myEventMap = new HashMap<>();
         myLevels = FXCollections.observableArrayList(new ArrayList<>());
         myLabelManager.getLabels(EntityField.GROUP).addListener((ListChangeListener<? super String>) change -> groupRemoveAction(change));
+        myCurrentLevel = levelProperty;
     }
 
     public void addLevel(AuthoringLevel level) {
@@ -57,11 +62,10 @@ public class ObjectManager {
     /**
      * Use this for instances that are added to a specific level
      * @param entity
-     * @param level
      */
-    public void addEntityInstance(AuthoringEntity entity, AuthoringLevel level) {
+    public void addEntityInstance(AuthoringEntity entity) {
         myEntities.add(entity);
-        level.addEntity(entity);
+        ((AuthoringLevel) myCurrentLevel.getValue()).addEntity(entity);
     }
 
     //TODO remove entity??

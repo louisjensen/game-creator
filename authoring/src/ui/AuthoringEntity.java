@@ -62,7 +62,7 @@ public class AuthoringEntity implements Propertable {
         myObjectManager.addEntityType(this);
     }
 
-    public AuthoringEntity(AuthoringEntity copyBasis, Entity backingEntity, AuthoringLevel level) { // Create new AuthoringEntity instance from pre-existing type
+    public AuthoringEntity(AuthoringEntity copyBasis, Entity backingEntity) { // Create new AuthoringEntity instance from pre-existing type
         this();
         myObjectManager = copyBasis.myObjectManager;
         myPropertyMap.put(EntityField.LABEL, copyBasis.myPropertyMap.get(EntityField.LABEL));
@@ -74,7 +74,7 @@ public class AuthoringEntity implements Propertable {
         myPropertyMap.put(EntityField.YSCALE, copyBasis.myPropertyMap.get(EntityField.YSCALE));
         myBackingEntity = backingEntity;
         addPropertyListeners();
-        myObjectManager.addEntityInstance(this, level);
+        myObjectManager.addEntityInstance(this);
     }
 
     private void addPropertyListeners() {
