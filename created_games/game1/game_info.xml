@@ -2,4 +2,5 @@
     <myTitle>Game 1</myTitle>
     <myDescription>This is a test game!</myDescription>
     <myImageLocation></myImageLocation>
+    <myFolderName>game1</myFolderName>
 </runner.external.GameCenterData>
