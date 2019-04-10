@@ -74,7 +74,7 @@ public class UserCreatedTypesPane extends VBox {
             AuthoringEntity originalAuthoringEntity = new AuthoringEntity(entity, myObjectManager);
             originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
             ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), originalAuthoringEntity);
-            UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, entity);
+            UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, originalAuthoringEntity);
             List<Pane> paneList = new ArrayList<>();
             paneList.add(subPane);
             myEntityMenu.addToDropDown(category, paneList);
