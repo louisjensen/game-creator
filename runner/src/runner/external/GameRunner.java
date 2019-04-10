@@ -49,7 +49,7 @@ public class GameRunner {
 
 
 
-    public GameRunner(String game) {
+    public GameRunner(String game) throws FileNotFoundException{
        /* Actual way to get game object
         GameRunner will have parameter String name, not Game game
         code below */
@@ -59,14 +59,10 @@ public class GameRunner {
         Game gameMade = dm2.getGame(game);
 
         DataManager dm = new DataManager();
-        try {
-            Game gameLoaded = (Game) dm.loadGameData(game);
-        } catch (FileNotFoundException e){
-            System.out.println("File not found");
-        }
 
-        myGame = gameMade;
-        //myGame = gameLoaded;
+        myGame = (Game) dm.loadGameData(game);
+
+
 
         myCurrentKeys = new HashSet<KeyCode>();
         myLevels = myGame.getLevels();
@@ -199,6 +195,7 @@ public class GameRunner {
 //            System.out.println("end");
 //            myGroup.getChildren().add((Node) myEntitiesAndNodes.get(entity));
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
+            System.out.println(imageViewComponent);
             ImageView image = (ImageView) imageViewComponent.getValue();
 
             myGroup.getChildren().add(image);

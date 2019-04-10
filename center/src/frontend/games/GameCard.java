@@ -91,7 +91,12 @@ public class GameCard {
 
     private void handleButton(String folderName) {
         System.out.println("running");
-        GameRunner gameRunner = new GameRunner(folderName);
+        try {
+            GameRunner gameRunner = new GameRunner(folderName);
+        } catch (FileNotFoundException e) {
+            System.out.println("in center");
+            // todo: print error message
+        }
     }
 
     private void addImageAndContent(BorderPane foreground) {
