@@ -49,18 +49,18 @@ public class GameRunner {
 
 
 
-    public GameRunner(String gameS) {
+    public GameRunner(String game) {
        /* Actual way to get game object
         GameRunner will have parameter String name, not Game game
         code below */
 
         DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
         dm2.serializeObject();
-        Game gameMade = dm2.getGame(gameS);
+        Game gameMade = dm2.getGame(game);
 
         DataManager dm = new DataManager();
         try {
-            Game gameLoaded = (Game) dm.loadGameData(gameS);
+            Game gameLoaded = (Game) dm.loadGameData(game);
         } catch (FileNotFoundException e){
             System.out.println("File not found");
         }
@@ -84,7 +84,6 @@ public class GameRunner {
         showEntities();
 
         myStage.setScene(myScene);
-        myEngine = new TestEngine(myLevels.get(0));
 
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         myAnimation = new Timeline();
