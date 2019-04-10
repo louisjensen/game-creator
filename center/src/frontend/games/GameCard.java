@@ -1,15 +1,12 @@
 package frontend.games;
 
-import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import runner.external.GameCenterData;
 import frontend.Utilities;
 import runner.external.GameRunner;
@@ -21,11 +18,8 @@ import java.util.ResourceBundle;
 public class GameCard {
     private static final int GAME_IMAGE_SIZE = 200;
     private static final int BUTTON_WIDTH = 100;
-    private static final int HORIZONTAL_BUTTON_SPACING = 15;
-    private static final int SUBTITLE_FONT_SIZE = 24;
     private static final int WRAP_OFFSET = 25;
 
-    private Pane myDisplay;
     public static final double DISPLAY_WIDTH = 300;
     public static final double DISPLAY_HEIGHT = 300;
     private static final String DEFAULT_IMAGE_LOCATION = "center/data/game_information/images/default_game.png";
@@ -34,9 +28,11 @@ public class GameCard {
     private static final String TEXT_SELECTOR = "cardtext";
     private static final String TITLE_SELECTOR = "cardtitle";
     private static final String BODY_SELECTOR = "cardbody";
+    private static final String BUTTONS_SELECTOR = "buttons";
     private int myIndex;
     private ResourceBundle myLanguageBundle;
     private GameCenterData myGame;
+    private Pane myDisplay;
 
     public GameCard(GameCenterData game, int index) {
         myGame = game;
@@ -76,6 +72,7 @@ public class GameCard {
 
     private void addForeGround(Pane pane) {
         BorderPane foreground = new BorderPane();
+        foreground.setPadding(new Insets(0, 0, 20, 0));
         addTitleContent(foreground);
         addImageAndContent(foreground);
         addButtons(foreground);
@@ -89,21 +86,16 @@ public class GameCard {
         play.setPrefWidth(BUTTON_WIDTH);
         play.setOnAction(e -> handleButton(myGame.getFolderName()));
         HBox buttons = new HBox(readMore, play);
-        buttons.setSpacing(HORIZONTAL_BUTTON_SPACING);
-        buttons.setAlignment(Pos.CENTER);
-        Text spacing = new Text("");
-        BorderPane buttonPane= new BorderPane();
+        buttons.getStyleClass().add(BUTTONS_SELECTOR);
+        BorderPane buttonPane = new BorderPane();
         buttonPane.setCenter(buttons);
-        buttonPane.setBottom(spacing);
         foreground.setBottom(buttonPane);
     }
 
     private void handleButton(String folderName) {
-        System.out.println("running");
         try {
             GameRunner gameRunner = new GameRunner(folderName);
         } catch (FileNotFoundException e) {
-            System.out.println("in center");
             // todo: print error message
         }
     }
@@ -120,8 +112,8 @@ public class GameCard {
         imageDescription.getStyleClass().add(BODY_SELECTOR);
         imageDescription.getStyleClass().add(TEXT_SELECTOR + myIndex);
         imageDescription.setWrappingWidth(DISPLAY_WIDTH - WRAP_OFFSET);
-        imageDescription.setTextAlignment(TextAlignment.CENTER);
         contentPane.setCenter(imageDescription);
+        contentPane.setPadding(new Insets(7));
         foreground.setCenter(contentPane);
     }
 
