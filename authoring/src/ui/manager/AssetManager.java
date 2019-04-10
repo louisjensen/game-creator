@@ -12,10 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ui.EntityField;
-import ui.ErrorBox;
-import ui.Propertable;
-import ui.Utility;
+import ui.*;
 import ui.panes.AssetImageSubPane;
 
 import javax.imageio.ImageIO;
@@ -68,7 +65,9 @@ public class AssetManager extends Stage {
      * a new type before the entity actually needs to be made and kept track of
      */
     public AssetManager(){
+        myProp = null;
         mySelectedImageName = "";
+        mySelectedImageView = null;
         initializeVariables();
         initializeStage();
         fillImageExtensionSet();
@@ -79,9 +78,7 @@ public class AssetManager extends Stage {
 
     public AssetManager(Propertable prop) {
         this();
-        //TODO: integrate in entity
         myProp = prop;
-
     }
 
 
@@ -202,21 +199,27 @@ public class AssetManager extends Stage {
             chooser.getExtensionFilters().add(extFilter);
         }
         File selectedFile = chooser.showOpenDialog(stage);
-        try {
-            BufferedImage image = ImageIO.read(selectedFile);
-            File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
-            File otherSaveToFile = new File("Images/" + selectedFile.getName());
-            String[] split = selectedFile.getPath().split("\\.");
-            String extension = split[split.length-1];
-            ImageIO.write(image, extension, saveToFile);
-            ImageIO.write(image, extension, otherSaveToFile);
-            drawImageScrollPane();
-        } catch (IOException e) {
-            //TODO: Test that this works
-            String[] text = myResources.getString(IO_ERROR).split(",");
-            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
-            errorBox.display();
+        if(selectedFile != null){
+            try {
+                BufferedImage image = ImageIO.read(selectedFile);
+                File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
+                File otherSaveToFile = new File("Images/" + selectedFile.getName());
+                String[] split = selectedFile.getPath().split("\\.");
+                String extension = split[split.length-1];
+                ImageIO.write(image, extension, saveToFile);
+                ImageIO.write(image, extension, otherSaveToFile);
+                drawImageScrollPane();
+            } catch (IOException e) {
+                //TODO: Test that this works
+                String[] text = myResources.getString(IO_ERROR).split(",");
+                ErrorBox errorBox = new ErrorBox(text[0], text[1]);
+                errorBox.display();
+            }
         }
+        else{
+            mySelectedImageView = null;
+        }
+
     }
 
     private void createAndDisplayAlert(String contentText) {
@@ -228,7 +231,19 @@ public class AssetManager extends Stage {
     }
 
     private void handleClose(){
+        mySelectedImageView = null;
+        this.close();
+    }
+
+    private void handleApply(){
+        //TODO: add method to set Entity's image
         if(!mySelectedImageName.equals("")){
+            if(myProp != null && myProp.getPropertyMap().containsKey(EntityField.IMAGE)){
+                myProp.getPropertyMap().put(EntityField.IMAGE, mySelectedImageName);
+            }
+            else if(myProp != null && myProp.getPropertyMap().containsKey(LevelField.BACKGROUND)){
+                myProp.getPropertyMap().put(LevelField.BACKGROUND, mySelectedImageName);
+            }
             this.close();
         }
         else{
@@ -236,10 +251,6 @@ public class AssetManager extends Stage {
             ErrorBox errorBox = new ErrorBox(text[0], text[1]);
             errorBox.display();
         }
-    }
-
-    private void handleApply(){
-        //TODO: add method to set Entity's image
     }
 
     /**

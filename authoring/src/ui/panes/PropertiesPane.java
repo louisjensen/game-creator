@@ -51,12 +51,16 @@ public class PropertiesPane extends TitledPane {
         });
     }
 
-    private ScrollPane createPropertiesGrid() throws UIException {
+    private Node createPropertiesGrid() throws UIException {
         Platform.runLater(this::requestFocus);
         GridPane gridlist = new GridPane();
         gridlist.getStyleClass().add("prop-grid");
         ScrollPane scrollpane = new ScrollPane(gridlist);
-        extractNewProperties(gridlist);
+        if (myProp.getValue() != null)
+            extractNewProperties(gridlist);
+        else {
+            return new Label("Create an Object Type to Start");
+        }
         return scrollpane;
     }
 
@@ -88,7 +92,7 @@ public class PropertiesPane extends TitledPane {
             ControlProperty instance = (sep[1].equals("none")) ?
                     (ControlProperty) constructor.newInstance() : (ControlProperty) constructor.newInstance(sep[1]);
             newProp.getChildren().addAll(propName, (Node) instance);
-            instance.populateValue(Enum.valueOf(enumClass, name.toUpperCase()),
+            instance.populateValue(myProp.getValue(), Enum.valueOf(enumClass, name.toUpperCase()),
                     myProp.getValue().getPropertyMap().get(Enum.valueOf(enumClass, name.toUpperCase())), myLabelManager);
             instance.setAction(myProp.getValue(), Enum.valueOf(enumClass, name.toUpperCase()), sep[2]);
         } catch (Exception e) {

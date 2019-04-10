@@ -53,6 +53,10 @@
     -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0  );
 }
 
+.combo-box-popup .list-view {
+    -fx-background-color: #606060;
+}
+
 .combo-box .list-cell {
     -fx-text-fill: white;
 }
@@ -71,7 +75,7 @@
 
 .titled-pane .title {
     -fx-background-color: #505050;
-    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 5 );
+    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0 );
 }
 
 .scroll-bar {
@@ -116,6 +120,15 @@
 }
 
 .menu:hover {
+    -fx-background-color: #505050;
+}
+
+.context-menu {
+    -fx-background-color: #303030;
+    -fx-text-fill: white;
+}
+
+.menu-item:hover, .menu-item:focused {
     -fx-background-color: #505050;
 }
 
@@ -195,17 +208,32 @@
 
 .entity-pane-box {
     -fx-spacing: 5;
-    -fx-padding: 0 0 0 5;
+    -fx-padding: 0 0 10 5;
 }
 
 .prop-pane {
-    -fx-min-width: 350;
+    -fx-min-width: 200;
     -fx-pref-height: 200;
     -fx-max-height: 200;
+    -fx-alignment: center;
+}
+
+.prop-pane .label {
+    -fx-font-weight: normal;
+    -fx-font-size: 14;
+    -fx-text-fill: #aaaaaa;
 }
 
 .entity-menu {
-    -fx-pref-height: 510;
+
+}
+
+.entity-menu .titled-pane {
+    -fx-pref-width: 200;
+}
+
+.entity-menu .titled-pane .content{
+    -fx-padding: 6 0 0 0;
 }
 
 .entity-menu .list-cell{
@@ -224,4 +252,14 @@
 
 .entity-menu .list-cell:hover {
     -fx-background-color: #505050;
+}
+
+.viewer-scroll-pane {
+    -fx-background-color: #606060;
+    -fx-pref-height: 100;
+}
+
+.main-center-pane {
+    -fx-padding: 0 0 10 10;
+    -fx-alignment: center;
 }

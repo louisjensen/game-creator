@@ -4,6 +4,7 @@ module center {
     requires javafx.graphics;
     requires javafx.base;
     requires javafx.controls;
+    requires xstream;
 
     exports center.external;
 }

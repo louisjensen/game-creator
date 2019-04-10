@@ -45,19 +45,19 @@ public class DefaultTypesPane extends VBox{
             List<String> specificTypes = myDefaultTypesFactory.getTypes(s1);
             for(String s2 : specificTypes){
                 Label label = new Label(s2);
-                Pane pane = new Pane(label);
+                VBox pane = new VBox(label);
+                pane.setFillWidth(true);
                 pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         CreateNewTypeWindow createNewTypeWindow = new CreateNewTypeWindow(s1, s2);
                         createNewTypeWindow.showAndWait();
                         Entity entity = createNewTypeWindow.getUserCreatedEntity();
+                        String[] info = createNewTypeWindow.getCategoryInfo();
+                        String typeOf = info[0];
+                        String basedOn = info[1];
                         if(entity != null){
-                            System.out.println("Not null");
-                            myUserCreatedTypesPane.addUserDefinedType(s1, entity, s1, s2);
-                        }
-                        else{
-                            System.out.println("Null");
+                            myUserCreatedTypesPane.addUserDefinedType(typeOf, entity, basedOn);
                         }
                     }
                 });

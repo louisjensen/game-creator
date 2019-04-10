@@ -6,6 +6,10 @@ import engine.external.Engine;
 
 import java.util.Collection;
 
+/**
+ * @author Hsingchih Tang
+ * Updates the PositionComponents for every movable Entity on each game loop based on its position and velocity values
+ */
 public class MovementSystem extends VoogaSystem {
 
     public MovementSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
@@ -15,19 +19,10 @@ public class MovementSystem extends VoogaSystem {
     @Override
     protected void run() {
         for (Entity e: getEntities()) {
-            XPositionComponent XPositionComponent = (XPositionComponent) e.getComponent(X_POSITION_COMPONENT_CLASS);
-            YPositionComponent YPositionComponent = (YPositionComponent) e.getComponent(Y_POSITION_COMPONENT_CLASS);
-            ZPositionComponent ZPositionComponent = (ZPositionComponent) e.getComponent(Z_POSITION_COMPONENT_CLASS);
-            XVelocityComponent XVelocityComponent = (XVelocityComponent) e.getComponent(X_VELOCITY_COMPONENT_CLASS);
-            YVelocityComponent YVelocityComponent = (YVelocityComponent) e.getComponent(Y_VELOCITY_COMPONENT_CLASS);
-
-            double x = XPositionComponent.getValue() + XVelocityComponent.getValue();
-            double y = YPositionComponent.getValue() + YVelocityComponent.getValue();
-            double z = ZPositionComponent.getValue();
-
-            XPositionComponent.setValue(x);
-            YPositionComponent.setValue(y);
-            ZPositionComponent.setValue(z);
+            double x = getDoubleComponentValue(X_POSITION_COMPONENT_CLASS,e) + getDoubleComponentValue(X_VELOCITY_COMPONENT_CLASS,e);
+            double y = getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS,e) + getDoubleComponentValue(Y_VELOCITY_COMPONENT_CLASS,e);
+            ((XPositionComponent)e.getComponent(X_POSITION_COMPONENT_CLASS)).setValue(x);
+            ((YPositionComponent)e.getComponent(Y_POSITION_COMPONENT_CLASS)).setValue(y);
         }
     }
 }

@@ -5,8 +5,8 @@ import engine.external.component.NameComponent;
 import engine.external.component.SpriteComponent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -17,31 +17,29 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import ui.DefaultTypesFactory;
+import ui.EntityField;
+import ui.ErrorBox;
 import ui.Utility;
 import ui.manager.AssetManager;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class CreateNewTypeWindow extends Stage {
     private GridPane myGridPane;
+    private static final ResourceBundle SYNTAX_RESOURCES = ResourceBundle.getBundle("property_syntax");
     private ResourceBundle myWindowResources;
     private ResourceBundle myTypeResources;
     private ComboBox myTypeOfComboBox;
     private ComboBox myBasedOnComboBox;
     private TextField myTextField;
-    private HBox myButtonPane;
+    private Node myButtonNode;
     private Pane mySelectedImagePane;
     private DefaultTypesFactory myDefaultTypesFactory;
     private String mySelectedImageName;
     private Entity myUserCreatedEntity;
 
-    private static final Insets INSETS = new Insets(10,10,10,10);
-    private static final int STAGE_HEIGHT = 300;
+    private static final int STAGE_HEIGHT = 325;
     private static final int STAGE_WIDTH = 400;
     private static final int GRIDPANE_GAP = 10;
     private static final int INPUT_WIDTH = 100;
@@ -51,6 +49,7 @@ public class CreateNewTypeWindow extends Stage {
     private static final String TYPE_RESOURCES = "default_entity_type";
 
     public CreateNewTypeWindow(String isANewTypeOf, String isBasedOn){
+        mySelectedImageName = null;
         initializeGridPane();
         initializeVariables();
         myWindowResources = ResourceBundle.getBundle(WINDOW_RESOURCES);
@@ -68,11 +67,25 @@ public class CreateNewTypeWindow extends Stage {
         return  myUserCreatedEntity;
     }
 
+    /**
+     * Gets the typeOf
+     * Called by UserCreatedTypesPane to determine what category to display
+     * the new type in
+     * @return String of the category
+     */
+    public String[] getCategoryInfo(){
+        String[] result = new String[2];
+        result[0] = myTypeOfComboBox.getValue().toString();
+        result[1] = myBasedOnComboBox.getValue().toString();
+        return result;
+    }
+
+
     private void initializeVariables() {
         myBasedOnComboBox = new ComboBox();
         myTypeOfComboBox = new ComboBox();
         myTextField = new TextField();
-        myButtonPane = new HBox();
+        myButtonNode = new HBox();
         mySelectedImagePane = new Pane();
         myDefaultTypesFactory = new DefaultTypesFactory();
         mySelectedImageName = "";
@@ -111,38 +124,56 @@ public class CreateNewTypeWindow extends Stage {
     private void openAssetManager(){
         AssetManager assetManager = new AssetManager();
         assetManager.showAndWait();
-        ImageView imageView = assetManager.getImageView();
-        mySelectedImagePane.getChildren().clear();
-        mySelectedImagePane.getChildren().add(imageView);
-        mySelectedImageName = assetManager.getImageName();
+        if(assetManager.getImageView() != null){
+            ImageView imageView = assetManager.getImageView();
+            mySelectedImagePane.getChildren().clear();
+            mySelectedImagePane.getChildren().add(imageView);
+            mySelectedImageName = assetManager.getImageName();
+        }
     }
 
     private void createButtonPane() {
         String[] buttons = myWindowResources.getString("Buttons").split(",");
+        List<Button> buttonList = new ArrayList<>();
         for(String s : buttons){
             String[] info = s.split(" ");
-            myButtonPane.getChildren().add(Utility.makeButton(this, info[1], info[0]));
+            buttonList.add(Utility.makeButton(this, info[1], info[0]));
         }
-        myButtonPane.setPadding(INSETS);
-        myButtonPane.setAlignment(Pos.CENTER);
-        myButtonPane.setSpacing(GRIDPANE_GAP);
+        myButtonNode = Utility.createButtonBar(buttonList);
     }
 
     private void handleCloseButton(){
-        System.out.println("Handle close button method called");
         this.close();
     }
 
     private void handleCreateButton(){
-        String typeLabel = myTextField.getText();
-        String typeOf = (String) myTypeOfComboBox.getValue();
-        String basedOn = (String) myBasedOnComboBox.getValue();
+        if(checkValidInputs()){
+            String typeLabel = myTextField.getText();
+            String typeOf = (String) myTypeOfComboBox.getValue();
+            String basedOn = (String) myBasedOnComboBox.getValue();
 
-        Entity entity = myDefaultTypesFactory.getDefaultEntity(typeOf, basedOn);
-        entity.addComponent(new NameComponent(typeLabel));
-        entity.addComponent(new SpriteComponent(mySelectedImageName));
-        myUserCreatedEntity = entity;
-        this.close();
+            Entity entity = myDefaultTypesFactory.getDefaultEntity(typeOf, basedOn);
+            entity.addComponent(new NameComponent(typeLabel));
+            entity.addComponent(new SpriteComponent(mySelectedImageName));
+            myUserCreatedEntity = entity;
+            this.close();
+        }
+        else{
+            String[] errorInfo = myWindowResources.getString("InvalidInputs").split(",");
+            ErrorBox errorBox = new ErrorBox(errorInfo[0], errorInfo[1]);
+            errorBox.display();
+        }
+    }
+
+    private boolean checkValidInputs() {
+        Set<Boolean> checkerSet = new HashSet<>();
+        checkerSet.add((!mySelectedImageName.equals("")));
+        System.out.println("Image good: " + (mySelectedImageName != null));
+        checkerSet.add(!myTextField.getText().isEmpty());
+        System.out.println("TextField Not Empty: " + (!myTextField.getText().isEmpty()));
+        checkerSet.add(myTextField.getText().matches(SYNTAX_RESOURCES.getString("LABEL")));
+        System.out.println("TextField good for label: " + (myTextField.getText().matches(SYNTAX_RESOURCES.getString("LABEL"))));
+        return !checkerSet.contains(false);
     }
 
 
@@ -178,7 +209,6 @@ public class CreateNewTypeWindow extends Stage {
         myTypeOfComboBox.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
-                System.out.println("Registered change");
                 populateBasedOnDropDown((String) t1);
             }
         });
@@ -190,7 +220,8 @@ public class CreateNewTypeWindow extends Stage {
         TitledPane titledPane = new TitledPane();
         titledPane.setText(myWindowResources.getString("Title"));
         VBox contents = new VBox();
-        contents.getChildren().addAll(myGridPane, myButtonPane);
+        contents.getChildren().addAll(myGridPane, myButtonNode);
+        contents.setSpacing(10.0);
         titledPane.setContent(contents);
         titledPane.setCollapsible(false);
         Scene scene = new Scene(titledPane);
