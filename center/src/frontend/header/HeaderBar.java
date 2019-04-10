@@ -30,12 +30,9 @@ public class HeaderBar {
 
     private void initializeLayouts() {
         Label title = new Label(Utilities.getValue(myLanguageBundle, "titleText"));
-        title.getStylesheets().add("center.css");
         BorderPane.setAlignment(title, Pos.TOP_CENTER);
         StackPane headerLayout = new StackPane();
-        headerLayout.getStylesheets().add("center.css");
         BorderPane titleLayout = new BorderPane();
-        titleLayout.getStylesheets().add("center.css");
         titleLayout.setCenter(title);
         headerLayout.getChildren().addAll(titleLayout);
         myHeaderLayout = headerLayout;

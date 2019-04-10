@@ -60,6 +60,7 @@ public class GameCard {
         BorderPane background = new BorderPane();
         background.setBackground(Background.EMPTY);
         Rectangle display = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+        display.getStyleClass().add("rectangle");
         display.setFill(Color.WHITE);
         background.setCenter(display);
         pane.getChildren().add(background);

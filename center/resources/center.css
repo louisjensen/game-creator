@@ -198,3 +198,8 @@
     -fx-padding: 10;
     -fx-alignment: center;
 }
+
+.rectangle {
+    -fx-arc-width: 25;
+    -fx-arc-height: 25;
+}
