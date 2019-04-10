@@ -30,10 +30,6 @@ public class AssetImageSubPane extends GridPane {
         Label text = new Label(cutText(title));
         text.getStyleClass().add("asset-manager-labels");
 
-        //text.setWrappingWidth(myImageSize);
-
-
-        System.out.println(text.getText());
         this.add(image, 0, 0);
         this.add(text, 0, 1);
         formatPaneAndImage(image);

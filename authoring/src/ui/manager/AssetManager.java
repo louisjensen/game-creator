@@ -68,6 +68,7 @@ public class AssetManager extends Stage {
      * a new type before the entity actually needs to be made and kept track of
      */
     public AssetManager(){
+        myProp = null;
         mySelectedImageName = "";
         initializeVariables();
         initializeStage();
@@ -78,10 +79,8 @@ public class AssetManager extends Stage {
     }
 
     public AssetManager(Propertable prop) {
-        super();
-        //TODO: integrate in entity
+        this();
         myProp = prop;
-
     }
 
 
@@ -205,9 +204,11 @@ public class AssetManager extends Stage {
         try {
             BufferedImage image = ImageIO.read(selectedFile);
             File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
+            File otherSaveToFile = new File("Images/" + selectedFile.getName());
             String[] split = selectedFile.getPath().split("\\.");
             String extension = split[split.length-1];
             ImageIO.write(image, extension, saveToFile);
+            ImageIO.write(image, extension, otherSaveToFile);
             drawImageScrollPane();
         } catch (IOException e) {
             //TODO: Test that this works
@@ -227,6 +228,9 @@ public class AssetManager extends Stage {
 
     private void handleClose(){
         if(!mySelectedImageName.equals("")){
+            if(myProp != null){
+                myProp.getPropertyMap().put(EntityField.IMAGE, mySelectedImageName);
+            }
             this.close();
         }
         else{

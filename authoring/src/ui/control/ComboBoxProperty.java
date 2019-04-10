@@ -15,7 +15,7 @@ public class ComboBoxProperty extends ComboBox<String> implements ControlPropert
     }
 
     @Override
-    public void populateValue(Enum type, String newVal, LabelManager labels) {
+    public void populateValue(Propertable prop, Enum type, String newVal, LabelManager labels) {
         this.itemsProperty().set(labels.getLabels((EntityField) type));
         this.setValue(newVal);
     }

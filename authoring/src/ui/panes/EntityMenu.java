@@ -20,6 +20,7 @@ public class EntityMenu extends TitledPane {
         myVBox = new VBox();
         myMap = new HashMap<>();
         this.setContent(myVBox);
+        this.getStyleClass().add("entity-menu");
     }
 
     public void addDropDown(String title){

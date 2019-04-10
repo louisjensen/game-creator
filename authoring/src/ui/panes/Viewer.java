@@ -1,17 +1,18 @@
 package ui.panes;
 
-import engine.external.Entity;
+import javafx.beans.property.ObjectProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 import ui.AuthoringEntity;
+import ui.EntityField;
+import ui.Propertable;
 import ui.Utility;
 
 import java.util.ResourceBundle;
@@ -22,7 +23,10 @@ public class Viewer extends ScrollPane {
     private static final int CELL_SIZE = 50;
     private int myRoomWidth;
     private int myRoomHeight;
-    private DataFormat myDataFormat;
+    private boolean isDragOnView;
+    private AuthoringEntity myDraggedAuthoringEntity;
+    private ObjectProperty<Propertable>  mySelectedEntity;
+    private UserCreatedTypesPane myUserCreatedPane;
     private ResourceBundle myGeneralResources;
 
 
@@ -30,37 +34,49 @@ public class Viewer extends ScrollPane {
      *
      * @param roomWidth
      * @param roomHeight
-     * @param dataFormat This needs to be the same dataformat passed into the UserCreatedTypesPane
-     *                   this allows for entities to be passed between these two panes
+     * @param userCreatedTypesPane
      */
-    public Viewer(int roomWidth, int roomHeight, DataFormat dataFormat){
+    public Viewer(int roomWidth, int roomHeight, UserCreatedTypesPane userCreatedTypesPane, ObjectProperty objectProperty){
         myStackPane = new StackPane();
-        myDataFormat = dataFormat;
+        myUserCreatedPane = userCreatedTypesPane;
+        mySelectedEntity = objectProperty;
         myStackPane.setAlignment(Pos.TOP_LEFT);
         myGeneralResources = ResourceBundle.getBundle("authoring_general");
+        setupAcceptDragEvents();
+        setupDragDropped();
+        setRoomSize(roomWidth, roomHeight);
+        addGridLines();
+        this.setContent(myStackPane);
+    }
+
+    private void setupAcceptDragEvents() {
         myStackPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
                 dragEvent.acceptTransferModes(TransferMode.ANY);
             }
         });
+    }
+
+    private void setupDragDropped() {
+
         myStackPane.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
-                Dragboard db = dragEvent.getDragboard();
-                boolean success = false;
-                System.out.println(db.getContentTypes());
-                if (db.hasContent(dataFormat)) {
-                    AuthoringEntity entity = (AuthoringEntity) db.getContent(myDataFormat);
-                    addImage(Utility.createImageWithEntity(entity));
-                    success = true;
+                AuthoringEntity authoringEntity;
+                if(isDragOnView){
+                    authoringEntity = myDraggedAuthoringEntity;
+                    isDragOnView = false;
                 }
-                dragEvent.setDropCompleted(success);
+                else{
+                    authoringEntity = myUserCreatedPane.getDraggedAuthoringEntity();
+                    addImage(Utility.createImageWithEntity(authoringEntity));
+                }
+                authoringEntity.getPropertyMap().put(EntityField.X, "" + snapToGrid(dragEvent.getX()));
+                authoringEntity.getPropertyMap().put(EntityField.Y, "" + snapToGrid(dragEvent.getY()));
+                mySelectedEntity.setValue(authoringEntity);
             }
         });
-        setRoomSize(roomWidth, roomHeight);
-        addGridLines();
-        this.setContent(myStackPane);
     }
 
     /**
@@ -73,7 +89,7 @@ public class Viewer extends ScrollPane {
 
         double result;
         if(valueRemainder >= CELL_SIZE/2){
-            result = value + valueRemainder;
+            result = value + CELL_SIZE - valueRemainder;
         }
         else{
             result = value - valueRemainder;
@@ -83,6 +99,20 @@ public class Viewer extends ScrollPane {
     }
 
     private void addImage(ImageWithEntity imageView){
+        imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                mySelectedEntity.setValue(imageView.getAuthoringEntity());
+            }
+        });
+        imageView.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Utility.setupDragAndDropImage(imageView);
+                isDragOnView = true;
+                myDraggedAuthoringEntity = imageView.getAuthoringEntity();
+            }
+        });
         myStackPane.getChildren().add(imageView);
     }
 
@@ -114,8 +144,6 @@ public class Viewer extends ScrollPane {
             int y = k * CELL_SIZE;
             Line tempLine = new Line(x1, y, x2, y);
             pane.getChildren().add(tempLine);
-            System.out.println("Y Coordinate: " + y);
-            //System.out.println("Drew line");
         }
     }
 

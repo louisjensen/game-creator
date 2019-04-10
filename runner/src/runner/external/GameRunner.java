@@ -21,6 +21,8 @@ import javafx.util.Duration;
 import runner.internal.DummyGameObjectMaker;
 import runner.internal.TestEngine;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class GameRunner {
@@ -57,7 +59,11 @@ public class GameRunner {
         Game gameMade = dm2.getGame(gameS);
 
         DataManager dm = new DataManager();
-        Game gameLoaded = (Game) dm.loadGameData(gameS);
+        try {
+            Game gameLoaded = (Game) dm.loadGameData(gameS);
+        } catch (FileNotFoundException e){
+            System.out.println("File not found");
+        }
 
         myGame = gameMade;
         //myGame = gameLoaded;
@@ -172,6 +178,11 @@ public class GameRunner {
         for(Entity entity : myEntities){
             List<Double> xyz = getXYZasList(entity);
             System.out.println(xyz);
+            //TODO: refactor code to use XPositionComponent, YPositionComponent, ZPositionComponent :)
+
+//            PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
+//            Point3D position = (Point3D) positionComponent.getValue();
+//            VoogaSystem.out.println(position.getX());
         }
     }
 
