@@ -15,9 +15,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import runner.external.Game;
+import runner.external.GameCenterData;
 import ui.AuthoringLevel;
 import ui.ErrorBox;
-import ui.LevelField;
 import ui.Propertable;
 import ui.PropertableType;
 import ui.UIException;
@@ -36,6 +36,7 @@ import java.util.ResourceBundle;
 public class MainGUI {
 
     private Game myGame;
+    private GameCenterData myGameData;
     private Stage myStage;
     private ObjectManager myObjectManager;
     private ObservableStringValue myCurrentStyle;
@@ -50,19 +51,23 @@ public class MainGUI {
 
     public MainGUI() { // Default constructor for creating a new game from scratch
         myGame = new Game();
+        myGameData = new GameCenterData();
+        defaultGameData();
         myStage = new Stage();
-        myObjectManager = new ObjectManager();
-        AuthoringLevel blankLevel = new AuthoringLevel("Level_1", myObjectManager);
+
+        AuthoringLevel blankLevel = new AuthoringLevel("Level_1");
+        myCurrentLevel = new SimpleObjectProperty<>(blankLevel);
+        myObjectManager = new ObjectManager(myCurrentLevel);
         myObjectManager.addLevel(blankLevel);
         mySelectedEntity = new SimpleObjectProperty<>(null);
-        myCurrentLevel = new SimpleObjectProperty<>(blankLevel);
         myCurrentStyle = new SimpleStringProperty(DEFAULT_STYLESHEET);
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
     }
 
-    public MainGUI(Game game) {
+    public MainGUI(Game game, GameCenterData gameData) {
         this();
         myGame = game;
+        myGameData = gameData;
     }
 
     public void launch() {
@@ -170,8 +175,8 @@ public class MainGUI {
     }
 
     private void saveGame() {
-        GameTranslator translator = new GameTranslator(myGame, myObjectManager); //TODO needs some notion of what level each object instance is in
-        Game exportableGame = translator.translate(); //TODO needs Game info when new project is created
+        GameTranslator translator = new GameTranslator(myGame, myGameData, myObjectManager);
+        Game exportableGame = translator.translate();
         //TODO Serialize and export
     }
 
@@ -191,6 +196,13 @@ public class MainGUI {
     private void swapStylesheet(String oldVal, String newVal) {
         myStage.getScene().getStylesheets().remove(oldVal);
         myStage.getScene().getStylesheets().add(newVal);
+    }
+
+    private void defaultGameData() {
+        myGameData.setFolderName("test");
+        myGameData.setImageLocation("test");
+        myGameData.setTitle("THE TEST GAME");
+        myGameData.setDescription("A game about testing");
     }
 
 }

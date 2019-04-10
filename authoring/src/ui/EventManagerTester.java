@@ -1,6 +1,7 @@
 package ui;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.stage.Stage;
 import ui.manager.EventManager;
 import ui.manager.LabelManager;
@@ -13,7 +14,7 @@ public class EventManagerTester extends Application {
 
     @Override
     public void start(Stage testStage) {
-        ObjectManager manager = new ObjectManager();
+        ObjectManager manager = new ObjectManager(new SimpleObjectProperty<>());
         addTestLabels(manager.getLabelManager());
         AuthoringEntity testEntity = populateTestObjects(manager);
         EventManager testEventManager = new EventManager(testEntity);
