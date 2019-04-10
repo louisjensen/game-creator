@@ -1,7 +1,10 @@
 package frontend.games;
 
 import data.external.DataManager;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -33,14 +36,19 @@ public class GameList {
 
     private void initializeDisplay(int numGames) {
         FlowPane gameList = new FlowPane();
+        gameList.setAlignment(Pos.CENTER);
+        //gameList.setColumnHalignment(HPos.CENTER);
+        //gameList.setRowValignment(VPos.CENTER);
         gameList.setVgap(CARD_V_OFFSET);
         gameList.setHgap(CARD_H_OFFSET);
         gameList.setPrefWrapLength((GameCard.DISPLAY_WIDTH + CARD_H_OFFSET) * NUM_CARDS_DISPLAYED);
+        gameList.setStyle("-fx-background-color: transparent;");
         for(GameCenterData game : myGames) {
             GameCard c = new GameCard(game);
             gameList.getChildren().add(c.getDisplay());
         }
         ScrollPane scroller = new ScrollPane();
+        scroller.getStylesheets().add("center.css");
         scroller.setPadding(new Insets(SCROLLER_PADDING, SCROLLER_PADDING, SCROLLER_PADDING, SCROLLER_PADDING));
         scroller.setContent(gameList);
         scroller.setStyle("-fx-background-color: transparent;");
