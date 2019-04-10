@@ -27,13 +27,13 @@ public class TestEngine {
             SpriteComponent spriteComponent = (SpriteComponent) e.getComponent(SpriteComponent.class);
             String sprite = spriteComponent.getValue();
             WidthComponent widthComponent = (WidthComponent) e.getComponent(WidthComponent.class);
-            Double width = (Double) widthComponent.getValue();
+            Double width = widthComponent.getValue();
             HeightComponent heightComponent = (HeightComponent) e.getComponent(HeightComponent.class);
-            Double height = (Double) heightComponent.getValue();
+            Double height = heightComponent.getValue();
             XPositionComponent xPositionComponent = (XPositionComponent) e.getComponent(XPositionComponent.class);
-            Double xPosition = (Double) xPositionComponent.getValue();
+            Double xPosition = xPositionComponent.getValue();
             YPositionComponent yPositionComponent = (YPositionComponent) e.getComponent(YPositionComponent.class);
-            Double yPosition = (Double) yPositionComponent.getValue();
+            Double yPosition = yPositionComponent.getValue();
 
             ImageView image = new ImageView(sprite);
 
@@ -42,7 +42,6 @@ public class TestEngine {
             image.setSmooth(false);
             image.setLayoutY(yPosition);
             image.setLayoutX(xPosition);
-
             e.addComponent(new ImageViewComponent(image));
         }
     }
@@ -61,19 +60,19 @@ public class TestEngine {
         for(Entity entity : myEntities){
             XPositionComponent xPositionComponent = (XPositionComponent) entity.getComponent(XPositionComponent.class);
             Double xPosition = (Double) xPositionComponent.getValue();
-//            YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
-//            Double yPosition = (Double) yPositionComponent.getValue();
-//            ZPositionComponent zPositionComponent = (ZPositionComponent) entity.getComponent(ZPositionComponent.class);
-//            Double zPosition = (Double) zPositionComponent.getValue();
-
             xPositionComponent.setValue(xPosition+1);
 
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
-            ImageView image = (ImageView) imageViewComponent.getValue();
-            image.setLayoutX(image.getX()+1);
-
+            ImageView imageView = imageViewComponent.getValue();
+            System.out.println(imageView.getX());
+            System.out.println(imageView.getX()+1);
 
         }
+    }
+
+    private ImageView modifyX(ImageView image){
+        image.setLayoutX(image.getX()+1);
+        return image;
     }
 
     private void moveRandom(){
