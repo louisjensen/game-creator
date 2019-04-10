@@ -18,7 +18,7 @@ import java.io.FileNotFoundException;
 import java.util.ResourceBundle;
 
 public class GameCard {
-    public static final int GAME_IMAGE_SIZE = 150;
+    public static final int GAME_IMAGE_SIZE = 200;
     public static final int BUTTON_WIDTH = 100;
     public static final int HORIZONTAL_BUTTON_SPACING = 15;
     public static final int SUBTITLE_FONT_SIZE = 24;
