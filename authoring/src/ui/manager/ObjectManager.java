@@ -25,11 +25,11 @@ public class ObjectManager {
     /**
      * Class that keeps track of every single instance of an Entity, across Levels, for the purposes of authoring environment
      */
-    public ObjectManager(LabelManager labelManager) {
+    public ObjectManager() {
         myEntities = new HashSet<>();
-        myLabelManager = labelManager;
+        myLabelManager = new LabelManager();
         myEventMap = new HashMap<>();
-        labelManager.getLabels(EntityField.GROUP).addListener((ListChangeListener<? super String>) change -> groupRemoveAction(change));
+        myLabelManager.getLabels(EntityField.GROUP).addListener((ListChangeListener<? super String>) change -> groupRemoveAction(change));
     }
 
     public void addEntity(AuthoringEntity entity) {
@@ -46,7 +46,7 @@ public class ObjectManager {
                 entity.getPropertyMap().put(property, newValue);
                 myLabelManager.addLabel(EntityField.LABEL, newValue);
             }
-        }
+        } //TODO propagate changed label into Event Map
         if (property.equals(EntityField.LABEL))
             myLabelManager.removeLabel(EntityField.LABEL, objectLabel); // Remove old label from LabelManager if a label was just propagated
     }
@@ -67,7 +67,7 @@ public class ObjectManager {
         }
     }
 
-    LabelManager getLabelManager() {
+    public LabelManager getLabelManager() {
         return myLabelManager;
     }
 

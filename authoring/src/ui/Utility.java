@@ -14,6 +14,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -178,26 +181,47 @@ public class Utility {
         return labelBox;
     }
 
-
+    /**
+     * This takes an AuthoringEntity and creates an instance of ImageWithEntity
+     * @param entity AuthoringEntity
+     * @return ImageWithEntity
+     */
     public static ImageWithEntity createImageWithEntity(AuthoringEntity entity){
         ResourceBundle generalResources = ResourceBundle.getBundle("authoring_general");
-        ResourceBundle utilityResources = ResourceBundle.getBundle(RESOURCE);
-        String imageName = (String) entity.getBackingEntity().getComponent(new SpriteComponent("").getClass()).getValue();
+
+        String imageName = entity.getPropertyMap().get(EntityField.IMAGE);
         String imagePath = generalResources.getString("images_filepath");
-        Double width = (Double) entity.getBackingEntity().getComponent(new WidthComponent(0.0).getClass()).getValue();
-        Double height = (Double) entity.getBackingEntity().getComponent(new HeightComponent(0.0).getClass()).getValue();
+        ImageWithEntity imageWithEntity = new ImageWithEntity(makeFileInputStream(imagePath + imageName), entity);
+        return imageWithEntity;
+
+    }
+
+    /**
+     * Attempts to create a file input stream with the given string path
+     * @param path String of the path to the desired fileinputstream file
+     * @return FileInputStream
+     */
+    public static FileInputStream makeFileInputStream(String path){
+        ResourceBundle utilityResources = ResourceBundle.getBundle(RESOURCE);
         try {
-            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(imagePath + imageName), entity, width, height);
-            return imageWithEntity;
+            FileInputStream fileInputStream = new FileInputStream(path);
+            return fileInputStream;
         } catch (FileNotFoundException e) {
-            System.out.println("File not found");
+            System.out.println("File not found in trying to create an image with entity in Utility");
             String[] info = utilityResources.getString("FileException").split(",");
             ErrorBox errorBox = new ErrorBox(info[0], info[1]);
             errorBox.display();
             //TODO: get rid of this stack trace. rn it's just in case this happens and we need to know where
             e.printStackTrace();
             return null;
-
         }
+    }
+
+    public static void setupDragAndDropImage(ImageWithEntity imageWithEntity){
+        Dragboard db = imageWithEntity.startDragAndDrop(TransferMode.MOVE);
+        ClipboardContent content = new ClipboardContent();
+        content.putImage(imageWithEntity.getImage());
+        db.setContent(content);
+        db.setDragView(imageWithEntity.getImage(), 0, 0);
     }
 }
