@@ -1,4 +1,4 @@
-package frontend;
+package center.external;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
