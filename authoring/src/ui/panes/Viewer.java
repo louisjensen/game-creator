@@ -1,8 +1,6 @@
 package ui.panes;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.MapChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -31,6 +29,8 @@ public class Viewer extends ScrollPane {
     private ObjectProperty<Propertable>  mySelectedEntity;
     private UserCreatedTypesPane myUserCreatedPane;
     private ResourceBundle myGeneralResources;
+    private Pane myLinesPane;
+    private String myBackgroundFileName;
     private static final ResourceBundle myResources = ResourceBundle.getBundle("viewer");
 
 
@@ -42,6 +42,9 @@ public class Viewer extends ScrollPane {
      */
     public Viewer(ObjectProperty<Propertable> authoringLevel, UserCreatedTypesPane userCreatedTypesPane, ObjectProperty objectProperty){
         myStackPane = new StackPane();
+        myLinesPane = new Pane();
+        myBackgroundFileName = null;
+        myStackPane.getChildren().add(myLinesPane);
         myUserCreatedPane = userCreatedTypesPane;
         mySelectedEntity = objectProperty;
         myAuthoringLevel = authoringLevel;
@@ -52,7 +55,7 @@ public class Viewer extends ScrollPane {
         setupAcceptDragEvents();
         setupDragDropped();
         setRoomSize();
-        addGridLines();
+        updateGridLines();
         this.setContent(myStackPane);
         this.getStyleClass().add("viewer-scroll-pane");
     }
@@ -69,25 +72,31 @@ public class Viewer extends ScrollPane {
 
     private void updateWidth(String width){
         Double widthDouble = Double.parseDouble(width);
-        this.setPrefWidth(widthDouble);
-        myStackPane.setPrefWidth(widthDouble);
+        updateGridLines();
+        //updateBackground(myBackgroundFileName);
+        myStackPane.setMinWidth(widthDouble);
+        myStackPane.setMaxWidth(widthDouble);
     }
 
     private void updateHeight(String height){
         Double heightDouble = Double.parseDouble(height);
-        this.setPrefHeight(heightDouble);
-        myStackPane.setPrefHeight(heightDouble);
+        updateGridLines();
+        //updateBackground(myBackgroundFileName);
+        myStackPane.setMinHeight(heightDouble);
+        myStackPane.setMaxHeight(heightDouble);
     }
 
     private void updateBackground(String filename){
-        System.out.println("Trying to update background");
-        String filepath = myGeneralResources.getString("images_filepath") + filename;
-        FileInputStream fileInputStream = Utility.makeFileInputStream(filepath);
-        Double roomHeight = this.getPrefHeight();
-        Double roomWidth = this.getPrefWidth();
-        Image image = new Image(fileInputStream, roomWidth, roomHeight, false, false);
-        BackgroundImage backgroundImage = new BackgroundImage(image, null, null, null, null);
-        myStackPane.setBackground(new Background(backgroundImage));
+        if(filename != null){
+            System.out.println("Trying to update background");
+            String filepath = myGeneralResources.getString("images_filepath") + filename;
+            FileInputStream fileInputStream = Utility.makeFileInputStream(filepath);
+            Double roomHeight = this.getPrefHeight();
+            Double roomWidth = this.getPrefWidth();
+            Image image = new Image(fileInputStream, roomWidth, roomHeight, false, false);
+            BackgroundImage backgroundImage = new BackgroundImage(image, null, null, null, null);
+            myStackPane.setBackground(new Background(backgroundImage));
+        }
     }
 
     private void setupAcceptDragEvents() {
@@ -166,33 +175,34 @@ public class Viewer extends ScrollPane {
         myStackPane.setMinHeight(height);
     }
 
-    private void addGridLines(){
+    private void updateGridLines(){
+        myStackPane.getChildren().remove(myLinesPane);
+        myLinesPane.getChildren().clear();
         int height = (int) Math.round(Double.parseDouble(myAuthoringLevel.getValue().getPropertyMap().get(LevelField.HEIGHT)));
         int width = (int) Math.round(Double.parseDouble(myAuthoringLevel.getValue().getPropertyMap().get(LevelField.WIDTH)));
-        Pane linesPane = new Pane();
-        linesPane.setPrefHeight(height);
-        linesPane.setPrefWidth(width);
-        addHorizontalLines(linesPane, height, width);
-        addVerticalLines(linesPane, height, width);
-        myStackPane.getChildren().add(linesPane);
+        myLinesPane.setPrefWidth(width);
+        myLinesPane.setPrefHeight(height);
+        addHorizontalLines(height, width);
+        addVerticalLines(height, width);
+        myStackPane.getChildren().add(myLinesPane);
     }
 
-    private void addHorizontalLines(Pane pane, int height, int width) {
+    private void addHorizontalLines(int height, int width) {
         int x1 = 0;
         for(int k = 0; k < height/CELL_SIZE; k++){
             int y = k * CELL_SIZE;
             Line tempLine = new Line(x1, y, width, y);
-            pane.getChildren().add(tempLine);
+            myLinesPane.getChildren().add(tempLine);
         }
     }
 
-    private void addVerticalLines(Pane pane, int height, int width){
+    private void addVerticalLines(int height, int width){
         int y1 = 0;
         int y2 = height;
         for(int k = 0; k < width/CELL_SIZE; k++){
             int x = k * CELL_SIZE;
             Line tempLine = new Line(x, y1, x, y2);
-            pane.getChildren().add(tempLine);
+            myLinesPane.getChildren().add(tempLine);
         }
     }
 
