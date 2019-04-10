@@ -10,6 +10,7 @@ import engine.external.component.SpriteComponent;
 import engine.external.component.WidthComponent;
 import engine.external.component.XPositionComponent;
 import engine.external.component.YPositionComponent;
+import engine.external.component.ZPositionComponent;
 import events.Event;
 import runner.external.Game;
 import runner.external.GameCenterData;
@@ -25,23 +26,24 @@ import ui.manager.ObjectManager;
 public class GameTranslator {
 
     private Game myGameBasis;
-    private GameCenterData myGameData;
+    private GameCenterData myOldGameData;
+    private GameCenterData myNewGameData;
     private ObjectManager myObjectManager;
 
     public GameTranslator(Game gameBasis, GameCenterData gameData, ObjectManager objectManager) {
         myGameBasis = gameBasis;
-        myGameData = gameData;
+        myOldGameData = gameData;
+        myNewGameData = new GameCenterData();
         myObjectManager = objectManager;
     }
 
     public Game translate() {
         Game translatedGame = new Game(); // Game info!!!
-        GameCenterData gameData = new GameCenterData();
 
-        gameData.setTitle(myGameData.getTitle());
-        gameData.setDescription(myGameData.getDescription());
-        gameData.setImageLocation(myGameData.getImageLocation());
-        gameData.setFolderName(myGameData.getFolderName());
+        myNewGameData.setTitle(myOldGameData.getTitle());
+        myNewGameData.setDescription(myOldGameData.getDescription());
+        myNewGameData.setImageLocation(myOldGameData.getImageLocation());
+        myNewGameData.setFolderName(myOldGameData.getFolderName());
 
         for (AuthoringLevel authLevel : myObjectManager.getLevels()) {
             translatedGame.addLevel(translateLevel(authLevel));
@@ -82,6 +84,8 @@ public class GameTranslator {
         addStringComponent(basisEntity, authEntity, GroupComponent.class, EntityField.GROUP);
         addStringComponent(basisEntity, authEntity, SpriteComponent.class, EntityField.IMAGE);
 
+        basisEntity.addComponent(new ZPositionComponent(0.0)); //TODO deal with this later, this is a stopgap
+
         return basisEntity;
     }
 
@@ -107,6 +111,10 @@ public class GameTranslator {
                 System.out.println("Error translating components");
             }
         }
+    }
+
+    public GameCenterData getNewGameData() {
+        return myNewGameData;
     }
 
 }
