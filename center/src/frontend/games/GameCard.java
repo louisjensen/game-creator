@@ -12,13 +12,14 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import runner.external.GameCenterData;
 import frontend.Utilities;
+import runner.external.GameRunner;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ResourceBundle;
 
 public class GameCard {
-    public static final int GAME_IMAGE_SIZE = 150;
+    public static final int GAME_IMAGE_SIZE = 200;
     public static final int BUTTON_WIDTH = 100;
     public static final int HORIZONTAL_BUTTON_SPACING = 15;
     public static final int SUBTITLE_FONT_SIZE = 24;
@@ -89,7 +90,13 @@ public class GameCard {
     }
 
     private void handleButton(String folderName) {
-        // todo: launch player here
+        System.out.println("running");
+        try {
+            GameRunner gameRunner = new GameRunner(folderName);
+        } catch (FileNotFoundException e) {
+            System.out.println("in center");
+            // todo: print error message
+        }
     }
 
     private void addImageAndContent(BorderPane foreground) {

@@ -109,8 +109,7 @@ public class MainGUI {
     }
 
     private Viewer createViewer(UserCreatedTypesPane userCreatedTypesPane) {
-        Viewer viewer = new Viewer(Integer.parseInt(myCurrentLevel.getValue().getPropertyMap().get(LevelField.WIDTH)),
-                Integer.parseInt(myCurrentLevel.getValue().getPropertyMap().get(LevelField.HEIGHT)), userCreatedTypesPane, mySelectedEntity);
+        Viewer viewer = new Viewer(myCurrentLevel, userCreatedTypesPane, mySelectedEntity);
         viewer.setMinWidth(400);
         viewer.setMinHeight(300);
         return viewer;

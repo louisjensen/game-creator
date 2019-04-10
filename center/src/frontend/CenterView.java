@@ -20,6 +20,7 @@ public class CenterView extends Application {
     public void start (Stage myStage) throws Exception {
         CenterView view = new CenterView();
         myStage.setScene(view.getScene());
+        myStage.setResizable(false);
         myStage.show();
     }
 
@@ -40,8 +41,8 @@ public class CenterView extends Application {
         HeaderBar myHeader = new HeaderBar();
         Pane layout = myHeader.getHeaderLayout();
         BorderPane.setAlignment(layout, Pos.TOP_CENTER);
-        root.setStyle("-fx-background-color: transparent;");
-        layout.setStyle("-fx-background-color: transparent;");
+        root.getStylesheets().add("center.css");
+        layout.getStylesheets().add("center.css");
         root.setTop(layout);
         root.setCenter((new GamePane()).getDisplay());
         myScene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT, BACKGROUND_COLOR);
