@@ -10,6 +10,7 @@ import engine.external.component.SpriteComponent;
 import engine.external.component.WidthComponent;
 import engine.external.component.XPositionComponent;
 import engine.external.component.YPositionComponent;
+import engine.external.component.ZPositionComponent;
 import events.Event;
 import runner.external.Game;
 import runner.external.GameCenterData;
@@ -82,6 +83,8 @@ public class GameTranslator {
         addStringComponent(basisEntity, authEntity, NameComponent.class, EntityField.LABEL);
         addStringComponent(basisEntity, authEntity, GroupComponent.class, EntityField.GROUP);
         addStringComponent(basisEntity, authEntity, SpriteComponent.class, EntityField.IMAGE);
+
+        basisEntity.addComponent(new ZPositionComponent(0.0)); //TODO deal with this later, this is a stopgap
 
         return basisEntity;
     }
