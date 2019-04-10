@@ -61,6 +61,9 @@ public class Viewer extends ScrollPane {
         if(change.wasAdded() && myResources.containsKey(change.getKey().toString())){
             Utility.makeAndCallMethod(myResources, change, this);
         }
+        if(change.getKey().equals(LevelField.BACKGROUND)){
+            System.out.println("Background change triggered");
+        }
     }
 
     private void updateWidth(String width){
