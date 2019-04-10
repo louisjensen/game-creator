@@ -54,6 +54,7 @@ public class Viewer extends ScrollPane {
         setRoomSize();
         addGridLines();
         this.setContent(myStackPane);
+        this.getStyleClass().add("viewer-scroll-pane");
     }
 
 
