@@ -60,7 +60,7 @@ public class UserCreatedTypesPane extends VBox {
         }
     }
 
-    public void addUserDefinedType(String category, Entity entity, String ofType, String basedOn){
+    public void addUserDefinedType(String category, Entity entity,String basedOn){
         String label = (String) entity.getComponent(NameComponent.class).getValue();
         String imageName = (String) entity.getComponent(SpriteComponent.class).getValue();
         try {
@@ -70,10 +70,10 @@ public class UserCreatedTypesPane extends VBox {
             List<Pane> paneList = new ArrayList<>();
             paneList.add(subPane);
             myEntityMenu.addToDropDown(category, paneList);
-            imageWithEntity.setOnDragDetected(new EventHandler<MouseEvent>() {
+            subPane.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    myDraggedEntity = myDefaultTypesFactory.getDefaultEntity(ofType, basedOn);
+                    myDraggedEntity = myDefaultTypesFactory.getDefaultEntity(category, basedOn);
                     myDraggedEntity.addComponent(new SpriteComponent(imageName));
                     System.out.println("Width " + imageWithEntity.getFitWidth());
                     Utility.setupDragAndDropImage(imageWithEntity);

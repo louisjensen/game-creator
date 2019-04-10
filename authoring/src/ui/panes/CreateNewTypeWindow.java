@@ -5,7 +5,6 @@ import engine.external.component.NameComponent;
 import engine.external.component.SpriteComponent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -66,6 +65,20 @@ public class CreateNewTypeWindow extends Stage {
     public Entity getUserCreatedEntity(){
         return  myUserCreatedEntity;
     }
+
+    /**
+     * Gets the typeOf
+     * Called by UserCreatedTypesPane to determine what category to display
+     * the new type in
+     * @return String of the category
+     */
+    public String[] getCategoryInfo(){
+        String[] result = new String[2];
+        result[0] = myTypeOfComboBox.getValue().toString();
+        result[1] = myBasedOnComboBox.getValue().toString();
+        return result;
+    }
+
 
     private void initializeVariables() {
         myBasedOnComboBox = new ComboBox();
