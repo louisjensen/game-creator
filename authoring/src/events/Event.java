@@ -20,7 +20,6 @@ public class Event implements IEventEngine, IEventAuthoring {
     private final ResourceBundle EVENT_TYPES_RESOURCES = ResourceBundle.getBundle("Events");
     private List<Action> actions = new ArrayList<>();
     private List<Condition> conditions = new ArrayList<>();
-    private List<KeyCode> inputs = new ArrayList<>();
     private String myType;
     private Collection<KeyCode> myInputs = new ArrayList<>();
 

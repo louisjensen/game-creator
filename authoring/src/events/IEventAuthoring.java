@@ -68,7 +68,7 @@ public interface IEventAuthoring {
     void setInputs(List<KeyCode> inputs);
 
     /**
-     * Allows you to add a list of INPUTS to the current list of required inputs
+     * Allows you to add a list of INPUTS to the current list of inputs
      * associated with this event. The next method allows you to add a single input.
      * @param
      */
