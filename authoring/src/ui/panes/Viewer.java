@@ -9,10 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
 import ui.*;
 
@@ -73,7 +70,7 @@ public class Viewer extends ScrollPane {
     private void updateWidth(String width){
         Double widthDouble = Double.parseDouble(width);
         updateGridLines();
-        //updateBackground(myBackgroundFileName);
+        updateBackground(myBackgroundFileName);
         myStackPane.setMinWidth(widthDouble);
         myStackPane.setMaxWidth(widthDouble);
     }
@@ -81,7 +78,7 @@ public class Viewer extends ScrollPane {
     private void updateHeight(String height){
         Double heightDouble = Double.parseDouble(height);
         updateGridLines();
-        //updateBackground(myBackgroundFileName);
+        updateBackground(myBackgroundFileName);
         myStackPane.setMinHeight(heightDouble);
         myStackPane.setMaxHeight(heightDouble);
     }
@@ -94,8 +91,9 @@ public class Viewer extends ScrollPane {
             Double roomHeight = this.getPrefHeight();
             Double roomWidth = this.getPrefWidth();
             Image image = new Image(fileInputStream, roomWidth, roomHeight, false, false);
-            BackgroundImage backgroundImage = new BackgroundImage(image, null, null, null, null);
+            BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, null);
             myStackPane.setBackground(new Background(backgroundImage));
+            myBackgroundFileName = filename;
         }
     }
 
