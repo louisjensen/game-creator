@@ -1,16 +1,20 @@
 package ui.panes;
+import actions.Action;
+import actions.HealthAction;
+import actions.NumericAction;
 import events.Event;
 import events.EventFactory;
 import events.EventType;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ui.UIException;
@@ -42,6 +46,7 @@ public class EventPane extends Stage {
     private Object[] eventParameters;
     VBox myEventDisplay;
 
+
     public EventPane(String eventDisplayName, String actorName,
                      ObservableList<Event> myEvents, Refresher refreshEventOptions) throws UIException{
         myEventName = eventDisplayName.replaceAll(" ","");
@@ -51,11 +56,10 @@ public class EventPane extends Stage {
         setUpEvent(eventDisplayOptions, actorName);
 
         myEventDisplay = new VBox();
-        VBox myActions = new VBox();
+        VBox myActions = setUpActions();
         VBox myEventButtons = new VBox();
 
         myEventDisplay.getChildren().add(myEventParameters);
-        myActions.getChildren().add(myEventFactory.createBoxFromResources(ACTION_LISTING));
         myEventButtons.getChildren().add(makeButtons(myEvents,refreshEventOptions));
 
         myEventDisplay.getChildren().add(myActions);
@@ -66,6 +70,64 @@ public class EventPane extends Stage {
         this.setScene(myScene);
         this.show();
     }
+
+    private VBox setUpActions(){
+        VBox actionsPanel = new VBox();
+        ComboBox<Button> myActionsListing = myEventFactory.createBoxFromResources(ACTION_LISTING);
+        myActionsListing.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                displayActionOptions(myActionsListing.getValue().getText());
+            }
+        });
+//        List<Label> simplisticActionsListing = new ArrayList<>();
+//        for (Button b: myActionsListing.getItems()) {
+//            Label currentLabel = new Label(b.getText());
+//            currentLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//                @Override
+//                public void handle(MouseEvent mouseEvent) {
+//                    displayActionOptions("hi");
+//                }
+//            });
+//            simplisticActionsListing.add(currentLabel);
+//        }
+//        ComboBox<Label> simplisticActions = new ComboBox<Label>(FXCollections.observableList(simplisticActionsListing));
+        actionsPanel.getChildren().add(myActionsListing);
+        return actionsPanel;
+
+    }
+
+    private void manageVisibilityOfButtons(VBox parentPanel, VBox innerPanel, Bounds intermediaryPanel ){
+        if ( innerPanel.isVisible()) {
+            parentPanel.getChildren().remove(innerPanel);
+        }
+        else {
+            parentPanel.getChildren().add(innerPanel);
+            innerPanel.setVisible(true);
+        }
+    }
+
+    private void displayActionOptions(String actionSelected){
+        VBox actionOptions = new VBox();
+
+        HBox modifyValue = new HBox();
+        modifyValue.getChildren().add(new Label("Modifier: "));
+        ChoiceBox<String> modifierOptions = new ChoiceBox<>();
+        List<String> modifierStrings = Arrays.asList("Set To","Scale By","Change By");
+        modifierOptions.setItems(FXCollections.observableArrayList(modifierStrings));
+
+        actionOptions.getChildren().add(modifierOptions);
+        actionOptions.getChildren().add(new Spinner<Double>(-100,100,1.0));
+        actionOptions.getChildren().add(new Button("Save"));
+        Stage smallActionOptions = new Stage();
+        smallActionOptions.setScene(new Scene(actionOptions));
+        actionOptions.getStylesheets().add("default.css");
+
+        smallActionOptions.show();
+
+    }
+
+
 
     private void setUpEvent(String eventDisplayOptions, String actorName) throws UIException {
         eventParameters = new Object[eventDisplayOptions.split(",").length + 1];
@@ -100,6 +162,7 @@ public class EventPane extends Stage {
             public void handle(ActionEvent actionEvent) {
                 generateUserEvent(userMadeEvents);
                 refreshOptions.refresh();
+                closeThisPane();
             }
         });
         Button myCancelButton = new Button("Cancel");
@@ -111,9 +174,6 @@ public class EventPane extends Stage {
         });
 
         return Utility.createButtonBar(Arrays.asList(mySaveButton,myCancelButton));
-    }
-    private void closeThisPane(){
-        this.close();
     }
     private Object getParameterValue(Node param){
         try {
@@ -137,6 +197,7 @@ public class EventPane extends Stage {
             Class eventClass = EventType.valueOf(myEventName.toUpperCase()).getClassName();
             Constructor eventConstructor = eventClass.getConstructor(constructorClassReferences);
             Event userMadeEvent = (Event) eventConstructor.newInstance(eventParameters);
+            Action associatedAction = generateUserAction();
             userMadeEvents.add(userMadeEvent);
         }
         catch (Exception e){
@@ -144,8 +205,11 @@ public class EventPane extends Stage {
         }
     }
 
-
-
-
+    private Action generateUserAction() {
+        return new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0);
+    }
+    private void closeThisPane(){
+        this.close();
+    }
 
 }

@@ -1,36 +1,60 @@
 package manager;
 
-import controls.SceneSwitchButton;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import page.WelcomePage;
+import page.CreateNewGamePage;
+import page.SplashPage;
 import page.WelcomeUserPage;
+import ui.main.MainGUI;
 
 public class SceneManager {
     private static final String MY_STYLE = "default.css";
     private static final double STAGE_WIDTH = 700;
     private static final double STAGE_HEIGHT = 600;
     private Scene myScene;
+    private SplashPage myInitialPage;
     private WelcomeUserPage myWelcomeUserPage;
+    private CreateNewGamePage myNewGamePage;
+
     private SwitchToUserOptions switchToWelcomeUserPage = new SwitchToUserOptions() {
         @Override
         public void switchPage() {
             goToWelcomeUserPage();
         }
     };
+    private SwitchToUserOptions switchToNewGamePage = new SwitchToUserOptions() {
+        @Override
+        public void switchPage() {
+            goToUserOptions();
+        }
+    };
+    private SwitchToUserOptions switchToAuthoring = new SwitchToUserOptions() {
+        @Override
+        public void switchPage() {
+            goToAuthoring();
+        }
+    };
     public void render(Stage myStage){
-        WelcomePage myWelcomePage = new WelcomePage(switchToWelcomeUserPage);
         makePages();
-        myScene = new Scene(myWelcomePage,STAGE_WIDTH,STAGE_HEIGHT);
+        myScene = new Scene(myInitialPage,STAGE_WIDTH,STAGE_HEIGHT);
         myScene.getStylesheets().add(MY_STYLE);
         myStage.setScene(myScene);
         myStage.show();
     }
     private void makePages(){
-        myWelcomeUserPage = new WelcomeUserPage();
+        myWelcomeUserPage = new WelcomeUserPage(switchToNewGamePage);
+        myInitialPage = new SplashPage(switchToWelcomeUserPage);
+        myNewGamePage = new CreateNewGamePage(switchToAuthoring);
     }
 
-    public void goToWelcomeUserPage(){
+    private void goToWelcomeUserPage(){
         myScene.setRoot(myWelcomeUserPage);
+    }
+    private void goToUserOptions(){
+        myScene.setRoot(myNewGamePage);
+    }
+    private void goToAuthoring(){
+        MainGUI myGUI = new MainGUI();
+        myGUI.launch();
     }
 }

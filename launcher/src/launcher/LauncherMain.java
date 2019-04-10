@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import manager.SceneManager;
-import page.WelcomePage;
 
 
 public class LauncherMain extends Application {

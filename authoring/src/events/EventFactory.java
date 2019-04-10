@@ -48,6 +48,7 @@ public class EventFactory {
         }
         ObservableList<Button> myButtons = FXCollections.observableArrayList(boxInfo);
         myChoices.setItems(myButtons);
+        myChoices.setValue(myButtons.get(0));
         return myChoices;
     }
     public static TextField createDisappearingLabel(String textFieldInformation){
