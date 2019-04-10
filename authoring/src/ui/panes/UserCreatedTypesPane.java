@@ -10,6 +10,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import ui.AuthoringEntity;
+import ui.AuthoringLevel;
 import ui.DefaultTypesFactory;
 import ui.Utility;
 import ui.manager.ObjectManager;
@@ -74,7 +75,7 @@ public class UserCreatedTypesPane extends VBox {
             imageWithEntity.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    AuthoringEntity copiedAuthoringEntity = new AuthoringEntity(originalAuthoringEntity, myDefaultTypesFactory.getDefaultEntity(ofType, basedOn));
+                    AuthoringEntity copiedAuthoringEntity = new AuthoringEntity(originalAuthoringEntity, myDefaultTypesFactory.getDefaultEntity(ofType, basedOn), new AuthoringLevel("REMOVEME", myObjectManager));
                     myDraggedAuthoringEntity = copiedAuthoringEntity;
                     System.out.println("Width " + imageWithEntity.getFitWidth());
                     Utility.setupDragAndDropImage(imageWithEntity);

@@ -1,5 +1,6 @@
 package ui.main;
 
+import factory.GameTranslator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,7 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import runner.external.Game;
-import ui.AuthoringEntity;
 import ui.AuthoringLevel;
 import ui.ErrorBox;
 import ui.LevelField;
@@ -53,7 +53,7 @@ public class MainGUI {
         myStage = new Stage();
         myObjectManager = new ObjectManager();
         AuthoringLevel blankLevel = new AuthoringLevel("Level_1", myObjectManager);
-        AuthoringEntity blankEntity = new AuthoringEntity("Object_1", myObjectManager);
+        myObjectManager.addLevel(blankLevel);
         mySelectedEntity = new SimpleObjectProperty<>(null);
         myCurrentLevel = new SimpleObjectProperty<>(blankLevel);
         myCurrentStyle = new SimpleStringProperty(DEFAULT_STYLESHEET);
@@ -73,7 +73,7 @@ public class MainGUI {
         myStage.setMinWidth(myStage.getWidth());
     }
 
-    private Scene createMainGUI(){
+    private Scene createMainGUI() { //TODO clean up
         BorderPane mainBorderPane = new BorderPane();
         Scene mainScene = new Scene(mainBorderPane);
         HBox propPaneBox = new HBox();
@@ -171,7 +171,9 @@ public class MainGUI {
     }
 
     private void saveGame() {
-        System.out.println("Save"); //TODO
+        GameTranslator translator = new GameTranslator(myGame, myObjectManager); //TODO needs some notion of what level each object instance is in
+        Game exportableGame = translator.translate(); //TODO needs Game info when new project is created
+        //TODO Serialize and export
     }
 
     private void openGroupManager() {
