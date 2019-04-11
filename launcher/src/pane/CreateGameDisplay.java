@@ -43,10 +43,10 @@ public class CreateGameDisplay extends VBox {
         myPlayer.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                DataManager dm = new DataManager();
-                dm.createGameFolder("GameOne");
-                GameCenterData myDataCenter = new GameCenterData(gameName.getTextEntered(), gameDescription.getTextEntered(), "GameOne", myFile.toURI().toString());
-                sceneSwitch.switchScene(myDataCenter);
+//                DataManager dm = new DataManager();
+//                dm.createGameFolder("GameOne");
+//                GameCenterData myDataCenter = new GameCenterData(gameName.getTextEntered(), gameDescription.getTextEntered(), "GameOne", myFile.toURI().toString());
+                sceneSwitch.switchScene();
             }
         });
 
