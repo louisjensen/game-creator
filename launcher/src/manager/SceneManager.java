@@ -56,7 +56,7 @@ public class SceneManager {
     private void makePages(){
         myWelcomeUserPage = new WelcomeUserPage(switchToNewGamePage,switchToGameCenter);
         myInitialPage = new SplashPage(switchToWelcomeUserPage);
-        myNewGamePage = new CreateNewGamePage(switchToAuthoring);
+        myNewGamePage = new CreateNewGamePage(switchToAuthoring,switchToGameCenter);
     }
 
     private void goToWelcomeUserPage(){
