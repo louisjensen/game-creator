@@ -23,7 +23,7 @@ public class CreateGameDisplay extends VBox {
     private InformativeField gameName = new InformativeField(GAME_FIELD);
     private InformativeField gameDescription = new InformativeField(GAME_DESCRIPITON);
     public CreateGameDisplay(SwitchToAuthoring sceneSwitch){
-        this.getStyleClass().add("default.css");
+        this.getStyleClass().add("default_launcher.css");
         setUpImages(sceneSwitch);
         this.setAlignment(Pos.CENTER);
         this.setSpacing(20);
@@ -43,10 +43,10 @@ public class CreateGameDisplay extends VBox {
         myPlayer.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                DataManager dm = new DataManager();
-                dm.createGameFolder("GameOne");
-                GameCenterData myDataCenter = new GameCenterData(gameName.getTextEntered(), gameDescription.getTextEntered(), "GameOne", myFile.toURI().toString());
-                sceneSwitch.switchScene(myDataCenter);
+//                DataManager dm = new DataManager();
+//                dm.createGameFolder("GameOne");
+//                GameCenterData myDataCenter = new GameCenterData(gameName.getTextEntered(), gameDescription.getTextEntered(), "GameOne", myFile.toURI().toString());
+                sceneSwitch.switchScene();
             }
         });
 

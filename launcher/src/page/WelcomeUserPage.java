@@ -6,7 +6,7 @@ import pane.UserOptionsDisplay;
 import pane.WelcomeDisplay;
 
 public class WelcomeUserPage extends VBox {
-    private static final String MY_STYLE = "default.css";
+    private static final String MY_STYLE = "default_launcher.css";
     private static final String WELCOME_LABEL_KEY = "specific_welcome";
 
     public WelcomeUserPage(SwitchToUserOptions switchDisplay, SwitchToUserOptions switchToLauncher){

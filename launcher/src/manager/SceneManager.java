@@ -11,7 +11,7 @@ import runner.external.GameCenterData;
 import ui.main.MainGUI;
 
 public class SceneManager {
-    private static final String MY_STYLE = "default.css";
+    private static final String MY_STYLE = "default_launcher.css";
     private static final double STAGE_WIDTH = 700;
     private static final double STAGE_HEIGHT = 600;
     private Scene myScene;
@@ -33,8 +33,8 @@ public class SceneManager {
     };
     private SwitchToAuthoring switchToAuthoring = new SwitchToAuthoring() {
         @Override
-        public void switchScene(GameCenterData myCenterData) {
-            goToAuthoring(myCenterData);
+        public void switchScene() {
+            goToAuthoring();
         }
     };
     private SwitchToUserOptions switchToGameCenter = new SwitchToUserOptions(){
@@ -65,8 +65,8 @@ public class SceneManager {
     private void goToUserOptions(){
         myScene.setRoot(myNewGamePage);
     }
-    private void goToAuthoring(GameCenterData myCenter){
-        MainGUI myGUI = new MainGUI(new Game(),myCenter);
+    private void goToAuthoring(){
+        MainGUI myGUI = new MainGUI();
         myGUI.launch();
     }
 
