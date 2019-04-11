@@ -9,7 +9,7 @@ public class UserOptionsDisplay extends HBox {
     private static final String CREATE_LAUNCHER = "create";
     private static final String PLAY_LAUNCHER = "play";
     public UserOptionsDisplay(SwitchToUserOptions switchDisplay, SwitchToUserOptions switchToLauncher){
-        this.getStyleClass().add("default.css");
+        this.getStyleClass().add("default_launcher.css");
         this.setTranslateY(100);
         setUpImages(switchDisplay,switchToLauncher);
         this.setAlignment(Pos.CENTER);

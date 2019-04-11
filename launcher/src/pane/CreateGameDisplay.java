@@ -23,7 +23,7 @@ public class CreateGameDisplay extends VBox {
     private InformativeField gameName = new InformativeField(GAME_FIELD);
     private InformativeField gameDescription = new InformativeField(GAME_DESCRIPITON);
     public CreateGameDisplay(SwitchToAuthoring sceneSwitch){
-        this.getStyleClass().add("default.css");
+        this.getStyleClass().add("default_launcher.css");
         setUpImages(sceneSwitch);
         this.setAlignment(Pos.CENTER);
         this.setSpacing(20);
