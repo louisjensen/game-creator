@@ -10,7 +10,8 @@ public enum EventType {
     RIGHTCOLLISION ("Right Collision", RightCollisionEvent.class, new Class<?>[]{String.class,String.class}, "INTERACTIVE"),
     TOPCOLLISION ("Top Collision", TopCollisionEvent.class, new Class<?>[]{String.class,String.class}, "INTERACTIVE"),
     TIMER ("Timer", TimerEvent.class, new Class<?>[]{String.class,Double.class},"INTERACTIVE"),
-    CONDITIONALEVENT ("Conditional", Event.class, new Class<?>[]{String.class},"CONDITIONAL");
+    CONDITIONALEVENT ("General", Event.class, new Class<?>[]{String.class},"CONDITIONAL");
+    
     public static final List<String> allDisplayNames = Arrays.asList(BOTTOMCOLLISION.displayName,LEFTCOLLISION.displayName,
             RIGHTCOLLISION.displayName,TOPCOLLISION.displayName,TIMER.displayName, CONDITIONALEVENT.displayName);
     private final String displayName;

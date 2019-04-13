@@ -77,8 +77,8 @@ public class EventPane extends Stage {
 
     private VBox setUpActions(){
         VBox actionsPanel = new VBox();
-        ComboBox<Button> myActionsListing = myEventFactory.createBoxFromResources(ACTION_LISTING);
-        actionsPanel.getChildren().add(myActionsListing);
+//        ComboBox<Button> myActionsListing = myEventFactory.createBoxFromResources(ACTION_LISTING);
+//        actionsPanel.getChildren().add(myActionsListing);
         return actionsPanel;
 
     }

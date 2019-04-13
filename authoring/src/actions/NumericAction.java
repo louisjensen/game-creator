@@ -74,9 +74,9 @@ public abstract class NumericAction<Double> extends Action<Double> {
      * value
      */
     public enum ModifyType {
-        ABSOLUTE("Set"),
-        RELATIVE("Add/Subtract"),
-        SCALE("Scale");
+        ABSOLUTE("ABSOLUTE"),
+        RELATIVE("RELATIVE"),
+        SCALE("SCALE");
 
         private final String displayName;
         ModifyType(String displayName) {

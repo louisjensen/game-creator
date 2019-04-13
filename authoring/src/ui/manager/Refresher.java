@@ -11,5 +11,5 @@ public interface Refresher {
      * @see EventPane
      * @author Anna Darwish
      */
-    void refresh(String eventAttribute);
+    void refresh();
 }

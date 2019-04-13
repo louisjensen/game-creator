@@ -28,7 +28,7 @@ public class EventManager extends Stage {
     private static final String INTERACTIVE_EVENT = "INTERACTIVE";
     private static final String EVENT_CLASSIFIER_RESOURCE = "event_classifier";
     private BorderPane myEventsDisplay;
-    private Refresher refreshEventListing = eventAttribute -> refreshEventListing(eventAttribute);
+    private Refresher refreshEventsListing = () -> refreshEventListing();
     public EventManager(Propertable prop) { // Loads common Events for object instance based on type label
         myEntity = (AuthoringEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
         Scene myDefaultScene = createPane();
@@ -78,7 +78,7 @@ public class EventManager extends Stage {
     private VBox createEventsToolPane(){
         VBox myTools = new VBox();
         Button myEventsPopUp = new Button("+ Event");
-        myEventsPopUp.setOnMouseClicked(e -> new EventsPopUpPane(myEntity.getPropertyMap()));
+        myEventsPopUp.setOnMouseClicked(e -> new EventsPopUpPane(myEntity.getPropertyMap(), myEntity.getEvents(), myEntityName,refreshEventsListing ));
         myTools.getChildren().add(myEventsPopUp);
         return myTools;
     }
@@ -100,7 +100,7 @@ public class EventManager extends Stage {
 //    }
 
 
-    private void refreshEventListing(String eventDetail){
+    private void refreshEventListing(){
         this.setScene(createPane());
     }
 
