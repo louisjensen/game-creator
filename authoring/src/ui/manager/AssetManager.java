@@ -76,6 +76,11 @@ public class AssetManager extends Stage {
         fillVBox();
     }
 
+    /**
+     * This constructor is needed when a user has already created an object and the image
+     * is tied to a properties object
+     * @param prop
+     */
     public AssetManager(Propertable prop) {
         this();
         myProp = prop;
@@ -116,8 +121,7 @@ public class AssetManager extends Stage {
         int col = 0;
         for(File temp : assetFolder.listFiles()){
             try {
-                String extension = temp.getName().split("\\.")[1];
-                String lowerCaseExtension = extension.toLowerCase();
+                String lowerCaseExtension = temp.getName().split("\\.")[1].toLowerCase();
                 if(myImageExtensions.contains(lowerCaseExtension)){
                     ImageView imageView = createImageView(temp);
                     AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
@@ -158,7 +162,8 @@ public class AssetManager extends Stage {
             Image image = new Image( new FileInputStream(temp.getPath()));
             imageView.setImage(image);
         } catch (FileNotFoundException e) {
-            //TODO DEAL WITH THIS
+            //The program is iterating through files found in the Assets folder
+            //If a file is not found, it shouldn't be included so returning a blank ImageView is ok
         }
         return imageView;
     }
@@ -194,32 +199,39 @@ public class AssetManager extends Stage {
     private void handleBrowse(){
         Stage stage = new Stage();
         FileChooser chooser = new FileChooser();
-        for(String s : myImageExtensions){
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(s,EXTENSION_PREFIX + s);
-            chooser.getExtensionFilters().add(extFilter);
-        }
+        initializeFileExtensions(chooser);
         File selectedFile = chooser.showOpenDialog(stage);
         if(selectedFile != null){
-            try {
-                BufferedImage image = ImageIO.read(selectedFile);
-                File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
-                File otherSaveToFile = new File("Images/" + selectedFile.getName());
-                String[] split = selectedFile.getPath().split("\\.");
-                String extension = split[split.length-1];
-                ImageIO.write(image, extension, saveToFile);
-                ImageIO.write(image, extension, otherSaveToFile);
-                drawImageScrollPane();
-            } catch (IOException e) {
-                //TODO: Test that this works
-                String[] text = myResources.getString(IO_ERROR).split(",");
-                ErrorBox errorBox = new ErrorBox(text[0], text[1]);
-                errorBox.display();
-            }
+            saveImage(selectedFile);
+            drawImageScrollPane();
         }
         else{
             mySelectedImageView = null;
         }
+    }
 
+    private void saveImage(File selectedFile) {
+        try {
+            BufferedImage image = ImageIO.read(selectedFile);
+            File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
+            File otherSaveToFile = new File("Images/" + selectedFile.getName());
+            String[] split = selectedFile.getPath().split("\\.");
+            String extension = split[split.length-1];
+            ImageIO.write(image, extension, saveToFile);
+            ImageIO.write(image, extension, otherSaveToFile);
+
+        } catch (IOException e) {
+            String[] text = myResources.getString(IO_ERROR).split(",");
+            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
+            errorBox.display();
+        }
+    }
+
+    private void initializeFileExtensions(FileChooser chooser) {
+        for(String s : myImageExtensions){
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(s,EXTENSION_PREFIX + s);
+            chooser.getExtensionFilters().add(extFilter);
+        }
     }
 
     private void createAndDisplayAlert(String contentText) {
@@ -236,7 +248,6 @@ public class AssetManager extends Stage {
     }
 
     private void handleApply(){
-        //TODO: add method to set Entity's image
         if(!mySelectedImageName.equals("")){
             if(myProp != null && myProp.getPropertyMap().containsKey(EntityField.IMAGE)){
                 myProp.getPropertyMap().put(EntityField.IMAGE, mySelectedImageName);
@@ -268,9 +279,5 @@ public class AssetManager extends Stage {
      */
     public String getImageName(){
         return  mySelectedImageName;
-    }
-
-    private void setImageToSelected(String resourceName) {
-        myProp.getPropertyMap().put(EntityField.IMAGE, resourceName);
     }
 }
