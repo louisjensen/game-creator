@@ -123,12 +123,7 @@ public class AssetManager extends Stage {
             try {
                 String lowerCaseExtension = temp.getName().split("\\.")[1].toLowerCase();
                 if(myImageExtensions.contains(lowerCaseExtension)){
-                    ImageView imageView = createImageView(temp);
-                    AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
-                    subPane.setOnMouseClicked(mouseEvent -> {
-                        mySelectedImageName = temp.getName();
-                        mySelectedImageView = imageView;
-                    });
+                    AssetImageSubPane subPane = createSubPane(temp);
                     if(col > MAX_NUM_COLS){
                         col = 0;
                         row++;
@@ -143,6 +138,16 @@ public class AssetManager extends Stage {
                 //this catch should be empty
             }
         }
+    }
+
+    private AssetImageSubPane createSubPane(File temp) {
+        ImageView imageView = createImageView(temp);
+        AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
+        subPane.setOnMouseClicked(mouseEvent -> {
+            mySelectedImageName = temp.getName();
+            mySelectedImageView = imageView;
+        });
+        return subPane;
     }
 
     private GridPane createAndFormatGridPane() {
