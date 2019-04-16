@@ -1,16 +1,22 @@
+/**
+ * @Author Megan Phibbons
+ * @Date April 2019
+ * @Purpose This code encompasses the general aspects of the header bar so that it can be displayed. For now, this is
+ * simply a title, but may eventually contain a settings button.
+ * @Dependencies javafx and Utilities.
+ * @Uses: Used in CenterMain to display the title
+ */
+
 package frontend.header;
 
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import frontend.Utilities;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import frontend.Utilities;
 
 import java.util.ResourceBundle;
 
@@ -18,24 +24,30 @@ public class HeaderBar {
     private Pane myHeaderLayout;
     private ResourceBundle myLanguageBundle;
 
+    /**
+     * @purpose constructor that initializes the resource bundle and sets the layout of the pane.
+     */
     public HeaderBar() {
         myLanguageBundle = ResourceBundle.getBundle("languages/English");
         myHeaderLayout = new BorderPane();
         initializeLayouts();
     }
 
+    /**
+     * @purpose share the header layout with CenterMain
+     * @return the current layout of the pane.
+     */
     public Pane getHeaderLayout() {
         return myHeaderLayout;
     }
 
     private void initializeLayouts() {
-        Label title = new Label(Utilities.getValue(myLanguageBundle, "titleText"));
-        title.getStylesheets().add("center.css");
+        Text title = new Text(Utilities.getValue(myLanguageBundle, "titleText"));
+        title.setFill(Color.WHITE);
+        title.setFont(new Font(48));
         BorderPane.setAlignment(title, Pos.TOP_CENTER);
         StackPane headerLayout = new StackPane();
-        headerLayout.getStylesheets().add("center.css");
         BorderPane titleLayout = new BorderPane();
-        titleLayout.getStylesheets().add("center.css");
         titleLayout.setCenter(title);
         headerLayout.getChildren().addAll(titleLayout);
         myHeaderLayout = headerLayout;
