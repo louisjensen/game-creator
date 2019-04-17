@@ -2,6 +2,7 @@ package ui.manager;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -126,7 +127,7 @@ abstract public class AssetManager extends Stage {
      * will be the content of the Manger's scrollpane
      * @return Pane of the desired content
      */
-    abstract protected Pane createAndFormatScrollPaneContent();
+    abstract protected Node createAndFormatScrollPaneContent();
 
     /**
      * Takes in a selectedFile by the user and then saves the assest to
@@ -162,7 +163,7 @@ abstract public class AssetManager extends Stage {
         }
     }
 
-    private void handleBrowse(){
+    protected void handleBrowse(){
         Stage stage = new Stage();
         FileChooser chooser = new FileChooser();
         initializeFileExtensions(chooser);
@@ -180,7 +181,7 @@ abstract public class AssetManager extends Stage {
         }
     }
 
-    private void createAndDisplayAlert(String contentText) {
+    protected void createAndDisplayAlert(String contentText) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(RESOURCES.getString(ERROR_HEADER));
         alert.setHeaderText(contentText);

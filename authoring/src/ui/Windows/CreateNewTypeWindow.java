@@ -126,14 +126,14 @@ public class CreateNewTypeWindow extends Stage {
     }
 
     private void openImageAssetManager(){
-        ImageManager assetManager = new ImageManager();
+        AudioManager assetManager = new AudioManager();
         assetManager.showAndWait();
-        if(assetManager.getImageView() != null){
-            ImageView imageView = assetManager.getImageView();
-            mySelectedImagePane.getChildren().clear();
-            mySelectedImagePane.getChildren().add(imageView);
-            mySelectedImageName = assetManager.getAssetName();
-        }
+//        if(assetManager.getImageView() != null){
+//            ImageView imageView = assetManager.getImageView();
+//            mySelectedImagePane.getChildren().clear();
+//            mySelectedImagePane.getChildren().add(imageView);
+//            mySelectedImageName = assetManager.getAssetName();
+//        }
     }
 
     private void createButtonPane() {
