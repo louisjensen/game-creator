@@ -7,20 +7,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ui.*;
 import ui.panes.AssetImageSubPane;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -28,28 +21,31 @@ import java.util.Set;
 /**
  * @author Carrie Hunner
  * This Class creates an AssetManger Stage
- * It displays all of the Images available in the Assets/Images folders
+ * It is a superclass designed to enable different assets
+ * to be displayed. Currently its sub-classes are ImageManager and
+ * Audio Manager. To add another subclass, the methods must be implemented
+ * but the corresponding AssetManger properties file must be edited
+ * to have a title for the pane and a list of acceptable file extensions
  */
-public class AssetManager extends Stage {
-    private ResourceBundle myResources;
+abstract public class AssetManager extends Stage {
+    private static final ResourceBundle RESOURCES = ResourceBundle.getBundle("asset_manager");
+    protected static final ResourceBundle GENERAL_RESOURCES = ResourceBundle.getBundle("authoring_general");
     private Set<String> myImageExtensions;
     private ScrollPane myImageScrollPane;
     private HBox myButtonHBox;
-    private String mySelectedImageName;
-    private ImageView mySelectedImageView;
+    protected String mySelectedAssetName;
     private TitledPane myImageTitledPane;
     private VBox myOuterVBox;
-
-    private static final String EXTENSION_RESOURCE_KEY = "AcceptableImageExtensions";
-    private static final String BUNDLE_NAME = "AssetManager";
-    private static final String ASSET_IMAGE_FOLDER_PATH = "authoring/Assets/Images";
-    private static final String IMAGES_TITLE_KEY = "ImagesTitle";
     private static final String BUTTON_INFO = "Buttons";
+
     private static final String IO_ERROR = "IOError";
     private static final String ERROR_HEADER = "ErrorHeader";
     private static final String EXTENSION_PREFIX = "*.";
     private static final String DEFAULT_STYLE_SHEET = "default.css";
     private static final String ASSET_SPECIFIC_SHEET = "asset-manager";
+    protected String myAssetFolderPath;
+    protected String myTitleKey;
+    protected String myExtensionKey;
     private static final double SPACING = 10;
     private static final int STAGE_WIDTH = 400;
     private static final int STAGE_HEIGHT = 300;
@@ -58,32 +54,21 @@ public class AssetManager extends Stage {
     private static final int BUTTON_SPACING = 20;
     private static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
 
-    private Propertable myProp;
-
     /**
      * This default Constructor is needed when the user is choosing an image for
      * a new type before the entity actually needs to be made and kept track of
      */
-    public AssetManager(){
-        myProp = null;
-        mySelectedImageName = "";
-        mySelectedImageView = null;
+    public AssetManager(String assetFolderPath, String titleKey, String extensionKey){
+        myAssetFolderPath = assetFolderPath;
+        myTitleKey = titleKey;
+        myExtensionKey = extensionKey;
+        mySelectedAssetName = "";
         initializeVariables();
         initializeStage();
         fillImageExtensionSet();
         drawImageScrollPane();
         createButtonPane();
         fillVBox();
-    }
-
-    /**
-     * This constructor is needed when a user has already created an object and the image
-     * is tied to a properties object
-     * @param prop
-     */
-    public AssetManager(Propertable prop) {
-        this();
-        myProp = prop;
     }
 
 
@@ -95,7 +80,7 @@ public class AssetManager extends Stage {
 
 
     private void createButtonPane() {
-        String buttonString = myResources.getString(BUTTON_INFO);
+        String buttonString = RESOURCES.getString(BUTTON_INFO);
         String[] buttonInfo = buttonString.split(",");
         formatButtonHBox();
         for(String s : buttonInfo){
@@ -116,14 +101,14 @@ public class AssetManager extends Stage {
         GridPane gridPane = createAndFormatGridPane();
         myImageScrollPane.setPadding(INSETS);
         myImageScrollPane.setContent(gridPane);
-        File assetFolder = new File(ASSET_IMAGE_FOLDER_PATH);
+        File assetFolder = new File(myAssetFolderPath);
         int row = 0;
         int col = 0;
         for(File temp : assetFolder.listFiles()){
             try {
                 String lowerCaseExtension = temp.getName().split("\\.")[1].toLowerCase();
                 if(myImageExtensions.contains(lowerCaseExtension)){
-                    AssetImageSubPane subPane = createSubPane(temp);
+                    Pane subPane = createSubPane(temp);
                     if(col > MAX_NUM_COLS){
                         col = 0;
                         row++;
@@ -140,15 +125,8 @@ public class AssetManager extends Stage {
         }
     }
 
-    private AssetImageSubPane createSubPane(File temp) {
-        ImageView imageView = createImageView(temp);
-        AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
-        subPane.setOnMouseClicked(mouseEvent -> {
-            mySelectedImageName = temp.getName();
-            mySelectedImageView = imageView;
-        });
-        return subPane;
-    }
+
+    abstract protected AssetImageSubPane createSubPane(File temp);
 
     private GridPane createAndFormatGridPane() {
         GridPane gridPane = new GridPane();
@@ -161,20 +139,9 @@ public class AssetManager extends Stage {
         return gridPane;
     }
 
-    private ImageView createImageView(File temp) {
-        ImageView imageView = new ImageView();
-        try {
-            Image image = new Image( new FileInputStream(temp.getPath()));
-            imageView.setImage(image);
-        } catch (FileNotFoundException e) {
-            //The program is iterating through files found in the Assets folder
-            //If a file is not found, it shouldn't be included so returning a blank ImageView is ok
-        }
-        return imageView;
-    }
+
 
     private void initializeVariables(){
-        myResources = ResourceBundle.getBundle(BUNDLE_NAME);
         myImageExtensions = new HashSet<>();
         myOuterVBox = new VBox();
         myOuterVBox.setPrefHeight(STAGE_HEIGHT);
@@ -182,7 +149,7 @@ public class AssetManager extends Stage {
         myButtonHBox = new HBox();
         myImageTitledPane = new TitledPane();
         myImageTitledPane.setContent(myImageScrollPane);
-        myImageTitledPane.setText(myResources.getString(IMAGES_TITLE_KEY));
+        myImageTitledPane.setText(RESOURCES.getString(myTitleKey));
     }
 
     private void initializeStage(){
@@ -195,8 +162,8 @@ public class AssetManager extends Stage {
         this.setScene(scene);
     }
 
-    private void fillImageExtensionSet(){
-        for(String s: myResources.getString(EXTENSION_RESOURCE_KEY).split(",")){
+    private void fillImageExtensionSet() {
+        for(String s: RESOURCES.getString(myExtensionKey).split(",")){
             myImageExtensions.add(s);
         }
     }
@@ -207,30 +174,12 @@ public class AssetManager extends Stage {
         initializeFileExtensions(chooser);
         File selectedFile = chooser.showOpenDialog(stage);
         if(selectedFile != null){
-            saveImage(selectedFile);
+            saveAsset(selectedFile);
             drawImageScrollPane();
         }
-        else{
-            mySelectedImageView = null;
-        }
     }
 
-    private void saveImage(File selectedFile) {
-        try {
-            BufferedImage image = ImageIO.read(selectedFile);
-            File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
-            File otherSaveToFile = new File("Images/" + selectedFile.getName());
-            String[] split = selectedFile.getPath().split("\\.");
-            String extension = split[split.length-1];
-            ImageIO.write(image, extension, saveToFile);
-            ImageIO.write(image, extension, otherSaveToFile);
-
-        } catch (IOException e) {
-            String[] text = myResources.getString(IO_ERROR).split(",");
-            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
-            errorBox.display();
-        }
-    }
+    abstract protected void saveAsset(File selectedFile);
 
     private void initializeFileExtensions(FileChooser chooser) {
         for(String s : myImageExtensions){
@@ -241,48 +190,46 @@ public class AssetManager extends Stage {
 
     private void createAndDisplayAlert(String contentText) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(myResources.getString(ERROR_HEADER));
+        alert.setTitle(RESOURCES.getString(ERROR_HEADER));
         alert.setHeaderText(contentText);
         alert.setContentText(null);
         alert.show();
     }
 
-    private void handleClose(){
-        mySelectedImageView = null;
+    protected void handleClose(){
+        mySelectedAssetName = null;
         this.close();
     }
 
-    private void handleApply(){
-        if(!mySelectedImageName.equals("")){
-            if(myProp != null && myProp.getPropertyMap().containsKey(EntityField.IMAGE)){
-                myProp.getPropertyMap().put(EntityField.IMAGE, mySelectedImageName);
-            }
-            else if(myProp != null && myProp.getPropertyMap().containsKey(LevelField.BACKGROUND)){
-                myProp.getPropertyMap().put(LevelField.BACKGROUND, mySelectedImageName);
-            }
-            this.close();
-        }
-        else{
-            String[] text = myResources.getString("NOIMAGE").split(",");
-            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
-            errorBox.display();
-        }
+    /**
+     * this method is called when an exception occurs in trying to save a file uploaded
+     * by the user
+     * It displays an error box
+     */
+    protected void handleSavingException(){
+        String[] text = RESOURCES.getString(IO_ERROR).split(",");
+        ErrorBox errorBox = new ErrorBox(text[0], text[1]);
+        errorBox.display();
     }
 
     /**
-     * Gets the ImageView associated with the selected image
-     * @return ImageView of the selected image
+     * This method is called by subclasses when someone hits the "Apply" button but
+     * no Asset is selected
      */
-    public ImageView getImageView(){
-        ImageView imageView = mySelectedImageView;
-        return imageView;
+    protected void handleNoAssetSelected(){
+        String[] text = RESOURCES.getString("NOIMAGE").split(",");
+        ErrorBox errorBox = new ErrorBox(text[0], text[1]);
+        errorBox.display();
     }
 
+    abstract protected void handleApply();
+
+
     /**
-     * Gets the Name of the selected image
-     * @return String of the selected image name
+     * Gets the Name of the selected asset
+     * @return String of the selected asset name
      */
-    public String getImageName(){
-        return  mySelectedImageName;
+    public String getAssetName(){
+        return mySelectedAssetName;
     }
 }

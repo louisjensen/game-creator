@@ -1,10 +1,8 @@
-package ui.panes;
+package ui.Windows;
 
 import engine.external.Entity;
 import engine.external.component.NameComponent;
 import engine.external.component.SpriteComponent;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -128,13 +126,13 @@ public class CreateNewTypeWindow extends Stage {
     }
 
     private void openImageAssetManager(){
-        AssetManager assetManager = new AssetManager();
+        ImageManager assetManager = new ImageManager();
         assetManager.showAndWait();
         if(assetManager.getImageView() != null){
             ImageView imageView = assetManager.getImageView();
             mySelectedImagePane.getChildren().clear();
             mySelectedImagePane.getChildren().add(imageView);
-            mySelectedImageName = assetManager.getImageName();
+            mySelectedImageName = assetManager.getAssetName();
         }
     }
 

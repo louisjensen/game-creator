@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import ui.DefaultTypesFactory;
+import ui.Windows.CreateNewTypeWindow;
 
 import java.util.ArrayList;
 import java.util.List;
