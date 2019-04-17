@@ -5,19 +5,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ui.panes.EventPane;
 
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
+
 /**
  * This is essentially a Utilities class that EventPane uses in order to display particular options and properties associated
  * with events and actions. This helps with reflection in creating events, as different events need to provide different
@@ -59,6 +53,12 @@ public class EventFactory {
         return createChoiceBox(myActionsList,myBinding);
 
     }
+    public static ChoiceBox<String> createBoxFromResources(String resourcesBundleName, String key, ArrayList<StringProperty> myBinding){
+        ResourceBundle optionsResource = ResourceBundle.getBundle(resourcesBundleName);
+        String[] keyValues = optionsResource.getString(key).split("::");
+        List<String> myActionsList = Arrays.asList(keyValues);
+        return createChoiceBox(myActionsList,myBinding);
+    }
 
     public static ChoiceBox<String> createBoxFromResourcesKey(String key, ArrayList<StringProperty> myBinding ){
         String[] keyValues = DEFAULT_RESOURCES.getString(key).split("::");
@@ -78,6 +78,26 @@ public class EventFactory {
         myBinding.add(myListener);
         return myChoices;
     }
+    public static HBox createDependentComboBoxes(String independentBundle, ArrayList<StringProperty> myBinding){
+        ChoiceBox<String> myControllingChoice = createBoxFromResources(independentBundle,myBinding);
+        ChoiceBox<String> myDependentChoice = new ChoiceBox<>(FXCollections.observableArrayList());
+        Map<String,ObservableList> choiceSelector = new HashMap<>();
+        ResourceBundle myIndependentResources = ResourceBundle.getBundle(independentBundle);
+        choiceSelector.put("", FXCollections.observableArrayList());
+
+        for (String key : ResourceBundle.getBundle(independentBundle).keySet()){
+            String[] dependentOptions = myIndependentResources.getString(key).split("::");
+            List dependentOptionsList = Arrays.asList(dependentOptions);
+            choiceSelector.put(key,FXCollections.observableArrayList(dependentOptionsList));
+        }
+        myControllingChoice.getSelectionModel().selectedItemProperty().addListener((observableEvent, previousEvent, selectedEvent) ->
+                myDependentChoice.setItems(FXCollections.observableList(choiceSelector.get(selectedEvent))));
+
+        HBox myHBox = new HBox();
+        myHBox.getChildren().add(myControllingChoice);
+        myHBox.getChildren().add(myDependentChoice);
+        return myHBox;
+    }
     public static TextField createDisappearingLabel(String textFieldInformation, ArrayList<StringProperty> myBinding){
         TextField myTextField = new TextField();
         myTextField.setPromptText(textFieldInformation);
@@ -92,6 +112,7 @@ public class EventFactory {
 
     public static HBox createActionsOptions(ArrayList<StringProperty> myActionsBinding){
         HBox myActionOptions = new HBox();
+        myActionOptions.getChildren().add(createLabel("Enter Action - "));
         ChoiceBox<String> modifyChoices = createBoxFromResourcesKey("Modifiers", myActionsBinding);
 //        modifyChoices.setPromptText("Modifiers");
         myActionOptions.getChildren().add(modifyChoices);
@@ -124,6 +145,18 @@ public class EventFactory {
             }
         });
         return myTextField;
+    }
+
+    public static Label createLabel(String labelText){
+        Label myLabel = new Label(labelText);
+        myLabel.getStylesheets().add("default.css");
+        return myLabel;
+    }
+
+    public static Label createLabel(String labelText, ArrayList<StringProperty> myBinding){
+        Label myLabel = new Label(labelText);
+        myLabel.getStylesheets().add("default.css");
+        return myLabel;
     }
 
 }

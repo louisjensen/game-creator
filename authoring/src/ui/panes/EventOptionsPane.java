@@ -1,53 +1,125 @@
 package ui.panes;
-
-
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.scene.control.*;
+import actions.Action;
+import actions.NumericAction;
+import conditions.Condition;
+import conditions.ConditionType;
+import events.Event;
+import events.EventFactory;
+import javafx.beans.property.StringProperty;
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ui.manager.Refresher;
+import ui.UIException;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class EventOptionsPane extends VBox {
-    private static final String EVENT_CLASSIFIER_RESOURCE = "component_options";
-    public EventOptionsPane(List<String> allEntities, List<String> uniqueReactiveEntities,
-                            ObservableMap<Enum, String> uniqueComponents, Refresher refreshEventsDisplay){
+    private static final String CONTROLS = "event_controls";
+    private static final String DISPLAY = "event_classes";
 
-        this.getChildren().add(makeOptionsListing(allEntities,uniqueReactiveEntities,"Select Entity..."));
-        this.getChildren().add(makeStateListing(uniqueReactiveEntities));
+    private static final String CONTROL_SEPARATOR = "::";
+    private static final String PARAMETER_SEPARATOR = ",";
 
-        List<String> optionalComponentsList = new ArrayList<>();
-        for (Enum en: uniqueComponents.keySet()){
-            optionalComponentsList.add(en.name());
+    private static final ResourceBundle CONTROLS_RESOURCES = ResourceBundle.getBundle(CONTROLS);
+    private static final ResourceBundle DISPLAY_RESOURCES = ResourceBundle.getBundle(DISPLAY);
+
+    private EventFactory myEventFactory = new EventFactory();
+    private ArrayList<StringProperty> myEventOptionsListener = new ArrayList<>();
+    private ArrayList<StringProperty> myActionOptionsListener = new ArrayList<>();
+
+    public EventOptionsPane(){
+        this.setMinSize(300,300);
+    }
+
+    public void displayEventOptions(String eventName) {
+        this.getChildren().clear();
+        myEventOptionsListener.clear();
+        HBox eventOptionsPanel = new HBox();
+        eventOptionsPanel.setSpacing(40);
+        for (String controlInformation: CONTROLS_RESOURCES.getString(eventName.replaceAll(" ","")).split(CONTROL_SEPARATOR)) {
+            String methodName = controlInformation.substring(0,controlInformation.indexOf(PARAMETER_SEPARATOR));
+            String methodParameter = controlInformation.substring(controlInformation.indexOf(PARAMETER_SEPARATOR) + 1);
+            Class<?>[] myClazz = {String.class, ArrayList.class};
+            Object[] myParams = {methodParameter,myEventOptionsListener};
+            try {
+                Method m = myEventFactory.getClass().getDeclaredMethod(methodName, myClazz);
+                Object addedOption = m.invoke(myEventFactory,myParams);
+               eventOptionsPanel.getChildren().add((Node)addedOption);
+            }
+            catch (Exception e){
+                UIException myEventCreatorException = new UIException("Missing Event Options"); //@TODO refactor to get message from properties file
+                myEventCreatorException.displayUIException();
+            }
         }
+        this.getChildren().add(eventOptionsPanel);
+        this.getChildren().add(myEventFactory.createActionsOptions(myActionOptionsListener));
+    }
 
-        Collections.sort(optionalComponentsList);
-        this.getChildren().add(makeOptionsListing(optionalComponentsList,"Select Component..."));
-       // this.getChildren().add(makeStateListing(uniqueComponents));
-    }
-    //Need a current listing of existing entities
-    private ComboBox<String> makeOptionsListing(List<String> fullList, List<String> partialList, String prompt){
-        fullList.removeAll(partialList);
-       return makeOptionsListing(fullList,prompt);
-    }
-    private ComboBox<String> makeOptionsListing(List<String> myListing, String prompt){
-        ObservableList<String> myObservableListing = FXCollections.observableArrayList(myListing);
-        ComboBox<String> myChooser = new ComboBox<>(myObservableListing);
-        myChooser.setMinWidth(180);
-        myChooser.setMaxWidth(180);
-        myChooser.setPromptText(prompt);
-        return myChooser;
+    Event saveEvent(String entityName, String eventName){
+        Event userMadeEvent = new Event("object1");
+        Class eventClass = null;
+        Constructor eventConstructor;
+        Object[] eventConstructorParameters;
+//
+        try {
+            //Collision case
 
-    }
-    private VBox makeStateListing(List<String> availableOptions){
-        VBox myEventsListing = new VBox();
-        for (String option: availableOptions){
-           myEventsListing.getChildren().add(new Label(option));
+            eventClass = Class.forName(DISPLAY_RESOURCES.getString(eventName));
+            eventConstructor = eventClass.getConstructor(String.class,String.class);
+            eventConstructorParameters = new Object[2];
+            eventConstructorParameters[0] = entityName; // @TODO Get Entity name here
+            eventConstructorParameters[1] = myEventOptionsListener.get(0).getValue();
+            userMadeEvent = (Event)eventConstructor.newInstance(eventConstructorParameters);
+            //This should be the collidee name if eventCollision was selected
         }
-        return myEventsListing;
+        catch (Exception e) {
+            try {
+                //GeneralCase
+                eventConstructor = eventClass.getConstructor(String.class);
+                eventConstructorParameters = new Object[1];
+                eventConstructorParameters[0] = entityName;
+                userMadeEvent = (Event)eventConstructor.newInstance(eventConstructorParameters);
+
+                Class conditionClass;
+                Constructor conditionConstructor;
+                Object[] conditionConstructorParameters;
+
+                ConditionType myConditionType = ConditionType.valueOf(myEventOptionsListener.get(1).getValue().replaceAll(" ",""));
+                // Component < Value, need <
+                conditionClass = myConditionType.getClassName();
+
+                conditionConstructor = conditionClass.getConstructor(String.class,Double.class);// @TODO Handle different condition constructors
+
+                conditionConstructorParameters = new Object[2];
+                conditionConstructorParameters[0] = Class.forName(myEventOptionsListener.get(0).getValue());
+                //need the class name of the component
+                conditionConstructorParameters[1] = Double.parseDouble(myEventOptionsListener.get(2).getValue());
+                //need the value corresponding to it
+                Condition userMadeCondition =  (Condition)conditionConstructor.newInstance(conditionConstructorParameters);
+                userMadeEvent.addConditions(userMadeCondition);
+
+            }
+            catch (Exception e2) {
+                System.out.println("NO STRING OR ZERO PARAMETER CONSTRUCTOR OR EVENT DOESN'T EXIST");
+            }
+        }
+        try {
+
+            Class actionClass = Class.forName("actions." + myActionOptionsListener.get(1).getValue()+ "Action");
+            Constructor actionConstructor = actionClass.getConstructor(NumericAction.ModifyType.class,Double.class); //@TODO handle different action constructors
+            Object[] actionConstructorParameters = {NumericAction.ModifyType.valueOf(myActionOptionsListener.get(0).getValue()),
+                    Double.parseDouble(myActionOptionsListener.get(2).getValue())};
+            Action userMadeAction = (Action)actionConstructor.newInstance(actionConstructorParameters);
+            userMadeEvent.addActions(userMadeAction);
+
+        }
+        catch(Exception e){
+            System.out.println("ACTION CREATED INCORRECTLY");
+        }
+       return userMadeEvent;
     }
+
 
 }

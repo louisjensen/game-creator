@@ -32,13 +32,7 @@ public class EventManager extends Stage {
     public EventManager(Propertable prop) { // Loads common Events for object instance based on type label
         myEntity = (AuthoringEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
         Scene myDefaultScene = createPane();
-        myDefaultScene.getStylesheets().add("default.css");
-        this.setMinHeight(700);
-        this.setMinWidth(800);
-        this.setMaxHeight(700);
-        this.setMaxWidth(800);
         this.setScene(myDefaultScene);
-        this.setResizable(false);
         myEntityName = myEntity.getPropertyMap().get(EntityField.LABEL);
     }
 
@@ -60,7 +54,14 @@ public class EventManager extends Stage {
         myEventsDisplay.setCenter(new CurrentEventsPane(myEntity.getEvents()));
         myEventsDisplay.setRight(null);
         myEventsDisplay.setBottom(createEventsToolPane());
-        return new Scene(myEventsDisplay);
+        Scene myScene = new Scene(myEventsDisplay);
+        this.setMinHeight(700);
+        this.setMinWidth(800);
+        this.setMaxHeight(700);
+        this.setMaxWidth(800);
+        this.setResizable(false);
+        myScene.getStylesheets().add("default.css");
+        return myScene;
     }
 
     private VBox createTitle(){
