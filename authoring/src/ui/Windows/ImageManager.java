@@ -15,6 +15,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/**
+ * @author Carrie Hunner
+ * This class extends AssetManager and provides a
+ * window for users to both upload and select previously
+ * uploaded images
+ */
 public class ImageManager extends AssetManager {
     private ImageView mySelectedImageView;
     private Propertable myProp;
@@ -22,6 +28,10 @@ public class ImageManager extends AssetManager {
     private static final String TITLE_KEY = "ImagesTitle";
     private static final String ASSET_IMAGE_FOLDER_PATH = GENERAL_RESOURCES.getString("images_filepath");
 
+    /**
+     * This default Constructor is needed when the user is choosing an image for
+     * a new type before the entity actually needs to be made and kept track of
+     */
     public ImageManager(){
         super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
         mySelectedImageView = null;

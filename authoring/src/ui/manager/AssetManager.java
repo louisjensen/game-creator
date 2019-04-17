@@ -55,8 +55,10 @@ abstract public class AssetManager extends Stage {
     private static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
 
     /**
-     * This default Constructor is needed when the user is choosing an image for
-     * a new type before the entity actually needs to be made and kept track of
+     * This is a constructor that forces the coder to input info for creating the window
+     * @param assetFolderPath String of the path to the assetFolder
+     * @param titleKey String of the key to the window title in the asset_manager properties file
+     * @param extensionKey String of the key to the list of extensions in the asset_manager properties file
      */
     public AssetManager(String assetFolderPath, String titleKey, String extensionKey){
         myAssetFolderPath = assetFolderPath;
