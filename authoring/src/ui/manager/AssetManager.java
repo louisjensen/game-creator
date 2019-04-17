@@ -11,7 +11,6 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ui.*;
-import ui.panes.AssetImageSubPane;
 
 import java.io.File;
 import java.util.HashSet;
@@ -30,8 +29,8 @@ import java.util.Set;
 abstract public class AssetManager extends Stage {
     private static final ResourceBundle RESOURCES = ResourceBundle.getBundle("asset_manager");
     protected static final ResourceBundle GENERAL_RESOURCES = ResourceBundle.getBundle("authoring_general");
-    private Set<String> myImageExtensions;
-    private ScrollPane myImageScrollPane;
+    private Set<String> myExtensions;
+    private ScrollPane myScrollPane;
     private HBox myButtonHBox;
     protected String mySelectedAssetName;
     private TitledPane myImageTitledPane;
@@ -46,13 +45,11 @@ abstract public class AssetManager extends Stage {
     protected String myAssetFolderPath;
     protected String myTitleKey;
     protected String myExtensionKey;
-    private static final double SPACING = 10;
+    protected static final double SPACING = 10;
     private static final int STAGE_WIDTH = 400;
     private static final int STAGE_HEIGHT = 300;
-    private static final int MAX_NUM_COLS = 4;
-    private static final int IMAGE_SUBPANE_SIZE = 60;
     private static final int BUTTON_SPACING = 20;
-    private static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
+    protected static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
 
     /**
      * This is a constructor that forces the coder to input info for creating the window
@@ -67,8 +64,8 @@ abstract public class AssetManager extends Stage {
         mySelectedAssetName = "";
         initializeVariables();
         initializeStage();
-        fillImageExtensionSet();
-        drawImageScrollPane();
+        fillExtensionSet();
+        populateScrollPane();
         createButtonPane();
         fillVBox();
     }
@@ -99,24 +96,15 @@ abstract public class AssetManager extends Stage {
         myButtonHBox.setAlignment(Pos.CENTER);
     }
 
-    private void drawImageScrollPane() {
-        GridPane gridPane = createAndFormatGridPane();
-        myImageScrollPane.setPadding(INSETS);
-        myImageScrollPane.setContent(gridPane);
+    private void populateScrollPane() {
+        myScrollPane.setPadding(INSETS);
+        myScrollPane.setContent(createAndFormatScrollPaneContent());
         File assetFolder = new File(myAssetFolderPath);
-        int row = 0;
-        int col = 0;
         for(File temp : assetFolder.listFiles()){
             try {
                 String lowerCaseExtension = temp.getName().split("\\.")[1].toLowerCase();
-                if(myImageExtensions.contains(lowerCaseExtension)){
-                    Pane subPane = createSubPane(temp);
-                    if(col > MAX_NUM_COLS){
-                        col = 0;
-                        row++;
-                    }
-                    gridPane.add(subPane, col, row);
-                    col++;
+                if(myExtensions.contains(lowerCaseExtension)){
+                    addAsset(temp);
                 }
             }
             catch (IndexOutOfBoundsException e){
@@ -127,30 +115,34 @@ abstract public class AssetManager extends Stage {
         }
     }
 
+    /**
+     * Method that adds a file to the manager
+     * @param file File to be added
+     */
+    abstract protected void addAsset(File file);
 
-    abstract protected AssetImageSubPane createSubPane(File temp);
+    /**
+     * Method that should create and format a pane that
+     * will be the content of the Manger's scrollpane
+     * @return Pane of the desired content
+     */
+    abstract protected Pane createAndFormatScrollPaneContent();
 
-    private GridPane createAndFormatGridPane() {
-        GridPane gridPane = new GridPane();
-        gridPane.setPadding(INSETS);
-        ColumnConstraints colRestraint = new ColumnConstraints(SPACING + IMAGE_SUBPANE_SIZE);
-        gridPane.getColumnConstraints().add(colRestraint);
-        RowConstraints rowRestraint = new RowConstraints(SPACING + IMAGE_SUBPANE_SIZE);
-        gridPane.getRowConstraints().add(rowRestraint);
-        gridPane.setAlignment(Pos.CENTER);
-        return gridPane;
-    }
-
-
+    /**
+     * Takes in a selectedFile by the user and then saves the assest to
+     * the folder
+     * @param selectedFile
+     */
+    abstract protected void saveAsset(File selectedFile);
 
     private void initializeVariables(){
-        myImageExtensions = new HashSet<>();
+        myExtensions = new HashSet<>();
         myOuterVBox = new VBox();
         myOuterVBox.setPrefHeight(STAGE_HEIGHT);
-        myImageScrollPane = new ScrollPane();
+        myScrollPane = new ScrollPane();
         myButtonHBox = new HBox();
         myImageTitledPane = new TitledPane();
-        myImageTitledPane.setContent(myImageScrollPane);
+        myImageTitledPane.setContent(myScrollPane);
         myImageTitledPane.setText(RESOURCES.getString(myTitleKey));
     }
 
@@ -164,9 +156,9 @@ abstract public class AssetManager extends Stage {
         this.setScene(scene);
     }
 
-    private void fillImageExtensionSet() {
+    private void fillExtensionSet() {
         for(String s: RESOURCES.getString(myExtensionKey).split(",")){
-            myImageExtensions.add(s);
+            myExtensions.add(s);
         }
     }
 
@@ -177,14 +169,12 @@ abstract public class AssetManager extends Stage {
         File selectedFile = chooser.showOpenDialog(stage);
         if(selectedFile != null){
             saveAsset(selectedFile);
-            drawImageScrollPane();
+            populateScrollPane();
         }
     }
 
-    abstract protected void saveAsset(File selectedFile);
-
     private void initializeFileExtensions(FileChooser chooser) {
-        for(String s : myImageExtensions){
+        for(String s : myExtensions){
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(s,EXTENSION_PREFIX + s);
             chooser.getExtensionFilters().add(extFilter);
         }

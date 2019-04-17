@@ -1,7 +1,12 @@
 package ui.Windows;
 
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.RowConstraints;
 import ui.EntityField;
 import ui.LevelField;
 import ui.Propertable;
@@ -24,6 +29,11 @@ import java.io.IOException;
 public class ImageManager extends AssetManager {
     private ImageView mySelectedImageView;
     private Propertable myProp;
+    private GridPane myGridPane;
+    private int myRow;
+    private int myCol;
+    private static final int IMAGE_SUBPANE_SIZE = 60;
+    private static final int MAX_NUM_COLS = 5;
     private static final String EXTENSION_KEY = "AcceptableImageExtensions";
     private static final String TITLE_KEY = "ImagesTitle";
     private static final String ASSET_IMAGE_FOLDER_PATH = GENERAL_RESOURCES.getString("images_filepath");
@@ -36,6 +46,8 @@ public class ImageManager extends AssetManager {
         super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
         mySelectedImageView = null;
         myProp = null;
+        myRow = 0;
+        myCol = 0;
     }
 
     /**
@@ -64,8 +76,7 @@ public class ImageManager extends AssetManager {
         this.close();
     }
 
-    @Override
-    protected AssetImageSubPane createSubPane(File temp) {
+    private AssetImageSubPane createSubPane(File temp) {
         ImageView imageView = createImageView(temp);
         AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
         subPane.setOnMouseClicked(mouseEvent -> {
@@ -73,6 +84,28 @@ public class ImageManager extends AssetManager {
             mySelectedImageView = imageView;
         });
         return subPane;
+    }
+
+    @Override
+    protected void addAsset(File file) {
+        if(myCol == MAX_NUM_COLS){
+            myCol = 0;
+            myRow += 1;
+        }
+        myGridPane.add(createSubPane(file), myCol, myRow);
+        myCol++;
+    }
+
+    @Override
+    protected Pane createAndFormatScrollPaneContent() {
+        myGridPane = new GridPane();
+        myGridPane.setPadding(INSETS);
+        ColumnConstraints colRestraint = new ColumnConstraints(SPACING + IMAGE_SUBPANE_SIZE);
+        myGridPane.getColumnConstraints().add(colRestraint);
+        RowConstraints rowRestraint = new RowConstraints(SPACING + IMAGE_SUBPANE_SIZE);
+        myGridPane.getRowConstraints().add(rowRestraint);
+        myGridPane.setAlignment(Pos.CENTER);
+        return myGridPane;
     }
 
     @Override
@@ -118,5 +151,6 @@ public class ImageManager extends AssetManager {
         }
         return imageView;
     }
+
 
 }
