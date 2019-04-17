@@ -38,21 +38,7 @@ public class EventOptionsPane extends VBox {
         myEventOptionsListener.clear();
         HBox eventOptionsPanel = new HBox();
         eventOptionsPanel.setSpacing(40);
-        for (String controlInformation: CONTROLS_RESOURCES.getString(eventName.replaceAll(" ","")).split(CONTROL_SEPARATOR)) {
-            String methodName = controlInformation.substring(0,controlInformation.indexOf(PARAMETER_SEPARATOR));
-            String methodParameter = controlInformation.substring(controlInformation.indexOf(PARAMETER_SEPARATOR) + 1);
-            Class<?>[] myClazz = {String.class, ArrayList.class};
-            Object[] myParams = {methodParameter,myEventOptionsListener};
-            try {
-                Method m = myEventFactory.getClass().getDeclaredMethod(methodName, myClazz);
-                Object addedOption = m.invoke(myEventFactory,myParams);
-               eventOptionsPanel.getChildren().add((Node)addedOption);
-            }
-            catch (Exception e){
-                UIException myEventCreatorException = new UIException("Missing Event Options"); //@TODO refactor to get message from properties file
-                myEventCreatorException.displayUIException();
-            }
-        }
+        myEventFactory.factoryDelegator(CONTROLS,eventName,eventOptionsPanel,myEventOptionsListener);
         this.getChildren().add(eventOptionsPanel);
         this.getChildren().add(myEventFactory.createActionsOptions(myActionOptionsListener));
     }
@@ -77,6 +63,7 @@ public class EventOptionsPane extends VBox {
         catch (Exception e) {
             try {
                 //GeneralCase
+
                 eventConstructor = eventClass.getConstructor(String.class);
                 eventConstructorParameters = new Object[1];
                 eventConstructorParameters[0] = entityName;
@@ -90,10 +77,10 @@ public class EventOptionsPane extends VBox {
                 // Component < Value, need <
                 conditionClass = myConditionType.getClassName();
 
-                conditionConstructor = conditionClass.getConstructor(String.class,Double.class);// @TODO Handle different condition constructors
+                conditionConstructor = conditionClass.getConstructor(Class.class,Double.class);// @TODO Handle different condition constructors
 
                 conditionConstructorParameters = new Object[2];
-                conditionConstructorParameters[0] = Class.forName(myEventOptionsListener.get(0).getValue());
+                conditionConstructorParameters[0] = Class.forName("engine.external.component." + myEventOptionsListener.get(0).getValue() + "Component");
                 //need the class name of the component
                 conditionConstructorParameters[1] = Double.parseDouble(myEventOptionsListener.get(2).getValue());
                 //need the value corresponding to it
@@ -107,9 +94,9 @@ public class EventOptionsPane extends VBox {
         }
         try {
 
-            Class actionClass = Class.forName("actions." + myActionOptionsListener.get(1).getValue()+ "Action");
+            Class actionClass = Class.forName("actions." + myActionOptionsListener.get(0).getValue()+ "Action");
             Constructor actionConstructor = actionClass.getConstructor(NumericAction.ModifyType.class,Double.class); //@TODO handle different action constructors
-            Object[] actionConstructorParameters = {NumericAction.ModifyType.valueOf(myActionOptionsListener.get(0).getValue()),
+            Object[] actionConstructorParameters = {NumericAction.ModifyType.valueOf(myActionOptionsListener.get(1).getValue()),
                     Double.parseDouble(myActionOptionsListener.get(2).getValue())};
             Action userMadeAction = (Action)actionConstructor.newInstance(actionConstructorParameters);
             userMadeEvent.addActions(userMadeAction);

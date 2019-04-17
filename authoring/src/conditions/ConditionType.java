@@ -2,11 +2,11 @@ package conditions;
 
 public enum ConditionType {
 
-        CollisionCondition (CollisionCondition.class, new Class<?>[]{String.class,String.class}),
-        EqualToCondition (EqualToCondition.class, new Class<?>[]{String.class,String.class}),
-        GreaterThanCondition (GreaterThanCondition.class, new Class<?>[]{String.class,String.class}),
-        LessThanCondition (LessThanCondition.class, new Class<?>[]{String.class,String.class}),
-        StringEqualToCondition (StringEqualToCondition.class, new Class<?>[]{String.class,Double.class});
+        Collision (CollisionCondition.class, new Class<?>[]{String.class,String.class}),
+        EqualTo (EqualToCondition.class, new Class<?>[]{String.class,String.class}),
+        GreaterThan (GreaterThanCondition.class, new Class<?>[]{String.class,String.class}),
+        LessThan (LessThanCondition.class, new Class<?>[]{String.class,String.class}),
+        StringEqualTo (StringEqualToCondition.class, new Class<?>[]{String.class,Double.class});
 
 
         private final Class<?> className;
