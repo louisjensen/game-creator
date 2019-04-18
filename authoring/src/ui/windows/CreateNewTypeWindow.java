@@ -1,4 +1,4 @@
-package ui.Windows;
+package ui.windows;
 
 import engine.external.Entity;
 import engine.external.component.NameComponent;

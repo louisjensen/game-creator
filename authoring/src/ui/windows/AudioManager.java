@@ -1,4 +1,4 @@
-package ui.Windows;
+package ui.windows;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
