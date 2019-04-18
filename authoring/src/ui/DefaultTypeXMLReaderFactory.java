@@ -8,6 +8,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.*;
 
@@ -57,6 +58,8 @@ public class DefaultTypeXMLReaderFactory {
                 for(int k = 0; k < paramTypes.length; k++){
                     System.out.println("\t" + paramTypes[k].toString());
                     Constructor constructor = clazz.getConstructor(paramTypes[k]);
+                    constructor.newInstance(entry.getValue());
+                    makeComponent(entry.getValue(), constructor, paramTypes[0].getClass());
                     System.out.println("Got constructor");
                     /**
                      * Current scenario:
@@ -68,8 +71,23 @@ public class DefaultTypeXMLReaderFactory {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
         }
+    }
+
+    private Component makeComponent(String input, Constructor constructor, Class clazz) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        System.out.println("Class: " + clazz.getName());
+        String[] brokenUpClass = clazz.getClass().toString().split("\\.");
+        String className = brokenUpClass[brokenUpClass.length-1];
+        System.out.println("Class Name Broken up: " + className);
+        System.out.println(className + ".parse" + className);
+        return null;
     }
 
 
