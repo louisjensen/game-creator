@@ -31,6 +31,7 @@ public class AuthoringEntity implements Propertable {
         myPropertyMap.put(EntityField.Y, "0.0");
         myPropertyMap.put(EntityField.XSCALE, "1.0");
         myPropertyMap.put(EntityField.YSCALE, "1.0");
+        myPropertyMap.put(EntityField.CAMERA, "false");
     }
 
     public AuthoringEntity(String label, ObjectManager manager) { // Create new type of AuthoringEntity from scratch
@@ -87,6 +88,9 @@ public class AuthoringEntity implements Propertable {
             myObjectManager.propagate(oldVal, key, newVal);
         else if (key.equals(EntityField.IMAGE) || key.equals(EntityField.GROUP)) // If we're changing the Image or Group, just do it
             myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
+        else if (key.equals(EntityField.CAMERA)) {
+            myObjectManager.flushCameraAssignment(this);
+        }
     }
 
     public ObservableMap<Enum, String> getPropertyMap() {

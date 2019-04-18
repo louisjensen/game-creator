@@ -39,6 +39,14 @@
     -fx-text-fill: white;
 }
 
+.check-box .box {
+    -fx-background-color: #606060;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
 .combo-box, .combo-box-popup .list-cell  {
     -fx-background-color: #606060;
     -fx-text-fill: white;
