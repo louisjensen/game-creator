@@ -16,16 +16,16 @@
     -fx-background-color: #606060;
 }
 
-.scroll-pane .list-cell{
+.scroll-pane .list-cell {
     -fx-text-fill: white;
     -fx-background-color: #404040;
 }
 
-.scroll-pane .list-cell:odd{
+.scroll-pane .list-cell:odd {
     -fx-background-color: #303030;
 }
 
-.scroll-pane .list-cell:selected {
+.scroll-pane .list-view .list-cell:selected {
     -fx-background-color: #005797;
 }
 
