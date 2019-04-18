@@ -1,11 +1,14 @@
 package ui;
 
 import engine.external.Entity;
+import engine.external.component.Component;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Parameter;
 import java.util.*;
 
 public class DefaultTypeXMLReaderFactory {
@@ -23,6 +26,7 @@ public class DefaultTypeXMLReaderFactory {
         myRootsList = new ArrayList<>();
         fillRootsList();
         fillMaps();
+        createEntity("Block");
     }
 
     /**
@@ -43,23 +47,46 @@ public class DefaultTypeXMLReaderFactory {
 
     private void createEntity(String name){
         Map<String, String> componentMap = myNameToComponents.get(name);
-
-    }
-    private void fillMaps() {
-        for(int k = 0; k < myRootsList.size(); k++){
-            Element currentElement = (Element) myRootsList.get(k);
-            Map<String, String> componentsMap = fillComponentsMap(currentElement);
-            if(hasRequiredInformation(componentsMap, currentElement)){
-                String name = componentsMap.get("Name");
-                myNameToComponents.put(name, componentsMap);
-                NodeList categoryList = currentElement.getElementsByTagName("Category");
-                String category = categoryList.item(categoryList.getLength()-1).getTextContent();
-                myNameToCategory.put(name, category);
+        System.out.println("Map size: " + componentMap.size());
+        for(Map.Entry<String, String> entry : componentMap.entrySet()){
+            try {
+                Class clazz = Class.forName("engine.external.component." + entry.getKey());
+                Constructor[] constructors = clazz.getConstructors();
+                Class[] paramTypes = constructors[0].getParameterTypes();
+                System.out.println("Param type for " + entry.getKey());
+                for(int k = 0; k < paramTypes.length; k++){
+                    System.out.println("\t" + paramTypes[k].toString());
+                    Constructor constructor = clazz.getConstructor(paramTypes[k]);
+                    System.out.println("Got constructor");
+                    /**
+                     * Current scenario:
+                     * I have the ability to get the type and constructors from that
+                     * I need to be able to translate the String from the XML into the correct type
+                     */
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
             }
         }
     }
 
 
+    private void fillMaps() {
+        for (int k = 0; k < myRootsList.size(); k++) {
+            Element currentElement = (Element) myRootsList.get(k);
+            Map<String, String> componentsMap = fillComponentsMap(currentElement);
+            if (hasRequiredInformation(componentsMap, currentElement)) {
+                String name = componentsMap.get("NameComponent");
+                myNameToComponents.put(name, componentsMap);
+                System.out.println("Added map for: " + name);
+                NodeList categoryList = currentElement.getElementsByTagName("Category");
+                String category = categoryList.item(categoryList.getLength() - 1).getTextContent();
+                myNameToCategory.put(name, category);
+            }
+        }
+    }
     private void fillRootsList(){
         File assetFolder = new File(FOLDER_PATH);
         File[] files = assetFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(EXTENSIONS));
