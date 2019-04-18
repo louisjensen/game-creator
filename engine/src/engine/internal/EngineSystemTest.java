@@ -1,5 +1,7 @@
 
 
+
+
 package engine.internal;
 
 import engine.external.Engine;
@@ -229,6 +231,17 @@ public class EngineSystemTest extends Application{
         testEngine.updateState(new ArrayList<>());
         assertTrue(!bird.hasComponents(RightCollidedComponent.class)||!((Collection)bird.getComponent(RightCollidedComponent.class).getValue()).contains(mushroom));
     }
-}
 
+    /**
+     *
+     */
+    @Test
+    public void testSetPosition(){
+        XPositionComponent c1 = new XPositionComponent(10.0);
+        c1.setValue(20.0);
+        assertTrue(c1.getValue()==20.0);
+        assertTrue(c1.getOldValue()==10.0);
+
+    }
+}
 
