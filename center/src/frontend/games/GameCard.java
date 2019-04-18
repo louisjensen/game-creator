@@ -37,6 +37,9 @@ public class GameCard {
     private static final String TITLE_SELECTOR = "cardtitle";
     private static final String BODY_SELECTOR = "cardbody";
     private static final String BUTTONS_SELECTOR = "buttons";
+    private static final String FOREGROUND_SELECTOR = "cardpadding";
+    private static final String INDIVIDUAL_BUTTON_SELECTOR = "button";
+    private static final String CONTENT_SELECTOR = "contentpadding";
     private int myIndex;
     private ResourceBundle myLanguageBundle;
     private GameCenterData myGame;
@@ -65,8 +68,7 @@ public class GameCard {
 
     private void initializeDisplay() {
         BorderPane tempDisplay = new BorderPane();
-        StackPane cardContents = null;
-        cardContents = fillCardContents();
+        StackPane cardContents = fillCardContents();
         tempDisplay.setCenter(cardContents);
         myDisplay = tempDisplay;
     }
@@ -80,9 +82,7 @@ public class GameCard {
 
     private void addBackground(Pane pane) {
         BorderPane background = new BorderPane();
-        background.setBackground(Background.EMPTY);
         Rectangle display = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-        display.getStyleClass().add(BACKGROUND_SELECTOR);
         display.getStyleClass().add(BACKGROUND_SELECTOR + myIndex);
         background.setCenter(display);
         pane.getChildren().add(background);
@@ -90,7 +90,7 @@ public class GameCard {
 
     private void addForeGround(Pane pane) {
         BorderPane foreground = new BorderPane();
-        foreground.setPadding(new Insets(0, 0, 20, 0));
+        foreground.getStyleClass().add(FOREGROUND_SELECTOR);
         addTitleContent(foreground);
         addImageAndContent(foreground);
         addButtons(foreground);
@@ -99,9 +99,9 @@ public class GameCard {
 
     private void addButtons(BorderPane foreground) {
         Button readMore = new Button(Utilities.getValue(myLanguageBundle, "readMoreButton"));
-        readMore.setPrefWidth(BUTTON_WIDTH);
+        readMore.getStyleClass().add(INDIVIDUAL_BUTTON_SELECTOR);
         Button play = new Button(Utilities.getValue(myLanguageBundle, "playGameButton"));
-        play.setPrefWidth(BUTTON_WIDTH);
+        play.getStyleClass().add(INDIVIDUAL_BUTTON_SELECTOR);
         play.setOnAction(e -> handleButton(myGame.getFolderName()));
         HBox buttons = new HBox(readMore, play);
         buttons.getStyleClass().add(BUTTONS_SELECTOR);
@@ -112,7 +112,7 @@ public class GameCard {
 
     private void handleButton(String folderName) {
         try {
-            GameRunner gameRunner = new GameRunner(folderName);
+            new GameRunner(folderName);
         } catch (FileNotFoundException e) {
             // todo: print error message
         }
@@ -131,7 +131,8 @@ public class GameCard {
         imageDescription.getStyleClass().add(TEXT_SELECTOR + myIndex);
         imageDescription.setWrappingWidth(DISPLAY_WIDTH - WRAP_OFFSET);
         contentPane.setCenter(imageDescription);
-        contentPane.setPadding(new Insets(7));
+        contentPane.getStyleClass().add(CONTENT_SELECTOR);
+        //contentPane.setPadding(new Insets(7));
         foreground.setCenter(contentPane);
     }
 
