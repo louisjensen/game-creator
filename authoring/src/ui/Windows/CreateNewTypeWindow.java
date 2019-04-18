@@ -126,7 +126,7 @@ public class CreateNewTypeWindow extends Stage {
     }
 
     private void openImageAssetManager(){
-        AudioManager assetManager = new AudioManager();
+        ImageManager assetManager = new ImageManager();
         assetManager.showAndWait();
 //        if(assetManager.getImageView() != null){
 //            ImageView imageView = assetManager.getImageView();

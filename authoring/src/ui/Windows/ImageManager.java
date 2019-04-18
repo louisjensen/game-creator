@@ -69,6 +69,11 @@ public class ImageManager extends AssetManager {
         return imageView;
     }
 
+    /**
+     * Makes sure the selected asset is null so
+     * other classes cannot access the selected
+     * because the user closed and didn't apply it
+     */
     @Override
     protected void handleClose(){
         mySelectedImageView = null;
@@ -86,6 +91,10 @@ public class ImageManager extends AssetManager {
         return subPane;
     }
 
+    /**
+     * Method that adds a file to the manager
+     * @param file File to be added
+     */
     @Override
     protected void addAsset(File file) {
         if(myCol == MAX_NUM_COLS){
@@ -96,6 +105,11 @@ public class ImageManager extends AssetManager {
         myCol++;
     }
 
+    /**
+     * Method that should create and format a pane that
+     * will be the content of the Manger's scrollpane
+     * @return Pane of the desired content
+     */
     @Override
     protected Pane createAndFormatScrollPaneContent() {
         myGridPane = new GridPane();
@@ -108,22 +122,11 @@ public class ImageManager extends AssetManager {
         return myGridPane;
     }
 
-    @Override
-    protected void saveAsset(File selectedFile) {
-        try {
-            BufferedImage image = ImageIO.read(selectedFile);
-            File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
-            File otherSaveToFile = new File("Images/" + selectedFile.getName());
-            String[] split = selectedFile.getPath().split("\\.");
-            String extension = split[split.length-1];
-            ImageIO.write(image, extension, saveToFile);
-            ImageIO.write(image, extension, otherSaveToFile);
 
-        } catch (IOException e) {
-            handleSavingException();
-        }
-    }
-
+    /**
+     * Sets the appropriate variables based on the selected Asset
+     * before closing the window
+     */
     @Override
     protected void handleApply() {
         if(!mySelectedAssetName.equals("")){
@@ -138,6 +141,15 @@ public class ImageManager extends AssetManager {
         else{
             handleNoAssetSelected();
         }
+    }
+
+    /**
+     * This needs to be here for reflection purposes. In creating the buttons the
+     * method must exist in the subclass
+     */
+    @Override
+    protected void handleBrowse(){
+        super.handleBrowse();
     }
 
     private ImageView createImageView(File temp) {

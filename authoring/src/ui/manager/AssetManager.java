@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import ui.*;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -129,12 +131,20 @@ abstract public class AssetManager extends Stage {
      */
     abstract protected Node createAndFormatScrollPaneContent();
 
-    /**
-     * Takes in a selectedFile by the user and then saves the assest to
-     * the folder
-     * @param selectedFile
-     */
-    abstract protected void saveAsset(File selectedFile);
+    private void saveAsset(File selectedFile){
+        try {
+            File dest = new File(myAssetFolderPath + selectedFile.getName()); //any location
+            System.out.println(dest.getPath());
+            File outsideDest = new File("Images" + File.separator + selectedFile.getName());
+            Files.copy(selectedFile.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(selectedFile.toPath(), outsideDest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (Exception e) {
+            String[] text = RESOURCES.getString(IO_ERROR).split(",");
+            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
+            errorBox.display();
+        }
+    }
 
     private void initializeVariables(){
         myExtensions = new HashSet<>();
@@ -163,6 +173,11 @@ abstract public class AssetManager extends Stage {
         }
     }
 
+    /**
+     * Allows the user to browse and add new assets
+     * this is protected because the method needs to be
+     * accessible in subclasses for reflection
+     */
     protected void handleBrowse(){
         Stage stage = new Stage();
         FileChooser chooser = new FileChooser();
@@ -189,21 +204,16 @@ abstract public class AssetManager extends Stage {
         alert.show();
     }
 
+    /**
+     * Makes sure the selected asset is null so
+     * other classes cannot access the selected
+     * because the user closed and didn't apply it
+     */
     protected void handleClose(){
         mySelectedAssetName = null;
         this.close();
     }
 
-    /**
-     * this method is called when an exception occurs in trying to save a file uploaded
-     * by the user
-     * It displays an error box
-     */
-    protected void handleSavingException(){
-        String[] text = RESOURCES.getString(IO_ERROR).split(",");
-        ErrorBox errorBox = new ErrorBox(text[0], text[1]);
-        errorBox.display();
-    }
 
     /**
      * This method is called by subclasses when someone hits the "Apply" button but
@@ -215,6 +225,9 @@ abstract public class AssetManager extends Stage {
         errorBox.display();
     }
 
+    /**
+     * should apply whatever needs to happen after an image has been selected
+     */
     abstract protected void handleApply();
 
 
