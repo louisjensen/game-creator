@@ -36,7 +36,7 @@ public class EventsPopUpPane extends Stage {
 
     private VBox setUpScene(){
         VBox eventTypeChooser = new VBox();
-        eventTypeChooser.setMinSize(600,600);
+        eventTypeChooser.setMinSize(500,400);
         HBox eventBox = new HBox();
         myEvents = new ChoiceBox<>(FXCollections.observableArrayList(EventType.allDisplayNames));
         myEvents.getSelectionModel().selectedItemProperty().addListener((observableEvent, previousEvent, selectedEvent) ->
@@ -45,7 +45,6 @@ public class EventsPopUpPane extends Stage {
         eventBox.getChildren().add(myEvents);
         eventTypeChooser.getChildren().add(eventBox);
         eventTypeChooser.getChildren().add(myOptions);
-        eventTypeChooser.setSpacing(40);
         return eventTypeChooser;
     }
 

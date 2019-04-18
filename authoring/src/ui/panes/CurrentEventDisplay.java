@@ -1,9 +1,12 @@
 package ui.panes;
 import actions.Action;
 import conditions.Condition;
+import events.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -14,14 +17,17 @@ import java.util.List;
 import java.util.Map;
 
 public class CurrentEventDisplay extends VBox {
-    public CurrentEventDisplay(Map<Class<?>, List<?>> myMap){
+    private Event myEvent;
+    private Editor myEventRemover;
+    public CurrentEventDisplay(Map<Class<?>, List<?>> myMap, Event myEvent, Editor eventRemover){
+        this.myEvent = myEvent;
+        this.myEventRemover = eventRemover;
         if (invalidEvent(myMap)){
             return;
         }
         this.setAlignment(Pos.CENTER);
         setUpLabel(myMap);
         setUpEditToolBar();
-
 
     }
     private void setUpLabel(Map<Class<?>, List<?>> myMap){
@@ -44,6 +50,12 @@ public class CurrentEventDisplay extends VBox {
     private void setUpEditToolBar(){
         Button editButton = new Button("Edit");
         Button removeButton = new Button("Remove");
+        removeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                myEventRemover.editEvent(myEvent);
+            }
+        });
         HBox buttons = new HBox();
         buttons.getChildren().add(editButton);
         buttons.getChildren().add(removeButton);

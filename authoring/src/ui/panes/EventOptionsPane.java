@@ -30,14 +30,15 @@ public class EventOptionsPane extends VBox {
     private ArrayList<StringProperty> myActionOptionsListener = new ArrayList<>();
 
     public EventOptionsPane(){
-        this.setMinSize(300,300);
+        this.setMinSize(500,140);
+        this.setMaxSize(500,140);
+        this.setSpacing(30);
     }
 
     public void displayEventOptions(String eventName) {
         this.getChildren().clear();
         myEventOptionsListener.clear();
         HBox eventOptionsPanel = new HBox();
-        eventOptionsPanel.setSpacing(40);
         myEventFactory.factoryDelegator(CONTROLS,eventName,eventOptionsPanel,myEventOptionsListener);
         this.getChildren().add(eventOptionsPanel);
         this.getChildren().add(myEventFactory.createActionsOptions(myActionOptionsListener));

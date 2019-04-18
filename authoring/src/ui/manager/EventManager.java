@@ -51,7 +51,7 @@ public class EventManager extends Stage {
         myEventsDisplay = new BorderPane();
         myEventsDisplay.setTop(createTitle());
         myEventsDisplay.setLeft(null);
-        myEventsDisplay.setCenter(new CurrentEventsPane(myEntity.getEvents()));
+        myEventsDisplay.setCenter(new CurrentEventsPane(myEntity.getEvents(), refreshEventsListing));
         myEventsDisplay.setRight(null);
         myEventsDisplay.setBottom(createEventsToolPane());
         Scene myScene = new Scene(myEventsDisplay);

@@ -99,19 +99,24 @@ public class EventFactory {
         ObservableList<String> myObservableChoices = FXCollections.observableArrayList(choiceBoxOptions);
         ChoiceBox<String> myChoices = new ChoiceBox<>(myObservableChoices);
         myChoices.getStylesheets().add("default.css");
+
+        myChoices.setMinSize(100,40);
+        myChoices.setMaxSize(100,40);
+        bindBox(myChoices,myBinding);
+        return myChoices;
+    }
+    public static void bindBox(ChoiceBox<String> myChoices, ArrayList<StringProperty> myBinding){
         myChoices.setOnAction(e -> myChoices.setAccessibleText(myChoices.getValue()));
         StringProperty myListener = new SimpleStringProperty();
         myListener.bindBidirectional(myChoices.accessibleTextProperty());
         myBinding.add(myListener);
-        return myChoices;
     }
     public static HBox createDependentComboBoxes(String independentBundle, ArrayList<StringProperty> myBinding){
         ChoiceBox<String> myControllingChoice = createBoxFromResources(independentBundle,myBinding);
         ChoiceBox<String> myDependentChoice = new ChoiceBox<>(FXCollections.observableArrayList());
-        myDependentChoice.setOnAction(e -> myDependentChoice.setAccessibleText(myDependentChoice.getValue()));
-        StringProperty myDep = new SimpleStringProperty();
-        myDep.bindBidirectional(myDependentChoice.accessibleTextProperty());
-        myBinding.add(myDep);
+        myDependentChoice.setMinSize(100,40);
+        myDependentChoice.setMaxSize(100,40);
+        bindBox(myDependentChoice,myBinding);
         Map<String,ObservableList> choiceSelector = new HashMap<>();
         ResourceBundle myIndependentResources = ResourceBundle.getBundle(independentBundle);
         choiceSelector.put("", FXCollections.observableArrayList());
@@ -140,6 +145,8 @@ public class EventFactory {
         myTextField.setPromptText(textFieldInformation);
         myTextField.setFocusTraversable(false);
         myTextField.setOnMouseClicked(mouseEvent -> myTextField.setText(""));
+        myTextField.setMinSize(100,40);
+        myTextField.setMaxSize(100,40);
         StringProperty myListener = new SimpleStringProperty();
         myListener.bindBidirectional(myTextField.textProperty());
         myBinding.add(myListener);
@@ -149,6 +156,7 @@ public class EventFactory {
 
     public static HBox createActionsOptions(ArrayList<StringProperty> myActionsBinding){
         HBox myActionOptions = new HBox();
+        myActionOptions.getStylesheets().add("default.css");
         myActionOptions.getChildren().add(createLabel("Enter Action - "));
         myActionOptions.getChildren().add(createDependentComboBoxes(ACTION_RESOURCES_NAME,myActionsBinding));
 //        List<String> componentOptions = new ArrayList<>(ACTION_RESOURCES.keySet());
