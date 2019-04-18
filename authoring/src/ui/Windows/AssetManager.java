@@ -1,4 +1,4 @@
-package ui.manager;
+package ui.Windows;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

@@ -10,15 +10,11 @@ import javafx.scene.layout.RowConstraints;
 import ui.EntityField;
 import ui.LevelField;
 import ui.Propertable;
-import ui.manager.AssetManager;
 import ui.panes.AssetImageSubPane;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 /**
  * @author Carrie Hunner

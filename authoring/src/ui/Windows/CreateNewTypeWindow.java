@@ -17,7 +17,6 @@ import javafx.stage.Stage;
 import ui.DefaultTypesFactory;
 import ui.ErrorBox;
 import ui.Utility;
-import ui.manager.AssetManager;
 
 import java.util.*;
 
