@@ -6,7 +6,9 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import ui.Propertable;
 
+import javax.sound.sampled.AudioInputStream;
 import java.io.File;
 
 public class AudioManager extends AssetManager {
@@ -15,9 +17,15 @@ public class AudioManager extends AssetManager {
     private static final String TITLE_KEY = "AudioTitle";
     private static final String ASSET_AUDIO_FOLDER_PATH = GENERAL_RESOURCES.getString("audio_filepath");
     private ListView myListView;
+    private Propertable myPropertable;
 
     public AudioManager(){
         super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
+    }
+
+    public AudioManager(Propertable propertable){
+        this();
+        myPropertable = propertable;
     }
 
     /**
