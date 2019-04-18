@@ -47,7 +47,7 @@ public class PropertiesPane extends TitledPane {
             try {
                 this.setContent(createPropertiesGrid());
             } catch (UIException e) {
-                // do nothing FIX
+                e.displayUIException();
             }
         });
     }

@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import ui.manager.ObjectManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class AuthoringEntity implements Propertable {
     private ObservableMap<Enum, String> myPropertyMap;
     private ObjectManager myObjectManager;
     private Entity myBackingEntity;
-
+    private List<String> myInteractionListing = new ArrayList<>();
     private static final List<? extends Enum> PROP_VAR_NAMES = Arrays.asList(EntityField.values());
 
     private AuthoringEntity() { // Initialize default property map
@@ -110,4 +111,8 @@ public class AuthoringEntity implements Propertable {
     public Entity getBackingEntity() {
         return myBackingEntity;
     }
+
+    public List<String> getInteractionListing(){ return myInteractionListing;}
+
+
 }
