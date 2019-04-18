@@ -32,6 +32,7 @@ public class AuthoringEntity implements Propertable {
         myPropertyMap.put(EntityField.XSCALE, "1.0");
         myPropertyMap.put(EntityField.YSCALE, "1.0");
         myPropertyMap.put(EntityField.CAMERA, "false");
+        myPropertyMap.put(EntityField.VISIBLE, "true");
     }
 
     public AuthoringEntity(String label, ObjectManager manager) { // Create new type of AuthoringEntity from scratch
