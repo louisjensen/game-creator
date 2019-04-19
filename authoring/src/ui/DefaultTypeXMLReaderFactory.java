@@ -2,7 +2,10 @@ package ui;
 
 import engine.external.Entity;
 import engine.external.component.Component;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -10,8 +13,14 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 public class DefaultTypeXMLReaderFactory {
     private static final ResourceBundle PATH_RESOURCES = ResourceBundle.getBundle("authoring_general");
@@ -28,15 +37,29 @@ public class DefaultTypeXMLReaderFactory {
         myRootsList = new ArrayList<>();
         fillRootsList();
         fillMaps();
-        createEntity("Block");
     }
 
     /**
-     * @return List of possible default names
+     * Gets the defaultNames/options associated with a category
+     * @param category String of a category
+     * @return List fo Strings of deafultNames for the category
      */
-    public List<String> getDefaultNames(){
-        List<String> defaultNames = new ArrayList<>(myNameToCategory.keySet());
-        return Collections.unmodifiableList(defaultNames);
+    public List<String> getDefaultNames(String category){
+        List<String> result = new ArrayList<>();
+        for(Map.Entry<String, String> entry : myNameToCategory.entrySet()){
+            if(entry.getValue().equals(category)){
+                result.add(entry.getKey());
+            }
+        }
+        return Collections.unmodifiableList(result);
+    }
+
+    /**
+     * @return List of possible categories
+     */
+    public List<String> getCategories(){
+        Set<String> defaultCategories = new HashSet<>(myNameToCategory.values());
+        return Collections.unmodifiableList(new ArrayList<>(defaultCategories));
     }
 
     /**
