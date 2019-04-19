@@ -2,7 +2,8 @@
     <Category>Obstacle</Category>
     <Components>
         <NameComponent>V Moving Platform</NameComponent>
-        <GravityComponent>0</GravityComponent>
+        <YAccelerationComponent>0.0</YAccelerationComponent>
+        <XAccelerationComponent>0.0</XAccelerationComponent>
         <VisibilityComponent>true</VisibilityComponent>
         <XVelocityComponent>0.0</XVelocityComponent>
         <YVelocityComponent>10.0</YVelocityComponent>
