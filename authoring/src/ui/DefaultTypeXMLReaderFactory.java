@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 
@@ -46,27 +47,46 @@ public class DefaultTypeXMLReaderFactory {
         return myNameToCategory.get(name);
     }
 
-    private void createEntity(String name){
+    /**
+     * This method uses the XML information read and compiled at the construction of an instance
+     * and reflection to create each component listed in the XML and then creates and returns
+     * an entity
+     * @param name Name of a default entity desired. This name will come off of the list of
+     *             names from the getDefaultNames() method
+     * @return Entity for the desired default name passed in
+     */
+    public Entity createEntity(String name){
         Map<String, String> componentMap = myNameToComponents.get(name);
-        System.out.println("Map size: " + componentMap.size());
+        Entity resultEntity = new Entity();
         for(Map.Entry<String, String> entry : componentMap.entrySet()){
             try {
-                Class clazz = Class.forName("engine.external.component." + entry.getKey());
-                Constructor[] constructors = clazz.getConstructors();
-                Class[] paramTypes = constructors[0].getParameterTypes();
-                System.out.println("Param type for " + entry.getKey());
-                for(int k = 0; k < paramTypes.length; k++){
-                    System.out.println("\t" + paramTypes[k].toString());
-                    Constructor constructor = clazz.getConstructor(paramTypes[k]);
-                    constructor.newInstance(entry.getValue());
-                    makeComponent(entry.getValue(), constructor, paramTypes[0].getClass());
-                    System.out.println("Got constructor");
-                    /**
-                     * Current scenario:
-                     * I have the ability to get the type and constructors from that
-                     * I need to be able to translate the String from the XML into the correct type
-                     */
+                Class componentClass = Class.forName("engine.external.component." + entry.getKey());
+                Constructor[] constructors = componentClass.getConstructors();
+                Class paramTypes = constructors[0].getParameterTypes()[0];
+//                System.out.println("Param type for " + entry.getKey());
+//                System.out.println("Type: " + paramTypes.toString());
+                Constructor constructor = componentClass.getConstructor(paramTypes);
+                Component component;
+
+                try {
+                    component = (Component) constructor.newInstance(entry.getValue());
                 }
+                catch (IllegalArgumentException e) {
+//                    System.out.println("Class: " + componentClass.getName());
+
+                    String[] brokenUpClass = paramTypes.toString().split("\\.");
+                    String className = brokenUpClass[brokenUpClass.length-1];
+                    Class parseClass = Class.forName("java.lang." + className);
+                    Method method = parseClass.getMethod(("parse" + className), String.class);
+//                    System.out.println("Entry value: " + entry.getValue());
+//                    System.out.println("Method to call: " + method.toString());
+//                    System.out.println(method.invoke(this, entry.getValue()));
+
+                    component = (Component) constructor.newInstance(method.invoke(this, entry.getValue()));
+                }
+                resultEntity.addComponent(component);
+                System.out.println("\t Worked for: " + component.getClass());
+
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
@@ -79,16 +99,9 @@ public class DefaultTypeXMLReaderFactory {
                 e.printStackTrace();
             }
         }
+        return resultEntity;
     }
 
-    private Component makeComponent(String input, Constructor constructor, Class clazz) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        System.out.println("Class: " + clazz.getName());
-        String[] brokenUpClass = clazz.getClass().toString().split("\\.");
-        String className = brokenUpClass[brokenUpClass.length-1];
-        System.out.println("Class Name Broken up: " + className);
-        System.out.println(className + ".parse" + className);
-        return null;
-    }
 
 
     private void fillMaps() {
@@ -98,7 +111,6 @@ public class DefaultTypeXMLReaderFactory {
             if (hasRequiredInformation(componentsMap, currentElement)) {
                 String name = componentsMap.get("NameComponent");
                 myNameToComponents.put(name, componentsMap);
-                System.out.println("Added map for: " + name);
                 NodeList categoryList = currentElement.getElementsByTagName("Category");
                 String category = categoryList.item(categoryList.getLength() - 1).getTextContent();
                 myNameToCategory.put(name, category);
