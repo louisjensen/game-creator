@@ -21,11 +21,11 @@
     -fx-background-color: #404040;
 }
 
-.scroll-pane .list-cell:odd {
+.audio-manager .scroll-pane .list-cell:odd {
     -fx-background-color: #303030;
 }
 
-.scroll-pane .list-view .list-cell:selected {
+.audio-manager .scroll-pane .list-view .list-cell:selected {
     -fx-background-color: #005797;
 }
 
@@ -89,6 +89,7 @@
 
 .combo-box .list-cell {
     -fx-text-fill: white;
+    -fx-background-color: transparent;
 }
 
 .titled-pane {
