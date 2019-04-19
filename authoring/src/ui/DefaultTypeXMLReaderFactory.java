@@ -11,7 +11,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +21,17 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+/**
+ * @author Carrie Hunner
+ * This class reads the XML's from the filepath in the default_types_factory.properties file.
+ * It then can create components and then entities from those files.
+ * It currently only works for components that take in Strings and any class that has a Class.parseClass(String s)
+ * method. E.g Double.parseDouble
+ *
+ * This requires the files in the folder to have a .xml extension
+ * This requires each file to define a category and a name and will not create any that are missing
+ * either of these components
+ */
 public class DefaultTypeXMLReaderFactory {
     private static final ResourceBundle PATH_RESOURCES = ResourceBundle.getBundle("authoring_general");
     private static final ResourceBundle RESOURCES = ResourceBundle.getBundle("default_types_factory");
@@ -59,7 +69,9 @@ public class DefaultTypeXMLReaderFactory {
      */
     public List<String> getCategories(){
         Set<String> defaultCategories = new HashSet<>(myNameToCategory.values());
-        return Collections.unmodifiableList(new ArrayList<>(defaultCategories));
+        List<String> result = new ArrayList<>(defaultCategories);
+        Collections.sort(result);
+        return Collections.unmodifiableList(result);
     }
 
     /**
@@ -86,40 +98,23 @@ public class DefaultTypeXMLReaderFactory {
                 Class componentClass = Class.forName("engine.external.component." + entry.getKey());
                 Constructor[] constructors = componentClass.getConstructors();
                 Class paramTypes = constructors[0].getParameterTypes()[0];
-//                System.out.println("Param type for " + entry.getKey());
-//                System.out.println("Type: " + paramTypes.toString());
                 Constructor constructor = componentClass.getConstructor(paramTypes);
                 Component component;
-
+                //Tries assuming the component parameter is a String
                 try {
                     component = (Component) constructor.newInstance(entry.getValue());
                 }
+                //Tries assuming the component parameter can use Class.parseClass(String s) eg. Double.parseDouble(String s)
                 catch (IllegalArgumentException e) {
-//                    System.out.println("Class: " + componentClass.getName());
-
                     String[] brokenUpClass = paramTypes.toString().split("\\.");
                     String className = brokenUpClass[brokenUpClass.length-1];
                     Class parseClass = Class.forName("java.lang." + className);
                     Method method = parseClass.getMethod(("parse" + className), String.class);
-//                    System.out.println("Entry value: " + entry.getValue());
-//                    System.out.println("Method to call: " + method.toString());
-//                    System.out.println(method.invoke(this, entry.getValue()));
-
                     component = (Component) constructor.newInstance(method.invoke(this, entry.getValue()));
                 }
                 resultEntity.addComponent(component);
-                System.out.println("\t Worked for: " + component.getClass());
-
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                makeAndDisplayError("ReflectionError");
             }
         }
         return resultEntity;
@@ -144,7 +139,6 @@ public class DefaultTypeXMLReaderFactory {
         File assetFolder = new File(FOLDER_PATH);
         File[] files = assetFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(EXTENSIONS));
         for(File temp : files) {
-            System.out.println("********************");
             System.out.println(temp.getName());
             try {
                 DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -155,22 +149,18 @@ public class DefaultTypeXMLReaderFactory {
                 Node root = document.getDocumentElement();
                 myRootsList.add(root);
             } catch (Exception e) {
-                e.printStackTrace();
+                makeAndDisplayError("XMLReadingError");
             }
         }
     }
 
     private boolean hasRequiredInformation(Map<String, String> componentsMap, Element root) {
         if(!componentsMap.containsKey("NameComponent")){
-            String[] info = RESOURCES.getString("NoName").split(",");
-            ErrorBox errorBox = new ErrorBox(info[0], info[1]);
-            errorBox.display();
+            makeAndDisplayError("NoName");
             return false;
         }
         else if(root.getElementsByTagName("Category").getLength() == 0){
-            String[] info = RESOURCES.getString("NoCategory").split(",");
-            ErrorBox errorBox = new ErrorBox(info[0], info[1]);
-            errorBox.display();
+            makeAndDisplayError("NoCategory");
             return false;
         }
         return true;
@@ -194,5 +184,10 @@ public class DefaultTypeXMLReaderFactory {
         return componentsMap;
     }
 
+    private void makeAndDisplayError(String resourceKey){
+        String[] info = RESOURCES.getString(resourceKey).split(",");
+        ErrorBox errorBox = new ErrorBox(info[0], info[1]);
+        errorBox.display();
+    }
 
 }
