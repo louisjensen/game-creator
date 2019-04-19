@@ -10,24 +10,26 @@ import ui.LevelField;
 import ui.Propertable;
 import ui.manager.ObjectManager;
 
+/**
+ * @author Harry Ross
+ */
 public class LevelsPane extends TitledPane {
 
     private ObjectManager myObjectManager;
-    private ListView<String> myLevelsList;
     private ObjectProperty<Propertable> myCurrentLevel;
 
     private static final String LEVELS_PANE_TITLE = "Levels";
 
     public LevelsPane(ObjectManager manager, ObjectProperty<Propertable> currentLevel) {
         myObjectManager = manager;
-        myLevelsList = new ListView<>();
+        ListView<String> levelsList = new ListView<>();
         myCurrentLevel = currentLevel;
 
         this.setText(LEVELS_PANE_TITLE);
-        this.setContent(new ScrollPane(myLevelsList));
-        myLevelsList.setItems(myObjectManager.getLabelManager().getLabels(LevelField.LABEL));
+        this.setContent(new ScrollPane(levelsList));
+        levelsList.setItems(myObjectManager.getLabelManager().getLabels(LevelField.LABEL));
         this.getStyleClass().add("prop-pane");
-        myLevelsList.getSelectionModel().selectedItemProperty()
+        levelsList.getSelectionModel().selectedItemProperty()
                 .addListener((ChangeListener<? super String>) (change, oldVal, newVal) -> changeLevel(newVal));
     }
 

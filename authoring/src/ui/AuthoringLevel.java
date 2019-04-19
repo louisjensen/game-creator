@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class AuthoringLevel implements Propertable {
 
-    private ObjectManager myObjectManager;
+    private ObjectManager myObjectManager; //TODO get this here
     private ObservableMap<Enum, String> myPropertyMap;
     private List<AuthoringEntity> myEntities;
 
@@ -29,6 +29,7 @@ public class AuthoringLevel implements Propertable {
         myPropertyMap.put(LevelField.LABEL, label);
         myPropertyMap.put(LevelField.HEIGHT, DEFAULT_ROOM_SIZE.toString());
         myPropertyMap.put(LevelField.WIDTH, DEFAULT_ROOM_SIZE.toString());
+        addPropertyListeners();
     }
 
     private void addPropertyListeners() {
@@ -41,15 +42,6 @@ public class AuthoringLevel implements Propertable {
             myObjectManager.updateLevelLabel(valueRemoved, valueAdded);
     }
 
-    public ObservableMap<Enum, String> getPropertyMap() {
-        return myPropertyMap;
-    }
-
-    @Override
-    public Class<? extends Enum> getEnumClass() {
-        return LevelField.class;
-    }
-
     public void addEntity(AuthoringEntity newEntity) {
         myEntities.add(newEntity);
     }
@@ -60,5 +52,14 @@ public class AuthoringLevel implements Propertable {
 
     public List<AuthoringEntity> getEntities() {
         return myEntities;
+    }
+
+    public ObservableMap<Enum, String> getPropertyMap() {
+        return myPropertyMap;
+    }
+
+    @Override
+    public Class<? extends Enum> getEnumClass() {
+        return LevelField.class;
     }
 }

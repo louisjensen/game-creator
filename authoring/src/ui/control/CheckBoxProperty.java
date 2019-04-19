@@ -3,10 +3,12 @@ package ui.control;
 import javafx.scene.control.CheckBox;
 import ui.EntityField;
 import ui.Propertable;
-import ui.UIException;
 import ui.manager.LabelManager;
 import ui.manager.ObjectManager;
 
+/**
+ * @author Harry Ross
+ */
 public class CheckBoxProperty extends CheckBox implements ControlProperty {
 
     @Override
@@ -15,7 +17,7 @@ public class CheckBoxProperty extends CheckBox implements ControlProperty {
     }
 
     @Override
-    public void setAction(ObjectManager manager, Propertable propertable, Enum label, String action) throws UIException {
+    public void setAction(ObjectManager manager, Propertable propertable, Enum label, String action) {
         this.setOnAction(event -> {
             if (label.equals(EntityField.CAMERA))
                 manager.flushCameraAssignment(propertable);

@@ -52,16 +52,16 @@ public class MainGUI {
 
     private static final double STAGE_MIN_HEIGHT = 600;
     private static final double PROP_PANE_HEIGHT = 210;
-    private static final String DEFAULT_STYLESHEET = "default.css"; //TODO propagate Stylesheet
+    private static final String DEFAULT_STYLESHEET = "default.css";
     private static final String MENU_ITEMS_FILE = "main_menu_items";
     private static final String STAGE_TITLE = "ByteMe Authoring Environment";
 
     public MainGUI() { // Default constructor for creating a new game from scratch
         myGame = new Game();
         myGameData = new GameCenterData();
-        defaultGameData();
         myStage = new Stage();
         myViewers = new HashMap<>();
+        defaultGameData();
 
         AuthoringLevel blankLevel = new AuthoringLevel("Level_1");
         AuthoringLevel blankLevel2 = new AuthoringLevel("Level 2"); //TODO
@@ -137,6 +137,7 @@ public class MainGUI {
         return new Viewer(myCurrentLevel, userCreatedTypesPane, mySelectedEntity, myObjectManager); //TODO change to take AuthoringLevel instead of prop
     }
 
+    @SuppressWarnings("Duplicates")
     private void createPropertiesPanes(HBox propPaneBox, Scene mainScene) {
         try {
             LevelsPane levelsPane = new LevelsPane(myObjectManager, myCurrentLevel);
@@ -185,15 +186,18 @@ public class MainGUI {
         return newItem;
     }
 
+    @SuppressWarnings("unused")
     private void newGame() {
         MainGUI newWorkspace = new MainGUI();
         newWorkspace.launch();
     }
 
+    @SuppressWarnings("unused")
     private void openGame() {
         System.out.println("Open"); //TODO
     }
 
+    @SuppressWarnings("unused")
     private void saveGame() {
         GameTranslator translator = new GameTranslator(myGame, myGameData, myObjectManager);
         Game exportableGame = translator.translate();
@@ -205,20 +209,24 @@ public class MainGUI {
         dm.saveGameInfo(gameData.getFolderName(), gameData);
     }
 
+    @SuppressWarnings("unused")
     private void openGroupManager() {
         GroupManager groupManager = new GroupManager(myObjectManager);
         groupManager.showAndWait();
     }
 
+    @SuppressWarnings("unused")
     private void openGameInfo() {
         InfoEditor infoEditor = new InfoEditor(myGameData);
         infoEditor.showAndWait();
     }
 
+    @SuppressWarnings("unused")
     private void openPreferences() {
         System.out.println("Preferences"); //TODO
     }
 
+    @SuppressWarnings("unused")
     private void toggleFullscreen() {
         myStage.setFullScreen(!myStage.isFullScreen());
     }
@@ -233,11 +241,11 @@ public class MainGUI {
         myStage.getScene().getStylesheets().add(newVal);
     }
 
-    private void defaultGameData() { //TODO
-        myGameData.setFolderName("test");
-        myGameData.setImageLocation("test");
-        myGameData.setTitle("THE TEST GAME");
-        myGameData.setDescription("A game about testing");
+    private void defaultGameData() {
+        myGameData.setFolderName("NewGame");
+        myGameData.setImageLocation("");
+        myGameData.setTitle("New Game");
+        myGameData.setDescription("A fun new game");
     }
 
 }
