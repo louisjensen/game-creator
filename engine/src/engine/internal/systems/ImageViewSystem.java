@@ -65,7 +65,6 @@ public class ImageViewSystem extends VoogaSystem {
     private ImageView setImgViewHeight(ImageView m, Entity e){
         m.setFitHeight(getDoubleComponentValue(HEIGHT_COMPONENT_CLASS, e));
         return m;
-
     }
 
 
