@@ -133,8 +133,8 @@ public class MainGUI {
         return userCreatedTypesPane;
     }
 
-    private Viewer createViewer(Propertable levelBasis, UserCreatedTypesPane userCreatedTypesPane) {
-        return new Viewer(myCurrentLevel, userCreatedTypesPane, mySelectedEntity, myObjectManager); //TODO change to take AuthoringLevel instead of prop
+    private Viewer createViewer(AuthoringLevel levelBasis, UserCreatedTypesPane userCreatedTypesPane) {
+        return new Viewer(levelBasis, userCreatedTypesPane, mySelectedEntity, myObjectManager); //TODO change to take AuthoringLevel instead of prop
     }
 
     @SuppressWarnings("Duplicates")

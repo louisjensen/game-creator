@@ -27,7 +27,7 @@ public class Viewer extends ScrollPane {
     private Double myRoomWidth;
     private boolean isDragOnView;
     private ObjectManager myObjectManager;
-    private ObjectProperty<Propertable> myAuthoringLevel;
+    private AuthoringLevel myAuthoringLevel;
     private AuthoringEntity myDraggedAuthoringEntity;
     private ObjectProperty<Propertable> mySelectedEntityProperty;
     private UserCreatedTypesPane myUserCreatedPane;
@@ -44,13 +44,13 @@ public class Viewer extends ScrollPane {
      * @param userCreatedTypesPane
      * @param objectProperty
      */
-    public Viewer(ObjectProperty<Propertable> authoringLevel, UserCreatedTypesPane userCreatedTypesPane, ObjectProperty objectProperty, ObjectManager objectManager){
+    public Viewer(AuthoringLevel authoringLevel, UserCreatedTypesPane userCreatedTypesPane, ObjectProperty objectProperty, ObjectManager objectManager){
         myObjectManager = objectManager;
         myUserCreatedPane = userCreatedTypesPane;
         mySelectedEntityProperty = objectProperty;
         myAuthoringLevel = authoringLevel;
         initializeAndFormatVariables();
-        myAuthoringLevel.getValue().getPropertyMap().addListener((MapChangeListener<? super Enum, ? super String>) change ->
+        myAuthoringLevel.getPropertyMap().addListener((MapChangeListener<? super Enum, ? super String>) change ->
                 handleChange(change));
         setupAcceptDragEvents();
         setupDragDropped();
@@ -178,8 +178,8 @@ public class Viewer extends ScrollPane {
     }
 
     private void setRoomSize(){
-        myRoomHeight = Double.parseDouble(myAuthoringLevel.getValue().getPropertyMap().get(LevelField.HEIGHT));
-        myRoomWidth = Double.parseDouble(myAuthoringLevel.getValue().getPropertyMap().get(LevelField.WIDTH));
+        myRoomHeight = Double.parseDouble(myAuthoringLevel.getPropertyMap().get(LevelField.HEIGHT));
+        myRoomWidth = Double.parseDouble(myAuthoringLevel.getPropertyMap().get(LevelField.WIDTH));
         this.setPrefHeight(myRoomHeight);
         this.setPrefWidth(myRoomWidth);
         myStackPane.setMinWidth(myRoomWidth);
