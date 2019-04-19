@@ -1,7 +1,6 @@
 package ui.panes;
 
 import javafx.application.Application;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -24,6 +23,7 @@ public class PaneTester extends Application {
     private static final String TEST_STYLESHEET = "default.css";
 
     @Override
+    @SuppressWarnings("Duplicates")
     public void start(Stage testStage) {
         testStage.setTitle("Pane Test");
         testStage.setResizable(false);

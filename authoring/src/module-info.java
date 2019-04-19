@@ -9,7 +9,6 @@ module authoring {
     requires xstream;
     requires java.desktop;
 
-    exports authoring.external;
     exports ui;
     exports ui.panes;
     exports ui.main;

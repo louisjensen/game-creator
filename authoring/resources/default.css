@@ -16,17 +16,17 @@
     -fx-background-color: #606060;
 }
 
-.scroll-pane .list-cell{
+.scroll-pane .list-cell {
     -fx-text-fill: white;
     -fx-background-color: #404040;
 }
 
-.scroll-pane .list-cell:odd{
+.scroll-pane .list-cell:odd {
     -fx-background-color: #303030;
 }
 
-.scroll-pane .list-cell:selected {
-    -fx-background-color: #005797;
+.scroll-pane .list-view .list-cell:selected {
+    -fx-background-color: #505050;
 }
 
 .scroll-pane .list-cell .label {
@@ -89,6 +89,7 @@
 
 .combo-box .list-cell {
     -fx-text-fill: white;
+    -fx-background-color: transparent;
 }
 
 .titled-pane {
@@ -292,4 +293,15 @@
 .main-center-pane {
     -fx-padding: 0 0 10 10;
     -fx-alignment: center;
+}
+
+.info-editor {
+    -fx-hgap: 15;
+    -fx-vgap: 15;
+}
+
+.info-editor .label {
+    -fx-font-weight: normal;
+    -fx-font-size: 14;
+    -fx-text-fill: #aaaaaa;
 }

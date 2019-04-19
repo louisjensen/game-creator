@@ -1,6 +1,5 @@
 package ui.manager;
 
-import engine.external.Entity;
 import events.Event;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
@@ -15,7 +14,6 @@ import ui.Propertable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 

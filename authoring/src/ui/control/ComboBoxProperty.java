@@ -1,7 +1,6 @@
 package ui.control;
 
 import javafx.scene.control.ComboBox;
-import ui.EntityField;
 import ui.Propertable;
 import ui.manager.LabelManager;
 import ui.manager.ObjectManager;
@@ -17,7 +16,7 @@ public class ComboBoxProperty extends ComboBox<String> implements ControlPropert
 
     @Override
     public void populateValue(Propertable prop, Enum type, String newVal, LabelManager labels) {
-        this.itemsProperty().set(labels.getLabels((EntityField) type));
+        this.itemsProperty().set(labels.getLabels(type));
         this.setValue(newVal);
     }
 
