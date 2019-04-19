@@ -8,11 +8,13 @@
 
 package frontend.games;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import runner.external.GameCenterData;
@@ -25,7 +27,6 @@ import java.util.ResourceBundle;
 
 public class GameCard {
     private static final int GAME_IMAGE_SIZE = 200;
-    private static final int BUTTON_WIDTH = 100;
     private static final int WRAP_OFFSET = 25;
 
     public static final double DISPLAY_WIDTH = 300;
@@ -122,7 +123,7 @@ public class GameCard {
         BorderPane contentPane = new BorderPane();
         try {
             addImage(contentPane);
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) { // this means that even the default image could not be found
             // do nothing, because in this case there would just be no image on the card which is fine
             // todo: possibly create a type of card with no image & turn this into a factory type class
         }
@@ -132,21 +133,20 @@ public class GameCard {
         imageDescription.setWrappingWidth(DISPLAY_WIDTH - WRAP_OFFSET);
         contentPane.setCenter(imageDescription);
         contentPane.getStyleClass().add(CONTENT_SELECTOR);
-        //contentPane.setPadding(new Insets(7));
         foreground.setCenter(contentPane);
     }
 
     private void addImage(BorderPane contentPane) throws FileNotFoundException {
-        ImageView noGameFound;
+        ImageView gameImage;
         try {
-            noGameFound = new ImageView(new Image(new FileInputStream(myGame.getImageLocation())));
-        } catch (Exception e) {
-            noGameFound = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
+            gameImage = new ImageView(new Image(new FileInputStream(myGame.getImageLocation())));
+        } catch (Exception e) { // if any exceptions come from this, it should just become a default image.
+            gameImage = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
         }
-        noGameFound.setPreserveRatio(true);
-        noGameFound.setFitWidth(GAME_IMAGE_SIZE);
+        gameImage.setPreserveRatio(true);
+        gameImage.setFitWidth(GAME_IMAGE_SIZE);
         BorderPane imagePane = new BorderPane();
-        imagePane.setCenter(noGameFound);
+        imagePane.setCenter(gameImage);
         contentPane.setTop(imagePane);
     }
 
