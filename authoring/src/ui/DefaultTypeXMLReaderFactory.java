@@ -101,7 +101,6 @@ public class DefaultTypeXMLReaderFactory {
         else{
             makeAndDisplayError("NoXMLFile");
         }
-
         return resultEntity;
     }
 
@@ -121,12 +120,11 @@ public class DefaultTypeXMLReaderFactory {
                 String[] brokenUpClass = constructorParamClassType.toString().split("\\.");
                 String className = brokenUpClass[brokenUpClass.length-1];
                 Class parseClass = Class.forName(constructorParamClassType.toString().split(" ")[1]);
-                Method method = parseClass.getMethod(("parse" + className), String.class);
+                Method method = parseClass.getMethod((RESOURCES.getString("methodSuffix") + className), String.class);
                 component = (Component) constructor.newInstance(method.invoke(this, entry.getValue()));
             }
             resultEntity.addComponent(component);
         } catch (Exception e) {
-            e.printStackTrace();
             makeAndDisplayError("ReflectionError");
         }
     }
