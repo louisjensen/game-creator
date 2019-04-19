@@ -7,7 +7,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import ui.AuthoringEntity;
 import ui.DefaultTypeXMLReaderFactory;
-import ui.DefaultTypesFactory;
 import ui.EntityField;
 import ui.Utility;
 import ui.manager.ObjectManager;

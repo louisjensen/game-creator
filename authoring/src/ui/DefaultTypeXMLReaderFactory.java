@@ -91,35 +91,45 @@ public class DefaultTypeXMLReaderFactory {
      * @return Entity for the desired default name passed in
      */
     public Entity createEntity(String name){
-        Map<String, String> componentMap = myNameToComponents.get(name);
         Entity resultEntity = new Entity();
-        for(Map.Entry<String, String> entry : componentMap.entrySet()){
-            try {
-                Class componentClass = Class.forName("engine.external.component." + entry.getKey());
-                Constructor[] constructors = componentClass.getConstructors();
-                Class paramTypes = constructors[0].getParameterTypes()[0];
-                Constructor constructor = componentClass.getConstructor(paramTypes);
-                Component component;
-                //Tries assuming the component parameter is a String
-                try {
-                    component = (Component) constructor.newInstance(entry.getValue());
-                }
-                //Tries assuming the component parameter can use Class.parseClass(String s) eg. Double.parseDouble(String s)
-                catch (IllegalArgumentException e) {
-                    String[] brokenUpClass = paramTypes.toString().split("\\.");
-                    String className = brokenUpClass[brokenUpClass.length-1];
-                    Class parseClass = Class.forName("java.lang." + className);
-                    Method method = parseClass.getMethod(("parse" + className), String.class);
-                    component = (Component) constructor.newInstance(method.invoke(this, entry.getValue()));
-                }
-                resultEntity.addComponent(component);
-            } catch (Exception e) {
-                makeAndDisplayError("ReflectionError");
+        if(myNameToComponents.containsKey(name)){
+            Map<String, String> componentMap = myNameToComponents.get(name);
+            for(Map.Entry<String, String> entry : componentMap.entrySet()){
+                makeAndAddComponent(resultEntity, entry);
             }
         }
+        else{
+            makeAndDisplayError("NoXMLFile");
+        }
+
         return resultEntity;
     }
 
+    private void makeAndAddComponent(Entity resultEntity, Map.Entry<String, String> entry) {
+        try {
+            Class componentClass = Class.forName(PATH_RESOURCES.getString("component_folder_filepath") + entry.getKey());
+            Constructor[] constructors = componentClass.getConstructors();
+            Class constructorParamClassType = constructors[0].getParameterTypes()[0];
+            Constructor constructor = componentClass.getConstructor(constructorParamClassType);
+            Component component;
+            //Tries assuming the component parameter is a String
+            try {
+                component = (Component) constructor.newInstance(entry.getValue());
+            }
+            //Tries assuming the component parameter can use Class.parseClass(String s) eg. Double.parseDouble(String s)
+            catch (IllegalArgumentException e) {
+                String[] brokenUpClass = constructorParamClassType.toString().split("\\.");
+                String className = brokenUpClass[brokenUpClass.length-1];
+                Class parseClass = Class.forName(constructorParamClassType.toString().split(" ")[1]);
+                Method method = parseClass.getMethod(("parse" + className), String.class);
+                component = (Component) constructor.newInstance(method.invoke(this, entry.getValue()));
+            }
+            resultEntity.addComponent(component);
+        } catch (Exception e) {
+            e.printStackTrace();
+            makeAndDisplayError("ReflectionError");
+        }
+    }
 
 
     private void fillMaps() {
@@ -139,7 +149,6 @@ public class DefaultTypeXMLReaderFactory {
         File assetFolder = new File(FOLDER_PATH);
         File[] files = assetFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(EXTENSIONS));
         for(File temp : files) {
-            System.out.println(temp.getName());
             try {
                 DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder documentBuilder;
