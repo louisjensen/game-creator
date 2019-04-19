@@ -30,6 +30,8 @@ import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -40,7 +42,9 @@ public class MainGUI {
     private Game myGame;
     private GameCenterData myGameData;
     private Stage myStage;
+    private HBox myViewerBox;
     private ObjectManager myObjectManager;
+    private Map<Propertable, Viewer> myViewers;
     private ObservableStringValue myCurrentStyle;
     private ObjectProperty<Propertable> mySelectedEntity;
     private ObjectProperty<Propertable> myCurrentLevel;
@@ -56,6 +60,7 @@ public class MainGUI {
         myGameData = new GameCenterData();
         defaultGameData();
         myStage = new Stage();
+        myViewers = new HashMap<>();
 
         AuthoringLevel blankLevel = new AuthoringLevel("Level_1");
         AuthoringLevel blankLevel2 = new AuthoringLevel("Level 2"); //TODO
@@ -63,9 +68,12 @@ public class MainGUI {
         myObjectManager = new ObjectManager(myCurrentLevel);
         myObjectManager.addLevel(blankLevel);
         myObjectManager.addLevel(blankLevel2); //TODO
+        myViewers.put(blankLevel, null);
+        myViewers.put(blankLevel2, null);
         mySelectedEntity = new SimpleObjectProperty<>(null);
         myCurrentStyle = new SimpleStringProperty(DEFAULT_STYLESHEET);
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
+        myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
@@ -91,13 +99,14 @@ public class MainGUI {
         entityPaneBox.getStyleClass().add("entity-pane-box");
 
         UserCreatedTypesPane userCreatedTypesPane = createTypePanes(entityPaneBox, mainScene);
-        Viewer viewer = createViewer(userCreatedTypesPane);
-        createPropertiesPanes(propPaneBox, mainScene);
-        HBox centerPaneBox = new HBox(viewer);
-        centerPaneBox.prefHeightProperty().bind(mainScene.heightProperty());
-        centerPaneBox.prefWidthProperty().bind(mainScene.widthProperty());
+        createViewersForExistingLevels(userCreatedTypesPane);
 
-        mainBorderPane.setCenter(centerPaneBox);
+        createPropertiesPanes(propPaneBox, mainScene);
+        myViewerBox = new HBox(myViewers.get(myCurrentLevel.getValue()));
+        myViewerBox.prefHeightProperty().bind(mainScene.heightProperty());
+        myViewerBox.prefWidthProperty().bind(mainScene.widthProperty());
+
+        mainBorderPane.setCenter(myViewerBox);
         mainBorderPane.setRight(entityPaneBox);
         mainBorderPane.setTop(addMenu());
         mainBorderPane.setBottom(propPaneBox);
@@ -105,6 +114,12 @@ public class MainGUI {
         mainScene.getStylesheets().add(myCurrentStyle.getValue());
         mainBorderPane.getCenter().getStyleClass().add("main-center-pane");
         return mainScene;
+    }
+
+    private void createViewersForExistingLevels(UserCreatedTypesPane userCreatedTypesPane) {
+        for (AuthoringLevel level : myObjectManager.getLevels()) {
+            myViewers.put(level, createViewer(level, userCreatedTypesPane));
+        }
     }
 
     private UserCreatedTypesPane createTypePanes(HBox entityPaneBox, Scene mainScene) {
@@ -117,11 +132,8 @@ public class MainGUI {
         return userCreatedTypesPane;
     }
 
-    private Viewer createViewer(UserCreatedTypesPane userCreatedTypesPane) {
-        Viewer viewer = new Viewer(myCurrentLevel, userCreatedTypesPane, mySelectedEntity, myObjectManager);
-        viewer.setMinWidth(400);
-        viewer.setMinHeight(300);
-        return viewer;
+    private Viewer createViewer(Propertable levelBasis, UserCreatedTypesPane userCreatedTypesPane) {
+        return new Viewer(myCurrentLevel, userCreatedTypesPane, mySelectedEntity, myObjectManager); //TODO change to take AuthoringLevel instead of prop
     }
 
     private void createPropertiesPanes(HBox propPaneBox, Scene mainScene) {
@@ -204,12 +216,17 @@ public class MainGUI {
         myStage.setFullScreen(!myStage.isFullScreen());
     }
 
+    private void swapViewer(Propertable oldLevel, Propertable newLevel) {
+        myViewerBox.getChildren().remove(myViewers.get(oldLevel));
+        myViewerBox.getChildren().add(myViewers.get(newLevel));
+    }
+
     private void swapStylesheet(String oldVal, String newVal) {
         myStage.getScene().getStylesheets().remove(oldVal);
         myStage.getScene().getStylesheets().add(newVal);
     }
 
-    private void defaultGameData() {
+    private void defaultGameData() { //TODO
         myGameData.setFolderName("test");
         myGameData.setImageLocation("test");
         myGameData.setTitle("THE TEST GAME");

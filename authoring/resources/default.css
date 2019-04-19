@@ -26,7 +26,7 @@
 }
 
 .scroll-pane .list-view .list-cell:selected {
-    -fx-background-color: #005797;
+    -fx-background-color: #505050;
 }
 
 .scroll-pane .list-cell .label {
