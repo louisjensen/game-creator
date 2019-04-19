@@ -79,3 +79,16 @@
 .contentpadding {
     -fx-padding: 7;
 }
+
+.cardlist {
+    -fx-vgap: 50;
+    -fx-hgap: 50;
+    -fx-background-color: transparent;
+}
+
+.scroller {
+    -fx-background-color: transparent;
+    -fx-fit-to-width: true;
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: never;
+}
