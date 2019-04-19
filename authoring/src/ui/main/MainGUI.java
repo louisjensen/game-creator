@@ -23,6 +23,7 @@ import ui.Propertable;
 import ui.PropertableType;
 import ui.UIException;
 import ui.manager.GroupManager;
+import ui.manager.InfoEditor;
 import ui.manager.ObjectManager;
 import ui.panes.DefaultTypesPane;
 import ui.panes.LevelsPane;
@@ -159,7 +160,7 @@ public class MainGUI {
     private MenuBar addMenu() {
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(createMenu("File", "New", "Open", "Save"), //TODO make this better
-                createMenu("Edit", "Groups", "Preferences"), createMenu("View", "Fullscreen"));
+                createMenu("Edit", "Info", "Groups", "Preferences"), createMenu("View", "Fullscreen"));
         return menuBar;
     }
 
@@ -185,7 +186,8 @@ public class MainGUI {
     }
 
     private void newGame() {
-        System.out.println("New"); //TODO
+        MainGUI newWorkspace = new MainGUI();
+        newWorkspace.launch();
     }
 
     private void openGame() {
@@ -206,6 +208,11 @@ public class MainGUI {
     private void openGroupManager() {
         GroupManager groupManager = new GroupManager(myObjectManager);
         groupManager.showAndWait();
+    }
+
+    private void openGameInfo() {
+        InfoEditor infoEditor = new InfoEditor(myGameData);
+        infoEditor.showAndWait();
     }
 
     private void openPreferences() {

@@ -294,3 +294,14 @@
     -fx-padding: 0 0 10 10;
     -fx-alignment: center;
 }
+
+.info-editor {
+    -fx-hgap: 15;
+    -fx-vgap: 15;
+}
+
+.info-editor .label {
+    -fx-font-weight: normal;
+    -fx-font-size: 14;
+    -fx-text-fill: #aaaaaa;
+}
