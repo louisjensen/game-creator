@@ -8,7 +8,6 @@
 
 package frontend.games;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,7 +24,6 @@ import java.util.ResourceBundle;
 
 public class GameCard {
     private static final int GAME_IMAGE_SIZE = 200;
-    private static final int BUTTON_WIDTH = 100;
     private static final int WRAP_OFFSET = 25;
 
     public static final double DISPLAY_WIDTH = 300;
@@ -132,7 +130,6 @@ public class GameCard {
         imageDescription.setWrappingWidth(DISPLAY_WIDTH - WRAP_OFFSET);
         contentPane.setCenter(imageDescription);
         contentPane.getStyleClass().add(CONTENT_SELECTOR);
-        //contentPane.setPadding(new Insets(7));
         foreground.setCenter(contentPane);
     }
 
