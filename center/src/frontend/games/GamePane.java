@@ -13,10 +13,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import frontend.Utilities;
 
 import java.util.ResourceBundle;
@@ -24,7 +21,6 @@ import java.util.ResourceBundle;
 public class GamePane {
     public static final int GAME_PANE_TOP_PADDING = 10;
     public static final int GAME_PANE_PADDING = 100;
-    public static final int TITLE_FONT_SIZE = 32;
     private static final String SUBTITLE_SELECTOR = "subtitlefont";
     private Pane myDisplay;
     private ResourceBundle myResources;
