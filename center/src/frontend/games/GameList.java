@@ -22,7 +22,6 @@ import java.util.List;
 public class GameList {
     private Pane myDisplay;
     private static final double CARD_H_OFFSET = 50;
-    private static final double CARD_V_OFFSET = 50;
     private static final int NUM_CARDS_DISPLAYED = 3;
     private static final String GAME_LIST_SELECTOR = "cardlist";
     private static final String SCROLLER_SELECTOR = "scroller";
