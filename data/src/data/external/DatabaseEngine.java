@@ -5,6 +5,7 @@ import data.internal.TablePrinter;
 
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -122,7 +123,7 @@ public class DatabaseEngine {
             "SELECT " + GAME_INFO_COLUMN + " FROM " + GAME_INFORMATION_TABLE_NAME + " WHERE " + GAME_NAME_COLUMN + " " +
                     "= ? AND " + GAME_INFO_COLUMN + " IS NOT NULL;";
     private static final String FIND_ALL_GAME_NAMES =
-            "SELECT + DISTINCT(" + GAME_NAME_COLUMN + ") FROM " + GAME_INFORMATION_TABLE_NAME + ";";
+            "SELECT DISTINCT(" + GAME_NAME_COLUMN + ") FROM " + GAME_INFORMATION_TABLE_NAME + ";";
 
     private Connection myConnection;
     private PreparedStatement myCreateGameEntryStatement;
@@ -149,6 +150,7 @@ public class DatabaseEngine {
             myCreateGameEntryStatement = myConnection.prepareStatement(CREATE_GAME_ENTRY);
             myUpdateGameEntryDataStatement = myConnection.prepareStatement(UPDATE_GAME_DATA);
             myUpdateGameEntryInfoStatement =  myConnection.prepareStatement(UPDATE_GAME_INFO);
+            myLoadGameDataStatement = myConnection.prepareStatement(LOAD_GAME_DATA);
             myLoadGameInformationStatement = myConnection.prepareStatement(LOAD_GAME_INFORMATION);
             myFindAllGameNamesStatement = myConnection.prepareStatement(FIND_ALL_GAME_NAMES);
 
@@ -237,6 +239,27 @@ public class DatabaseEngine {
 
     public String loadGameInformation(String gameName) throws SQLException{
         return loadXML(gameName, myLoadGameInformationStatement, GAME_INFO_COLUMN);
+    }
+
+    public List<String> loadAllGameInformationXMLs() throws SQLException{
+        List<String> gameInformations = new ArrayList<>();
+        List<String> gameNames = getGameNames();
+        for (String game : gameNames){
+            String gameInfoXML = loadGameInformation(game);
+            if (gameInfoXML != null){
+                gameInformations.add(gameInfoXML);
+            }
+        }
+        return gameInformations;
+    }
+
+    private List<String> getGameNames() throws SQLException{
+        List<String> gameNames = new ArrayList<>();
+        ResultSet resultSet = myFindAllGameNamesStatement.executeQuery();
+        while (resultSet.next()){
+            gameNames.add(resultSet.getString(GAME_NAME_COLUMN));
+        }
+        return gameNames;
     }
 
     private String loadXML(String gameName, PreparedStatement preparedStatement, String columnName) throws SQLException {

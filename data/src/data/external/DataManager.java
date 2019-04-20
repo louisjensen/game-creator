@@ -6,6 +6,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +58,11 @@ public class DataManager implements ExternalData{
             System.out.println("Couldn't connect to database");
             return;
         }
-        myDatabaseEngine.createEntryForNewGame(gameName);
+        try {
+            myDatabaseEngine.createEntryForNewGame(gameName);
+        } catch (SQLException e) {
+            System.out.println("Couldn't create entry fro new game: " + e.getMessage());
+        }
         myDatabaseEngine.close();
     }
 
@@ -73,7 +78,11 @@ public class DataManager implements ExternalData{
             System.out.println("Couldn't connect to database");
             return;
         }
-        myDatabaseEngine.createEntryForNewGame(folderName);
+        try {
+            myDatabaseEngine.createEntryForNewGame(folderName);
+        } catch (SQLException e) {
+            System.out.println("Couldn't create entry for new game: " + e.getMessage());
+        }
         myDatabaseEngine.close();
     }
 
@@ -97,7 +106,11 @@ public class DataManager implements ExternalData{
         if (! myDatabaseEngine.open()){
             System.out.println("Couldn't load to database because couldn't connect");
         }
-        myDatabaseEngine.updateGameEntryData(gameName, myRawXML);
+        try {
+            myDatabaseEngine.updateGameEntryData(gameName, myRawXML);
+        } catch (SQLException e) {
+            System.out.println("Couldn't update game entry data: " + e.getMessage());
+        }
         myDatabaseEngine.close();
 
     }
@@ -107,15 +120,27 @@ public class DataManager implements ExternalData{
     }
 
     public List<Object> loadAllGameInfoObjects(){
-        List<String> gameNames = getGameNames();
+//        List<String> gameNames = getGameNames();
+//        List<Object> gameInfoObjects = new ArrayList<>();
+//        for (String game : gameNames){
+////            if (loadGameInfo(game))
+//            try {
+//                gameInfoObjects.add(loadGameInfo(game));
+//            } catch (FileNotFoundException exception){
+//                // do not try to add object to the list
+//            }
+//        }
         List<Object> gameInfoObjects = new ArrayList<>();
-        for (String game : gameNames){
-//            if (loadGameInfo(game))
-            try {
-                gameInfoObjects.add(loadGameInfo(game));
-            } catch (FileNotFoundException exception){
-                // do not try to add object to the list
-            }
+        List<String> gameInfoObjectXMLs = null;
+        try {
+            myDatabaseEngine.open();
+            gameInfoObjectXMLs = myDatabaseEngine.loadAllGameInformationXMLs();
+            myDatabaseEngine.close();
+        } catch (SQLException e) {
+            System.out.println("Couldn't load game information xmls: " + e.getMessage());
+        }
+        for (String xml : gameInfoObjectXMLs){
+            gameInfoObjects.add(mySerializer.fromXML(xml));
         }
         return gameInfoObjects;
     }
@@ -127,7 +152,11 @@ public class DataManager implements ExternalData{
         if (! myDatabaseEngine.open()){
             System.out.println("Couldn't load to database because couldn't connect");
         }
-        myDatabaseEngine.updateGameEntryInfo(gameName, myRawXML);
+        try {
+            myDatabaseEngine.updateGameEntryInfo(gameName, myRawXML);
+        } catch (SQLException e) {
+            System.out.println("Couldn't update game entry information: " + e.getMessage());
+        }
         myDatabaseEngine.close();
     }
 
@@ -143,20 +172,25 @@ public class DataManager implements ExternalData{
         if(!myDatabaseEngine.open()){
             System.out.println("Couldn't connect");
         }
-        Object ret = mySerializer.fromXML(myDatabaseEngine.loadGameData(gameName));
+        Object ret = null;
+        try {
+            ret = mySerializer.fromXML(myDatabaseEngine.loadGameData(gameName));
+        } catch (SQLException e) {
+            System.out.println("Couldn't load game date from database: " + e.getMessage());
+        }
         myDatabaseEngine.close();
         return ret;
     }
 
-    public void saveGameDataFromFolder(String gameName){
-        myDatabaseEngine.open();
-        myDatabaseEngine.createEntryForNewGame(gameName);
-        try {
-            myDatabaseEngine.updateGameEntryInfo(gameName, readFromXML("created_games/"+gameName+"/"+GAME_INFO+XML_EXTENSION));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void saveGameDataFromFolder(String gameName){
+//        myDatabaseEngine.open();
+//        myDatabaseEngine.createEntryForNewGame(gameName);
+//        try {
+//            myDatabaseEngine.updateGameEntryInfo(gameName, readFromXML("created_games/"+gameName+"/"+GAME_INFO+XML_EXTENSION));
+//        } catch (FileNotFoundException e || SQLException sqlException) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     private String readFromXML(String path) throws FileNotFoundException {

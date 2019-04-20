@@ -15,7 +15,7 @@ public class DatabaseLoader {
         List<String> gamesToLoad = List.of("celeste","downwell","fez","inside","limbo","mario","ori","spelunky",
                 "supermeatboy","yooka");
         for (String game: gamesToLoad){
-            dm.saveGameDataFromFolder(game);
+//            dm.saveGameDataFromFolder(game);
         }
     }
 }

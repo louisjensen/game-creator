@@ -57,17 +57,17 @@ public class SerializationTester {
     }
 
     public void testDatabaseConnection(){
-        DatabaseEngine de = new DatabaseEngine();
-        de.open();
-        System.out.println("Before: ==========================================================");
-        de.printGameTable();
-        System.out.println("Create new entry: ==================================================");
-        de.createEntryForNewGame("RyanGame");
-        de.printGameTable();
-        System.out.println("Update Entry: =======================================================");
-        de.updateGameEntryData("RyanGame", "testing");
-        de.printGameTable();
-        de.close();
+//        DatabaseEngine de = new DatabaseEngine();
+//        de.open();
+//        System.out.println("Before: ==========================================================");
+//        de.printGameTable();
+//        System.out.println("Create new entry: ==================================================");
+//        de.createEntryForNewGame("RyanGame");
+//        de.printGameTable();
+//        System.out.println("Update Entry: =======================================================");
+//        de.updateGameEntryData("RyanGame", "testing");
+//        de.printGameTable();
+//        de.close();
     }
 
     public void testSavingImages(){
