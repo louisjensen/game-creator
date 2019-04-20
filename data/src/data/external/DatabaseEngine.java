@@ -34,13 +34,15 @@ public class DatabaseEngine {
     private static final String ASSETS_COLUMN = "Assets";
     private static final String FIRST_PUBLISHED_COLUMN = "FirstPublished";
     private static final String MOST_RECENT_PUBLISHED_COLUMN = "MostRecentPublish";
+    private static final String AUTHOR_NAME_COLUMN = "AuthorName";
     public static final List<String> GAME_INFORMATION_COLUMN_NAMES = List.of(
             GAME_NAME_COLUMN,
             GAME_DATA_COLUMN,
             GAME_INFO_COLUMN,
             ASSETS_COLUMN,
             FIRST_PUBLISHED_COLUMN,
-            MOST_RECENT_PUBLISHED_COLUMN
+            MOST_RECENT_PUBLISHED_COLUMN,
+            AUTHOR_NAME_COLUMN
     );
 
     public static final String GAME_STATISTICS_TABLE_NAME = "GameStatistics";
@@ -106,16 +108,52 @@ public class DatabaseEngine {
             SOUNDS_TABLE_NAME, SOUNDS_COLUMN_NAMES
     );
 
+    private static final String CREATE_GAME_ENTRY =
+            "INSERT INTO "+ GAME_INFORMATION_TABLE_NAME + " (" + GAME_NAME_COLUMN + ") VALUES" +
+        "(?);";
+    private static final String UPDATE_GAME_DATA =
+            "UPDATE " + GAME_INFORMATION_TABLE_NAME + " SET " + GAME_DATA_COLUMN + " = ? WHERE " + GAME_NAME_COLUMN + " = ?;";
+    private static final String UPDATE_GAME_INFO = "UPDATE " + GAME_INFORMATION_TABLE_NAME + " SET " + GAME_INFO_COLUMN + " = ? " +
+            "WHERE " + GAME_NAME_COLUMN + " = ?;";
+    private static final String LOAD_GAME_DATA =
+            "SELECT " + GAME_DATA_COLUMN + " FROM " + GAME_INFORMATION_TABLE_NAME + " WHERE " + GAME_NAME_COLUMN + " " +
+                    "= ?;";
+    private static final String LOAD_GAME_INFORMATION =
+            "SELECT " + GAME_INFO_COLUMN + " FROM " + GAME_INFORMATION_TABLE_NAME + " WHERE " + GAME_NAME_COLUMN + " " +
+                    "= ? AND " + GAME_INFO_COLUMN + " IS NOT NULL;";
+    private static final String FIND_ALL_GAME_NAMES =
+            "SELECT + DISTINCT(" + GAME_NAME_COLUMN + ") FROM " + GAME_INFORMATION_TABLE_NAME + ";";
+
     private Connection myConnection;
+    private PreparedStatement myCreateGameEntryStatement;
+    private PreparedStatement myUpdateGameEntryDataStatement;
+    private PreparedStatement myUpdateGameEntryInfoStatement;
+    private PreparedStatement myLoadGameDataStatement;
+    private PreparedStatement myLoadGameInformationStatement;
+    private PreparedStatement myFindAllGameNamesStatement;
 
     public boolean open() {
         try {
             myConnection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
+            initializePreparedStatements();
             return true;
         } catch (SQLException exception){
             System.out.println("Couldn't connect to database" + exception.getMessage());
             exception.printStackTrace();
             return false;
+        }
+    }
+
+    private void initializePreparedStatements() {
+        try {
+            myCreateGameEntryStatement = myConnection.prepareStatement(CREATE_GAME_ENTRY);
+            myUpdateGameEntryDataStatement = myConnection.prepareStatement(UPDATE_GAME_DATA);
+            myUpdateGameEntryInfoStatement =  myConnection.prepareStatement(UPDATE_GAME_INFO);
+            myLoadGameInformationStatement = myConnection.prepareStatement(LOAD_GAME_INFORMATION);
+            myFindAllGameNamesStatement = myConnection.prepareStatement(FIND_ALL_GAME_NAMES);
+
+        } catch (SQLException exception){
+            System.out.println("Statement Preparation Failed " + exception.getMessage());
         }
     }
 
@@ -129,11 +167,9 @@ public class DatabaseEngine {
         }
     }
 
-    public void createEntryForNewGame(String gameName){
-        int id = 4;
-        String sqlQuery =
-                "INSERT INTO " + "GameInformation" + " " + "(GameID, GameName) VALUES("+ id + ", '" + gameName +"')";
-        executeStatement(sqlQuery);
+    public void createEntryForNewGame(String gameName) throws SQLException{
+        myCreateGameEntryStatement.setString(1, gameName);
+        myCreateGameEntryStatement.execute();
     }
 
     public void printGameTable(){
@@ -179,32 +215,37 @@ public class DatabaseEngine {
         return  null;
     }
 
-    public void updateGameEntryData(String gameName, String rawXML){
-        executeStatement("UPDATE " + GAME_INFORMATION_TABLE_NAME + " SET " + GAME_DATA_COLUMN + " = '" + rawXML +
-                "' WHERE " + GAME_NAME_COLUMN + " = '" + gameName + "';");
+    public void updateGameEntryData(String gameName, String rawXML) throws SQLException{
+        myUpdateGameEntryDataStatement.setString(1, rawXML);
+        myUpdateGameEntryDataStatement.setString(2, gameName);
+        myUpdateGameEntryDataStatement.execute();
     }
 
-    public void updateGameEntryInfo(String gameName, String rawXML){
-        executeStatement("UPDATE " + GAME_INFORMATION_TABLE_NAME + " SET " + GAME_INFO_COLUMN + " = '" + rawXML +
-                "' WHERE " + GAME_NAME_COLUMN + " = '" + gameName + "';");
+    public void updateGameEntryInfo(String gameName, String rawXML) throws SQLException{
+        myUpdateGameEntryInfoStatement.setString(1, rawXML);
+        myUpdateGameEntryInfoStatement.setString(2, gameName);
+        myUpdateGameEntryInfoStatement.execute();
     }
 
     public void addAssets(String gameName, List<String> assetPaths){
 
     }
 
-    public String loadGameData(String gameName){
-        String query =
-                "SELECT * FROM " + GAME_INFORMATION_TABLE_NAME + " WHERE " + GAME_NAME_COLUMN + " = '" + gameName +
-                        "';";
-        return executeQuery(query, GAME_DATA_COLUMN);
+    public String loadGameData(String gameName) throws SQLException{
+        return loadXML(gameName, myLoadGameDataStatement, GAME_DATA_COLUMN);
     }
 
-    public String loadGameInformation(String gameName){
-        String query =
-                "SELECT * FROM " + GAME_INFORMATION_TABLE_NAME + " WHERE " + GAME_NAME_COLUMN + " = '" + gameName +
-                        "';";
-        return executeQuery(query, GAME_INFORMATION_TABLE_NAME);
+    public String loadGameInformation(String gameName) throws SQLException{
+        return loadXML(gameName, myLoadGameInformationStatement, GAME_INFO_COLUMN);
+    }
+
+    private String loadXML(String gameName, PreparedStatement preparedStatement, String columnName) throws SQLException {
+        preparedStatement.setString(1, gameName);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()){
+            return resultSet.getString(columnName);
+        }
+        return null;
     }
 
     private void printResults(ResultSet results) throws SQLException {
