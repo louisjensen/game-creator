@@ -182,15 +182,16 @@ public class DataManager implements ExternalData{
         return ret;
     }
 
-//    public void saveGameDataFromFolder(String gameName){
-//        myDatabaseEngine.open();
-//        myDatabaseEngine.createEntryForNewGame(gameName);
-//        try {
-//            myDatabaseEngine.updateGameEntryInfo(gameName, readFromXML("created_games/"+gameName+"/"+GAME_INFO+XML_EXTENSION));
-//        } catch (FileNotFoundException e || SQLException sqlException) {
-//            e.printStackTrace();
-//        }
-//    }
+    public void saveGameDataFromFolder(String gameName){
+        createGameFolder(gameName);
+        try {
+            myDatabaseEngine.updateGameEntryInfo(gameName, readFromXML("created_games/"+gameName+"/"+GAME_INFO+XML_EXTENSION));
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (SQLException e){
+            System.out.println("Couldn't update game entry info: " + e.getMessage());
+        }
+    }
 
 
     private String readFromXML(String path) throws FileNotFoundException {
