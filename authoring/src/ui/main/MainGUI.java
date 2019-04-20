@@ -44,6 +44,7 @@ public class MainGUI {
     private GameCenterData myGameData;
     private Stage myStage;
     private HBox myViewerBox;
+    private UserCreatedTypesPane myCreatedTypesPane;
     private ObjectManager myObjectManager;
     private Map<Propertable, Viewer> myViewers;
     private ObservableStringValue myCurrentStyle;
@@ -52,6 +53,7 @@ public class MainGUI {
 
     private static final double STAGE_MIN_HEIGHT = 600;
     private static final double PROP_PANE_HEIGHT = 210;
+    private static final String DEFAULT_FIRST_LEVEL = "New_Level_1";
     private static final String DEFAULT_STYLESHEET = "default.css";
     private static final String MENU_ITEMS_FILE = "main_menu_items";
     private static final String STAGE_TITLE = "ByteMe Authoring Environment";
@@ -62,16 +64,14 @@ public class MainGUI {
         myStage = new Stage();
         myViewers = new HashMap<>();
         defaultGameData();
-
-        AuthoringLevel blankLevel = new AuthoringLevel("Level_1");
-        AuthoringLevel blankLevel2 = new AuthoringLevel("Level 2"); //TODO
-        myCurrentLevel = new SimpleObjectProperty<>(blankLevel);
+        myCurrentLevel = new SimpleObjectProperty<>();
+        mySelectedEntity = new SimpleObjectProperty<>();
         myObjectManager = new ObjectManager(myCurrentLevel);
+
+        AuthoringLevel blankLevel = new AuthoringLevel(DEFAULT_FIRST_LEVEL, myObjectManager);
         myObjectManager.addLevel(blankLevel);
-        myObjectManager.addLevel(blankLevel2); //TODO
-        myViewers.put(blankLevel, null);
-        myViewers.put(blankLevel2, null);
-        mySelectedEntity = new SimpleObjectProperty<>(null);
+        myCurrentLevel.setValue(blankLevel);
+
         myCurrentStyle = new SimpleStringProperty(DEFAULT_STYLESHEET);
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
         myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
@@ -99,8 +99,8 @@ public class MainGUI {
         HBox entityPaneBox = new HBox();
         entityPaneBox.getStyleClass().add("entity-pane-box");
 
-        UserCreatedTypesPane userCreatedTypesPane = createTypePanes(entityPaneBox, mainScene);
-        createViewersForExistingLevels(userCreatedTypesPane);
+        myCreatedTypesPane = createTypePanes(entityPaneBox, mainScene);
+        createViewersForExistingLevels();
 
         createPropertiesPanes(propPaneBox, mainScene);
         myViewerBox = new HBox(myViewers.get(myCurrentLevel.getValue()));
@@ -117,9 +117,9 @@ public class MainGUI {
         return mainScene;
     }
 
-    private void createViewersForExistingLevels(UserCreatedTypesPane userCreatedTypesPane) {
+    private void createViewersForExistingLevels() {
         for (AuthoringLevel level : myObjectManager.getLevels()) {
-            myViewers.put(level, createViewer(level, userCreatedTypesPane));
+            myViewers.put(level, createViewer(level));
         }
     }
 
@@ -133,8 +133,8 @@ public class MainGUI {
         return userCreatedTypesPane;
     }
 
-    private Viewer createViewer(AuthoringLevel levelBasis, UserCreatedTypesPane userCreatedTypesPane) {
-        return new Viewer(levelBasis, userCreatedTypesPane, mySelectedEntity, myObjectManager); //TODO change to take AuthoringLevel instead of prop
+    private Viewer createViewer(AuthoringLevel levelBasis) {
+        return new Viewer(levelBasis, myCreatedTypesPane, mySelectedEntity, myObjectManager);
     }
 
     @SuppressWarnings("Duplicates")
@@ -233,6 +233,9 @@ public class MainGUI {
 
     private void swapViewer(Propertable oldLevel, Propertable newLevel) {
         myViewerBox.getChildren().remove(myViewers.get(oldLevel));
+        if (!myViewers.containsKey(newLevel))
+            myViewers.put(newLevel, createViewer((AuthoringLevel) newLevel));
+
         myViewerBox.getChildren().add(myViewers.get(newLevel));
     }
 

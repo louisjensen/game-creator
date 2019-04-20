@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import ui.AuthoringEntity;
 import ui.AuthoringLevel;
 import ui.EntityField;
+import ui.ErrorBox;
 import ui.LevelField;
 import ui.Propertable;
 
@@ -52,11 +53,16 @@ public class ObjectManager {
 
     /**
      * Remove a level from ObjectManager
-     * @param level AuthoringLevel to be removed
+     * @param label AuthoringLevel to be removed
      */
-    public void removeLevel(AuthoringLevel level) {
-        myLevels.remove(level);
-        myLabelManager.removeLabel(LevelField.LABEL, level.getPropertyMap().get(LevelField.LABEL));
+    public void removeLevel(String label) {
+        for (AuthoringLevel level : myLevels) {
+            if (level.getPropertyMap().get(LevelField.LABEL).equals(label)) {
+                myLevels.remove(level);
+                myLabelManager.removeLabel(LevelField.LABEL, level.getPropertyMap().get(LevelField.LABEL));
+                return;
+            }
+        }
     }
 
     /**

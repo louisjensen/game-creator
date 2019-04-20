@@ -31,7 +31,7 @@ public class PaneTester extends Application {
         addTestLabels(manager.getLabelManager());
         AuthoringEntity obj1 = populateTestObjects(manager);
         SimpleObjectProperty<Propertable> testObj = new SimpleObjectProperty<>(obj1);
-        SimpleObjectProperty<Propertable> testLvl = new SimpleObjectProperty<>(new AuthoringLevel("Level_1"));
+        SimpleObjectProperty<Propertable> testLvl = new SimpleObjectProperty<>(new AuthoringLevel("Level_1", manager));
 
         try {
             PropertiesPane testPaneObj = new PropertiesPane(manager, PropertableType.OBJECT, testObj, manager.getLabelManager());
