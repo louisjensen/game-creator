@@ -3,10 +3,12 @@ package ui.panes;
 import engine.external.Entity;
 import engine.external.component.SpriteComponent;
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -16,6 +18,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
@@ -45,7 +49,6 @@ import java.util.ResourceBundle;
 
 public class Viewer extends ScrollPane {
     private StackPane myStackPane;
-    private List<ImageWithEntity> myImageWithEntitiesList;
     private static final int CELL_SIZE = 50;
     private Double myRoomHeight;
     private Double myRoomWidth;
@@ -85,13 +88,28 @@ public class Viewer extends ScrollPane {
 
     private void initializeAndFormatVariables() {
         myStackPane = new StackPane();
-        myImageWithEntitiesList = new ArrayList<>();
         myLinesPane = new Pane();
         myBackgroundFileName = null;
+        myStackPane.getChildren().addListener((ListChangeListener<Node>) change -> updateZField());
         myStackPane.getChildren().add(myLinesPane);
+        System.out.println("List size with just lines: " + myStackPane.getChildren().size());
         myStackPane.setAlignment(Pos.TOP_LEFT);
         this.setContent(myStackPane);
         this.getStyleClass().add(SHEET);
+    }
+
+    private void updateZField() {
+        int objectCount = 0;
+        for(Node node : myStackPane.getChildren()){
+            if(node instanceof ImageWithEntity){
+                System.out.println("*************");
+                AuthoringEntity authoringEntity = ((ImageWithEntity) node).getAuthoringEntity();
+                authoringEntity.getPropertyMap().put(EntityField.Z, Integer.toString(objectCount));
+                System.out.println("Label: " + authoringEntity.getPropertyMap().get(EntityField.LABEL) + "\t Index: " + authoringEntity.getPropertyMap().get(EntityField.Z));
+                System.out.println("****************");
+                objectCount++;
+            }
+        }
     }
 
 
@@ -124,6 +142,7 @@ public class Viewer extends ScrollPane {
             Image image = new Image(fileInputStream, myRoomWidth, myRoomHeight, false, false);
             BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, null);
             myStackPane.setBackground(new Background(backgroundImage));
+            System.out.println("Size with background: " + myStackPane.getChildren().size());
             myBackgroundFileName = filename;
         }
     }
@@ -180,37 +199,63 @@ public class Viewer extends ScrollPane {
     private void addImage(ImageWithEntity imageView){
         applyLeftClickHandler(imageView);
         applyDragHandler(imageView);
-        //applyRightClickHandler(imageView);
+        applyRightClickHandler(imageView);
         myStackPane.getChildren().add(imageView);
     }
 
-//    private void applyRightClickHandler(ImageWithEntity imageView) {
-//        imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//                if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-//                    System.out.println("RIGHT CLICK");
-//                    ListView listView = new ListView();
-//                    Label label = new Label("Opacity");
-//                    label.setOnMousePressed(new EventHandler<MouseEvent>() {
-//                        @Override
-//                        public void handle(MouseEvent mouseEvent) {
-//                            System.out.println("Opacity pressed");
-//                            imageView.opacityProperty().setValue(50);
-//                        }
-//                    });
-//                    listView.getItems().add(label);
-//                    Scene scene = new Scene(listView, 50, 100);
-//                    Stage stage = new Stage();
-//                    stage.setScene(scene);
-//                    stage.setX(mouseEvent.getScreenX());
-//                    stage.setY(mouseEvent.getScreenY());
-//                    stage.initStyle(StageStyle.UNDECORATED);
-//                    stage.show();
-//                }
-//            }
-//        });
-//    }
+    private void applyRightClickHandler(ImageWithEntity imageView) {
+        imageView.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                System.out.println("RIGHT CLICK");
+                ListView listView = new ListView();
+                Label label = new Label("Bring To Front");
+
+                label.setOnMousePressed(mouseEvent1 -> {
+                    imageView.toFront();
+                });
+
+                Label label2 = new Label(("Send to Back"));
+                listView.getItems().add(label2);
+                label2.setOnMousePressed(mouseEvent12 -> {
+                    imageView.toBack();
+                });
+
+                Label label3 = new Label("Delete");
+                listView.getItems().add(label3);
+                label3.setOnMousePressed(mouseEvent13 -> {
+                    myStackPane.getChildren().remove(imageView);
+                    myObjectManager.removeEntityInstance(imageView.getAuthoringEntity());
+                });
+
+                listView.getItems().add(label);
+                ScrollPane scrollPane = new ScrollPane();
+                scrollPane.setContent(listView);
+                scrollPane.getStyleClass().add(SHEET);
+                Scene scene = new Scene(scrollPane, 125, 100);
+                scene.getStylesheets().add("default.css");
+                scrollPane.getStyleClass().add(".object-layering-window");
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.setX(mouseEvent.getScreenX());
+                stage.setY(mouseEvent.getScreenY());
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.show();
+                stage.setAlwaysOnTop(true);
+                stage.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent14 -> {
+                    System.out.println("mouse click detected!");
+                    stage.close();
+                });
+                stage.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(KeyEvent keyEvent) {
+                        if(keyEvent.getCode() == KeyCode.ESCAPE){
+                            stage.close();
+                        }
+                    }
+                });
+            }
+        });
+    }
 
     private void applyDragHandler(ImageWithEntity imageView) {
         imageView.setOnDragDetected(new EventHandler<MouseEvent>() {
