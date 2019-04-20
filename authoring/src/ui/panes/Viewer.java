@@ -4,30 +4,54 @@ import engine.external.Entity;
 import engine.external.component.SpriteComponent;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.MapChangeListener;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
-import ui.*;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import ui.AuthoringEntity;
+import ui.AuthoringLevel;
+import ui.EntityField;
+import ui.LevelField;
+import ui.Propertable;
+import ui.Utility;
 import ui.manager.ObjectManager;
 
+import java.awt.*;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
 public class Viewer extends ScrollPane {
     private StackPane myStackPane;
+    private List<ImageWithEntity> myImageWithEntitiesList;
     private static final int CELL_SIZE = 50;
     private Double myRoomHeight;
     private Double myRoomWidth;
     private boolean isDragOnView;
     private ObjectManager myObjectManager;
-    private ObjectProperty<Propertable> myAuthoringLevel;
+    private AuthoringLevel myAuthoringLevel;
     private AuthoringEntity myDraggedAuthoringEntity;
     private ObjectProperty<Propertable> mySelectedEntityProperty;
     private UserCreatedTypesPane myUserCreatedPane;
@@ -44,13 +68,14 @@ public class Viewer extends ScrollPane {
      * @param userCreatedTypesPane
      * @param objectProperty
      */
-    public Viewer(ObjectProperty<Propertable> authoringLevel, UserCreatedTypesPane userCreatedTypesPane, ObjectProperty objectProperty, ObjectManager objectManager){
+    public Viewer(AuthoringLevel authoringLevel, UserCreatedTypesPane userCreatedTypesPane,
+                  ObjectProperty objectProperty, ObjectManager objectManager){
         myObjectManager = objectManager;
         myUserCreatedPane = userCreatedTypesPane;
         mySelectedEntityProperty = objectProperty;
         myAuthoringLevel = authoringLevel;
         initializeAndFormatVariables();
-        myAuthoringLevel.getValue().getPropertyMap().addListener((MapChangeListener<? super Enum, ? super String>) change ->
+        myAuthoringLevel.getPropertyMap().addListener((MapChangeListener<? super Enum, ? super String>) change ->
                 handleChange(change));
         setupAcceptDragEvents();
         setupDragDropped();
@@ -60,6 +85,7 @@ public class Viewer extends ScrollPane {
 
     private void initializeAndFormatVariables() {
         myStackPane = new StackPane();
+        myImageWithEntitiesList = new ArrayList<>();
         myLinesPane = new Pane();
         myBackgroundFileName = null;
         myStackPane.getChildren().add(myLinesPane);
@@ -154,8 +180,37 @@ public class Viewer extends ScrollPane {
     private void addImage(ImageWithEntity imageView){
         applyLeftClickHandler(imageView);
         applyDragHandler(imageView);
+        //applyRightClickHandler(imageView);
         myStackPane.getChildren().add(imageView);
     }
+
+//    private void applyRightClickHandler(ImageWithEntity imageView) {
+//        imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent mouseEvent) {
+//                if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+//                    System.out.println("RIGHT CLICK");
+//                    ListView listView = new ListView();
+//                    Label label = new Label("Opacity");
+//                    label.setOnMousePressed(new EventHandler<MouseEvent>() {
+//                        @Override
+//                        public void handle(MouseEvent mouseEvent) {
+//                            System.out.println("Opacity pressed");
+//                            imageView.opacityProperty().setValue(50);
+//                        }
+//                    });
+//                    listView.getItems().add(label);
+//                    Scene scene = new Scene(listView, 50, 100);
+//                    Stage stage = new Stage();
+//                    stage.setScene(scene);
+//                    stage.setX(mouseEvent.getScreenX());
+//                    stage.setY(mouseEvent.getScreenY());
+//                    stage.initStyle(StageStyle.UNDECORATED);
+//                    stage.show();
+//                }
+//            }
+//        });
+//    }
 
     private void applyDragHandler(ImageWithEntity imageView) {
         imageView.setOnDragDetected(new EventHandler<MouseEvent>() {
@@ -178,8 +233,8 @@ public class Viewer extends ScrollPane {
     }
 
     private void setRoomSize(){
-        myRoomHeight = Double.parseDouble(myAuthoringLevel.getValue().getPropertyMap().get(LevelField.HEIGHT));
-        myRoomWidth = Double.parseDouble(myAuthoringLevel.getValue().getPropertyMap().get(LevelField.WIDTH));
+        myRoomHeight = Double.parseDouble(myAuthoringLevel.getPropertyMap().get(LevelField.HEIGHT));
+        myRoomWidth = Double.parseDouble(myAuthoringLevel.getPropertyMap().get(LevelField.WIDTH));
         this.setPrefHeight(myRoomHeight);
         this.setPrefWidth(myRoomWidth);
         myStackPane.setMinWidth(myRoomWidth);
