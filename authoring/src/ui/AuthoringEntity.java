@@ -30,6 +30,7 @@ public class AuthoringEntity implements Propertable {
             myPropertyMap.put(name, null);
         myPropertyMap.put(EntityField.X, "0.0");
         myPropertyMap.put(EntityField.Y, "0.0");
+        myPropertyMap.put(EntityField.Z, "0.0");
         myPropertyMap.put(EntityField.XSCALE, "1.0");
         myPropertyMap.put(EntityField.YSCALE, "1.0");
         myPropertyMap.put(EntityField.CAMERA, "false");
@@ -57,6 +58,8 @@ public class AuthoringEntity implements Propertable {
             myPropertyMap.put(EntityField.X, ("" + (basis.getComponent(XPositionComponent.class).getValue())));
         if (basis.hasComponents(YPositionComponent.class))
             myPropertyMap.put(EntityField.Y, ("" + (basis.getComponent(YPositionComponent.class).getValue())));
+        if (basis.hasComponents(ZPositionComponent.class))
+            myPropertyMap.put(EntityField.Z, ("" + (basis.getComponent(ZPositionComponent.class).getValue())));
         if (basis.hasComponents(WidthComponent.class))
             myPropertyMap.put(EntityField.XSCALE, ("" + (basis.getComponent(WidthComponent.class).getValue()))); //TODO add Group & other things??
         if (basis.hasComponents(HeightComponent.class))
@@ -73,6 +76,7 @@ public class AuthoringEntity implements Propertable {
         myPropertyMap.put(EntityField.GROUP, copyBasis.myPropertyMap.get(EntityField.GROUP));
         myPropertyMap.put(EntityField.X, copyBasis.myPropertyMap.get(EntityField.X));
         myPropertyMap.put(EntityField.Y, copyBasis.myPropertyMap.get(EntityField.Y));
+        myPropertyMap.put(EntityField.Z, copyBasis.myPropertyMap.get(EntityField.Z));
         myPropertyMap.put(EntityField.XSCALE, copyBasis.myPropertyMap.get(EntityField.XSCALE));
         myPropertyMap.put(EntityField.YSCALE, copyBasis.myPropertyMap.get(EntityField.YSCALE));
         myBackingEntity = backingEntity;
