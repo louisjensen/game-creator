@@ -224,6 +224,7 @@ public class Viewer extends ScrollPane {
                 listView.getItems().add(label3);
                 label3.setOnMousePressed(mouseEvent13 -> {
                     myStackPane.getChildren().remove(imageView);
+                    myObjectManager.removeEntityInstance(imageView.getAuthoringEntity());
                 });
 
                 listView.getItems().add(label);
