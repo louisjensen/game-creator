@@ -41,11 +41,19 @@ public class ObjectManager {
         myCurrentLevel = levelProperty;
     }
 
+    /**
+     * Add a level to ObjectManager
+     * @param level AuthoringLevel to be added
+     */
     public void addLevel(AuthoringLevel level) {
         myLevels.add(level);
         myLabelManager.addLabel(LevelField.LABEL, level.getPropertyMap().get(LevelField.LABEL));
     }
 
+    /**
+     * Remove a level from ObjectManager
+     * @param level AuthoringLevel to be removed
+     */
     public void removeLevel(AuthoringLevel level) {
         myLevels.remove(level);
         myLabelManager.removeLabel(LevelField.LABEL, level.getPropertyMap().get(LevelField.LABEL));
@@ -70,7 +78,33 @@ public class ObjectManager {
         ((AuthoringLevel) myCurrentLevel.getValue()).addEntity(entity);
     }
 
-    //TODO remove entity??
+    /**
+     * Use to remove all instances of an entity type from ObjectManager, removes Instances, Events, Label for complete deletion
+     * @param entity AuthoringEntity with label corresponding to the type being deleted
+     */
+    public void removeEntityType(AuthoringEntity entity) {
+        for (AuthoringEntity authEntity : myEntities) {
+            if (authEntity.getPropertyMap().get(EntityField.LABEL).equals(entity.getPropertyMap().get(EntityField.LABEL)))
+                myEntities.remove(authEntity);
+        }
+        for (AuthoringLevel level : myLevels) {
+            for (AuthoringEntity authEntity : level.getEntities()) {
+                if (authEntity.getPropertyMap().get(EntityField.LABEL).equals(entity.getPropertyMap().get(EntityField.LABEL)))
+                    level.removeEntity(authEntity);
+            }
+        }
+        myLabelManager.removeLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL));
+        myEventMap.remove(entity.getPropertyMap().get(EntityField.LABEL));
+    }
+
+    /**
+     * Use to remove a single instance of an AuthoringEntity from the authoring environment
+     * @param entity Instance to be removed
+     */
+    public void removeEntityInstance(AuthoringEntity entity) {
+        myEntities.remove(entity);
+        ((AuthoringLevel) myCurrentLevel.getValue()).getEntities().remove(entity);
+    }
 
     public void propagate(String objectLabel, Enum property, String newValue) {
         for (AuthoringEntity entity : myEntities) {
@@ -99,7 +133,7 @@ public class ObjectManager {
             str = change.getAddedSubList().get(0);
 
         if (change.wasRemoved())
-            System.out.println("REMOVED");
+            System.out.println("REMOVED"); //TODO still debugging
 
         if (change.wasReplaced() || change.wasRemoved()) {
             for (AuthoringEntity entity : myEntities) {
