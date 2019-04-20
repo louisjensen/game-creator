@@ -204,70 +204,54 @@ public class Viewer extends ScrollPane {
     }
 
     private void applyRightClickHandler(ImageWithEntity imageView) {
-        imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                    System.out.println("RIGHT CLICK");
-                    ListView listView = new ListView();
-                    Label label = new Label("Bring To Front");
-                    label.setOnMousePressed(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-                            System.out.println("Brint to front");
-                            imageView.toFront();
-                        }
-                    });
+        imageView.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                System.out.println("RIGHT CLICK");
+                ListView listView = new ListView();
+                Label label = new Label("Bring To Front");
 
-                    Label label2 = new Label(("Send to Back"));
-                    listView.getItems().add(label2);
-                    label2.setOnMousePressed(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-                            System.out.println("Send to back");
-                            imageView.toBack();
-                        }
-                    });
+                label.setOnMousePressed(mouseEvent1 -> {
+                    imageView.toFront();
+                });
 
-                    Label label3 = new Label("Delete");
-                    listView.getItems().add(label3);
-                    label3.setOnMousePressed(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
+                Label label2 = new Label(("Send to Back"));
+                listView.getItems().add(label2);
+                label2.setOnMousePressed(mouseEvent12 -> {
+                    imageView.toBack();
+                });
 
-                        }
-                    });
+                Label label3 = new Label("Delete");
+                listView.getItems().add(label3);
+                label3.setOnMousePressed(mouseEvent13 -> {
+                    myStackPane.getChildren().remove(imageView);
+                });
 
-                    listView.getItems().add(label);
-                    ScrollPane scrollPane = new ScrollPane();
-                    scrollPane.setContent(listView);
-                    scrollPane.getStyleClass().add(SHEET);
-                    Scene scene = new Scene(scrollPane, 125, 100);
-                    scene.getStylesheets().add("default.css");
-                    scrollPane.getStyleClass().add(".object-layering-window");
-                    Stage stage = new Stage();
-                    stage.setScene(scene);
-                    stage.setX(mouseEvent.getScreenX());
-                    stage.setY(mouseEvent.getScreenY());
-                    stage.initStyle(StageStyle.UNDECORATED);
-                    stage.show();
-                    stage.setAlwaysOnTop(true);
-                    stage.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-                            System.out.println("mouse click detected!");
+                listView.getItems().add(label);
+                ScrollPane scrollPane = new ScrollPane();
+                scrollPane.setContent(listView);
+                scrollPane.getStyleClass().add(SHEET);
+                Scene scene = new Scene(scrollPane, 125, 100);
+                scene.getStylesheets().add("default.css");
+                scrollPane.getStyleClass().add(".object-layering-window");
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.setX(mouseEvent.getScreenX());
+                stage.setY(mouseEvent.getScreenY());
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.show();
+                stage.setAlwaysOnTop(true);
+                stage.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent14 -> {
+                    System.out.println("mouse click detected!");
+                    stage.close();
+                });
+                stage.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(KeyEvent keyEvent) {
+                        if(keyEvent.getCode() == KeyCode.ESCAPE){
                             stage.close();
                         }
-                    });
-                    stage.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-                        @Override
-                        public void handle(KeyEvent keyEvent) {
-                            if(keyEvent.getCode() == KeyCode.ESCAPE){
-                                stage.close();
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             }
         });
     }
