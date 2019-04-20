@@ -148,6 +148,16 @@ public class DataManager implements ExternalData{
         return ret;
     }
 
+    public void saveGameDataFromFolder(String gameName){
+        myDatabaseEngine.open();
+        myDatabaseEngine.createEntryForNewGame(gameName);
+        try {
+            myDatabaseEngine.updateGameEntryInfo(gameName, readFromXML("created_games/"+gameName+"/"+GAME_INFO+XML_EXTENSION));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private String readFromXML(String path) throws FileNotFoundException {
         BufferedReader bufferedReader = null;
