@@ -5,17 +5,13 @@ import engine.external.component.SpriteComponent;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
@@ -35,6 +31,8 @@ import ui.manager.ObjectManager;
 import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Comparator;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -49,7 +47,7 @@ public class Viewer extends ScrollPane {
     private AuthoringEntity myDraggedAuthoringEntity;
     private ObjectProperty<Propertable> mySelectedEntityProperty;
     private UserCreatedTypesPane myUserCreatedPane;
-    private static final ResourceBundle myGeneralResources = ResourceBundle.getBundle("authoring_general");
+    private static final ResourceBundle GENERAL_RESOURCES = ResourceBundle.getBundle("authoring_general");
     private Pane myLinesPane;
     private String myBackgroundFileName;
     private static final ResourceBundle RESOURCES = ResourceBundle.getBundle("viewer");
@@ -69,12 +67,32 @@ public class Viewer extends ScrollPane {
         mySelectedEntityProperty = objectProperty;
         myAuthoringLevel = authoringLevel;
         initializeAndFormatVariables();
+        addAllExistingEntities(authoringLevel);
         myAuthoringLevel.getPropertyMap().addListener((MapChangeListener<? super Enum, ? super String>) change ->
                 handleChange(change));
         setupAcceptDragEvents();
         setupDragDropped();
         setRoomSize();
         updateGridLines();
+    }
+
+    private void addAllExistingEntities(AuthoringLevel authoringLevel) {
+        List<AuthoringEntity> authoringEntityList = authoringLevel.getEntities();
+        authoringEntityList.sort(new Comparator<AuthoringEntity>() {
+            @Override
+            public int compare(AuthoringEntity o1, AuthoringEntity o2) {
+                int firstZ = Integer.parseInt(o1.getPropertyMap().get(EntityField.Z));
+                int secondZ = Integer.parseInt(o2.getPropertyMap().get(EntityField.Z));
+                return firstZ - secondZ;
+            }
+        });
+
+        for(AuthoringEntity authoringEntity : authoringEntityList){
+            String imagePath = GENERAL_RESOURCES.getString("images_filepath/") + authoringEntity.getPropertyMap().get(EntityField.IMAGE);
+            FileInputStream fileInputStream = Utility.makeFileInputStream(imagePath);
+            ImageWithEntity imageWithEntity = new ImageWithEntity(fileInputStream, authoringEntity);
+            myStackPane.getChildren().add(imageWithEntity);
+        }
     }
 
     private void initializeAndFormatVariables() {
@@ -128,7 +146,7 @@ public class Viewer extends ScrollPane {
 
     private void updateBackground(String filename){
         if(filename != null){
-            String filepath = myGeneralResources.getString("images_filepath") + filename;
+            String filepath = GENERAL_RESOURCES.getString("images_filepath") + filename;
             FileInputStream fileInputStream = Utility.makeFileInputStream(filepath);
             Image image = new Image(fileInputStream, myRoomWidth, myRoomHeight, false, false);
             BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, null);
