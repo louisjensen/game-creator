@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import ui.UIException;
 import ui.panes.EventPane;
+import voogasalad.util.reflection.Reflection;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -24,25 +25,35 @@ import java.util.*;
 public class EventFactory {
     private static final String DEFAULT_RESOURCES_NAME = "basic_event_display";
     private static final String ACTION_RESOURCES_NAME = "actions_display";
-    private static final String CONDITONS_RESOURCES = "condition_values";
+    private static final String ERROR_RESOURCES = "error_messages";
+    //private static final String CONDITONS_RESOURCES = "condition_values";
+    private static final String KEY_CODE_DELIMITER = "#";
     private static final String CONTROL_SEPARATOR = "::";
     private static final String PARAMETER_SEPARATOR = ",";
     private static final ResourceBundle DEFAULT_RESOURCES = ResourceBundle.getBundle(DEFAULT_RESOURCES_NAME);
-    private static final ResourceBundle ACTION_RESOURCES = ResourceBundle.getBundle(ACTION_RESOURCES_NAME);
 
-    public void factoryDelegator(String controlResources,String controlKey, Pane myParent, ArrayList<StringProperty> myBinding){
+    //private Reflection myMethodReflector = new Reflection();
+
+
+    public void factoryDelegator(String controlResources,String controlKey, Pane myParent, Map<String,StringProperty> myBinding){
         ResourceBundle myControlsOptions = ResourceBundle.getBundle(controlResources);
         for (String controlInformation: myControlsOptions.getString(controlKey.replaceAll(" ","")).split(CONTROL_SEPARATOR)) {
-            String methodName = controlInformation.substring(0, controlInformation.indexOf(PARAMETER_SEPARATOR));
-            String methodParameter = controlInformation.substring(controlInformation.indexOf(PARAMETER_SEPARATOR) + 1);
-            Class<?>[] myClazz = {String.class, ArrayList.class};
-            Object[] myParams = {methodParameter, myBinding};
+            String keyCode = controlInformation.substring(0,controlInformation.indexOf(KEY_CODE_DELIMITER));
+
+            String factoryInformation = controlInformation.substring(controlInformation.indexOf(KEY_CODE_DELIMITER)+1);
+            String methodName = factoryInformation.substring(0, factoryInformation.indexOf(PARAMETER_SEPARATOR));
+            String methodParameter = factoryInformation.substring(factoryInformation.indexOf(PARAMETER_SEPARATOR) + 1);
+
+            Class<?>[] myClazz = {String.class, String.class, Map.class};
+            Object[] myParams = {methodParameter, keyCode, myBinding};
+            //myParent.getChildren().add((Node) Reflection.callMethod(this,methodName,methodParameter,myBinding));
             try {
                 Method m = this.getClass().getDeclaredMethod(methodName, myClazz);
                 Object addedOption = m.invoke(this, myParams);
                 myParent.getChildren().add((Node) addedOption);
             } catch (Exception e) {
-                UIException myEventCreatorException = new UIException("Missing Event Options"); //@TODO refactor to get message from properties file
+                ResourceBundle errorBundle = ResourceBundle.getBundle(ERROR_RESOURCES);
+                UIException myEventCreatorException = new UIException(errorBundle.getString(this.getClass().getSimpleName())); //@TODO refactor to get message from properties file
                 myEventCreatorException.displayUIException();
             }
         }
@@ -68,29 +79,30 @@ public class EventFactory {
 //        collisionOptions.getChildren().add(actionOptions);
         return collisionOptions;
     }
-    public static ChoiceBox<String> createBoxFromResources(String resourcesBundleName, ArrayList<StringProperty> myBinding){
+    public static ChoiceBox<String> createBoxFromResources(String resourcesBundleName, String myInformationKey, Map<String,StringProperty> myBinding){
         ResourceBundle optionsResource = ResourceBundle.getBundle(resourcesBundleName);
         Set<String> myActionsSet = optionsResource.keySet();
         List<String> myActionsList = new ArrayList<>(myActionsSet);
         Collections.sort(myActionsList);
-        return createChoiceBox(myActionsList,myBinding);
+        return createChoiceBox(myActionsList,myInformationKey, myBinding);
 
     }
-    public static ChoiceBox<String> createBoxFromResources(String resourcesBundleName, String key, ArrayList<StringProperty> myBinding){
+    public static ChoiceBox<String> createBoxFromResources(String resourcesBundleName, String key, String myInformationKey,
+                                                           Map<String,StringProperty> myBinding){
         ResourceBundle optionsResource = ResourceBundle.getBundle(resourcesBundleName);
         String[] keyValues = optionsResource.getString(key).split("::");
         List<String> myActionsList = Arrays.asList(keyValues);
-        return createChoiceBox(myActionsList,myBinding);
+        return createChoiceBox(myActionsList,myInformationKey,myBinding);
     }
 
-    public static ChoiceBox<String> createBoxFromResourcesKey(String key, ArrayList<StringProperty> myBinding ){
+    public static ChoiceBox<String> createBoxFromResourcesKey(String key, String myInformationKey,Map<String,StringProperty> myBinding ){
         String[] keyValues = DEFAULT_RESOURCES.getString(key).split("::");
         List<String> myKeyValues = Arrays.asList(keyValues);
         Collections.sort(myKeyValues);
-        return createChoiceBox(myKeyValues,myBinding);
+        return createChoiceBox(myKeyValues,myInformationKey,myBinding);
     }
 
-    public static ChoiceBox<String> createChoiceBox(List<String> choiceBoxOptions, ArrayList<StringProperty> myBinding){
+    public static ChoiceBox<String> createChoiceBox(List<String> choiceBoxOptions, String myInformationKey, Map<String,StringProperty> myBinding){
         
         ObservableList<String> myObservableChoices = FXCollections.observableArrayList(choiceBoxOptions);
         ChoiceBox<String> myChoices = new ChoiceBox<>(myObservableChoices);
@@ -98,21 +110,24 @@ public class EventFactory {
 
         myChoices.setMinSize(100,40);
         myChoices.setMaxSize(100,40);
-        bindBox(myChoices,myBinding);
+        bindBox(myChoices,myInformationKey, myBinding);
         return myChoices;
     }
-    public static void bindBox(ChoiceBox<String> myChoices, ArrayList<StringProperty> myBinding){
+    public static void bindBox(ChoiceBox<String> myChoices, String myInformationKey, Map<String,StringProperty> myBinding){
         myChoices.setOnAction(e -> myChoices.setAccessibleText(myChoices.getValue()));
         StringProperty myListener = new SimpleStringProperty();
         myListener.bindBidirectional(myChoices.accessibleTextProperty());
-        myBinding.add(myListener);
+        myBinding.put(myInformationKey,myListener);
     }
-    public static HBox createDependentComboBoxes(String independentBundle, ArrayList<StringProperty> myBinding){
-        ChoiceBox<String> myControllingChoice = createBoxFromResources(independentBundle,myBinding);
+    public static HBox createDependentComboBoxes(String independentBundle, String myKeys,
+                                                 Map<String,StringProperty> myBinding){
+        String myIndependentKey = myKeys.substring(0,myKeys.indexOf("%"));
+        String myDependentKey = myKeys.substring(myKeys.indexOf("%") + 1);
+        ChoiceBox<String> myControllingChoice = createBoxFromResources(independentBundle,myIndependentKey,myBinding);
         ChoiceBox<String> myDependentChoice = new ChoiceBox<>(FXCollections.observableArrayList());
         myDependentChoice.setMinSize(100,40);
         myDependentChoice.setMaxSize(100,40);
-        bindBox(myDependentChoice,myBinding);
+        bindBox(myDependentChoice,myDependentKey,myBinding);
         Map<String,ObservableList> choiceSelector = new HashMap<>();
         ResourceBundle myIndependentResources = ResourceBundle.getBundle(independentBundle);
         choiceSelector.put("", FXCollections.observableArrayList());
@@ -136,7 +151,7 @@ public class EventFactory {
     }
 
 
-    public static TextField createDisappearingLabel(String textFieldInformation, ArrayList<StringProperty> myBinding){
+    public static TextField createDisappearingLabel(String textFieldInformation, String myKeyInformation, Map<String,StringProperty> myBinding){
         TextField myTextField = new TextField();
         myTextField.setPromptText(textFieldInformation);
         myTextField.setFocusTraversable(false);
@@ -145,16 +160,16 @@ public class EventFactory {
         myTextField.setMaxSize(100,40);
         StringProperty myListener = new SimpleStringProperty();
         myListener.bindBidirectional(myTextField.textProperty());
-        myBinding.add(myListener);
+        myBinding.put(myKeyInformation,myListener);
         return myTextField;
         }
 
 
-    public static HBox createActionsOptions(ArrayList<StringProperty> myActionsBinding){
+    public static HBox createActionsOptions(String myInfoKey, String valueKey,Map<String,StringProperty> myActionsBinding){
         HBox myActionOptions = new HBox();
-        myActionOptions.getStylesheets().add("default.css");
+        //myActionOptions.getStylesheets().add("default.css");
         myActionOptions.getChildren().add(createLabel("Enter Action - "));
-        myActionOptions.getChildren().add(createDependentComboBoxes(ACTION_RESOURCES_NAME,myActionsBinding));
+        myActionOptions.getChildren().add(createDependentComboBoxes(ACTION_RESOURCES_NAME,myInfoKey,myActionsBinding));
 //        List<String> componentOptions = new ArrayList<>(ACTION_RESOURCES.keySet());
 //        Collections.sort(componentOptions);
 //        ChoiceBox<String> actionChoices = createChoiceBox(componentOptions,myActionsBinding);
@@ -163,7 +178,7 @@ public class EventFactory {
 //        myActionOptions.getChildren().add(modifyChoices);
 ////        actionChoices.setPromptText("Actions");
 //        myActionOptions.getChildren().add(actionChoices);
-        myActionOptions.getChildren().add(createDisappearingLabel("Value",myActionsBinding));
+        myActionOptions.getChildren().add(createDisappearingLabel("Value",valueKey,myActionsBinding));
 
         return myActionOptions;
     }
@@ -172,8 +187,8 @@ public class EventFactory {
 
 
 
-    public static TextField createNumericOptions(String numericFieldInformation, ArrayList<StringProperty> myBinding){
-        TextField myTextField = createDisappearingLabel(numericFieldInformation,myBinding);
+    public static TextField createNumericOptions(String numericFieldInformation, String valueKey, Map<String,StringProperty> myBinding){
+        TextField myTextField = createDisappearingLabel(numericFieldInformation, valueKey,myBinding);
         myTextField.setPromptText(numericFieldInformation);
         myTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -191,7 +206,7 @@ public class EventFactory {
         return myLabel;
     }
 
-    public static Label createLabel(String labelText, ArrayList<StringProperty> myBinding){
+    public static Label createLabel(String labelText, String keyCode, Map<String,StringProperty> myBinding){
         Label myLabel = new Label(labelText);
         myLabel.getStylesheets().add("default.css");
         return myLabel;

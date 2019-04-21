@@ -8,8 +8,7 @@ module authoring {
     requires javafx.media;
     requires xstream;
     requires java.desktop;
-
-    exports authoring.external;
+    requires voogasalad_util;
     exports ui;
     exports ui.panes;
     exports ui.main;
