@@ -6,25 +6,16 @@ import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
@@ -32,10 +23,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import ui.AuthoringEntity;
 import ui.AuthoringLevel;
 import ui.EntityField;
@@ -44,10 +32,9 @@ import ui.Propertable;
 import ui.Utility;
 import ui.manager.ObjectManager;
 
-import java.awt.*;
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ResourceBundle;
 
 
@@ -65,7 +52,7 @@ public class Viewer extends ScrollPane {
     private static final ResourceBundle myGeneralResources = ResourceBundle.getBundle("authoring_general");
     private Pane myLinesPane;
     private String myBackgroundFileName;
-    private static final ResourceBundle myResources = ResourceBundle.getBundle("viewer");
+    private static final ResourceBundle RESOURCES = ResourceBundle.getBundle("viewer");
     private static final String SHEET = "viewer-scroll-pane";
 
 
@@ -118,8 +105,8 @@ public class Viewer extends ScrollPane {
 
 
     private void handleChange(MapChangeListener.Change<? extends Enum,? extends String> change) {
-        if(change.wasAdded() && myResources.containsKey(change.getKey().toString())){
-            Utility.makeAndCallMethod(myResources, change, this);
+        if(change.wasAdded() && RESOURCES.containsKey(change.getKey().toString())){
+            Utility.makeAndCallMethod(RESOURCES, change, this);
         }
     }
 
@@ -146,22 +133,15 @@ public class Viewer extends ScrollPane {
             Image image = new Image(fileInputStream, myRoomWidth, myRoomHeight, false, false);
             BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, null);
             myStackPane.setBackground(new Background(backgroundImage));
-            System.out.println("Size with background: " + myStackPane.getChildren().size());
             myBackgroundFileName = filename;
         }
     }
 
     private void setupAcceptDragEvents() {
-        myStackPane.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                dragEvent.acceptTransferModes(TransferMode.ANY);
-            }
-        });
+        myStackPane.setOnDragOver(dragEvent -> dragEvent.acceptTransferModes(TransferMode.ANY));
     }
 
     private void setupDragDropped() {
-
         myStackPane.setOnDragDropped(dragEvent -> {
             AuthoringEntity authoringEntity;
             if(isDragOnView){
@@ -197,7 +177,6 @@ public class Viewer extends ScrollPane {
             result = value - valueRemainder;
         }
         return result;
-
     }
 
     private void addImage(ImageWithEntity imageView){
@@ -209,93 +188,45 @@ public class Viewer extends ScrollPane {
 
     private void applyRightClickHandler(ImageWithEntity imageView) {
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem toFrontMenuItem = new MenuItem();
-        toFrontMenuItem.setText("Bring to Front");
-        toFrontMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                imageView.toFront();
+        String[] reflectionInfo = RESOURCES.getString("ContextMenu").split(";");
+        for(String itemInfo : reflectionInfo){
+            String text = itemInfo.split(",")[0];
+            String methodName = itemInfo.split(",")[1];
+            MenuItem menuItem = new MenuItem();
+            menuItem.setText(text);
+            //TODO: replace with Duvall's Utility reflection
+            try {
+                Method method = this.getClass().getDeclaredMethod(methodName, ImageWithEntity.class);
+                menuItem.setOnAction(actionEvent -> {
+                    try {
+                        method.invoke(this, imageView);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
             }
-        });
+            contextMenu.getItems().add(menuItem);
+        }
+        imageView.setOnContextMenuRequested(contextMenuEvent -> contextMenu.show(imageView, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY()));
 
-        MenuItem toBackMenuItem = new MenuItem();
-        toBackMenuItem.setText("Send to Back");
-        toBackMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                imageView.toBack();
-            }
-        });
+    }
 
-        MenuItem deleteMenuItem = new MenuItem();
-        deleteMenuItem.setText("Delete");
-        deleteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                myObjectManager.removeEntityInstance(imageView.getAuthoringEntity());
-                myStackPane.getChildren().remove(imageView);
-            }
-        });
+    private void handleToFront(ImageWithEntity imageWithEntity){
+        imageWithEntity.toFront();
+    }
 
-        contextMenu.getItems().addAll(toFrontMenuItem, toBackMenuItem, deleteMenuItem);
-        imageView.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-            @Override
-            public void handle(ContextMenuEvent contextMenuEvent) {
-                contextMenu.show(imageView, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
-            }
-        });
+    private void handleToBack(ImageWithEntity imageWithEntity){
+        imageWithEntity.toBack();
+        updateGridLines();
+    }
 
-//        imageView.setOnMouseClicked(mouseEvent -> {
-//            if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-//                System.out.println("RIGHT CLICK");
-//                ListView listView = new ListView();
-//                Label label = new Label("Bring To Front");
-//
-//                label.setOnMousePressed(mouseEvent1 -> {
-//                    imageView.toFront();
-//                });
-//
-//                Label label2 = new Label(("Send to Back"));
-//                listView.getItems().add(label2);
-//                label2.setOnMousePressed(mouseEvent12 -> {
-//                    imageView.toBack();
-//                });
-//
-//                Label label3 = new Label("Delete");
-//                listView.getItems().add(label3);
-//                label3.setOnMousePressed(mouseEvent13 -> {
-//                    myStackPane.getChildren().remove(imageView);
-//                    myObjectManager.removeEntityInstance(imageView.getAuthoringEntity());
-//                });
-//
-//                listView.getItems().add(label);
-//                ScrollPane scrollPane = new ScrollPane();
-//                scrollPane.setContent(listView);
-//                scrollPane.getStyleClass().add(SHEET);
-//                Scene scene = new Scene(scrollPane, 125, 100);
-//                scene.getStylesheets().add("default.css");
-//                scrollPane.getStyleClass().add(".object-layering-window");
-//                Stage stage = new Stage();
-//                stage.setScene(scene);
-//                stage.setX(mouseEvent.getScreenX());
-//                stage.setY(mouseEvent.getScreenY());
-//                stage.initStyle(StageStyle.UNDECORATED);
-//                stage.show();
-//                stage.setAlwaysOnTop(true);
-//                stage.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent14 -> {
-//                    System.out.println("mouse click detected!");
-//                    stage.close();
-//                });
-//                stage.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-//                    @Override
-//                    public void handle(KeyEvent keyEvent) {
-//                        if(keyEvent.getCode() == KeyCode.ESCAPE){
-//                            stage.close();
-//                        }
-//                    }
-//                });
-//            }
-//        });
+    private void handleDelete(ImageWithEntity imageWithEntity){
+        myStackPane.getChildren().remove(imageWithEntity);
+        myObjectManager.removeEntityInstance(imageWithEntity.getAuthoringEntity());
     }
 
     private void applyDragHandler(ImageWithEntity imageView) {
@@ -310,12 +241,7 @@ public class Viewer extends ScrollPane {
     }
 
     private void applyLeftClickHandler(ImageWithEntity imageView) {
-        imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                mySelectedEntityProperty.setValue(imageView.getAuthoringEntity());
-            }
-        });
+        imageView.setOnMouseClicked(mouseEvent -> mySelectedEntityProperty.setValue(imageView.getAuthoringEntity()));
     }
 
     private void setRoomSize(){
