@@ -99,7 +99,7 @@ public class DummyGameObjectMaker {
         dummy2.addComponent(new SpriteComponent("mushroom.png"));
         dummy3.addComponent(new SpriteComponent("basketball"));
 
-        dummy1.addComponent(new MainEntityComponent(true));
+        dummy1.addComponent(new CameraComponent(true));
 
         dummy1.addComponent(new NameComponent("one"));
         dummy2.addComponent(new NameComponent("two"));

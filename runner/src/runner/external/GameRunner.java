@@ -191,9 +191,14 @@ public class GameRunner {
     private void showEntities(){
         myGroup.getChildren().clear();
         for(Entity entity : myEntities){
-            if(entity.hasComponents(MainEntityComponent.class)){
+            if(entity.hasComponents(CameraComponent.class)){
                 Double x = (Double) entity.getComponent(XPositionComponent.class).getValue();
-                myGroup.setTranslateX(-1*x);
+                if (x < 80.0) {
+                    myGroup.setTranslateX(-1 * x + 80);
+                }
+                if (x > 320.0) {
+                    myGroup.setTranslateX(-1 * x + 320);
+                }
             }
 //            Node toAdd = (Node) myEntitiesAndNodes.get(entity);
 //            System.out.println("begin");
