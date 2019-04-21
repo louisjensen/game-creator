@@ -191,7 +191,10 @@ public class GameRunner {
     private void showEntities(){
         myGroup.getChildren().clear();
         for(Entity entity : myEntities){
-
+            if(entity.hasComponents(MainEntityComponent.class)){
+                Double x = (Double) entity.getComponent(XPositionComponent.class).getValue();
+                myGroup.setTranslateX(-1*x);
+            }
 //            Node toAdd = (Node) myEntitiesAndNodes.get(entity);
 //            System.out.println("begin");
 //            System.out.println(myGroup);

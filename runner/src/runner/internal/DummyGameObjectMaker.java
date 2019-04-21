@@ -75,7 +75,7 @@ public class DummyGameObjectMaker {
         Entity dummy4 = new Entity();
         Entity dummy5 = new Entity();
         Entity dummy6 = new Entity();
-        dummy1.addComponent(new XPositionComponent(40.0));
+        dummy1.addComponent(new XPositionComponent(140.0));
         dummy1.addComponent(new YPositionComponent(30.0));
         dummy1.addComponent(new ZPositionComponent(0.0));
         dummy2.addComponent(new XPositionComponent(400.0));
@@ -98,6 +98,8 @@ public class DummyGameObjectMaker {
         dummy1.addComponent(new SpriteComponent("flappy_bird"));
         dummy2.addComponent(new SpriteComponent("mushroom.png"));
         dummy3.addComponent(new SpriteComponent("basketball"));
+
+        dummy1.addComponent(new MainEntityComponent(true));
 
         dummy1.addComponent(new NameComponent("one"));
         dummy2.addComponent(new NameComponent("two"));
