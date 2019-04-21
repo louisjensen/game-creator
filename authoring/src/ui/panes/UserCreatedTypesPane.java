@@ -81,7 +81,7 @@ public class UserCreatedTypesPane extends VBox {
             subPane.setOnDragDetected(mouseEvent -> {
                 myDraggedEntity = myDefaultTypesFactory.createEntity(defaultName);
                 myDraggedEntity.addComponent(new NameComponent(originalAuthoringEntity.getPropertyMap().get(EntityField.LABEL)));
-                myDraggedEntity.addComponent(new SpriteComponent(imageName));
+                myDraggedEntity.addComponent(new SpriteComponent(originalAuthoringEntity.getPropertyMap().get(EntityField.IMAGE)));
                 myDraggedAuthoringEntity = originalAuthoringEntity;
                 Utility.setupDragAndDropImage(imageWithEntity);
             });
