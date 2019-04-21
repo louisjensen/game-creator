@@ -35,6 +35,13 @@ public class UserDefinedTypeSubPane extends GridPane {
         this.setVgap(GAP);
     }
 
+    /**
+     * @return AuthoringEntity backing this pane
+     */
+    public AuthoringEntity getAuthoringEntity(){
+        return myAuthoringEntity;
+    }
+
     private void setUpChangeListening(Label label) {
         myAuthoringEntity.getPropertyMap().addListener(new MapChangeListener<Enum, String>() {
             @Override

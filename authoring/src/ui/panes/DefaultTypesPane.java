@@ -1,9 +1,7 @@
 package ui.panes;
 
 import engine.external.Entity;
-import javafx.event.EventHandler;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import ui.DefaultTypeXMLReaderFactory;
@@ -50,27 +48,21 @@ public class DefaultTypesPane extends VBox{
                 labelsList.add(pane);
             }
             myEntityMenu.addDropDown(category);
-            myEntityMenu.addToDropDown(category, labelsList);
+            myEntityMenu.setDropDown(category, labelsList);
         }
 
     }
 
-    //takes in the Strings for the type and basedOn as well as the label
-    //sets up the event for when clicked on
+
     private VBox createAndFormatVBox(String defaultName, Label label) {
         VBox pane = new VBox(label);
         pane.setFillWidth(true);
-        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                CreateNewTypeWindow createNewTypeWindow = new CreateNewTypeWindow(defaultName);
-                createNewTypeWindow.showAndWait();
-                Entity entity = createNewTypeWindow.getUserCreatedEntity();
-                String defaultTypeName = createNewTypeWindow.getDefaultTypeName();
-                String category = myDefaultTypesFactory.getCategory(defaultName);
-                if(entity != null){
-                    myUserCreatedTypesPane.addUserDefinedType(entity, defaultName);
-                }
+        pane.setOnMouseClicked(mouseEvent -> {
+            CreateNewTypeWindow createNewTypeWindow = new CreateNewTypeWindow(defaultName);
+            createNewTypeWindow.showAndWait();
+            Entity entity = createNewTypeWindow.getUserCreatedEntity();
+            if(entity != null){
+                myUserCreatedTypesPane.addUserDefinedType(entity, defaultName);
             }
         });
         return pane;
