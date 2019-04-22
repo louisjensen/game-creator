@@ -24,7 +24,7 @@ public class DataManager implements ExternalData{
 
     public DataManager(){
         mySerializer = new XStream(new DomDriver());
-        myDatabaseEngine = new DatabaseEngine();
+        myDatabaseEngine = DatabaseEngine.getInstance();
     }
 
     @Deprecated

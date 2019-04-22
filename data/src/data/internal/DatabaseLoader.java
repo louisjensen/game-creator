@@ -8,9 +8,6 @@ import java.util.List;
 public class DatabaseLoader {
 
     public static void main(String[] args) {
-//        loadGameCenterDataFromCreatedGames();
-//        loadGameCenterImages();
-//        loadImage();
         createUser("Ryan", "testPassword");
         createUser("Person2", "passwordTwo");
         validateUsers();

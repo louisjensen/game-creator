@@ -164,6 +164,16 @@ public class DatabaseEngine {
     private PreparedStatement myGetPasswordStatement;
     private PreparedStatement myCreateUserStatement;
 
+    private static DatabaseEngine myInstance = new DatabaseEngine();
+
+    private DatabaseEngine(){
+
+    }
+
+    public static DatabaseEngine getInstance(){
+        return myInstance;
+    }
+
     public boolean open() {
         try {
             myConnection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
