@@ -193,10 +193,12 @@ public class GameRunner {
         for(Entity entity : myEntities){
             if(entity.hasComponents(CameraComponent.class)){
                 Double x = (Double) entity.getComponent(XPositionComponent.class).getValue();
-                if (x < 80.0) {
+                Double origin = myGroup.getTranslateX();
+
+                if (x < 80 - origin) {
                     myGroup.setTranslateX(-1 * x + 80);
                 }
-                if (x > 320.0) {
+                if (x > 320 - origin) {
                     myGroup.setTranslateX(-1 * x + 320);
                 }
             }
