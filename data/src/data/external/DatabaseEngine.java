@@ -109,13 +109,17 @@ public class DatabaseEngine {
             SOUNDS_TABLE_NAME, SOUNDS_COLUMN_NAMES
     );
 
-    private static final String CREATE_GAME_ENTRY =
-            "INSERT INTO "+ GAME_INFORMATION_TABLE_NAME + " (" + GAME_NAME_COLUMN + ") VALUES" +
-        "(?);";
+    private static final String ON_DUPLICATE_UPDATE = "ON DUPLICATE KEY UPDATE";
+    private static final String GAME_DATA_INSERT = "INSERT INTO "+ GAME_INFORMATION_TABLE_NAME +
+            " (" + GAME_NAME_COLUMN + ", " + AUTHOR_NAME_COLUMN + ", " + GAME_DATA_COLUMN + ") VALUES (?, ?, ?)";
+    private static final String GAME_INFO_INSERT = "INSERT INTO "+ GAME_INFORMATION_TABLE_NAME + " (" +
+            GAME_NAME_COLUMN + ", " + AUTHOR_NAME_COLUMN + ", " + GAME_INFO_COLUMN + ") VALUES (?, ?, ?)";
+    private static final String CREATE_GAME_ENTRY = "INSERT INTO "+ GAME_INFORMATION_TABLE_NAME + " (" +
+            GAME_NAME_COLUMN + ") VALUES" + "(?);";
     private static final String UPDATE_GAME_DATA =
-            "UPDATE " + GAME_INFORMATION_TABLE_NAME + " SET " + GAME_DATA_COLUMN + " = ? WHERE " + GAME_NAME_COLUMN + " = ?;";
-    private static final String UPDATE_GAME_INFO = "UPDATE " + GAME_INFORMATION_TABLE_NAME + " SET " + GAME_INFO_COLUMN + " = ? " +
-            "WHERE " + GAME_NAME_COLUMN + " = ?;";
+            GAME_DATA_INSERT + " " + ON_DUPLICATE_UPDATE + " " + GAME_DATA_COLUMN + " = ?";
+    private static final String UPDATE_GAME_INFO =
+            GAME_INFO_INSERT + " " + ON_DUPLICATE_UPDATE + " " + GAME_INFO_COLUMN + " = ?";
     private static final String LOAD_GAME_DATA =
             "SELECT " + GAME_DATA_COLUMN + " FROM " + GAME_INFORMATION_TABLE_NAME + " WHERE " + GAME_NAME_COLUMN + " " +
                     "= ?;";
@@ -124,6 +128,14 @@ public class DatabaseEngine {
                     "= ? AND " + GAME_INFO_COLUMN + " IS NOT NULL;";
     private static final String FIND_ALL_GAME_NAMES =
             "SELECT DISTINCT(" + GAME_NAME_COLUMN + ") FROM " + GAME_INFORMATION_TABLE_NAME + ";";
+    private static final String IMAGES_INSERT = "INSERT INTO " + IMAGES_TABLE_NAME + " (" + IMAGE_NAME_COLUMN + ", " +
+        IMAGE_DATA_COLUMN + ") VALUES (?, ?)";
+    private static final String SOUNDS_INSERT = "INSERT INTO " + SOUNDS_TABLE_NAME + " (" + SOUND_NAME_COLUMN + ", " +
+            SOUND_DATA_COLUMN + ") VALUES (?, ?)";
+    private static final String UPDATE_IMAGES = "UPDATE " + IMAGES_TABLE_NAME + " SET " + IMAGE_NAME_COLUMN + " = ?" +
+            " WHERE " + IMAGE_NAME_COLUMN + " = ? IF @@ROWCOUNT = 0 " + IMAGES_INSERT;
+    private static final String UPDATE_SOUNDS = "UPDATE " + SOUNDS_TABLE_NAME + " SET " + SOUND_NAME_COLUMN + " = ?" +
+            " WHERE " + SOUND_NAME_COLUMN + " = ? IF @@ROWCOUNT = 0 " + SOUNDS_INSERT;;
 
     private Connection myConnection;
     private PreparedStatement myCreateGameEntryStatement;
@@ -132,6 +144,8 @@ public class DatabaseEngine {
     private PreparedStatement myLoadGameDataStatement;
     private PreparedStatement myLoadGameInformationStatement;
     private PreparedStatement myFindAllGameNamesStatement;
+    private PreparedStatement myUpdateImagesStatement;
+    private PreparedStatement myUpdateSoundsStatement;
 
     public boolean open() {
         try {
@@ -153,6 +167,8 @@ public class DatabaseEngine {
             myLoadGameDataStatement = myConnection.prepareStatement(LOAD_GAME_DATA);
             myLoadGameInformationStatement = myConnection.prepareStatement(LOAD_GAME_INFORMATION);
             myFindAllGameNamesStatement = myConnection.prepareStatement(FIND_ALL_GAME_NAMES);
+            myUpdateImagesStatement = myConnection.prepareStatement(UPDATE_IMAGES);
+            myUpdateSoundsStatement = myConnection.prepareStatement(UPDATE_SOUNDS);
 
         } catch (SQLException exception){
             System.out.println("Statement Preparation Failed " + exception.getMessage());
@@ -174,54 +190,12 @@ public class DatabaseEngine {
         myCreateGameEntryStatement.execute();
     }
 
-    public void printGameTable(){
-        try {
-            printTable(GAME_INFORMATION_TABLE_NAME);
-        } catch (SQLException e) {
-            System.out.println("Failed to print table: " + e.getMessage());
-        }
-    }
 
-    public void printTable(String tableToPrint) throws SQLException{
-        executeQuery("SELECT * FROM " + tableToPrint, new TablePrinter(tableToPrint));
-    }
-
-    private void executeStatement (String sqlStatement){
-        try (Statement statement = myConnection.createStatement()){
-            statement.execute(sqlStatement);
-        } catch (SQLException exception){
-            System.out.println("Statement failed: " + exception.getMessage());
-        }
-    }
-
-    private void executeQuery(String sqlQuery, ResultsProcessor resultsProcessor) {
-        open();
-        try (Statement statement = myConnection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sqlQuery)){
-            resultsProcessor.processResults(resultSet);
-        } catch (SQLException exception){
-            System.out.println("Query failed: " + exception.getMessage());
-        }
-        close();
-    }
-
-    private String executeQuery(String sqlQuery, String columnName){
-        try (Statement statement = myConnection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sqlQuery)){
-            if (resultSet != null && resultSet.next()){
-                return resultSet.getString(columnName);
-            }
-        } catch (SQLException exception){
-            System.out.println("Query failed: " + exception.getMessage());
-        }
-        return  null;
-    }
-
-    public void updateGameEntryData(String gameName, String rawXML) throws SQLException{
-        myUpdateGameEntryDataStatement.setString(1, rawXML);
-        myUpdateGameEntryDataStatement.setString(2, gameName);
-        myUpdateGameEntryDataStatement.execute();
-    }
+//    public void updateGameEntryData(String gameName, String rawXML) throws SQLException{
+//        myUpdateGameEntryDataStatement.setString(1, rawXML);
+//        myUpdateGameEntryDataStatement.setString(2, gameName);
+//        myUpdateGameEntryDataStatement.execute();
+//    }
 
     public void updateGameEntryInfo(String gameName, String rawXML) throws SQLException{
         myUpdateGameEntryInfoStatement.setString(1, rawXML);
@@ -326,5 +300,22 @@ public class DatabaseEngine {
         } catch (FileNotFoundException e) {
             System.out.println("Could not find the file: " + assetToSave.toString());
         }
+    }
+
+    public void updateGameEntryData(String gameName, String authorName, String myRawXML) throws SQLException{
+        prepareAndExecuteUpdate(myUpdateGameEntryDataStatement, gameName, authorName, myRawXML);
+    }
+
+    private void prepareAndExecuteUpdate(PreparedStatement statement, String gameName, String authorName,
+                                         String myRawXML) throws SQLException {
+        statement.setString(1, gameName);
+        statement.setString(2, authorName);
+        statement.setString(3, myRawXML);
+        statement.setString(4, myRawXML);
+        statement.executeUpdate();
+    }
+
+    public void updateGameEntryInfo(String gameName, String authorName, String myRawXML) throws SQLException{
+        prepareAndExecuteUpdate(myUpdateGameEntryInfoStatement, gameName, authorName, myRawXML);
     }
 }

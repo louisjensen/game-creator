@@ -17,6 +17,7 @@ public class DataManager implements ExternalData{
     public static final String XML_EXTENSION = ".xml";
     public static final String GAME_DATA = "game_data";
     private static final String GAME_INFO = "game_info";
+    public static final String DEFAULT_AUTHOR = "DefaultAuthor";
 
     private XStream mySerializer;
     private DatabaseEngine myDatabaseEngine;
@@ -26,54 +27,8 @@ public class DataManager implements ExternalData{
         myDatabaseEngine = new DatabaseEngine();
     }
 
-    @Override
-    public Object loadGameDisplay(String gameName) {
-        return null;
-    }
-
-    @Override
-    public void saveGameDisplay(String gameName) {
-
-    }
-
-    @Override
-    public Object loadGame(String gameName) {
-        return null;
-    }
-
-    @Override
-    public Object continueGame(String gameName) {
-        return null;
-    }
-
-    @Override
-    public void saveGame(String gameName) {
-
-    }
-
-    public void createGameFolder(String folderName, String gameName){
-
-        createGameFolder(folderName);
-        if (!myDatabaseEngine.open()){
-            System.out.println("Couldn't connect to database");
-            return;
-        }
-        try {
-            myDatabaseEngine.createEntryForNewGame(gameName);
-        } catch (SQLException e) {
-            System.out.println("Couldn't create entry fro new game: " + e.getMessage());
-        }
-        myDatabaseEngine.close();
-    }
-
-    @Override
+    @Deprecated
     public void createGameFolder(String folderName) {
-//        try {
-//            Files.createDirectories(Paths.get(CREATED_GAMES_DIRECTORY + File.separator + folderName));
-//        } catch (IOException e) {
-//            System.out.println("Could not create directory");
-//            e.printStackTrace();
-//        }
         if (!myDatabaseEngine.open()){
             System.out.println("Couldn't connect to database");
             return;
@@ -99,37 +54,25 @@ public class DataManager implements ExternalData{
     }
 
     @Override
-    public void saveGameData(String gameName, Object gameObject) {
-//        String path = transformGameNameToPath(gameName, GAME_DATA);
-//        saveObjectToXML(path, gameObject);
+    public void saveGameData(String gameName, String authorName, Object gameObject){
         String myRawXML = mySerializer.toXML(gameObject);
         if (! myDatabaseEngine.open()){
             System.out.println("Couldn't load to database because couldn't connect");
         }
         try {
-            myDatabaseEngine.updateGameEntryData(gameName, myRawXML);
+            myDatabaseEngine.updateGameEntryData(gameName, authorName, myRawXML);
         } catch (SQLException e) {
             System.out.println("Couldn't update game entry data: " + e.getMessage());
         }
         myDatabaseEngine.close();
-
     }
 
-    public Object loadGameInfo(String gameName) throws FileNotFoundException{
-        return loadObjectFromXML(transformGameNameToPath(gameName, GAME_INFO));
+    @Deprecated
+    public void saveGameData(String gameName, Object gameObject) {
+        saveGameData(gameName, DEFAULT_AUTHOR, gameObject);
     }
 
     public List<Object> loadAllGameInfoObjects(){
-//        List<String> gameNames = getGameNames();
-//        List<Object> gameInfoObjects = new ArrayList<>();
-//        for (String game : gameNames){
-////            if (loadGameInfo(game))
-//            try {
-//                gameInfoObjects.add(loadGameInfo(game));
-//            } catch (FileNotFoundException exception){
-//                // do not try to add object to the list
-//            }
-//        }
         List<Object> gameInfoObjects = new ArrayList<>();
         List<String> gameInfoObjectXMLs = null;
         try {
@@ -145,30 +88,26 @@ public class DataManager implements ExternalData{
         return gameInfoObjects;
     }
 
-    public void saveGameInfo(String gameName, Object gameInfoObject){
-//        String path = transformGameNameToPath(gameName, GAME_INFO);
-//        saveObjectToXML(path, gameInfoObject);
+    public void saveGameInfo(String gameName, String authorName, Object gameInfoObject){
         String myRawXML = mySerializer.toXML(gameInfoObject);
         if (! myDatabaseEngine.open()){
             System.out.println("Couldn't load to database because couldn't connect");
         }
         try {
-            myDatabaseEngine.updateGameEntryInfo(gameName, myRawXML);
+            myDatabaseEngine.updateGameEntryInfo(gameName, authorName, myRawXML);
         } catch (SQLException e) {
             System.out.println("Couldn't update game entry information: " + e.getMessage());
         }
         myDatabaseEngine.close();
     }
 
-    @Override
-    public void saveAssets(String gameName, List<String> assets) {
-
+    @Deprecated
+    public void saveGameInfo(String gameName, Object gameInfoObject){
+        saveGameInfo(gameName, DEFAULT_AUTHOR, gameInfoObject);
     }
 
     @Override
     public Object loadGameData(String gameName) {
-
-//        return loadObjectFromXML(transformGameNameToPath(gameName, GAME_DATA));
         if(!myDatabaseEngine.open()){
             System.out.println("Couldn't connect");
         }
