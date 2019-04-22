@@ -10,8 +10,7 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ui.UIException;
-
-import java.lang.reflect.Constructor;
+import voogasalad.util.reflection.Reflection;
 import java.util.*;
 
 public class EventOptionsPane extends VBox {
@@ -34,11 +33,14 @@ public class EventOptionsPane extends VBox {
     private static final String ACTION = "ACTION";
     private static final String MODIFIER = "MODIFIER";
     private static final String VALUE = "VALUE";
+
     private static final String ACTION_KEY = "Action";
     private static final String COMPONENT_KEY = "Component";
+
     private static final ResourceBundle myErrors = ResourceBundle.getBundle(ERROR_PACKAGE_NAME);
     private static final String ERROR_ONE_KEY = "InvalidEvent";
     private static final String ERROR_TWO_KEY = "InvalidAction";
+
     public EventOptionsPane(){
         this.getStylesheets().clear();
 //        this.getStylesheets().add("events_pop_up.css");
@@ -87,51 +89,34 @@ public class EventOptionsPane extends VBox {
     }
 
 
-    private Event createCollisionEvent(String entityName, String eventName) throws Exception {
-        Class eventClass = null;
-        Constructor eventConstructor;
-        Object[] eventConstructorParameters;
-        eventClass = Class.forName(DISPLAY_RESOURCES.getString(eventName));
-        eventConstructor = eventClass.getConstructor(String.class,String.class);
-        eventConstructorParameters = new Object[2];
-        eventConstructorParameters[0] = entityName; //
-        eventConstructorParameters[1] = myEventOptionsListener.get(COLLIDEE).getValue();
-        return (Event)eventConstructor.newInstance(eventConstructorParameters);
+    private Event createCollisionEvent(String entityName, String eventName) {
+        String eventClassName = DISPLAY_RESOURCES.getString(eventName);
+        return (Event)Reflection.createInstance(eventClassName,entityName,myEventOptionsListener.get(COLLIDEE).getValue());
     }
 
     private Condition createGeneralCondition() throws Exception{
-        Class conditionClass;
-        Constructor conditionConstructor;
-        Object[] conditionConstructorParameters;
         ConditionType myConditionType = ConditionType.valueOf(myEventOptionsListener.get(COMPARATOR).getValue().replaceAll(" ",""));
-        conditionClass = myConditionType.getClassName();
-        conditionConstructor = conditionClass.getConstructor(Class.class,Double.class);
-        conditionConstructorParameters = new Object[2];
-        conditionConstructorParameters[0] = Class.forName(COMPONENT_PACKAGE_PREFIX + myEventOptionsListener.get(COMPONENT).getValue() + COMPONENT_KEY);
-        conditionConstructorParameters[1] = Double.parseDouble(myEventOptionsListener.get(VALUE).getValue());
-        Condition userMadeCondition =  (Condition)conditionConstructor.newInstance(conditionConstructorParameters);
-        return userMadeCondition;
+        String conditionClassName = myConditionType.getClassName();
+        Class componentClass = Class.forName(COMPONENT_PACKAGE_PREFIX + myEventOptionsListener.get(COMPONENT).getValue() + COMPONENT_KEY);
+        try{
+            Double value = Double.parseDouble(myEventOptionsListener.get(VALUE).getValue());
+            return (Condition)Reflection.createInstance(conditionClassName,componentClass,value);
+         }
+        catch(Exception e){
+            String value = myEventOptionsListener.get(VALUE).getValue();
+            return (Condition)Reflection.createInstance(conditionClassName,componentClass,value);
+        }
     }
 
     private Action createGeneralAction() {
-        Class actionClass = null;
-        Constructor actionConstructor = null;
-        Object[] actionConstructorParameters = null;
+        String actionClassName = ACTION_PACKAGE_PREFIX + myActionOptionsListener.get(ACTION).getValue()+ ACTION_KEY;
         try {
-            actionClass = Class.forName(ACTION_PACKAGE_PREFIX + myActionOptionsListener.get(ACTION).getValue()+ ACTION_KEY);
-            actionConstructor = actionClass.getConstructor(NumericAction.ModifyType.class, Double.class);
-            actionConstructorParameters = new Object[2];
-            actionConstructorParameters[0] = NumericAction.ModifyType.valueOf(myActionOptionsListener.get(MODIFIER).getValue());
-            actionConstructorParameters[1] = Double.parseDouble(myActionOptionsListener.get(VALUE).getValue());
-            return (Action) actionConstructor.newInstance(actionConstructorParameters);
+            return (Action)Reflection.createInstance(actionClassName, NumericAction.ModifyType.valueOf(myActionOptionsListener.get(MODIFIER).getValue()),
+                    Double.parseDouble(myActionOptionsListener.get(VALUE).getValue()));
         }
         catch(Exception nonNumericAction){
             try {
-                actionConstructor = actionClass.getConstructor(String.class); //@TODO handle different action constructors
-                actionConstructorParameters = new Object[1];
-                actionConstructorParameters[0] = myActionOptionsListener.get(VALUE).getValue();
-                Action myStringAction = (Action) actionConstructor.newInstance(actionConstructorParameters);
-                return myStringAction;
+                return (Action)Reflection.createInstance(actionClassName,myActionOptionsListener.get(VALUE).getValue()) ;
             }
             catch(Exception e){
                 UIException myException = new UIException(myErrors.getString(ERROR_TWO_KEY));

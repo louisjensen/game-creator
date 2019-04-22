@@ -7,12 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import ui.UIException;
 import ui.panes.EventPane;
 import voogasalad.util.reflection.Reflection;
-
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -24,15 +20,10 @@ import java.util.*;
  */
 public class EventFactory {
     private static final String DEFAULT_RESOURCES_NAME = "basic_event_display";
-    private static final String ACTION_RESOURCES_NAME = "actions_display";
-    private static final String ERROR_RESOURCES = "error_messages";
-    //private static final String CONDITONS_RESOURCES = "condition_values";
     private static final String KEY_CODE_DELIMITER = "#";
     private static final String CONTROL_SEPARATOR = "::";
     private static final String PARAMETER_SEPARATOR = ",";
     private static final ResourceBundle DEFAULT_RESOURCES = ResourceBundle.getBundle(DEFAULT_RESOURCES_NAME);
-
-    //private Reflection myMethodReflector = new Reflection();
 
 
     public void factoryDelegator(String controlResources,String controlKey, Pane myParent, Map<String,StringProperty> myBinding){
@@ -44,41 +35,21 @@ public class EventFactory {
             String methodName = factoryInformation.substring(0, factoryInformation.indexOf(PARAMETER_SEPARATOR));
             String methodParameter = factoryInformation.substring(factoryInformation.indexOf(PARAMETER_SEPARATOR) + 1);
 
-            Class<?>[] myClazz = {String.class, String.class, Map.class};
-            Object[] myParams = {methodParameter, keyCode, myBinding};
-            //myParent.getChildren().add((Node) Reflection.callMethod(this,methodName,methodParameter,myBinding));
-            try {
-                Method m = this.getClass().getDeclaredMethod(methodName, myClazz);
-                Object addedOption = m.invoke(this, myParams);
-                myParent.getChildren().add((Node) addedOption);
-            } catch (Exception e) {
-                ResourceBundle errorBundle = ResourceBundle.getBundle(ERROR_RESOURCES);
-                UIException myEventCreatorException = new UIException(errorBundle.getString(this.getClass().getSimpleName())); //@TODO refactor to get message from properties file
-                myEventCreatorException.displayUIException();
-            }
+//            Class<?>[] myClazz = {String.class, String.class, Map.class};
+//            Object[] myParams = {methodParameter, keyCode, myBinding};
+            myParent.getChildren().add((Node) Reflection.callMethod(this,methodName,methodParameter,keyCode,myBinding));
+//            try {
+//                Method m = this.getClass().getDeclaredMethod(methodName, myClazz);
+//                Object addedOption = m.invoke(this, myParams);
+//                myParent.getChildren().add((Node) addedOption);
+//            } catch (Exception e) {
+//                ResourceBundle errorBundle = ResourceBundle.getBundle(ERROR_RESOURCES);
+//                UIException myEventCreatorException = new UIException(errorBundle.getString(this.getClass().getSimpleName())); //@TODO refactor to get message from properties file
+//                myEventCreatorException.displayUIException();
+//            }
         }
     }
 
-    public static VBox createCollisionOptions(){
-        VBox collisionOptions = new VBox();
-//        collisionOptions.getChildren().add(new Label("Collision Preferences"));
-//
-//        HBox labeledPane = new HBox();
-//        labeledPane.getChildren().add(new Label("Direction: "));
-//        labeledPane.getChildren().add(createBoxFromResourcesKey("Direction"));
-//        collisionOptions.getChildren().add(labeledPane);
-//
-//        HBox entityPane = new HBox();
-//        entityPane.getChildren().add(new Label("Collidee: "));
-//        entityPane.getChildren().add(createChoiceBox(Arrays.asList("object1","object2","object3")));
-//        collisionOptions.getChildren().add(entityPane);
-//
-//        HBox actionOptions = createActionsOptions();
-//        collisionOptions.getChildren().add(myDirections);
-//        collisionOptions.getChildren().add(myEntities);
-//        collisionOptions.getChildren().add(actionOptions);
-        return collisionOptions;
-    }
     public static ChoiceBox<String> createBoxFromResources(String resourcesBundleName, String myInformationKey, Map<String,StringProperty> myBinding){
         ResourceBundle optionsResource = ResourceBundle.getBundle(resourcesBundleName);
         Set<String> myActionsSet = optionsResource.keySet();
@@ -163,28 +134,6 @@ public class EventFactory {
         myBinding.put(myKeyInformation,myListener);
         return myTextField;
         }
-
-
-    public static HBox createActionsOptions(String myInfoKey, String valueKey,Map<String,StringProperty> myActionsBinding){
-        HBox myActionOptions = new HBox();
-        //myActionOptions.getStylesheets().add("default.css");
-        myActionOptions.getChildren().add(createLabel("Enter Action - "));
-        myActionOptions.getChildren().add(createDependentComboBoxes(ACTION_RESOURCES_NAME,myInfoKey,myActionsBinding));
-//        List<String> componentOptions = new ArrayList<>(ACTION_RESOURCES.keySet());
-//        Collections.sort(componentOptions);
-//        ChoiceBox<String> actionChoices = createChoiceBox(componentOptions,myActionsBinding);
-//        ChoiceBox<String> modifyChoices = createBoxFromResourcesKey("Modifiers", myActionsBinding);
-////        modifyChoices.setPromptText("Modifiers");
-//        myActionOptions.getChildren().add(modifyChoices);
-////        actionChoices.setPromptText("Actions");
-//        myActionOptions.getChildren().add(actionChoices);
-        myActionOptions.getChildren().add(createDisappearingLabel("Value",valueKey,myActionsBinding));
-
-        return myActionOptions;
-    }
-
-
-
 
 
     public static TextField createNumericOptions(String numericFieldInformation, String valueKey, Map<String,StringProperty> myBinding){
