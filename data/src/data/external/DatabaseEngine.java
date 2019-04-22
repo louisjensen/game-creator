@@ -140,6 +140,7 @@ public class DatabaseEngine {
             "SELECT " + SOUND_DATA_COLUMN + " FROM " + SOUNDS_TABLE_NAME + " WHERE " + SOUND_NAME_COLUMN + " = ?";
     private static final String LOAD_IMAGE =
             "SELECT " + IMAGE_DATA_COLUMN + " FROM " + IMAGES_TABLE_NAME + " WHERE " + IMAGE_NAME_COLUMN + " = ?";
+    public static final String DEFAULT_AUTHOR = "DefaultAuthor";
 
     private Connection myConnection;
     private PreparedStatement myUpdateGameEntryDataStatement;
@@ -196,9 +197,7 @@ public class DatabaseEngine {
     }
 
     public void updateGameEntryInfo(String gameName, String rawXML) throws SQLException{
-        myUpdateGameEntryInfoStatement.setString(1, rawXML);
-        myUpdateGameEntryInfoStatement.setString(2, gameName);
-        myUpdateGameEntryInfoStatement.execute();
+        updateGameEntryInfo(gameName, DEFAULT_AUTHOR, rawXML);
     }
 
     public String loadGameData(String gameName) throws SQLException{
