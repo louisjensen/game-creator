@@ -228,4 +228,24 @@ public class DataManager implements ExternalData{
             }
         }
     }
+
+    public boolean createUser (String userName, String password){
+        boolean success = false;
+        myDatabaseEngine.open();
+        try {
+            success =myDatabaseEngine.createUser(userName, password);
+        } catch (SQLException e) {
+            System.out.println("Could not create user: " + e.getMessage());
+        }
+        myDatabaseEngine.close();
+        return success;
+    }
+
+    public boolean validateUser (String userName, String password){
+        boolean success = false;
+        myDatabaseEngine.open();
+        success = myDatabaseEngine.authenticateUser(userName, password);
+        myDatabaseEngine.close();
+        return success;
+    }
 }

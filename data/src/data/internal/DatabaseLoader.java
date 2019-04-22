@@ -8,9 +8,26 @@ import java.util.List;
 public class DatabaseLoader {
 
     public static void main(String[] args) {
-        loadGameCenterDataFromCreatedGames();
+//        loadGameCenterDataFromCreatedGames();
 //        loadGameCenterImages();
-        loadImage();
+//        loadImage();
+        createUser("Ryan", "testPassword");
+        createUser("Person2", "passwordTwo");
+        validateUsers();
+        System.out.println();
+    }
+
+    private static void createUser(String userName, String password){
+        DataManager dm = new DataManager();
+        boolean success = dm.createUser(userName, password);
+    }
+
+    private static void validateUsers(){
+        DataManager dm = new DataManager();
+        System.out.println(dm.validateUser("Ryan", "testPassword"));
+        System.out.println(dm.validateUser("Ryan", "wrongPassword"));
+        System.out.println(dm.validateUser("FakePerson", "testPassword"));
+        System.out.println(dm.validateUser("FakePerson", "wrongPassword"));
     }
 
     private static void loadImage(){
