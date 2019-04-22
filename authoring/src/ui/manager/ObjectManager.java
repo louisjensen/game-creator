@@ -1,6 +1,6 @@
 package ui.manager;
 
-import events.Event;
+import engine.external.events.Event;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
