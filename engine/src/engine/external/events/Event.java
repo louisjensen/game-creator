@@ -132,6 +132,8 @@ public class Event implements IEventEngine, IEventAuthoring {
         myInputs.remove(inputsToRemove);
     }
 
+    public void clearInputs(){myInputs.clear();}
+
     public Map<Class<?>,List<?>> getEventInformation(){
         Map<Class<?>,List<?>> myEventInformation = new HashMap<>();
         myEventInformation.put(Condition.class,conditions);

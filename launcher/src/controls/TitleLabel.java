@@ -33,7 +33,7 @@ public class TitleLabel extends Label {
     public void addToLabel(String addition){
         this.setText(this.getText() + " " + addition);
     }
-    //@TODO work on developing fade transition of header titles as a nice UI feature
+
     private void setUpDisplay(){
         this.setText(myWelcomeLabel);
         myFadeAnimation.setNode(this);

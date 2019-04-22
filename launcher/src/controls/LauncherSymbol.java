@@ -25,19 +25,8 @@ public class LauncherSymbol extends ImageView {
        this.setImage(myDefaultImage);
        this.setScaleX(1.5);
        this.setScaleY(1.5);
-       this.setOnMousePressed(new EventHandler<MouseEvent>() {
-           @Override
-           public void handle(MouseEvent mouseEvent) {
-               switchImage(myPressedImage);
-           }
-       });
-        this.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                switchImage(myDefaultImage);
-            }
-
-        });
+       this.setOnMousePressed(mouseEvent -> switchImage(myPressedImage));
+        this.setOnMouseReleased(mouseEvent -> switchImage(myDefaultImage));
     }
 
     private void switchImage(Image switchedImage){
