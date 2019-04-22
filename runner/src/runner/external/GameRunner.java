@@ -62,11 +62,11 @@ public class GameRunner {
 
         DataManager dm = new DataManager();
         dm.createGameFolder("YeetRevised2");
-        dm.saveGameData("YeetRevised2", gameMade);
+        dm.saveGameData("YeetRevised3", gameMade);
         System.out.println("Serialization complete");
 
 
-        myGame = (Game) dm.loadGameData("YeetRevised2");
+        myGame = (Game) dm.loadGameData("YeetRevised3");
 
 
 

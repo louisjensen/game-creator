@@ -273,10 +273,11 @@ public class DatabaseEngine {
     private void saveAsset (String assetName, File assetToSave, PreparedStatement statement) {
         try {
             BufferedInputStream assetData = new BufferedInputStream(new FileInputStream(assetToSave));
+            System.out.println(assetData);
             statement.setString(1, assetName);
-            statement.setBinaryStream(2, assetData);
-            statement.setBinaryStream(3, assetData);
-            statement.execute();
+            statement.setBinaryStream(2, new BufferedInputStream(new FileInputStream(assetToSave)));
+            statement.setBinaryStream(3, new BufferedInputStream(new FileInputStream(assetToSave)));
+            statement.executeUpdate();
         } catch (SQLException e){
             System.out.println("Could not save the asset: " + e.getMessage());
         } catch (FileNotFoundException e) {

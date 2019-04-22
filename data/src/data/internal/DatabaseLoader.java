@@ -10,6 +10,12 @@ public class DatabaseLoader {
     public static void main(String[] args) {
         loadGameCenterDataFromCreatedGames();
 //        loadGameCenterImages();
+        loadImage();
+    }
+
+    private static void loadImage(){
+        DataManager dm = new DataManager();
+        dm.saveImage("flappy_bird", new File("Images/flappy_bird.png"));
     }
 
     private static void loadGameCenterImages() {
