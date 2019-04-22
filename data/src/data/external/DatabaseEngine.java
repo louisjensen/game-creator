@@ -132,13 +132,16 @@ public class DatabaseEngine {
         IMAGE_DATA_COLUMN + ") VALUES (?, ?)";
     private static final String SOUNDS_INSERT = "INSERT INTO " + SOUNDS_TABLE_NAME + " (" + SOUND_NAME_COLUMN + ", " +
             SOUND_DATA_COLUMN + ") VALUES (?, ?)";
-    private static final String UPDATE_IMAGES = "UPDATE " + IMAGES_TABLE_NAME + " SET " + IMAGE_NAME_COLUMN + " = ?" +
-            " WHERE " + IMAGE_NAME_COLUMN + " = ? IF @@ROWCOUNT = 0 " + IMAGES_INSERT;
-    private static final String UPDATE_SOUNDS = "UPDATE " + SOUNDS_TABLE_NAME + " SET " + SOUND_NAME_COLUMN + " = ?" +
-            " WHERE " + SOUND_NAME_COLUMN + " = ? IF @@ROWCOUNT = 0 " + SOUNDS_INSERT;;
+    private static final String UPDATE_IMAGES =
+            IMAGES_INSERT + " " + ON_DUPLICATE_UPDATE + " " + IMAGE_DATA_COLUMN + " = ?";
+    private static final String UPDATE_SOUNDS =
+            SOUNDS_INSERT + " " + ON_DUPLICATE_UPDATE + " " + SOUND_DATA_COLUMN + " = ?";
+    private static final String LOAD_SOUND =
+            "SELECT " + SOUND_DATA_COLUMN + " FROM " + SOUNDS_TABLE_NAME + " WHERE " + SOUND_NAME_COLUMN + " = ?";
+    private static final String LOAD_IMAGE =
+            "SELECT " + IMAGE_DATA_COLUMN + " FROM " + IMAGES_TABLE_NAME + " WHERE " + IMAGE_NAME_COLUMN + " = ?";
 
     private Connection myConnection;
-    private PreparedStatement myCreateGameEntryStatement;
     private PreparedStatement myUpdateGameEntryDataStatement;
     private PreparedStatement myUpdateGameEntryInfoStatement;
     private PreparedStatement myLoadGameDataStatement;
@@ -146,6 +149,8 @@ public class DatabaseEngine {
     private PreparedStatement myFindAllGameNamesStatement;
     private PreparedStatement myUpdateImagesStatement;
     private PreparedStatement myUpdateSoundsStatement;
+    private PreparedStatement myLoadImageStatement;
+    private PreparedStatement myLoadSoundStatement;
 
     public boolean open() {
         try {
@@ -161,7 +166,6 @@ public class DatabaseEngine {
 
     private void initializePreparedStatements() {
         try {
-            myCreateGameEntryStatement = myConnection.prepareStatement(CREATE_GAME_ENTRY);
             myUpdateGameEntryDataStatement = myConnection.prepareStatement(UPDATE_GAME_DATA);
             myUpdateGameEntryInfoStatement =  myConnection.prepareStatement(UPDATE_GAME_INFO);
             myLoadGameDataStatement = myConnection.prepareStatement(LOAD_GAME_DATA);
@@ -169,7 +173,8 @@ public class DatabaseEngine {
             myFindAllGameNamesStatement = myConnection.prepareStatement(FIND_ALL_GAME_NAMES);
             myUpdateImagesStatement = myConnection.prepareStatement(UPDATE_IMAGES);
             myUpdateSoundsStatement = myConnection.prepareStatement(UPDATE_SOUNDS);
-
+            myLoadImageStatement = myConnection.prepareStatement(LOAD_IMAGE);
+            myLoadSoundStatement = myConnection.prepareStatement(LOAD_SOUND);
         } catch (SQLException exception){
             System.out.println("Statement Preparation Failed " + exception.getMessage());
         }
@@ -186,25 +191,14 @@ public class DatabaseEngine {
     }
 
     public void createEntryForNewGame(String gameName) throws SQLException{
-        myCreateGameEntryStatement.setString(1, gameName);
-        myCreateGameEntryStatement.execute();
+//        myCreateGameEntryStatement.setString(1, gameName);
+//        myCreateGameEntryStatement.execute();
     }
-
-
-//    public void updateGameEntryData(String gameName, String rawXML) throws SQLException{
-//        myUpdateGameEntryDataStatement.setString(1, rawXML);
-//        myUpdateGameEntryDataStatement.setString(2, gameName);
-//        myUpdateGameEntryDataStatement.execute();
-//    }
 
     public void updateGameEntryInfo(String gameName, String rawXML) throws SQLException{
         myUpdateGameEntryInfoStatement.setString(1, rawXML);
         myUpdateGameEntryInfoStatement.setString(2, gameName);
         myUpdateGameEntryInfoStatement.execute();
-    }
-
-    public void addAssets(String gameName, List<String> assetPaths){
-
     }
 
     public String loadGameData(String gameName) throws SQLException{
@@ -245,37 +239,24 @@ public class DatabaseEngine {
         return null;
     }
 
-    private void printResults(ResultSet results) throws SQLException {
-        // iterate of the results, starts at beginning so results.next() takes you to first record
-        while (results.next()){
-            System.out.println(results.getString(1));
-//            System.out.println(results.getString("name") + " " +
-//                    results.getInt("phone") + " " +
-//                    results.getString("email"));
-        }
-        // have to close your results sets since it is a resource
-        results.close();
-    }
-
-
     public void saveImage(String imageName, File imageToSave) {
-        saveAsset(imageName, imageToSave, "INSERT INTO Images (ImageName, ImageData) VALUES (?, ?)");
+        saveAsset(imageName, imageToSave, myUpdateImagesStatement);
     }
 
     public void saveSound(String soundName, File soundToSave){
-        saveAsset(soundName, soundToSave, "INSERT INTO Sounds (SoundName, SoundData) VALUES (?, ?)");
+        saveAsset(soundName, soundToSave, myUpdateSoundsStatement);
     }
 
     public InputStream loadImage(String imageName){
-        return loadAsset(imageName, IMAGE_DATA_COLUMN,"SELECT ImageData FROM Images WHERE ImageName = ?");
+        return loadAsset(imageName, IMAGE_DATA_COLUMN, myLoadImageStatement);
     }
 
     public InputStream loadSound(String soundName){
-        return loadAsset(soundName, SOUND_DATA_COLUMN,"SELECT SoundData FROM Sounds WHERE SoundName = ?");
+        return loadAsset(soundName, SOUND_DATA_COLUMN, myLoadSoundStatement);
     }
 
-    private InputStream loadAsset(String assetName, String columnName, String sqlQuery) {
-        try (PreparedStatement statement = myConnection.prepareStatement(sqlQuery)){
+    private InputStream loadAsset(String assetName, String columnName, PreparedStatement statement) {
+        try {
             statement.setString(1, assetName);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()){
@@ -290,13 +271,15 @@ public class DatabaseEngine {
         return null;
     }
 
-    private void saveAsset (String assetName, File assetToSave, String sqlQuery) {
-        try (PreparedStatement statement = myConnection.prepareStatement(sqlQuery)){
+    private void saveAsset (String assetName, File assetToSave, PreparedStatement statement) {
+        try {
+            BufferedInputStream assetData = new BufferedInputStream(new FileInputStream(assetToSave));
             statement.setString(1, assetName);
-            statement.setBinaryStream(2, new BufferedInputStream(new FileInputStream(assetToSave)));
+            statement.setBinaryStream(2, assetData);
+            statement.setBinaryStream(3, assetData);
             statement.execute();
-        } catch (SQLException exception){
-            System.out.println("Statement failed: " + exception.getMessage());
+        } catch (SQLException e){
+            System.out.println("Could not save the asset: " + e.getMessage());
         } catch (FileNotFoundException e) {
             System.out.println("Could not find the file: " + assetToSave.toString());
         }
