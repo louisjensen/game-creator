@@ -3,6 +3,7 @@ import engine.external.events.Event;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import ui.manager.Refresher;
 
 import java.util.HashMap;
@@ -12,8 +13,7 @@ public class CurrentEventsPane extends ScrollPane {
     private static final String CSS_STYLE_SHEET = "default.css";
     private Map<Event,CurrentEventDisplay> myCurrentDisplays = new HashMap<>();
     ObservableList<Event> myCurrentEvents;
-    private Editor myEditor = eventToBeEdited -> {
-    };
+    private Editor myEditor = eventToBeEdited -> { editCurrentEvent(eventToBeEdited);};
     private Editor myRemover = eventToBeRemoved -> removeCurrentEvent(eventToBeRemoved);
     private Refresher myCurrentEventsRefresher;
     public CurrentEventsPane(ObservableList<Event> myEvents, Refresher eventsRefresher){
@@ -27,7 +27,7 @@ public class CurrentEventsPane extends ScrollPane {
         this.setMaxWidth(800);
         myEventsListing.getStylesheets().add(CSS_STYLE_SHEET);
         for (Event event: myEvents) {
-            CurrentEventDisplay currEventDisplay = new CurrentEventDisplay(event.getEventInformation(),event,myRemover);
+            CurrentEventDisplay currEventDisplay = new CurrentEventDisplay(event.getEventInformation(),event,myRemover,myEditor);
             myCurrentDisplays.put(event,currEventDisplay);
             myEventsListing.getChildren().add(currEventDisplay);
         }
@@ -36,7 +36,9 @@ public class CurrentEventsPane extends ScrollPane {
     }
 
     public void editCurrentEvent(Event unfinishedEvent){
-
+        EventEditorPane myPane = new EventEditorPane(unfinishedEvent,myCurrentEventsRefresher);
+        myPane.initModality(Modality.WINDOW_MODAL);
+        myPane.show();
     }
 
     public void removeCurrentEvent(Event obsoleteEvent){

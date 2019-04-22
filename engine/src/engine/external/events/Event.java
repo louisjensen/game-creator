@@ -101,6 +101,8 @@ public class Event implements IEventEngine, IEventAuthoring {
         conditions.removeAll(conditionsToRemove);
     }
 
+    public void removeConditions(Condition conditionToRemove){conditions.remove(conditionToRemove);}
+
     public void setActions(List<Action> newSetOfActions) {
         actions = newSetOfActions;
     }
@@ -109,7 +111,7 @@ public class Event implements IEventEngine, IEventAuthoring {
         actions.removeAll(actionsToRemove);
     }
 
-
+    public void removeActions(Action actionToRemove){ actions.remove(actionToRemove);}
     @Override
     public void setInputs(Set<KeyCode> inputs) {
         myInputs = inputs;

@@ -17,9 +17,11 @@ import java.util.Map;
 public class CurrentEventDisplay extends VBox {
     private Event myEvent;
     private Editor myEventRemover;
-    public CurrentEventDisplay(Map<Class<?>, List<?>> myMap, Event myEvent, Editor eventRemover){
+    private Editor myEventModifier;
+    public CurrentEventDisplay(Map<Class<?>, List<?>> myMap, Event myEvent, Editor eventRemover, Editor eventModifier){
         this.myEvent = myEvent;
         this.myEventRemover = eventRemover;
+        this.myEventModifier = eventModifier;
         if (invalidEvent(myMap)){
             return;
         }
@@ -48,12 +50,8 @@ public class CurrentEventDisplay extends VBox {
     private void setUpEditToolBar(){
         Button editButton = new Button("Edit");
         Button removeButton = new Button("Remove");
-        removeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                myEventRemover.editEvent(myEvent);
-            }
-        });
+        removeButton.setOnMouseClicked(mouseEvent -> myEventRemover.editEvent(myEvent));
+        editButton.setOnMouseClicked(mouseEvent -> myEventModifier.editEvent(myEvent));
         HBox buttons = new HBox();
         buttons.getChildren().add(editButton);
         buttons.getChildren().add(removeButton);
