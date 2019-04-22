@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import ui.AuthoringEntity;
 import ui.AuthoringLevel;
 import ui.EntityField;
-import ui.ErrorBox;
 import ui.LevelField;
 import ui.Propertable;
 
@@ -67,7 +66,7 @@ public class ObjectManager {
 
     /**
      * Use this for adding a new general type
-     * @param entity
+     * @param entity AuthoringEntity whose type is to be added
      */
     public void addEntityType(AuthoringEntity entity) {
         myEntities.add(entity);
@@ -77,7 +76,7 @@ public class ObjectManager {
 
     /**
      * Use this for instances that are added to a specific level
-     * @param entity
+     * @param entity AuthoringEntity instance to add
      */
     public void addEntityInstance(AuthoringEntity entity) {
         myEntities.add(entity);
@@ -88,17 +87,13 @@ public class ObjectManager {
      * Use to remove all instances of an entity type from ObjectManager, removes Instances, Events, Label for complete deletion
      * @param entity AuthoringEntity with label corresponding to the type being deleted
      */
-    public void removeEntityType(AuthoringEntity entity) {
-        for (AuthoringEntity authEntity : myEntities) {
-            if (authEntity.getPropertyMap().get(EntityField.LABEL).equals(entity.getPropertyMap().get(EntityField.LABEL)))
-                myEntities.remove(authEntity);
-        }
-        for (AuthoringLevel level : myLevels) {
-            for (AuthoringEntity authEntity : level.getEntities()) {
-                if (authEntity.getPropertyMap().get(EntityField.LABEL).equals(entity.getPropertyMap().get(EntityField.LABEL)))
-                    level.removeEntity(authEntity);
-            }
-        }
+    public void removeEntityType(AuthoringEntity entity) { //TODO test to check working
+        myEntities.removeIf(authEntity ->
+                authEntity.getPropertyMap().get(EntityField.LABEL).equals(entity.getPropertyMap().get(EntityField.LABEL)));
+        for (AuthoringLevel level : myLevels)
+            level.getEntities().removeIf(authEntity ->
+                    authEntity.getPropertyMap().get(EntityField.LABEL).equals(entity.getPropertyMap().get(EntityField.LABEL)));
+
         myLabelManager.removeLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL));
         myEventMap.remove(entity.getPropertyMap().get(EntityField.LABEL));
     }
