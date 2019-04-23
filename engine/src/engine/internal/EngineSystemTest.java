@@ -5,8 +5,25 @@ package engine.internal;
 import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.Level;
-import engine.external.actions.XVelocityAction;
-import engine.external.component.*;
+import engine.external.component.SpriteComponent;
+import engine.external.component.XPositionComponent;
+import engine.external.component.XVelocityComponent;
+import engine.external.component.XAccelerationComponent;
+import engine.external.component.YPositionComponent;
+import engine.external.component.YVelocityComponent;
+import engine.external.component.YAccelerationComponent;
+import engine.external.component.ZPositionComponent;
+import engine.external.component.ImageViewComponent;
+import engine.external.component.CollisionComponent;
+import engine.external.component.WidthComponent;
+import engine.external.component.HeightComponent;
+import engine.external.component.AnyCollidedComponent;
+import engine.external.component.TopCollidedComponent;
+import engine.external.component.BottomCollidedComponent;
+import engine.external.component.LeftCollidedComponent;
+import engine.external.component.RightCollidedComponent;
+
+
 import engine.internal.systems.CollisionSystem;
 import engine.internal.systems.ImageViewSystem;
 import engine.internal.systems.MovementSystem;
@@ -16,10 +33,12 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,7 +93,7 @@ public class EngineSystemTest extends Application{
 
 
     private void initSystems(){
-        testImgViewSystem = new ImageViewSystem(Arrays.asList(SpriteComponent.class,XPositionComponent.class,YPositionComponent.class,ZPositionComponent.class),testEngine);
+        testImgViewSystem = new ImageViewSystem(Arrays.asList(SpriteComponent.class, XPositionComponent.class, YPositionComponent.class,ZPositionComponent.class),testEngine);
         testMovementSystem = new MovementSystem(Arrays.asList(XVelocityComponent.class,YVelocityComponent.class,XPositionComponent.class,YPositionComponent.class,ZPositionComponent.class),testEngine);
         testCollisionSystem = new CollisionSystem(Arrays.asList(CollisionComponent.class,ImageViewComponent.class,XPositionComponent.class,YPositionComponent.class),testEngine);
     }
