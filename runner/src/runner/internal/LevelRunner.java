@@ -106,21 +106,25 @@ public class LevelRunner {
         myGroup.getChildren().clear();
         for(Entity entity : myEntities){
             if(entity.hasComponents(CameraComponent.class)){
-                Double x = (Double) entity.getComponent(XPositionComponent.class).getValue();
-                Double origin = myGroup.getTranslateX();
-                Double xMinBoundary = myScene.getWidth()/5.0;
-                Double xMaxBoundary = myScene.getWidth()/4.0*3;
-                if (x < xMinBoundary - origin) {
-                    myGroup.setTranslateX(-1 * x + xMinBoundary);
-                }
-                if (x > xMaxBoundary - origin) {
-                    myGroup.setTranslateX(-1 * x + xMaxBoundary);
-                }
+                scrollOnMainCharacter(entity);
             }
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
             System.out.println(imageViewComponent);
             ImageView image = imageViewComponent.getValue();
             myGroup.getChildren().add(image);
+        }
+    }
+    
+    private void scrollOnMainCharacter(Entity entity){
+        Double x = (Double) entity.getComponent(XPositionComponent.class).getValue();
+        Double origin = myGroup.getTranslateX();
+        Double xMinBoundary = myScene.getWidth()/5.0;
+        Double xMaxBoundary = myScene.getWidth()/4.0*3;
+        if (x < xMinBoundary - origin) {
+            myGroup.setTranslateX(-1 * x + xMinBoundary);
+        }
+        if (x > xMaxBoundary - origin) {
+            myGroup.setTranslateX(-1 * x + xMaxBoundary);
         }
     }
 }
