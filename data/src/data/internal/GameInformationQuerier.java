@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A Querier used to access the GameInformation table to save and load game information
+ */
 public class GameInformationQuerier extends Querier {
 
     private static final String GAME_INFORMATION_TABLE_NAME = "GameInformation";
@@ -34,6 +37,11 @@ public class GameInformationQuerier extends Querier {
     private PreparedStatement myLoadGameInformationStatement;
     private PreparedStatement myFindAllGameNamesStatement;
 
+    /**
+     * GameInformationQuerier constructor
+     * @param connection connection to the database
+     * @throws SQLException if statements cannot be prepared
+     */
     public GameInformationQuerier(Connection connection) throws SQLException {
         super(connection);
     }
@@ -54,6 +62,11 @@ public class GameInformationQuerier extends Querier {
 //        updateGameEntryInfo(gameName, DEFAULT_AUTHOR, rawXML);
 //    }
 
+    /**
+     * Deserializes the xml file stored at created_games/gameName/game_data.xml into an object
+     * @param gameName the game whose data is to be loaded
+     * @return the deserialized game data that should then be cast to a game object
+     */
     public String loadGameData(String gameName) throws SQLException{
         return loadXML(gameName, myLoadGameDataStatement, GAME_DATA_COLUMN);
     }
@@ -62,6 +75,10 @@ public class GameInformationQuerier extends Querier {
         return loadXML(gameName, myLoadGameInformationStatement, GAME_INFO_COLUMN);
     }
 
+    /**
+     * Loads the raw xml for all the game info objects from the database to pass to the serializer
+     * @return raw xml of game info objects
+     */
     public List<String> loadAllGameInformationXMLs() throws SQLException{
         List<String> gameInformations = new ArrayList<>();
         List<String> gameNames = getGameNames();
@@ -92,6 +109,13 @@ public class GameInformationQuerier extends Querier {
         return null;
     }
 
+    /**
+     * Updates data entry for a game if it already exists, or creates new game if it doesn't
+     * @param gameName game name
+     * @param authorName author name
+     * @param myRawXML serialized game object
+     * @throws SQLException if statement fails
+     */
     public void updateGameEntryData(String gameName, String authorName, String myRawXML) throws SQLException{
         prepareAndExecuteUpdate(myUpdateGameEntryDataStatement, gameName, authorName, myRawXML);
     }
@@ -105,6 +129,13 @@ public class GameInformationQuerier extends Querier {
         statement.executeUpdate();
     }
 
+    /**
+     * Updates game info entry for a game if it already exists, or creates new game if it doesn't
+     * @param gameName game name
+     * @param authorName author name
+     * @param myRawXML serialized game object
+     * @throws SQLException if statement fails
+     */
     public void updateGameEntryInfo(String gameName, String authorName, String myRawXML) throws SQLException{
         prepareAndExecuteUpdate(myUpdateGameEntryInfoStatement, gameName, authorName, myRawXML);
     }

@@ -37,6 +37,20 @@ public interface ExternalData {
     Object loadGameData(String gameName) throws FileNotFoundException;
 
     /**
+     * Saves game information (game center data) to the data base
+     * @param gameName name of the game
+     * @param authorName name of the author of the game
+     * @param gameInfoObject the game center data object to be serialized and saved
+     */
+    void saveGameInfo(String gameName, String authorName, Object gameInfoObject);
+
+    /**
+     * Loads and deserializes all the game info objects from the database to pass to the game center
+     * @return deserialized game center data objects
+     */
+    List<Object> loadAllGameInfoObjects();
+
+    /**
      * Saves an image to the database
      * @param imageName the name of the image to save
      * @param imageToSave the image file that should be saved

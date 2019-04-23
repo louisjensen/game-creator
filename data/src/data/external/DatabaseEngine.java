@@ -10,6 +10,12 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.List;
 
+/**
+ * The DatabaseEngine establishes the connection to the database and has several Querier objects that it delegates
+ * the responsibilities of querying the database to.  The DatabaseEngine is designed to be used as a singleton so a
+ * connection to the database can be established at the beginning of the program and closed at the end of the project
+ * to avoid resource leaks and constantly having to open and close the connection.
+ */
 public class DatabaseEngine {
 
     private static final String JDBC_DRIVER = "jdbc:mysql://";
@@ -34,10 +40,19 @@ public class DatabaseEngine {
 
     }
 
+    /**
+     * The DatabaseEngine class is supposed to be used as a singleton so the connection is only opened once,
+     * The getInstance method allows other parts of the program to access the instance to open the connection
+     * @return DatabaseEngine
+     */
     public static DatabaseEngine getInstance() {
         return myInstance;
     }
 
+    /**
+     * Opens the connection to the database, should be called at the very beginning of the program
+     * @return true if successfully opened connection to the database
+     */
     public boolean open() {
         try {
             myConnection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
@@ -56,6 +71,9 @@ public class DatabaseEngine {
         myQueriers = List.of(myAssetQuerier, myGameInformationQuerier, myUserQuerier);
     }
 
+    /**
+     * Closes the resources associated with the database, should be called from the stop method
+     */
     public void close() {
         try {
             for (Querier querier : myQueriers) {

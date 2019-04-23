@@ -93,6 +93,7 @@ public class DataManager implements ExternalData{
      * Loads and deserializes all the game info objects from the database to pass to the game center
      * @return deserialized game center data objects
      */
+    @Override
     public List<Object> loadAllGameInfoObjects(){
         List<Object> gameInfoObjects = new ArrayList<>();
         List<String> gameInfoObjectXMLs = new ArrayList<>();
@@ -113,6 +114,7 @@ public class DataManager implements ExternalData{
      * @param authorName name of the author of the game
      * @param gameInfoObject the game center data object to be serialized and saved
      */
+    @Override
     public void saveGameInfo(String gameName, String authorName, Object gameInfoObject){
         String myRawXML = mySerializer.toXML(gameInfoObject);
         try {
@@ -197,6 +199,7 @@ public class DataManager implements ExternalData{
      * @param imageName the name of the image to save
      * @param imageToSave the image file that should be saved
      */
+    @Override
     public void saveImage(String imageName, File imageToSave){
         myDatabaseEngine.saveImage(imageName, imageToSave);
     }
@@ -206,6 +209,7 @@ public class DataManager implements ExternalData{
      * @param soundName name of the sound to be saved
      * @param soundToSave sound file to be saved
      */
+    @Override
     public void saveSound(String soundName, File soundToSave){
         myDatabaseEngine.saveSound(soundName, soundToSave);
     }
@@ -215,6 +219,7 @@ public class DataManager implements ExternalData{
      * @param soundName name of the sound to be loaded
      * @return an input stream of sound data to be converted to a media object
      */
+    @Override
     public InputStream loadSound(String soundName){
         return myDatabaseEngine.loadSound(soundName);
     }
@@ -224,6 +229,7 @@ public class DataManager implements ExternalData{
      * @param imageName name of the image to be loaded
      * @return an input stream of image data to be converted to an image object
      */
+    @Override
     public InputStream loadImage(String imageName){
         return myDatabaseEngine.loadImage(imageName);
     }
@@ -268,6 +274,7 @@ public class DataManager implements ExternalData{
      * @param password user's password
      * @return true if the user was successfully created
      */
+    @Override
     public boolean createUser (String userName, String password){
         boolean success = false;
         try {
@@ -284,6 +291,7 @@ public class DataManager implements ExternalData{
      * @param password entered password
      * @return true if valid user name and password combination
      */
+    @Override
     public boolean validateUser (String userName, String password){
         return myDatabaseEngine.authenticateUser(userName, password);
     }

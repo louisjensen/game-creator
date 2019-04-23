@@ -8,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Querier class to access and query the User table to perform user authentication
+ */
 public class UserQuerier extends Querier{
 
     private static final String USERS_TABLE_NAME= "Users";
@@ -23,6 +26,11 @@ public class UserQuerier extends Querier{
     private PreparedStatement myGetPasswordStatement;
     private PreparedStatement myCreateUserStatement;
 
+    /**
+     * UserQuerier constructor
+     * @param connection connection to the database
+     * @throws SQLException if cannot prepare statements
+     */
     public UserQuerier(Connection connection) throws SQLException{
         super(connection);
     }
@@ -34,7 +42,12 @@ public class UserQuerier extends Querier{
         myPreparedStatements = List.of(myGetPasswordStatement, myCreateUserStatement);
     }
 
-
+    /**
+     * Authenticates a user's login attempt
+     * @param userName entered user name
+     * @param password entered password
+     * @return true if valid user name and password combination
+     */
     public boolean authenticateUser(String userName, String password) {
         try {
             String hashedPassword = generateHashedPassword(password);
@@ -48,6 +61,13 @@ public class UserQuerier extends Querier{
         return false;
     }
 
+    /**
+     * Creates a new user entry in the database
+     * @param userName user name of new user
+     * @param password password of new user
+     * @return true if successfully creates a new user entry
+     * @throws SQLException if statement fails
+     */
     public boolean createUser(String userName, String password) throws SQLException{
         myCreateUserStatement.setString(1, userName);
         try {

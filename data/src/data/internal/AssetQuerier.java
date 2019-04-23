@@ -11,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * A Querier that is used to manage saving and loading assets (sounds and images)
+ */
 public class AssetQuerier extends Querier {
 
     private static final String IMAGES_TABLE_NAME = "Images";
@@ -38,6 +41,11 @@ public class AssetQuerier extends Querier {
     private PreparedStatement myLoadImageStatement;
     private PreparedStatement myLoadSoundStatement;
 
+    /**
+     * AssetQuerier constructor calls super constructor to initialize prepared statements
+     * @param connection connection to the database provided by database engine
+     * @throws SQLException if cannot connect or prepare the statements
+     */
     public AssetQuerier(Connection connection) throws SQLException {
         super(connection);
     }
@@ -52,18 +60,38 @@ public class AssetQuerier extends Querier {
                 myLoadSoundStatement);
     }
 
+    /**
+     * Saves an image to the database
+     * @param imageName the name of the image to save
+     * @param imageToSave the image file that should be saved
+     */
     public void saveImage(String imageName, File imageToSave) {
         saveAsset(imageName, imageToSave, myUpdateImagesStatement);
     }
 
+    /**
+     * Saves a sound to the database
+     * @param soundName name of the sound to be saved
+     * @param soundToSave sound file to be saved
+     */
     public void saveSound(String soundName, File soundToSave){
         saveAsset(soundName, soundToSave, myUpdateSoundsStatement);
     }
 
+    /**
+     * Loads an image from the database
+     * @param imageName name of the image to be loaded
+     * @return an input stream of image data to be converted to an image object
+     */
     public InputStream loadImage(String imageName){
         return loadAsset(imageName, IMAGE_DATA_COLUMN, myLoadImageStatement);
     }
 
+    /**
+     * Loads a sound from the database
+     * @param soundName name of the sound to be loaded
+     * @return an input stream of sound data to be converted to a media object
+     */
     public InputStream loadSound(String soundName){
         return loadAsset(soundName, SOUND_DATA_COLUMN, myLoadSoundStatement);
     }
