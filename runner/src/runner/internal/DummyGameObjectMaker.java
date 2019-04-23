@@ -8,15 +8,11 @@ import engine.external.component.*;
 import engine.external.events.*;
 
 
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
-import runner.Testing.conditions.Condition;
-import runner.Testing.conditions.GreaterThanCondition;
-import runner.external.Game;
-import javafx.stage.Stage;
 
-import java.util.Arrays;
+import runner.external.Game;
+
 
 public class DummyGameObjectMaker {
     private Game myGame;
