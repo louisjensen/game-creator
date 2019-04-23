@@ -114,7 +114,7 @@ public class LevelRunner {
             myGroup.getChildren().add(image);
         }
     }
-    
+
     private void scrollOnMainCharacter(Entity entity){
         Double x = (Double) entity.getComponent(XPositionComponent.class).getValue();
         Double origin = myGroup.getTranslateX();
