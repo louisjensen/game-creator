@@ -1,5 +1,6 @@
 package ui.main;
 
+import data.external.DatabaseEngine;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -13,5 +14,11 @@ public class MainTester extends Application {
 
     public static void main(String[] args){
         launch(args);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        DatabaseEngine.getInstance().close();
     }
 }

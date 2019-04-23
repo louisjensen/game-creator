@@ -5,13 +5,6 @@ import java.util.List;
 
 public interface ExternalData {
 
-    /*
-     * This method will create a folder when a user starts building a new game, and populate it with the xml files, along
-     * with their basic outlines, that it will absolutely need for a game. This folder is where authoring will store information
-     * from the user's design inputs so that it can be loaded across any platforms that would need access to data
-     */
-    void createGameFolder(String folderName);
-
     /**
      * Saves a an object to xml at the path specified by path
      * @param path to the file to be saved

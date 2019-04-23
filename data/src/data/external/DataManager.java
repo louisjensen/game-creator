@@ -13,9 +13,9 @@ import java.util.List;
 
 public class DataManager implements ExternalData{
 
-    private static final String CREATED_GAMES_DIRECTORY = "created_games";
+//    private static final String CREATED_GAMES_DIRECTORY = "created_games";
     public static final String XML_EXTENSION = ".xml";
-    public static final String GAME_DATA = "game_data";
+//    public static final String GAME_DATA = "game_data";
     private static final String GAME_INFO = "game_info";
     public static final String DEFAULT_AUTHOR = "DefaultAuthor";
 
@@ -29,16 +29,11 @@ public class DataManager implements ExternalData{
 
     @Deprecated
     public void createGameFolder(String folderName) {
-        if (!myDatabaseEngine.open()){
-            System.out.println("Couldn't connect to database");
-            return;
-        }
-        try {
-            myDatabaseEngine.createEntryForNewGame(folderName);
-        } catch (SQLException e) {
-            System.out.println("Couldn't create entry for new game: " + e.getMessage());
-        }
-        myDatabaseEngine.close();
+//        try {
+//            myDatabaseEngine.createEntryForNewGame(folderName);
+//        } catch (SQLException e) {
+//            System.out.println("Couldn't create entry for new game: " + e.getMessage());
+//        }
     }
 
     @Override
@@ -56,15 +51,11 @@ public class DataManager implements ExternalData{
     @Override
     public void saveGameData(String gameName, String authorName, Object gameObject){
         String myRawXML = mySerializer.toXML(gameObject);
-        if (! myDatabaseEngine.open()){
-            System.out.println("Couldn't load to database because couldn't connect");
-        }
         try {
             myDatabaseEngine.updateGameEntryData(gameName, authorName, myRawXML);
         } catch (SQLException e) {
             System.out.println("Couldn't update game entry data: " + e.getMessage());
         }
-        myDatabaseEngine.close();
     }
 
     @Deprecated
@@ -76,9 +67,7 @@ public class DataManager implements ExternalData{
         List<Object> gameInfoObjects = new ArrayList<>();
         List<String> gameInfoObjectXMLs = null;
         try {
-            myDatabaseEngine.open();
             gameInfoObjectXMLs = myDatabaseEngine.loadAllGameInformationXMLs();
-            myDatabaseEngine.close();
         } catch (SQLException e) {
             System.out.println("Couldn't load game information xmls: " + e.getMessage());
         }
@@ -90,15 +79,11 @@ public class DataManager implements ExternalData{
 
     public void saveGameInfo(String gameName, String authorName, Object gameInfoObject){
         String myRawXML = mySerializer.toXML(gameInfoObject);
-        if (! myDatabaseEngine.open()){
-            System.out.println("Couldn't load to database because couldn't connect");
-        }
         try {
             myDatabaseEngine.updateGameEntryInfo(gameName, authorName, myRawXML);
         } catch (SQLException e) {
             System.out.println("Couldn't update game entry information: " + e.getMessage());
         }
-        myDatabaseEngine.close();
     }
 
     @Deprecated
@@ -108,26 +93,19 @@ public class DataManager implements ExternalData{
 
     @Override
     public Object loadGameData(String gameName) {
-        if(!myDatabaseEngine.open()){
-            System.out.println("Couldn't connect");
-        }
         Object ret = null;
         try {
             ret = mySerializer.fromXML(myDatabaseEngine.loadGameData(gameName));
         } catch (SQLException e) {
             System.out.println("Couldn't load game date from database: " + e.getMessage());
         }
-        myDatabaseEngine.close();
         return ret;
     }
 
     public void saveGameDataFromFolder(String gameName){
-//        createGameFolder(gameName);
         try {
-            myDatabaseEngine.open();
             myDatabaseEngine.updateGameEntryInfo(gameName,
                     DEFAULT_AUTHOR, readFromXML("created_games/"+gameName+"/"+GAME_INFO+XML_EXTENSION));
-            myDatabaseEngine.close();
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (SQLException e){
@@ -165,49 +143,36 @@ public class DataManager implements ExternalData{
     }
 
     public void saveImage(String imageName, File imageToSave){
-        myDatabaseEngine.open();
         myDatabaseEngine.saveImage(imageName, imageToSave);
-        myDatabaseEngine.close();
     }
 
     public void saveSound(String soundName, File soundToSave){
-        myDatabaseEngine.open();
         myDatabaseEngine.saveSound(soundName, soundToSave);
-        myDatabaseEngine.close();
     }
 
     public InputStream loadSound(String soundName){
-        myDatabaseEngine.open();
         InputStream inputStream = myDatabaseEngine.loadSound(soundName);
-        myDatabaseEngine.close();
         return inputStream;
     }
 
     public InputStream loadImage(String imageName){
-        myDatabaseEngine.open();
         InputStream inputStream = myDatabaseEngine.loadImage(imageName);
-        myDatabaseEngine.close();
         return inputStream;
     }
 
-    public List<String> getGameNames(){
-        File file = new File(CREATED_GAMES_DIRECTORY);
-        String[] directories = file.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File current, String name) {
-                return new File(current, name).isDirectory();
-            }
-        });
-        System.out.println(Arrays.toString(directories));
-        if (directories != null) {
-            return Arrays.asList(directories);
-        }
-        return new ArrayList<>();
-    }
+//    public List<String> getGameNames(){
+//        File file = new File(CREATED_GAMES_DIRECTORY);
+//        String[] directories = file.list((current, name) -> new File(current, name).isDirectory());
+//        System.out.println(Arrays.toString(directories));
+//        if (directories != null) {
+//            return Arrays.asList(directories);
+//        }
+//        return new ArrayList<>();
+//    }
 
-    private String transformGameNameToPath(String gameName, String filename) {
-        return CREATED_GAMES_DIRECTORY + File.separator + gameName + File.separator + filename + XML_EXTENSION;
-    }
+//    private String transformGameNameToPath(String gameName, String filename) {
+//        return CREATED_GAMES_DIRECTORY + File.separator + gameName + File.separator + filename + XML_EXTENSION;
+//    }
 
     private void writeToXML(String path, String rawXML){
         FileWriter fileWriter = null;
@@ -231,21 +196,16 @@ public class DataManager implements ExternalData{
 
     public boolean createUser (String userName, String password){
         boolean success = false;
-        myDatabaseEngine.open();
         try {
             success =myDatabaseEngine.createUser(userName, password);
         } catch (SQLException e) {
             System.out.println("Could not create user: " + e.getMessage());
         }
-        myDatabaseEngine.close();
         return success;
     }
 
     public boolean validateUser (String userName, String password){
-        boolean success = false;
-        myDatabaseEngine.open();
-        success = myDatabaseEngine.authenticateUser(userName, password);
-        myDatabaseEngine.close();
+        boolean success = myDatabaseEngine.authenticateUser(userName, password);
         return success;
     }
 }

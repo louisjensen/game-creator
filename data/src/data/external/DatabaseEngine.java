@@ -1,8 +1,5 @@
 package data.external;
 
-import data.internal.ResultsProcessor;
-import data.internal.TablePrinter;
-
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,12 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DatabaseEngine {
-
-    public static final String TABLE_USER_AUTHENTICATION = "user_authentication";
-
-    public static final String COLUMN_USERNAME = "username";
-    public static final String COLUMN_PASSWORD = "hashed_password";
-    public static final String COLUMN_EMAIL = "email";
 
     private static final String JDBC_DRIVER = "jdbc:mysql://";
     private static final String IP_ADDRESS = "67.159.94.60";
@@ -212,11 +203,6 @@ public class DatabaseEngine {
         } catch (SQLException exception){
             System.out.println("Couldn't close the connection");
         }
-    }
-
-    public void createEntryForNewGame(String gameName) throws SQLException{
-//        myCreateGameEntryStatement.setString(1, gameName);
-//        myCreateGameEntryStatement.execute();
     }
 
     public void updateGameEntryInfo(String gameName, String rawXML) throws SQLException{

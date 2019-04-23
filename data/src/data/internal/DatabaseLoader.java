@@ -1,6 +1,7 @@
 package data.internal;
 
 import data.external.DataManager;
+import data.external.DatabaseEngine;
 
 import java.io.File;
 import java.util.List;
@@ -8,10 +9,12 @@ import java.util.List;
 public class DatabaseLoader {
 
     public static void main(String[] args) {
+        DatabaseEngine.getInstance().open();
         createUser("Ryan", "testPassword");
         createUser("Person2", "passwordTwo");
         validateUsers();
         System.out.println();
+        DatabaseEngine.getInstance().close();
     }
 
     private static void createUser(String userName, String password){
