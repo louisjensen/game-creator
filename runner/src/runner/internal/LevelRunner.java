@@ -122,8 +122,11 @@ public class LevelRunner {
             if(entity.hasComponents(CameraComponent.class)){
                 scrollOnMainCharacter(entity);
             }
+            if(entity.hasComponents(NextLevelComponent.class)){
+                System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
+                System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
+            }
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
-            System.out.println(imageViewComponent);
             ImageView image = imageViewComponent.getValue();
             myGroup.getChildren().add(image);
         }

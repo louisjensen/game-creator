@@ -3,14 +3,13 @@ package runner.internal;
 import data.external.DataManager;
 import engine.external.Entity;
 import engine.external.Level;
-import engine.external.actions.NumericAction;
-import engine.external.actions.XPositionAction;
-import engine.external.actions.XVelocityAction;
-import engine.external.actions.YPositionAction;
+import engine.external.actions.*;
 import engine.external.component.*;
 
+import engine.external.conditions.CollisionCondition;
 import engine.external.events.Event;
 import engine.external.events.RightCollisionEvent;
+import engine.external.events.TopCollisionEvent;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import runner.external.Game;
@@ -31,6 +30,11 @@ public class DummyGameObjectMaker {
         addDummyEntities(level1);
         addDummyEvents(level1);
         dummyGame.addLevel(level1);
+
+        Level level2 = new Level();
+        addDummyEntities(level2);
+        addDummyEvents(level2);
+        dummyGame.addLevel(level2);
 
     }
 
@@ -59,9 +63,15 @@ public class DummyGameObjectMaker {
         movedown.addInputs(KeyCode.DOWN);
         movedown.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
 
+
+        Event event4 = new Event("one");
+        event4.addInputs(KeyCode.D);
+        event4.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, 2.0));
+
         level1.addEvent(event);
         level1.addEvent(event2);
         level1.addEvent(event3);
+        level1.addEvent(event4);
         level1.addEvent(moveup);
         level1.addEvent(movedown);
 
@@ -113,21 +123,7 @@ public class DummyGameObjectMaker {
 
         dummy1.addComponent(new CollisionComponent(true));
         dummy2.addComponent(new CollisionComponent(true));
-
-        dummy1.addComponent(new AnyCollidedComponent(Arrays.asList(dummy2)));
-        dummy2.addComponent(new AnyCollidedComponent(Arrays.asList(dummy1)));
-
-        dummy1.addComponent(new RightCollidedComponent(Arrays.asList(dummy2)));
-        dummy2.addComponent(new RightCollidedComponent(Arrays.asList(dummy1)));
-        dummy2.addComponent(new LeftCollidedComponent(Arrays.asList(dummy1)));
-        dummy1.addComponent(new LeftCollidedComponent(Arrays.asList(dummy2)));
-
-        dummy1.addComponent(new TopCollidedComponent(Arrays.asList(dummy2)));
-        dummy2.addComponent(new TopCollidedComponent(Arrays.asList(dummy1)));
-
-        dummy1.addComponent(new BottomCollidedComponent(Arrays.asList(dummy2)));
-        dummy2.addComponent(new BottomCollidedComponent(Arrays.asList(dummy1)));
-
+        dummy3.addComponent(new CollisionComponent(true));
 
         dummy4.addComponent(new XPositionComponent(170.0));
         dummy4.addComponent(new YPositionComponent(100.0));
@@ -152,6 +148,9 @@ public class DummyGameObjectMaker {
         dummy6.addComponent(new HeightComponent(80.0));
         dummy6.addComponent(new SpriteComponent("basketball.png"));
         dummy6.addComponent(new NameComponent("six"));
+
+        dummy1.addComponent(new NextLevelComponent(1.0));
+        dummy1.addComponent(new ProgressionComponent(false));
 
         level.addEntity(dummy1);
         level.addEntity(dummy2);
