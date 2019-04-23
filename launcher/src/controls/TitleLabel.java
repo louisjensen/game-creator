@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 public class TitleLabel extends Label {
     private static final String WELCOME_RESOURCE = "launcher_display";
     private static final String FADE_DURATION_KEY = "fade_duration";
+    private static final String STYLE = "welcome.css";
 
     private final String myWelcomeLabel;
     private final FadeTransition myFadeAnimation;
@@ -24,7 +25,7 @@ public class TitleLabel extends Label {
         myFadeAnimation = new FadeTransition(Duration.millis(fadeDuration));
         //setUpDisplay();
         this.setText(myWelcomeLabel);
-        this.getStylesheets().add("welcome.css");
+        this.getStylesheets().add(STYLE);
 
     }
     /**
@@ -33,7 +34,7 @@ public class TitleLabel extends Label {
     public void addToLabel(String addition){
         this.setText(this.getText() + " " + addition);
     }
-    //@TODO work on developing fade transition of header titles as a nice UI feature
+
     private void setUpDisplay(){
         this.setText(myWelcomeLabel);
         myFadeAnimation.setNode(this);

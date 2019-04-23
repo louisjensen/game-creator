@@ -2,18 +2,18 @@ package engine.external.conditions;
 
 public enum ConditionType {
 
-        Collision (CollisionCondition.class, new Class<?>[]{String.class,String.class}),
-        EqualTo (EqualToCondition.class, new Class<?>[]{String.class,String.class}),
-        GreaterThan (GreaterThanCondition.class, new Class<?>[]{String.class,String.class}),
-        LessThan (LessThanCondition.class, new Class<?>[]{String.class,String.class}),
-        StringEqualTo (StringEqualToCondition.class, new Class<?>[]{String.class,Double.class});
+        Collision ("engine.external.conditions.CollisionCondition", new Class<?>[]{String.class,String.class}),
+        EqualTo ("engine.external.conditions.EqualTo", new Class<?>[]{String.class,String.class}),
+        GreaterThan ("engine.external.conditions.GreaterThanCondition", new Class<?>[]{String.class,String.class}),
+        LessThan ("engine.external.conditions.LessThanCondition", new Class<?>[]{String.class,String.class}),
+        Is ("engine.external.conditions.StringEqualToCondition", new Class<?>[]{String.class,Double.class});
 
 
-        private final Class<?> className;
+        private final String className;
         private final Class<?>[] classConstructorTypes;
 
 
-        ConditionType(Class<?> className, Class<?>[] constructorTypes) {
+        ConditionType(String className, Class<?>[] constructorTypes) {
 
             this.className = className;
             this.classConstructorTypes = constructorTypes;
@@ -24,7 +24,7 @@ public enum ConditionType {
             return this.classConstructorTypes;
         }
 
-        public Class<?> getClassName(){
+        public String getClassName(){
             return this.className;
         }
 

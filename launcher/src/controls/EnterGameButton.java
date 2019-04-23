@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class EnterGameButton extends SceneSwitchButton {
     private static final String LOGIN_RESOURCE = "user_credentials";
+    private static final String STYLE = "default_launcher.css";
     private static final ResourceBundle myResources = ResourceBundle.getBundle(LOGIN_RESOURCE);
     private CredentialValidator userNameAccessor;
     private CredentialValidator passWordAccessor;
@@ -22,15 +23,12 @@ public class EnterGameButton extends SceneSwitchButton {
         super(label);
         userNameAccessor = userName;
         passWordAccessor = passWord;
-        this.getStylesheets().add("default_launcher.css");
-        this.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (validateUserCredentials()){
-                    mySwitch.switchPage();
-                }
-
+        this.getStylesheets().add(STYLE);
+        this.setOnMouseReleased(mouseEvent -> {
+            if (validateUserCredentials()){
+                mySwitch.switchPage();
             }
+
         });
     }
     private boolean validateUserCredentials(){

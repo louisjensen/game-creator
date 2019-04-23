@@ -9,9 +9,10 @@ import engine.external.component.Component;
  * @author Feroze
  */
 public abstract class BooleanAction extends Action<Boolean> {
-    Boolean myValue;
-    Class<? extends Component<Boolean>> myComponentClass;
-
+    private Boolean myValue;
+    private Class<? extends Component<Boolean>> myComponentClass;
+    private static final String VALID = "DO ";
+    private static final String INVALID = "DON'T ";
     public void setAction(Boolean newValue, Class<? extends Component<Boolean>> componentClass) {
         super.setAbsoluteAction(newValue, componentClass);
         myValue = newValue;
@@ -21,9 +22,9 @@ public abstract class BooleanAction extends Action<Boolean> {
     public String toString() {
         String actionMessage = "";
         if (myValue) {
-            actionMessage += "DO ";
+            actionMessage += VALID;
         } else {
-            actionMessage += "DON'T ";
+            actionMessage += INVALID;
         }
         actionMessage += myComponentClass.getSimpleName();
         return actionMessage;
