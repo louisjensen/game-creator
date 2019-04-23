@@ -5,6 +5,8 @@ import data.internal.GameInformationQuerier;
 import data.internal.Querier;
 import data.internal.UserQuerier;
 
+import java.io.File;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class DatabaseEngine {
         return myInstance;
     }
 
-    public boolean open() throws SQLException {
+    public boolean open() {
         try {
             myConnection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
             initializeQueriers();
@@ -47,7 +49,7 @@ public class DatabaseEngine {
         }
     }
 
-    private void initializeQueriers() throws SQLException{
+    private void initializeQueriers() throws SQLException {
         myAssetQuerier = new AssetQuerier(myConnection);
         myGameInformationQuerier = new GameInformationQuerier(myConnection);
         myUserQuerier = new UserQuerier(myConnection);
@@ -56,7 +58,7 @@ public class DatabaseEngine {
 
     public void close() {
         try {
-            for (Querier querier : myQueriers){
+            for (Querier querier : myQueriers) {
                 querier.closeStatements();
             }
             if (myConnection != null) {
@@ -67,5 +69,43 @@ public class DatabaseEngine {
         }
     }
 
+    void updateGameEntryData(String gameName, String authorName, String myRawXML) throws SQLException {
+        myGameInformationQuerier.updateGameEntryData(gameName, authorName, myRawXML);
+    }
 
+    List<String> loadAllGameInformationXMLs() throws SQLException {
+        return myGameInformationQuerier.loadAllGameInformationXMLs();
+    }
+
+    void updateGameEntryInfo(String gameName, String authorName, String myRawXML) throws SQLException {
+        myGameInformationQuerier.updateGameEntryInfo(gameName, authorName, myRawXML);
+    }
+
+    String loadGameData(String gameName) throws SQLException {
+        return myGameInformationQuerier.loadGameData(gameName);
+    }
+
+    void saveImage(String imageName, File imageToSave) {
+        myAssetQuerier.saveImage(imageName, imageToSave);
+    }
+
+    void saveSound(String soundName, File soundToSave) {
+        myAssetQuerier.saveSound(soundName, soundToSave);
+    }
+
+    InputStream loadSound(String soundName) {
+        return myAssetQuerier.loadSound(soundName);
+    }
+
+    InputStream loadImage(String imageName) {
+        return myAssetQuerier.loadImage(imageName);
+    }
+
+    boolean createUser(String userName, String password) throws SQLException {
+        return myUserQuerier.createUser(userName, password);
+    }
+
+    boolean authenticateUser(String userName, String password) {
+        return myUserQuerier.authenticateUser(userName, password);
+    }
 }

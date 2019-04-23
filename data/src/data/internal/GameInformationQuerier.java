@@ -9,28 +9,24 @@ import java.util.List;
 
 public class GameInformationQuerier extends Querier {
 
-    public static final String GAME_INFORMATION_TABLE_NAME = "GameInformation";
+    private static final String GAME_INFORMATION_TABLE_NAME = "GameInformation";
     private static final String GAME_NAME_COLUMN = "GameName";
     private static final String GAME_DATA_COLUMN = "GameData";
     private static final String GAME_INFO_COLUMN = "GameInfo";
     private static final String AUTHOR_NAME_COLUMN = "AuthorName";
 
-    private static final String GAME_DATA_INSERT = "INSERT INTO "+ GAME_INFORMATION_TABLE_NAME +
-            " (" + GAME_NAME_COLUMN + ", " + AUTHOR_NAME_COLUMN + ", " + GAME_DATA_COLUMN + ") VALUES (?, ?, ?)";
-    private static final String GAME_INFO_INSERT = "INSERT INTO "+ GAME_INFORMATION_TABLE_NAME + " (" +
-            GAME_NAME_COLUMN + ", " + AUTHOR_NAME_COLUMN + ", " + GAME_INFO_COLUMN + ") VALUES (?, ?, ?)";
+    private static final String GAME_DATA_INSERT = String.format("INSERT INTO %s (%s, %s, %s) VALUES (?, ?, ?)", GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, GAME_DATA_COLUMN);
+    private static final String GAME_INFO_INSERT = String.format("INSERT INTO %s (%s, %s, %s) VALUES (?, ?, ?)", GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, GAME_INFO_COLUMN);
     private static final String UPDATE_GAME_DATA =
-            GAME_DATA_INSERT + " " + ON_DUPLICATE_UPDATE + " " + GAME_DATA_COLUMN + " = ?";
+            String.format("%s %s %s = ?", GAME_DATA_INSERT, ON_DUPLICATE_UPDATE, GAME_DATA_COLUMN);
     private static final String UPDATE_GAME_INFO =
-            GAME_INFO_INSERT + " " + ON_DUPLICATE_UPDATE + " " + GAME_INFO_COLUMN + " = ?";
+            String.format("%s %s %s = ?", GAME_INFO_INSERT, ON_DUPLICATE_UPDATE, GAME_INFO_COLUMN);
     private static final String LOAD_GAME_DATA =
-            "SELECT " + GAME_DATA_COLUMN + " FROM " + GAME_INFORMATION_TABLE_NAME + " WHERE " + GAME_NAME_COLUMN + " " +
-                    "= ?;";
+            String.format("SELECT %s FROM %s WHERE %s = ?;", GAME_DATA_COLUMN, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN);
     private static final String LOAD_GAME_INFORMATION =
-            "SELECT " + GAME_INFO_COLUMN + " FROM " + GAME_INFORMATION_TABLE_NAME + " WHERE " + GAME_NAME_COLUMN + " " +
-                    "= ? AND " + GAME_INFO_COLUMN + " IS NOT NULL;";
+            String.format("SELECT %s FROM %s WHERE %s = ? AND %s IS NOT NULL;", GAME_INFO_COLUMN, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, GAME_INFO_COLUMN);
     private static final String FIND_ALL_GAME_NAMES =
-            "SELECT DISTINCT(" + GAME_NAME_COLUMN + ") FROM " + GAME_INFORMATION_TABLE_NAME + ";";
+            String.format("SELECT DISTINCT(%s) FROM %s;", GAME_NAME_COLUMN, GAME_INFORMATION_TABLE_NAME);
 
     private PreparedStatement myUpdateGameEntryDataStatement;
     private PreparedStatement myUpdateGameEntryInfoStatement;
@@ -62,7 +58,7 @@ public class GameInformationQuerier extends Querier {
         return loadXML(gameName, myLoadGameDataStatement, GAME_DATA_COLUMN);
     }
 
-    public String loadGameInformation(String gameName) throws SQLException{
+    private String loadGameInformation(String gameName) throws SQLException{
         return loadXML(gameName, myLoadGameInformationStatement, GAME_INFO_COLUMN);
     }
 

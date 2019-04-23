@@ -7,7 +7,9 @@ import javafx.stage.Stage;
 public class DataTestRunner {
     public static void main(String[] args){
         System.out.println("DataTestRunner");
-        DatabaseEngine.getInstance().open();
+        if (! DatabaseEngine.getInstance().open()){
+            System.exit(1);
+        };
         RunnerTester.main(args);
         //GameRunner runner = new GameRunner("game1");
     }

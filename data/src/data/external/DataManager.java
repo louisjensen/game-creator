@@ -4,20 +4,15 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class DataManager implements ExternalData{
 
-//    private static final String CREATED_GAMES_DIRECTORY = "created_games";
-    public static final String XML_EXTENSION = ".xml";
-//    public static final String GAME_DATA = "game_data";
+    private static final String XML_EXTENSION = ".xml";
     private static final String GAME_INFO = "game_info";
-    public static final String DEFAULT_AUTHOR = "DefaultAuthor";
+    private static final String DEFAULT_AUTHOR = "DefaultAuthor";
 
     private XStream mySerializer;
     private DatabaseEngine myDatabaseEngine;
@@ -29,11 +24,7 @@ public class DataManager implements ExternalData{
 
     @Deprecated
     public void createGameFolder(String folderName) {
-//        try {
-//            myDatabaseEngine.createEntryForNewGame(folderName);
-//        } catch (SQLException e) {
-//            System.out.println("Couldn't create entry for new game: " + e.getMessage());
-//        }
+        //Method is no longer necessary for saving games, using saveGameData will suffice
     }
 
     @Override
@@ -65,7 +56,7 @@ public class DataManager implements ExternalData{
 
     public List<Object> loadAllGameInfoObjects(){
         List<Object> gameInfoObjects = new ArrayList<>();
-        List<String> gameInfoObjectXMLs = null;
+        List<String> gameInfoObjectXMLs = new ArrayList<>();
         try {
             gameInfoObjectXMLs = myDatabaseEngine.loadAllGameInformationXMLs();
         } catch (SQLException e) {
@@ -151,13 +142,11 @@ public class DataManager implements ExternalData{
     }
 
     public InputStream loadSound(String soundName){
-        InputStream inputStream = myDatabaseEngine.loadSound(soundName);
-        return inputStream;
+        return myDatabaseEngine.loadSound(soundName);
     }
 
     public InputStream loadImage(String imageName){
-        InputStream inputStream = myDatabaseEngine.loadImage(imageName);
-        return inputStream;
+        return myDatabaseEngine.loadImage(imageName);
     }
 
 //    public List<String> getGameNames(){
@@ -205,7 +194,6 @@ public class DataManager implements ExternalData{
     }
 
     public boolean validateUser (String userName, String password){
-        boolean success = myDatabaseEngine.authenticateUser(userName, password);
-        return success;
+        return myDatabaseEngine.authenticateUser(userName, password);
     }
 }

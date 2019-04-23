@@ -10,14 +10,13 @@ import java.util.List;
 
 public class UserQuerier extends Querier{
 
-    public static final String USERS_TABLE_NAME= "Users";
-    public static final String USERNAME_COLUMN = "UserName";
+    private static final String USERS_TABLE_NAME= "Users";
+    private static final String USERNAME_COLUMN = "UserName";
     private static final String PASSWORD_COLUMN = "Password";
 
-    private static final String GET_HASHED_PASSWORD = "SELECT " + PASSWORD_COLUMN + " FROM " + USERS_TABLE_NAME + " " +
-            "WHERE " + USERNAME_COLUMN + " = ?";
+    private static final String GET_HASHED_PASSWORD = String.format("SELECT %s FROM %s WHERE %s = ?", PASSWORD_COLUMN, USERS_TABLE_NAME, USERNAME_COLUMN);
     private static final String CREATE_USER =
-            "INSERT INTO " + USERS_TABLE_NAME + " (" + USERNAME_COLUMN + ", " + PASSWORD_COLUMN + ") VALUES (?, ?)";
+            String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)", USERS_TABLE_NAME, USERNAME_COLUMN, PASSWORD_COLUMN);
 
     private static final String HASH_ALGORITHM = "SHA-256";
 
@@ -70,6 +69,8 @@ public class UserQuerier extends Querier{
         }
     }
 
+    // Hashing process adapted from: https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+    // Author: Lokesh Gupta
     private String generateHashedPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest messageDigest = MessageDigest.getInstance(HASH_ALGORITHM);
         byte[] bytes = messageDigest.digest(password.getBytes());

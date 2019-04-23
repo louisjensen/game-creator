@@ -13,26 +13,24 @@ import java.util.List;
 
 public class AssetQuerier extends Querier {
 
-    public static final String IMAGES_TABLE_NAME = "Images";
-    public static final String IMAGE_NAME_COLUMN = "ImageName";
-    public static final String IMAGE_DATA_COLUMN = "ImageData";
+    private static final String IMAGES_TABLE_NAME = "Images";
+    private static final String IMAGE_NAME_COLUMN = "ImageName";
+    private static final String IMAGE_DATA_COLUMN = "ImageData";
 
-    public static final String SOUNDS_TABLE_NAME = "Sounds";
-    public static final String SOUND_NAME_COLUMN = "SoundName";
-    public static final String SOUND_DATA_COLUMN = "SoundData";
+    private static final String SOUNDS_TABLE_NAME = "Sounds";
+    private static final String SOUND_NAME_COLUMN = "SoundName";
+    private static final String SOUND_DATA_COLUMN = "SoundData";
 
-    private static final String IMAGES_INSERT = "INSERT INTO " + IMAGES_TABLE_NAME + " (" + IMAGE_NAME_COLUMN + ", " +
-            IMAGE_DATA_COLUMN + ") VALUES (?, ?)";
-    private static final String SOUNDS_INSERT = "INSERT INTO " + SOUNDS_TABLE_NAME + " (" + SOUND_NAME_COLUMN + ", " +
-            SOUND_DATA_COLUMN + ") VALUES (?, ?)";
+    private static final String IMAGES_INSERT = String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)", IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN, IMAGE_DATA_COLUMN);
+    private static final String SOUNDS_INSERT = String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)", SOUNDS_TABLE_NAME, SOUND_NAME_COLUMN, SOUND_DATA_COLUMN);
     private static final String UPDATE_IMAGES =
-            IMAGES_INSERT + " " + ON_DUPLICATE_UPDATE + " " + IMAGE_DATA_COLUMN + " = ?";
+            String.format("%s %s %s = ?", IMAGES_INSERT, ON_DUPLICATE_UPDATE, IMAGE_DATA_COLUMN);
     private static final String UPDATE_SOUNDS =
-            SOUNDS_INSERT + " " + ON_DUPLICATE_UPDATE + " " + SOUND_DATA_COLUMN + " = ?";
+            String.format("%s %s %s = ?", SOUNDS_INSERT, ON_DUPLICATE_UPDATE, SOUND_DATA_COLUMN);
     private static final String LOAD_SOUND =
-            "SELECT " + SOUND_DATA_COLUMN + " FROM " + SOUNDS_TABLE_NAME + " WHERE " + SOUND_NAME_COLUMN + " = ?";
+            String.format("SELECT %s FROM %s WHERE %s = ?", SOUND_DATA_COLUMN, SOUNDS_TABLE_NAME, SOUND_NAME_COLUMN);
     private static final String LOAD_IMAGE =
-            "SELECT " + IMAGE_DATA_COLUMN + " FROM " + IMAGES_TABLE_NAME + " WHERE " + IMAGE_NAME_COLUMN + " = ?";
+            String.format("SELECT %s FROM %s WHERE %s = ?", IMAGE_DATA_COLUMN, IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN);
 
 
     private PreparedStatement myUpdateImagesStatement;
