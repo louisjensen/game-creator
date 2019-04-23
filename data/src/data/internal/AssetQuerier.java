@@ -16,18 +16,10 @@ public class AssetQuerier extends Querier {
     public static final String IMAGES_TABLE_NAME = "Images";
     public static final String IMAGE_NAME_COLUMN = "ImageName";
     public static final String IMAGE_DATA_COLUMN = "ImageData";
-    public static final List<String> IMAGES_COLUMN_NAMES = List.of(
-            IMAGE_NAME_COLUMN,
-            IMAGE_DATA_COLUMN
-    );
 
     public static final String SOUNDS_TABLE_NAME = "Sounds";
     public static final String SOUND_NAME_COLUMN = "SoundName";
     public static final String SOUND_DATA_COLUMN = "SoundData";
-    public static final List<String> SOUNDS_COLUMN_NAMES = List.of(
-            SOUND_NAME_COLUMN,
-            SOUND_DATA_COLUMN
-    );
 
     private static final String IMAGES_INSERT = "INSERT INTO " + IMAGES_TABLE_NAME + " (" + IMAGE_NAME_COLUMN + ", " +
             IMAGE_DATA_COLUMN + ") VALUES (?, ?)";
@@ -58,11 +50,8 @@ public class AssetQuerier extends Querier {
         myUpdateSoundsStatement = myConnection.prepareStatement(UPDATE_SOUNDS);
         myLoadImageStatement = myConnection.prepareStatement(LOAD_IMAGE);
         myLoadSoundStatement = myConnection.prepareStatement(LOAD_SOUND);
-    }
-
-    @Override
-    protected void closeStatements() {
-
+        myPreparedStatements = List.of(myUpdateImagesStatement, myUpdateSoundsStatement, myLoadImageStatement,
+                myLoadSoundStatement);
     }
 
     public void saveImage(String imageName, File imageToSave) {

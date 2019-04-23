@@ -1,14 +1,12 @@
 package data.external;
 
+import data.internal.AssetQuerier;
+import data.internal.GameInformationQuerier;
+import data.internal.Querier;
 import data.internal.UserQuerier;
 
-import java.io.*;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class DatabaseEngine {
 
@@ -17,53 +15,57 @@ public class DatabaseEngine {
     private static final String PORT_NUMBER = "3306";
     private static final String DATABASE_NAME = "vooga_byteme";
     private static final String SERVER_TIMEZONE = "serverTimezone=UTC";
-    private static final String DATABASE_URL = JDBC_DRIVER + IP_ADDRESS + ":"+ PORT_NUMBER + "/" + DATABASE_NAME +
+    private static final String DATABASE_URL = JDBC_DRIVER + IP_ADDRESS + ":" + PORT_NUMBER + "/" + DATABASE_NAME +
             "?" + SERVER_TIMEZONE;
     private static final String USERNAME = "vooga";
     private static final String PASSWORD = "byteMe!";
 
     private Connection myConnection;
+    private GameInformationQuerier myGameInformationQuerier;
+    private AssetQuerier myAssetQuerier;
+    private UserQuerier myUserQuerier;
+    private List<Querier> myQueriers;
 
     private static DatabaseEngine myInstance = new DatabaseEngine();
 
-    private DatabaseEngine(){
+    private DatabaseEngine() {
 
     }
 
-    public static DatabaseEngine getInstance(){
+    public static DatabaseEngine getInstance() {
         return myInstance;
     }
 
-    public boolean open() {
+    public boolean open() throws SQLException {
         try {
             myConnection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
-            initializePreparedStatements();
+            initializeQueriers();
             return true;
-        } catch (SQLException exception){
+        } catch (SQLException exception) {
             System.out.println("Couldn't connect to database" + exception.getMessage());
-            exception.printStackTrace();
             return false;
         }
     }
 
-    private void initializePreparedStatements() {
-        try {
-
-        } catch (SQLException exception){
-            System.out.println("Statement Preparation Failed " + exception.getMessage());
-        }
+    private void initializeQueriers() throws SQLException{
+        myAssetQuerier = new AssetQuerier(myConnection);
+        myGameInformationQuerier = new GameInformationQuerier(myConnection);
+        myUserQuerier = new UserQuerier(myConnection);
+        myQueriers = List.of(myAssetQuerier, myGameInformationQuerier, myUserQuerier);
     }
 
     public void close() {
         try {
-            if (myConnection != null){
+            for (Querier querier : myQueriers){
+                querier.closeStatements();
+            }
+            if (myConnection != null) {
                 myConnection.close();
             }
-        } catch (SQLException exception){
+        } catch (SQLException exception) {
             System.out.println("Couldn't close the connection");
         }
     }
-
 
 
 }

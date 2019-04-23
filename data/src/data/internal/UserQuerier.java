@@ -13,9 +13,6 @@ public class UserQuerier extends Querier{
     public static final String USERS_TABLE_NAME= "Users";
     public static final String USERNAME_COLUMN = "UserName";
     private static final String PASSWORD_COLUMN = "Password";
-    private static final String AUTHORED_GAMES_COLUMN = "AuthoredGames";
-    private static final String LAST_LOGIN_COLUMN = "LastLogin";
-    private static final String FIRST_LOGIN_COLUMN = "FirstLogin";
 
     private static final String GET_HASHED_PASSWORD = "SELECT " + PASSWORD_COLUMN + " FROM " + USERS_TABLE_NAME + " " +
             "WHERE " + USERNAME_COLUMN + " = ?";
@@ -35,12 +32,9 @@ public class UserQuerier extends Querier{
     protected void prepareStatements() throws SQLException {
         myGetPasswordStatement = myConnection.prepareStatement(GET_HASHED_PASSWORD);
         myCreateUserStatement = myConnection.prepareStatement(CREATE_USER);
+        myPreparedStatements = List.of(myGetPasswordStatement, myCreateUserStatement);
     }
 
-    @Override
-    protected void closeStatements() {
-
-    }
 
     public boolean authenticateUser(String userName, String password) {
         try {

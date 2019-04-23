@@ -49,12 +49,10 @@ public class GameInformationQuerier extends Querier {
         myLoadGameDataStatement = myConnection.prepareStatement(LOAD_GAME_DATA);
         myLoadGameInformationStatement = myConnection.prepareStatement(LOAD_GAME_INFORMATION);
         myFindAllGameNamesStatement = myConnection.prepareStatement(FIND_ALL_GAME_NAMES);
+        myPreparedStatements = List.of(myUpdateGameEntryDataStatement, myUpdateGameEntryInfoStatement,
+                myLoadGameDataStatement, myLoadGameInformationStatement, myFindAllGameNamesStatement);
     }
 
-    @Override
-    protected void closeStatements() {
-
-    }
 
 //    public void updateGameEntryInfo(String gameName, String rawXML) throws SQLException{
 //        updateGameEntryInfo(gameName, DEFAULT_AUTHOR, rawXML);
