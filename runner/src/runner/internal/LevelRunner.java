@@ -34,6 +34,7 @@ public class LevelRunner {
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private Level myLevel;
     private Set<KeyCode> myCurrentKeys;
+    private boolean canPause = false;
 
     public LevelRunner(Level level, int width, int height, Stage stage){
         myLevel = level;
@@ -52,6 +53,7 @@ public class LevelRunner {
         myPauseButton = new PauseButton(myAnimation);
         myPause = myPauseButton.getPauseButton();
         myGroup.getChildren().add(myPause);
+        canPause = true;
     }
 
     private void buildStage(Stage stage) {
@@ -125,6 +127,16 @@ public class LevelRunner {
             ImageView image = imageViewComponent.getValue();
             myGroup.getChildren().add(image);
         }
+        if (canPause) {
+            movePauseButton();
+        }
+    }
+
+    private void movePauseButton(){
+        System.out.println(myPause);
+        System.out.println(myPause.getLayoutX());
+        System.out.println(myGroup.getTranslateX());
+        myPause.setLayoutX(myPauseButton.getButtonX() - myGroup.getTranslateX());
     }
 
     private void scrollOnMainCharacter(Entity entity){
