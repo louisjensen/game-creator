@@ -20,11 +20,16 @@ public class UserQuerier extends Querier{
     private static final String GET_HASHED_PASSWORD = String.format("SELECT %s FROM %s WHERE %s = ?", PASSWORD_COLUMN, USERS_TABLE_NAME, USERNAME_COLUMN);
     private static final String CREATE_USER =
             String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)", USERS_TABLE_NAME, USERNAME_COLUMN, PASSWORD_COLUMN);
+    private static final String DELETE_USER = String.format("DELETE FROM %s WHERE %s = ?", USERS_TABLE_NAME, USERNAME_COLUMN);
 
     private static final String HASH_ALGORITHM = "SHA-256";
 
+    private static final String COULD_NOT_VALIDATE_USER = "Could not validate user: ";
+    private static final String COULD_NOT_GENERATE_HASH = "Could not generate hash: ";
+
     private PreparedStatement myGetPasswordStatement;
     private PreparedStatement myCreateUserStatement;
+    private PreparedStatement myDeleteUserStatement;
 
     /**
      * UserQuerier constructor
@@ -39,7 +44,8 @@ public class UserQuerier extends Querier{
     protected void prepareStatements() throws SQLException {
         myGetPasswordStatement = myConnection.prepareStatement(GET_HASHED_PASSWORD);
         myCreateUserStatement = myConnection.prepareStatement(CREATE_USER);
-        myPreparedStatements = List.of(myGetPasswordStatement, myCreateUserStatement);
+        myDeleteUserStatement = myConnection.prepareStatement(DELETE_USER);
+        myPreparedStatements = List.of(myGetPasswordStatement, myCreateUserStatement, myDeleteUserStatement);
     }
 
     /**
@@ -56,7 +62,7 @@ public class UserQuerier extends Querier{
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (SQLException e) {
-            System.out.println("Could not validate user: " + e.getMessage());
+            System.out.println(COULD_NOT_VALIDATE_USER + e.getMessage());
         }
         return false;
     }
@@ -73,7 +79,7 @@ public class UserQuerier extends Querier{
         try {
             myCreateUserStatement.setString(2, generateHashedPassword(password));
         } catch (NoSuchAlgorithmException e) {
-            System.out.println("Could not generate hash: " + e.getMessage());
+            System.out.println(COULD_NOT_GENERATE_HASH + e.getMessage());
         }
         int updates = myCreateUserStatement.executeUpdate();
         return updates == 1;
@@ -99,5 +105,17 @@ public class UserQuerier extends Querier{
             stringBuilder.append(Integer.toString((bite & 0xff) + 0x100, 16).substring(1));
         }
         return stringBuilder.toString();
+    }
+
+    /**
+     * Removes a user from the database
+     * @param userName name of the user to delete
+     * @return true if any users were deleted
+     * @throws SQLException if statement fails
+     */
+    public boolean removeUser(String userName) throws SQLException{
+        myDeleteUserStatement.setString(1, userName);
+        int affectedRows = myDeleteUserStatement.executeUpdate();
+        return affectedRows > 0;
     }
 }

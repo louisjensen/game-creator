@@ -126,4 +126,8 @@ public class DatabaseEngine {
     boolean authenticateUser(String userName, String password) {
         return myUserQuerier.authenticateUser(userName, password);
     }
+
+    boolean removeUser(String userName) throws SQLException{
+        return myUserQuerier.removeUser(userName);
+    }
 }

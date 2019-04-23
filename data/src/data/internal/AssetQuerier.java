@@ -35,6 +35,10 @@ public class AssetQuerier extends Querier {
     private static final String LOAD_IMAGE =
             String.format("SELECT %s FROM %s WHERE %s = ?", IMAGE_DATA_COLUMN, IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN);
 
+    private static final String COULD_NOT_LOAD_ASSET = "Could not load asset: ";
+    private static final String COULD_NOT_SAVE_THE_ASSET = "Could not save the asset: ";
+    private static final String COULD_NOT_FIND_THE_FILE = "Could not find the file: ";
+
 
     private PreparedStatement myUpdateImagesStatement;
     private PreparedStatement myUpdateSoundsStatement;
@@ -106,7 +110,7 @@ public class AssetQuerier extends Querier {
                 return  imageInputStream;
             }
         } catch (SQLException e) {
-            System.out.println("Could not load asset: " + e.getMessage());
+            System.out.println(COULD_NOT_LOAD_ASSET + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -121,9 +125,9 @@ public class AssetQuerier extends Querier {
             statement.setBinaryStream(3, new BufferedInputStream(new FileInputStream(assetToSave)));
             statement.executeUpdate();
         } catch (SQLException e){
-            System.out.println("Could not save the asset: " + e.getMessage());
+            System.out.println(COULD_NOT_SAVE_THE_ASSET + e.getMessage());
         } catch (FileNotFoundException e) {
-            System.out.println("Could not find the file: " + assetToSave.toString());
+            System.out.println(COULD_NOT_FIND_THE_FILE + assetToSave.toString());
         }
     }
 }

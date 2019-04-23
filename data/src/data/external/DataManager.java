@@ -18,6 +18,15 @@ public class DataManager implements ExternalData{
     private static final String XML_EXTENSION = ".xml";
     private static final String GAME_INFO = "game_info";
     private static final String DEFAULT_AUTHOR = "DefaultAuthor";
+    private static final String COULDNT_UPDATE_GAME_ENTRY_DATA = "Couldn't update game entry data: ";
+    private static final String CANT_LOAD_GAME_INFORMATION_XMLS = "Couldn't load game information xmls: ";
+    private static final String CANT_UPDATE_GAME_ENTRY_INFO = "Couldn't update game entry information: ";
+    private static final String CANT_LOAD_GAME_DATA_FROM_DATABASE = "Couldn't load game data from database: ";
+    private static final String CREATED_GAMES_DIR = "created_games/";
+    private static final String CANNOT_READ_XML_FILE = "Cannot read XML file";
+    private static final String COULD_NOT_CLOSE_FILES = "Could not close files";
+    private static final String WRITE_FAILED = "Write Failed";
+    private static final String COULD_NOT_CREATE_USER = "Could not create user: ";
 
     private XStream mySerializer;
     private DatabaseEngine myDatabaseEngine;
@@ -75,7 +84,7 @@ public class DataManager implements ExternalData{
         try {
             myDatabaseEngine.updateGameEntryData(gameName, authorName, myRawXML);
         } catch (SQLException e) {
-            System.out.println("Couldn't update game entry data: " + e.getMessage());
+            System.out.println(COULDNT_UPDATE_GAME_ENTRY_DATA + e.getMessage());
         }
     }
 
@@ -100,7 +109,7 @@ public class DataManager implements ExternalData{
         try {
             gameInfoObjectXMLs = myDatabaseEngine.loadAllGameInformationXMLs();
         } catch (SQLException e) {
-            System.out.println("Couldn't load game information xmls: " + e.getMessage());
+            System.out.println(CANT_LOAD_GAME_INFORMATION_XMLS + e.getMessage());
         }
         for (String xml : gameInfoObjectXMLs){
             gameInfoObjects.add(mySerializer.fromXML(xml));
@@ -120,7 +129,7 @@ public class DataManager implements ExternalData{
         try {
             myDatabaseEngine.updateGameEntryInfo(gameName, authorName, myRawXML);
         } catch (SQLException e) {
-            System.out.println("Couldn't update game entry information: " + e.getMessage());
+            System.out.println(CANT_UPDATE_GAME_ENTRY_INFO + e.getMessage());
         }
     }
 
@@ -145,7 +154,7 @@ public class DataManager implements ExternalData{
         try {
             ret = mySerializer.fromXML(myDatabaseEngine.loadGameData(gameName));
         } catch (SQLException e) {
-            System.out.println("Couldn't load game date from database: " + e.getMessage());
+            System.out.println(CANT_LOAD_GAME_DATA_FROM_DATABASE + e.getMessage());
         }
         return ret;
     }
@@ -157,11 +166,11 @@ public class DataManager implements ExternalData{
     public void saveGameDataFromFolder(String gameName){
         try {
             myDatabaseEngine.updateGameEntryInfo(gameName,
-                    DEFAULT_AUTHOR, readFromXML("created_games/"+gameName+"/"+GAME_INFO+XML_EXTENSION));
+                    DEFAULT_AUTHOR, readFromXML(CREATED_GAMES_DIR +gameName+File.separator+GAME_INFO+XML_EXTENSION));
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (SQLException e){
-            System.out.println("Couldn't update game entry info: " + e.getMessage());
+            System.out.println(CANT_UPDATE_GAME_ENTRY_INFO + e.getMessage());
         }
     }
 
@@ -177,7 +186,7 @@ public class DataManager implements ExternalData{
                 rawXML.append(currentLine);
             }
         } catch (IOException e) {
-            System.out.println("Cannot read XML file");
+            System.out.println(CANNOT_READ_XML_FILE);
             throw new FileNotFoundException();
         } finally {
             try {
@@ -188,7 +197,7 @@ public class DataManager implements ExternalData{
                     fileReader.close();
                 }
             } catch (IOException ex) {
-                System.out.println("Could not close files");
+                System.out.println(COULD_NOT_CLOSE_FILES);
             }
         }
         return rawXML.toString();
@@ -254,16 +263,14 @@ public class DataManager implements ExternalData{
             fileWriter = new FileWriter(new File(path));
             fileWriter.write(rawXML);
         } catch (IOException exception){
-            System.out.println("In catch block");
-            exception.printStackTrace();
+            System.out.println(WRITE_FAILED); //Debugging information, method only used internally
         } finally {
-            System.out.println("In finally block");
             try {
                 if (fileWriter != null){
                     fileWriter.close();
                 }
             } catch (IOException e){
-                System.out.println("Couldn't close file");
+                System.out.println(COULD_NOT_CLOSE_FILES);
             }
         }
     }
@@ -280,7 +287,7 @@ public class DataManager implements ExternalData{
         try {
             success =myDatabaseEngine.createUser(userName, password);
         } catch (SQLException e) {
-            System.out.println("Could not create user: " + e.getMessage());
+            System.out.println(COULD_NOT_CREATE_USER + e.getMessage());
         }
         return success;
     }
@@ -295,4 +302,6 @@ public class DataManager implements ExternalData{
     public boolean validateUser (String userName, String password){
         return myDatabaseEngine.authenticateUser(userName, password);
     }
+
+
 }

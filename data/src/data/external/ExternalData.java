@@ -94,4 +94,12 @@ public interface ExternalData {
      */
     boolean validateUser (String userName, String password);
 
+    boolean removeUser (String userName);
+
+    boolean removeGame (String gameName, String authorName);
+
+    boolean removeImage (String imageName);
+
+    boolean removeSound (String soundName);
+
 }

@@ -19,7 +19,7 @@ public class DatabaseLoader {
 
     private static void createUser(String userName, String password){
         DataManager dm = new DataManager();
-        boolean success = dm.createUser(userName, password);
+        System.out.println(dm.createUser(userName, password));
     }
 
     private static void validateUsers(){
