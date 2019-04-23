@@ -9,6 +9,9 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Suite of tests for the data module that show the basics of how the module works
+ */
 public class DataTest {
 
     private String myUserName1;
@@ -22,6 +25,8 @@ public class DataTest {
 
     @BeforeEach
     protected void setUp(){
+        // Must open the connection to the database before it can be used
+        // DatabaseEngine uses the singleton design pattern
         DatabaseEngine.getInstance().open();
         myDataManager = new DataManager();
         instantiateVariables();
@@ -61,12 +66,14 @@ public class DataTest {
 
     @Test
     public void testCreateUser(){
+        // Can only create one user for each user name
         assertTrue(myDataManager.createUser(myUserName1, myCorrectPassword));
         assertFalse(myDataManager.createUser(myUserName1, myIncorrectPassword));
     }
 
     @Test
     public void testValidateUser() {
+        // User is only validated if they enter the correct username and password
         assertTrue(myDataManager.createUser(myUserName1, myCorrectPassword));
         assertTrue(myDataManager.validateUser(myUserName1, myCorrectPassword));
         assertFalse(myDataManager.validateUser(myUserName1, myIncorrectPassword));
@@ -75,6 +82,7 @@ public class DataTest {
 
     @Test
     public void testSaveAndLoadGameData() {
+        // Data can save any object as "game data" and reload it as long as it is casted properly when loaded
         myDataManager.saveGameData(myFakeGameName1, myUserName1, myFakeGameData1);
         String loadedData = (String) myDataManager.loadGameData(myFakeGameName1);
         assertEquals(loadedData, myFakeGameData1);
@@ -82,6 +90,7 @@ public class DataTest {
 
     @Test
     public void testInvalidConnection() {
+        // If the connection is closed, SQLExceptions will be thrown
         DatabaseEngine.getInstance().close();
         assertThrows(SQLException.class, () -> myDataManager.removeUser(myUserName1));
         DatabaseEngine.getInstance().open();
