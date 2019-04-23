@@ -133,9 +133,6 @@ public class LevelRunner {
     }
 
     private void movePauseButton(){
-        System.out.println(myPause);
-        System.out.println(myPause.getLayoutX());
-        System.out.println(myGroup.getTranslateX());
         myPause.setLayoutX(myPauseButton.getButtonX() - myGroup.getTranslateX());
     }
 
