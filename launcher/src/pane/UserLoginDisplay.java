@@ -25,9 +25,12 @@ class UserLoginDisplay extends VBox {
 
     private static final String LOGIN_LABEL = "login_label";
 
+    private static final String STYLE = "default_launcher.css";
+    private static final String DELIMITER = ",";
+
     UserLoginDisplay(SwitchToUserOptions mySwitch){
-        this.getStylesheets().add("default_launcher.css");
-        String[] loginTextFields = myResources.getString(LOGIN_KEY).split(",");
+        this.getStylesheets().add(STYLE);
+        String[] loginTextFields = myResources.getString(LOGIN_KEY).split(DELIMITER);
         this.setSpacing(40);
         InformativeField myUserNameField = new InformativeField(loginTextFields[0]);
         HiddenField myPasswordField = new HiddenField(loginTextFields[1]);
@@ -35,10 +38,10 @@ class UserLoginDisplay extends VBox {
     }
     private void setUpChildren(InformativeField userName, HiddenField passWord, SwitchToUserOptions mySwitch){
         this.setAlignment(Pos.CENTER);
-        this.getChildren().add(0, new PaneLabel(LOGIN_LABEL));
-        this.getChildren().add(1, userName);
-        this.getChildren().add(2, passWord);
-        this.getChildren().add(3,new EnterGameButton(LOGIN_BUTTON_TEXT, userName.accessValue(),
+        this.getChildren().add(new PaneLabel(LOGIN_LABEL));
+        this.getChildren().add(userName);
+        this.getChildren().add(passWord);
+        this.getChildren().add(new EnterGameButton(LOGIN_BUTTON_TEXT, userName.accessValue(),
                 passWord.accessValue(), mySwitch));
     }
 }

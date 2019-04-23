@@ -160,18 +160,18 @@ public class EventPane extends Stage {
         return Utility.createButtonBar(Arrays.asList(mySaveButton,myCancelButton));
     }
     private Object getParameterValue(Node param){
-        try {
-            Method m = param.getClass().getDeclaredMethod(GET_VALUE_METHOD);
-            return m.invoke(param);
-
-        } catch (Exception e) {
-            try {
-                Method m = param.getClass().getDeclaredMethod(GET_TEXT_METHOD);
-                return m.invoke(param);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        }
+//        try {
+//            Method m = param.getClass().getDeclaredMethod(GET_VALUE_METHOD);
+//            return m.invoke(param);
+//
+//        } catch (Exception e) {
+//            try {
+//                Method m = param.getClass().getDeclaredMethod(GET_TEXT_METHOD);
+//                return m.invoke(param);
+//            } catch (Exception e1) {
+//                e1.printStackTrace();
+//            }
+//        }
         return "";
     }
 

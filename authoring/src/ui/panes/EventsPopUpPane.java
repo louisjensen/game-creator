@@ -4,7 +4,6 @@ import events.EventFactory;
 import events.EventType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -13,39 +12,49 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ui.manager.Refresher;
 
+import java.util.ResourceBundle;
+
 
 public class EventsPopUpPane extends Stage {
     private ChoiceBox<String> myEvents;
     private EventOptionsPane myOptions = new EventOptionsPane();
-    private EventFactory myFactory = new EventFactory();
 
-    public EventsPopUpPane(ObservableMap<Enum, String> uniqueComponents,
-                           ObservableList<Event> myEntityEvents, String myEntityName, Refresher myEventsRefresher){
+    private static final String EVENT_DISPLAY = "event_display";
+    private ResourceBundle myEventDisplay = ResourceBundle.getBundle(EVENT_DISPLAY);
+
+    private static final String SELECT = "Select";
+    private static final String SAVE = "Save";
+    private static final String CANCEL = "Cancel";
+
+
+    public EventsPopUpPane(ObservableList<Event> myEntityEvents, String myEntityName, Refresher myEventsRefresher){
         VBox eventTypeChooser = setUpScene();
+        HBox buttonOptions = setUpButtons(myEntityEvents,myEntityName,myEventsRefresher);
 
-        HBox buttonOptions = new HBox();
-        buttonOptions.getChildren().add(makeSaveButton(myEntityEvents, myEntityName,myEventsRefresher));
-        buttonOptions.getChildren().add(makeCancelButton());
         eventTypeChooser.getChildren().add(buttonOptions);
 
         Scene myScene = new Scene(eventTypeChooser);
-        myScene.getStylesheets().add("default.css");
         this.setScene(myScene);
-        this.show();
+        this.showAndWait();
     }
 
     private VBox setUpScene(){
         VBox eventTypeChooser = new VBox();
         eventTypeChooser.setMinSize(500,400);
+        HBox eventBox = createEventListing();
+        eventTypeChooser.getChildren().add(eventBox);
+        eventTypeChooser.getChildren().add(myOptions);
+        return eventTypeChooser;
+    }
+
+    private HBox createEventListing(){
         HBox eventBox = new HBox();
         myEvents = new ChoiceBox<>(FXCollections.observableArrayList(EventType.allDisplayNames));
         myEvents.getSelectionModel().selectedItemProperty().addListener((observableEvent, previousEvent, selectedEvent) ->
                 manageEventParameters(selectedEvent));
-        eventBox.getChildren().add(EventFactory.createLabel("Select Event - "));
+        eventBox.getChildren().add(EventFactory.createLabel(SELECT));
         eventBox.getChildren().add(myEvents);
-        eventTypeChooser.getChildren().add(eventBox);
-        eventTypeChooser.getChildren().add(myOptions);
-        return eventTypeChooser;
+        return eventBox;
     }
 
     private void manageEventParameters(String eventName){
@@ -53,8 +62,15 @@ public class EventsPopUpPane extends Stage {
     }
 
 
+    private HBox setUpButtons(ObservableList<Event> myEntityEvents, String myEntityName, Refresher myEventsRefresher){
+        HBox buttonOptions = new HBox();
+        buttonOptions.getChildren().add(makeSaveButton(myEntityEvents, myEntityName,myEventsRefresher));
+        buttonOptions.getChildren().add(makeCancelButton());
+        return buttonOptions;
+    }
+
     private Button makeSaveButton(ObservableList<Event> myEntityEvents, String myEntityName, Refresher myEventsRefresher ){
-        Button saveButton = new Button("save");
+        Button saveButton = new Button(myEventDisplay.getString(SAVE));
         saveButton.setOnMouseClicked(mouseEvent -> {
             String eventKeyName = myEvents.getValue().replaceAll(" ","");
             Event userMadeEvent = myOptions.saveEvent(myEntityName, eventKeyName);
@@ -65,7 +81,7 @@ public class EventsPopUpPane extends Stage {
         return saveButton;
     }
     private Button makeCancelButton() {
-        Button myCancelButton = new Button("Cancel");
+        Button myCancelButton = new Button(CANCEL);
         myCancelButton.setOnMouseClicked(mouseEvent -> closePage());
         return myCancelButton;
     }
