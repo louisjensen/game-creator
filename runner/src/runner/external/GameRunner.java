@@ -42,7 +42,6 @@ public class GameRunner {
     private static final int FRAMES_PER_SECOND = 60;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-    private Map myEntitiesAndNodes;
     private List<Level> myLevels;
     private Game myGame;
     private Set<KeyCode> myCurrentKeys;
@@ -53,7 +52,6 @@ public class GameRunner {
         code below */
 
         DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
-        //dm2.serializeObject();
         Game gameMade = dm2.getGame(game);
         DataManager dm = new DataManager();
         dm.createGameFolder("YeetRevised2");
@@ -83,8 +81,6 @@ public class GameRunner {
         myStage.show();
     }
 
-    private void doNothing(){}
-
     private void handleKeyPress(KeyCode code) {
         myCurrentKeys.add(code);
     }
@@ -103,15 +99,15 @@ public class GameRunner {
     private void printKeys() {
         System.out.println(myCurrentKeys);
     }
-    
+
     protected List<Double> getXYZasList(Entity entity){
         List<Double> list = new ArrayList<>();
         XPositionComponent xPositionComponent = (XPositionComponent) entity.getComponent(XPositionComponent.class);
-        Double xPosition = (Double) xPositionComponent.getValue();
+        Double xPosition = xPositionComponent.getValue();
         YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
-        Double yPosition = (Double) yPositionComponent.getValue();
+        Double yPosition = yPositionComponent.getValue();
         ZPositionComponent zPositionComponent = (ZPositionComponent) entity.getComponent(ZPositionComponent.class);
-        Double zPosition = (Double) zPositionComponent.getValue();
+        Double zPosition = zPositionComponent.getValue();
         list.add(xPosition);
         list.add(yPosition);
         list.add(zPosition);
@@ -142,7 +138,7 @@ public class GameRunner {
             }
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
             System.out.println(imageViewComponent);
-            ImageView image = (ImageView) imageViewComponent.getValue();
+            ImageView image = imageViewComponent.getValue();
             myGroup.getChildren().add(image);
         }
     }
