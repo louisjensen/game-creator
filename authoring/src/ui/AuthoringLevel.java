@@ -21,7 +21,8 @@ public class AuthoringLevel implements Propertable {
     private static final List<? extends Enum> PROP_VAR_NAMES = Arrays.asList(LevelField.values());
     private static final Integer DEFAULT_ROOM_SIZE = 1200;
 
-    public AuthoringLevel(String label) {
+    public AuthoringLevel(String label, ObjectManager manager) {
+        myObjectManager = manager;
         myEntities = new ArrayList<>();
         myPropertyMap = FXCollections.observableHashMap();
         for (Enum name : PROP_VAR_NAMES)
@@ -29,6 +30,7 @@ public class AuthoringLevel implements Propertable {
         myPropertyMap.put(LevelField.LABEL, label);
         myPropertyMap.put(LevelField.HEIGHT, DEFAULT_ROOM_SIZE.toString());
         myPropertyMap.put(LevelField.WIDTH, DEFAULT_ROOM_SIZE.toString());
+        addPropertyListeners();
     }
 
     private void addPropertyListeners() {
@@ -41,15 +43,6 @@ public class AuthoringLevel implements Propertable {
             myObjectManager.updateLevelLabel(valueRemoved, valueAdded);
     }
 
-    public ObservableMap<Enum, String> getPropertyMap() {
-        return myPropertyMap;
-    }
-
-    @Override
-    public Class<? extends Enum> getEnumClass() {
-        return LevelField.class;
-    }
-
     public void addEntity(AuthoringEntity newEntity) {
         myEntities.add(newEntity);
     }
@@ -60,5 +53,14 @@ public class AuthoringLevel implements Propertable {
 
     public List<AuthoringEntity> getEntities() {
         return myEntities;
+    }
+
+    public ObservableMap<Enum, String> getPropertyMap() {
+        return myPropertyMap;
+    }
+
+    @Override
+    public Class<? extends Enum> getEnumClass() {
+        return LevelField.class;
     }
 }

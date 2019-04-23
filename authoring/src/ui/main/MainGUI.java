@@ -23,6 +23,7 @@ import ui.Propertable;
 import ui.PropertableType;
 import ui.UIException;
 import ui.manager.GroupManager;
+import ui.manager.InfoEditor;
 import ui.manager.ObjectManager;
 import ui.panes.DefaultTypesPane;
 import ui.panes.LevelsPane;
@@ -30,6 +31,8 @@ import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -40,32 +43,38 @@ public class MainGUI {
     private Game myGame;
     private GameCenterData myGameData;
     private Stage myStage;
+    private HBox myViewerBox;
+    private UserCreatedTypesPane myCreatedTypesPane;
     private ObjectManager myObjectManager;
+    private Map<Propertable, Viewer> myViewers;
     private ObservableStringValue myCurrentStyle;
     private ObjectProperty<Propertable> mySelectedEntity;
     private ObjectProperty<Propertable> myCurrentLevel;
 
     private static final double STAGE_MIN_HEIGHT = 600;
     private static final double PROP_PANE_HEIGHT = 210;
-    private static final String DEFAULT_STYLESHEET = "default.css"; //TODO propagate Stylesheet
+    private static final String DEFAULT_FIRST_LEVEL = "New_Level_1";
+    private static final String DEFAULT_STYLESHEET = "default.css";
     private static final String MENU_ITEMS_FILE = "main_menu_items";
     private static final String STAGE_TITLE = "ByteMe Authoring Environment";
 
     public MainGUI() { // Default constructor for creating a new game from scratch
         myGame = new Game();
         myGameData = new GameCenterData();
-        defaultGameData();
         myStage = new Stage();
-
-        AuthoringLevel blankLevel = new AuthoringLevel("Level_1");
-        AuthoringLevel blankLevel2 = new AuthoringLevel("Level 2"); //TODO
-        myCurrentLevel = new SimpleObjectProperty<>(blankLevel);
+        myViewers = new HashMap<>();
+        defaultGameData();
+        myCurrentLevel = new SimpleObjectProperty<>();
+        mySelectedEntity = new SimpleObjectProperty<>();
         myObjectManager = new ObjectManager(myCurrentLevel);
+
+        AuthoringLevel blankLevel = new AuthoringLevel(DEFAULT_FIRST_LEVEL, myObjectManager);
         myObjectManager.addLevel(blankLevel);
-        myObjectManager.addLevel(blankLevel2); //TODO
-        mySelectedEntity = new SimpleObjectProperty<>(null);
+        myCurrentLevel.setValue(blankLevel);
+
         myCurrentStyle = new SimpleStringProperty(DEFAULT_STYLESHEET);
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
+        myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
@@ -90,14 +99,15 @@ public class MainGUI {
         HBox entityPaneBox = new HBox();
         entityPaneBox.getStyleClass().add("entity-pane-box");
 
-        UserCreatedTypesPane userCreatedTypesPane = createTypePanes(entityPaneBox, mainScene);
-        Viewer viewer = createViewer(userCreatedTypesPane);
-        createPropertiesPanes(propPaneBox, mainScene);
-        HBox centerPaneBox = new HBox(viewer);
-        centerPaneBox.prefHeightProperty().bind(mainScene.heightProperty());
-        centerPaneBox.prefWidthProperty().bind(mainScene.widthProperty());
+        myCreatedTypesPane = createTypePanes(entityPaneBox, mainScene);
+        createViewersForExistingLevels();
 
-        mainBorderPane.setCenter(centerPaneBox);
+        createPropertiesPanes(propPaneBox, mainScene);
+        myViewerBox = new HBox(myViewers.get(myCurrentLevel.getValue()));
+        myViewerBox.prefHeightProperty().bind(mainScene.heightProperty());
+        myViewerBox.prefWidthProperty().bind(mainScene.widthProperty());
+
+        mainBorderPane.setCenter(myViewerBox);
         mainBorderPane.setRight(entityPaneBox);
         mainBorderPane.setTop(addMenu());
         mainBorderPane.setBottom(propPaneBox);
@@ -105,6 +115,12 @@ public class MainGUI {
         mainScene.getStylesheets().add(myCurrentStyle.getValue());
         mainBorderPane.getCenter().getStyleClass().add("main-center-pane");
         return mainScene;
+    }
+
+    private void createViewersForExistingLevels() {
+        for (AuthoringLevel level : myObjectManager.getLevels()) {
+            myViewers.put(level, createViewer(level));
+        }
     }
 
     private UserCreatedTypesPane createTypePanes(HBox entityPaneBox, Scene mainScene) {
@@ -117,13 +133,11 @@ public class MainGUI {
         return userCreatedTypesPane;
     }
 
-    private Viewer createViewer(UserCreatedTypesPane userCreatedTypesPane) {
-        Viewer viewer = new Viewer(myCurrentLevel, userCreatedTypesPane, mySelectedEntity, myObjectManager);
-        viewer.setMinWidth(400);
-        viewer.setMinHeight(300);
-        return viewer;
+    private Viewer createViewer(AuthoringLevel levelBasis) {
+        return new Viewer(levelBasis, myCreatedTypesPane, mySelectedEntity, myObjectManager);
     }
 
+    @SuppressWarnings("Duplicates")
     private void createPropertiesPanes(HBox propPaneBox, Scene mainScene) {
         try {
             LevelsPane levelsPane = new LevelsPane(myObjectManager, myCurrentLevel);
@@ -147,7 +161,7 @@ public class MainGUI {
     private MenuBar addMenu() {
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(createMenu("File", "New", "Open", "Save"), //TODO make this better
-                createMenu("Edit", "Groups", "Preferences"), createMenu("View", "Fullscreen"));
+                createMenu("Edit", "Info", "Groups", "Preferences"), createMenu("View", "Fullscreen"));
         return menuBar;
     }
 
@@ -172,14 +186,18 @@ public class MainGUI {
         return newItem;
     }
 
+    @SuppressWarnings("unused")
     private void newGame() {
-        System.out.println("New"); //TODO
+        MainGUI newWorkspace = new MainGUI();
+        newWorkspace.launch();
     }
 
+    @SuppressWarnings("unused")
     private void openGame() {
         System.out.println("Open"); //TODO
     }
 
+    @SuppressWarnings("unused")
     private void saveGame() {
         GameTranslator translator = new GameTranslator(myGame, myGameData, myObjectManager);
         Game exportableGame = translator.translate();
@@ -191,17 +209,34 @@ public class MainGUI {
         dm.saveGameInfo(gameData.getFolderName(), gameData);
     }
 
+    @SuppressWarnings("unused")
     private void openGroupManager() {
         GroupManager groupManager = new GroupManager(myObjectManager);
         groupManager.showAndWait();
     }
 
+    @SuppressWarnings("unused")
+    private void openGameInfo() {
+        InfoEditor infoEditor = new InfoEditor(myGameData);
+        infoEditor.showAndWait();
+    }
+
+    @SuppressWarnings("unused")
     private void openPreferences() {
         System.out.println("Preferences"); //TODO
     }
 
+    @SuppressWarnings("unused")
     private void toggleFullscreen() {
         myStage.setFullScreen(!myStage.isFullScreen());
+    }
+
+    private void swapViewer(Propertable oldLevel, Propertable newLevel) {
+        myViewerBox.getChildren().remove(myViewers.get(oldLevel));
+        if (!myViewers.containsKey(newLevel))
+            myViewers.put(newLevel, createViewer((AuthoringLevel) newLevel));
+
+        myViewerBox.getChildren().add(myViewers.get(newLevel));
     }
 
     private void swapStylesheet(String oldVal, String newVal) {
@@ -210,10 +245,10 @@ public class MainGUI {
     }
 
     private void defaultGameData() {
-        myGameData.setFolderName("test");
-        myGameData.setImageLocation("test");
-        myGameData.setTitle("THE TEST GAME");
-        myGameData.setDescription("A game about testing");
+        myGameData.setFolderName("NewGame");
+        myGameData.setImageLocation("");
+        myGameData.setTitle("New Game");
+        myGameData.setDescription("A fun new game");
     }
 
 }
