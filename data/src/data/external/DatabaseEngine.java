@@ -130,4 +130,16 @@ public class DatabaseEngine {
     boolean removeUser(String userName) throws SQLException{
         return myUserQuerier.removeUser(userName);
     }
+
+    boolean removeGame(String gameName, String authorName) throws SQLException{
+        return myGameInformationQuerier.removeGame(gameName, authorName);
+    }
+
+    boolean removeImage(String imageName) throws SQLException{
+        return myAssetQuerier.removeImage(imageName);
+    }
+
+    public boolean removeSound(String soundName) throws SQLException{
+        return myAssetQuerier.removeSound(soundName);
+    }
 }

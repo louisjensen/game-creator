@@ -34,6 +34,10 @@ public class AssetQuerier extends Querier {
             String.format("SELECT %s FROM %s WHERE %s = ?", SOUND_DATA_COLUMN, SOUNDS_TABLE_NAME, SOUND_NAME_COLUMN);
     private static final String LOAD_IMAGE =
             String.format("SELECT %s FROM %s WHERE %s = ?", IMAGE_DATA_COLUMN, IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN);
+    private static final String REMOVE_IMAGE =
+            String.format("DELETE FROM %s WHERE %s = ?", IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN);
+    private static final String REMOVE_SOUND =
+            String.format("DELETE FROM %s WHERE %s = ?", SOUNDS_TABLE_NAME, SOUND_NAME_COLUMN);
 
     private static final String COULD_NOT_LOAD_ASSET = "Could not load asset: ";
     private static final String COULD_NOT_SAVE_THE_ASSET = "Could not save the asset: ";
@@ -44,9 +48,12 @@ public class AssetQuerier extends Querier {
     private PreparedStatement myUpdateSoundsStatement;
     private PreparedStatement myLoadImageStatement;
     private PreparedStatement myLoadSoundStatement;
+    private PreparedStatement myRemoveImageStatement;
+    private PreparedStatement myRemoveSoundStatement;
 
     /**
      * AssetQuerier constructor calls super constructor to initialize prepared statements
+     *
      * @param connection connection to the database provided by database engine
      * @throws SQLException if cannot connect or prepare the statements
      */
@@ -60,13 +67,16 @@ public class AssetQuerier extends Querier {
         myUpdateSoundsStatement = myConnection.prepareStatement(UPDATE_SOUNDS);
         myLoadImageStatement = myConnection.prepareStatement(LOAD_IMAGE);
         myLoadSoundStatement = myConnection.prepareStatement(LOAD_SOUND);
+        myRemoveImageStatement = myConnection.prepareStatement(REMOVE_IMAGE);
+        myRemoveSoundStatement = myConnection.prepareStatement(REMOVE_SOUND);
         myPreparedStatements = List.of(myUpdateImagesStatement, myUpdateSoundsStatement, myLoadImageStatement,
-                myLoadSoundStatement);
+                myLoadSoundStatement, myRemoveImageStatement, myRemoveSoundStatement);
     }
 
     /**
      * Saves an image to the database
-     * @param imageName the name of the image to save
+     *
+     * @param imageName   the name of the image to save
      * @param imageToSave the image file that should be saved
      */
     public void saveImage(String imageName, File imageToSave) {
@@ -75,28 +85,31 @@ public class AssetQuerier extends Querier {
 
     /**
      * Saves a sound to the database
-     * @param soundName name of the sound to be saved
+     *
+     * @param soundName   name of the sound to be saved
      * @param soundToSave sound file to be saved
      */
-    public void saveSound(String soundName, File soundToSave){
+    public void saveSound(String soundName, File soundToSave) {
         saveAsset(soundName, soundToSave, myUpdateSoundsStatement);
     }
 
     /**
      * Loads an image from the database
+     *
      * @param imageName name of the image to be loaded
      * @return an input stream of image data to be converted to an image object
      */
-    public InputStream loadImage(String imageName){
+    public InputStream loadImage(String imageName) {
         return loadAsset(imageName, IMAGE_DATA_COLUMN, myLoadImageStatement);
     }
 
     /**
      * Loads a sound from the database
+     *
      * @param soundName name of the sound to be loaded
      * @return an input stream of sound data to be converted to a media object
      */
-    public InputStream loadSound(String soundName){
+    public InputStream loadSound(String soundName) {
         return loadAsset(soundName, SOUND_DATA_COLUMN, myLoadSoundStatement);
     }
 
@@ -104,10 +117,10 @@ public class AssetQuerier extends Querier {
         try {
             statement.setString(1, assetName);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 InputStream imageInputStream = resultSet.getBinaryStream(columnName);
                 resultSet.close();
-                return  imageInputStream;
+                return imageInputStream;
             }
         } catch (SQLException e) {
             System.out.println(COULD_NOT_LOAD_ASSET + e.getMessage());
@@ -116,7 +129,7 @@ public class AssetQuerier extends Querier {
         return null;
     }
 
-    private void saveAsset (String assetName, File assetToSave, PreparedStatement statement) {
+    private void saveAsset(String assetName, File assetToSave, PreparedStatement statement) {
         try {
             BufferedInputStream assetData = new BufferedInputStream(new FileInputStream(assetToSave));
             System.out.println(assetData);
@@ -124,10 +137,20 @@ public class AssetQuerier extends Querier {
             statement.setBinaryStream(2, new BufferedInputStream(new FileInputStream(assetToSave)));
             statement.setBinaryStream(3, new BufferedInputStream(new FileInputStream(assetToSave)));
             statement.executeUpdate();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(COULD_NOT_SAVE_THE_ASSET + e.getMessage());
         } catch (FileNotFoundException e) {
             System.out.println(COULD_NOT_FIND_THE_FILE + assetToSave.toString());
         }
+    }
+
+    public boolean removeImage(String imageName) throws SQLException {
+        myRemoveImageStatement.setString(1, imageName);
+        return myRemoveImageStatement.executeUpdate() > 0;
+    }
+
+    public boolean removeSound(String soundName) throws SQLException {
+        myRemoveSoundStatement.setString(1, soundName);
+        return myRemoveSoundStatement.executeUpdate() > 0;
     }
 }

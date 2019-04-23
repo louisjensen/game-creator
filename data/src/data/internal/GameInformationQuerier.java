@@ -30,12 +30,15 @@ public class GameInformationQuerier extends Querier {
             String.format("SELECT %s FROM %s WHERE %s = ? AND %s IS NOT NULL;", GAME_INFO_COLUMN, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, GAME_INFO_COLUMN);
     private static final String FIND_ALL_GAME_NAMES =
             String.format("SELECT DISTINCT(%s) FROM %s;", GAME_NAME_COLUMN, GAME_INFORMATION_TABLE_NAME);
+    private static final String REMOVE_GAME =
+            String.format("DELETE FROM %s WHERE %s = ? AND %s = ?", GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN);
 
     private PreparedStatement myUpdateGameEntryDataStatement;
     private PreparedStatement myUpdateGameEntryInfoStatement;
     private PreparedStatement myLoadGameDataStatement;
     private PreparedStatement myLoadGameInformationStatement;
     private PreparedStatement myFindAllGameNamesStatement;
+    private PreparedStatement myRemoveGameStatement;
 
     /**
      * GameInformationQuerier constructor
@@ -53,8 +56,9 @@ public class GameInformationQuerier extends Querier {
         myLoadGameDataStatement = myConnection.prepareStatement(LOAD_GAME_DATA);
         myLoadGameInformationStatement = myConnection.prepareStatement(LOAD_GAME_INFORMATION);
         myFindAllGameNamesStatement = myConnection.prepareStatement(FIND_ALL_GAME_NAMES);
+        myRemoveGameStatement = myConnection.prepareStatement(REMOVE_GAME);
         myPreparedStatements = List.of(myUpdateGameEntryDataStatement, myUpdateGameEntryInfoStatement,
-                myLoadGameDataStatement, myLoadGameInformationStatement, myFindAllGameNamesStatement);
+                myLoadGameDataStatement, myLoadGameInformationStatement, myFindAllGameNamesStatement, myRemoveGameStatement);
     }
 
 
@@ -138,5 +142,11 @@ public class GameInformationQuerier extends Querier {
      */
     public void updateGameEntryInfo(String gameName, String authorName, String myRawXML) throws SQLException{
         prepareAndExecuteUpdate(myUpdateGameEntryInfoStatement, gameName, authorName, myRawXML);
+    }
+
+    public boolean removeGame(String gameName, String authorName) throws SQLException{
+        myRemoveGameStatement.setString(1, gameName);
+        myRemoveGameStatement.setString(2, authorName);
+        return myRemoveGameStatement.executeUpdate() > 0;
     }
 }

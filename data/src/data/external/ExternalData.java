@@ -3,6 +3,7 @@ package data.external;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ExternalData {
@@ -94,12 +95,33 @@ public interface ExternalData {
      */
     boolean validateUser (String userName, String password);
 
-    boolean removeUser (String userName);
+    /**
+     * Removes a user from the database
+     * @param userName user name of the user to remove
+     * @return true if the user was successfully removed
+     */
+    boolean removeUser (String userName) throws SQLException;
 
-    boolean removeGame (String gameName, String authorName);
+    /**
+     * Removes a game from the database
+     * @param gameName name of the game to remove
+     * @param authorName author of the game to remove
+     * @return true if game was successfully removed
+     */
+    boolean removeGame (String gameName, String authorName) throws SQLException;
 
-    boolean removeImage (String imageName);
+    /**
+     * Remove an image from the database
+     * @param imageName name of the image to remove
+     * @return true if image was successfully removed
+     */
+    boolean removeImage (String imageName) throws SQLException;
 
-    boolean removeSound (String soundName);
+    /**
+     * Remove a sound from the database
+     * @param soundName name of the sound to remove
+     * @return true if the image was successfully removed
+     */
+    boolean removeSound (String soundName) throws SQLException;
 
 }
