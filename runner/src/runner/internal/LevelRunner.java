@@ -7,7 +7,9 @@ import engine.external.component.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -17,6 +19,8 @@ import javafx.util.Duration;
 import java.util.*;
 
 public class LevelRunner {
+    private PauseButton myPauseButton;
+    private Node myPause;
     private Collection<Entity> myEntities;
     private int mySceneWidth;
     private int mySceneHeight;
@@ -40,7 +44,14 @@ public class LevelRunner {
         myEntities = myEngine.updateState(myCurrentKeys);
         buildStage(stage);
         startAnimation();
+        addPauseButton();
         myStage.show();
+    }
+
+    private void addPauseButton() {
+        myPauseButton = new PauseButton(myAnimation);
+        myPause = myPauseButton.getPauseButton();
+        myGroup.getChildren().add(myPause);
     }
 
     private void buildStage(Stage stage) {
@@ -103,7 +114,8 @@ public class LevelRunner {
     }
 
     private void showEntities(){
-        myGroup.getChildren().clear();
+        myGroup.getChildren().retainAll(myPause);
+        //myGroup.getChildren().clear();
         for(Entity entity : myEntities){
             if(entity.hasComponents(CameraComponent.class)){
                 scrollOnMainCharacter(entity);
