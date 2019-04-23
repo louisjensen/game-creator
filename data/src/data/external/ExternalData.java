@@ -124,6 +124,13 @@ public interface ExternalData {
      */
     boolean removeSound (String soundName) throws SQLException;
 
+    /**
+     * Loads the deserialized game object from the database
+     * @param gameName   name of the game
+     * @param authorName name of the author that wrote the game
+     * @return deserialized game object that needs to be cast
+     * @throws SQLException if operation fails
+     */
     Object loadGameData (String gameName, String authorName) throws SQLException;
 
 }

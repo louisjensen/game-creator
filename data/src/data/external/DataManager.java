@@ -21,7 +21,6 @@ public class DataManager implements ExternalData {
     private static final String COULDNT_UPDATE_GAME_ENTRY_DATA = "Couldn't update game entry data: ";
     private static final String CANT_LOAD_GAME_INFORMATION_XMLS = "Couldn't load game information xmls: ";
     private static final String CANT_UPDATE_GAME_ENTRY_INFO = "Couldn't update game entry information: ";
-    private static final String CANT_LOAD_GAME_DATA_FROM_DATABASE = "Couldn't load game data from database: ";
     private static final String CREATED_GAMES_DIR = "created_games/";
     private static final String CANNOT_READ_XML_FILE = "Cannot read XML file";
     private static final String COULD_NOT_CLOSE_FILES = "Could not close files";
@@ -158,6 +157,7 @@ public class DataManager implements ExternalData {
      * @return deserialized game data that should be cast to a game object and the cast should be checked
      */
     @Override
+    @Deprecated
     public Object loadGameData(String gameName) throws SQLException {
         return loadGameData(gameName, DEFAULT_AUTHOR);
     }
@@ -313,35 +313,65 @@ public class DataManager implements ExternalData {
         return myDatabaseEngine.authenticateUser(userName, password);
     }
 
+    /**
+     * Removes a user account
+     *
+     * @param userName user name of the user to remove
+     * @return true if the user is successfully removed
+     * @throws SQLException if operation fails
+     */
     @Override
     public boolean removeUser(String userName) throws SQLException {
         return myDatabaseEngine.removeUser(userName);
     }
 
+    /**
+     * Removes a game from the database
+     *
+     * @param gameName   name of the game to remove
+     * @param authorName author of the game to remove
+     * @return true if game is successfully removed
+     * @throws SQLException if operation fails
+     */
     @Override
     public boolean removeGame(String gameName, String authorName) throws SQLException {
         return myDatabaseEngine.removeGame(gameName, authorName);
     }
 
+    /**
+     * Removes an image from the database
+     *
+     * @param imageName name of the image to remove
+     * @return true if the image was successfully removed
+     * @throws SQLException if operation fails
+     */
     @Override
     public boolean removeImage(String imageName) throws SQLException {
         return myDatabaseEngine.removeImage(imageName);
     }
 
+    /**
+     * Removes a sound from the database
+     *
+     * @param soundName name of the sound to remove
+     * @return true if the sound was successfully removed
+     * @throws SQLException if operation fails
+     */
     @Override
     public boolean removeSound(String soundName) throws SQLException {
         return myDatabaseEngine.removeSound(soundName);
     }
 
+    /**
+     * Loads the deserialized game object from the database
+     * @param gameName   name of the game
+     * @param authorName name of the author that wrote the game
+     * @return deserialized game object that needs to be cast
+     * @throws SQLException if operation fails
+     */
     @Override
     public Object loadGameData(String gameName, String authorName) throws SQLException {
-        Object ret = null;
-        try {
-            ret = mySerializer.fromXML(myDatabaseEngine.loadGameData(gameName, authorName));
-        } catch (SQLException e) {
-            System.out.println(CANT_LOAD_GAME_DATA_FROM_DATABASE + e.getMessage());
-        }
-        return ret;
+        return mySerializer.fromXML(myDatabaseEngine.loadGameData(gameName, authorName));
     }
 
 
