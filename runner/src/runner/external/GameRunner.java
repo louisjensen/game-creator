@@ -194,12 +194,13 @@ public class GameRunner {
             if(entity.hasComponents(CameraComponent.class)){
                 Double x = (Double) entity.getComponent(XPositionComponent.class).getValue();
                 Double origin = myGroup.getTranslateX();
-
-                if (x < 80 - origin) {
-                    myGroup.setTranslateX(-1 * x + 80);
+                Double xMinBoundary = myScene.getWidth()/5.0;
+                Double xMaxBoundary = myScene.getWidth()/4.0*3;
+                if (x < xMinBoundary - origin) {
+                    myGroup.setTranslateX(-1 * x + xMinBoundary);
                 }
-                if (x > 320 - origin) {
-                    myGroup.setTranslateX(-1 * x + 320);
+                if (x > xMaxBoundary - origin) {
+                    myGroup.setTranslateX(-1 * x + xMaxBoundary);
                 }
             }
 //            Node toAdd = (Node) myEntitiesAndNodes.get(entity);
