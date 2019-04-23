@@ -138,17 +138,6 @@ public abstract class VoogaSystem {
     protected Object getComponentValue(Class<? extends Component> componentClazz,Entity entity, String method){
         return Reflection.callMethod(entity.getComponent(componentClazz),method);
     }
-
-    protected Double getDoubleComponentValue(Class<? extends Component> componentClazz,Entity entity){
-        return (Double)entity.getComponent(componentClazz).getValue();
-    }
-
-    protected Boolean getBooleanComponentValue(Class<? extends Component> componentClazz,Entity entity){
-        return (Boolean)entity.getComponent(componentClazz).getValue();
-    }
-
-    protected String getStringComponentValue(Class<? extends Component> componentClazz,Entity entity){
-        return (String)entity.getComponent(componentClazz).getValue();
-    }
+    
 
 }
