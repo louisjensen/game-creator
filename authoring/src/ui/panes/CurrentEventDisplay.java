@@ -3,26 +3,30 @@ import engine.external.actions.Action;
 import engine.external.conditions.Condition;
 import engine.external.events.Event;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import ui.UIException;
 
 import java.util.*;
 
-public class CurrentEventDisplay extends VBox {
+    class CurrentEventDisplay extends VBox {
     private Event myEvent;
     private Editor myEventRemover;
     private Editor myEventModifier;
     private ResourceBundle myKeyCodes = ResourceBundle.getBundle("keycode");
-    public CurrentEventDisplay(Map<Class<?>, List<?>> myMap, Event myEvent, Editor eventRemover, Editor eventModifier){
+    private ResourceBundle myErrorMessage = ResourceBundle.getBundle("error_messages");
+    private static final String IF = "IF    ";
+    private static final String EDIT = "Edit";
+    private static final String REMOVE = "Remove";
+    private static final String STYLE = "event_options_style.css";
+    private static final String DELIMITER = ".";
+    CurrentEventDisplay(Map<Class<?>, List<?>> myMap, Event myEvent, Editor eventRemover, Editor eventModifier){
         this.myEvent = myEvent;
         this.myEventRemover = eventRemover;
         this.myEventModifier = eventModifier;
@@ -35,25 +39,30 @@ public class CurrentEventDisplay extends VBox {
 
     }
     private void setUpLabel(Map<Class<?>, List<?>> myMap){
-        String labelText = "IF    ";
-        for (Condition c: (List<Condition>)myMap.get(Condition.class)){
-            labelText += c.toString() + "\n";
+        StringBuilder labelText = new StringBuilder(IF);
+        try {
+            for (Condition c : (List<Condition>) myMap.get(Condition.class)) {
+                labelText.append(c.toString()).append("\n");
+            }
+            for (Action a : (List<Action>) myMap.get(Action.class)) {
+                labelText.append("\u26AB ").append(a.toString()).append("\n");
+            }
         }
-        for (Action a: (List<Action>)myMap.get(Action.class)){
-            labelText += "\u26AB " + a.toString() + "\n";
+        catch(ClassCastException e){
+            UIException wrongCast = new UIException(myErrorMessage.getString(this.getClass().getSimpleName()));
+            wrongCast.displayUIException();
         }
-
-        Label myLabel = new Label(labelText);
+        Label myLabel = new Label(labelText.toString());
         myLabel.getStylesheets().clear();
-        myLabel.getStylesheets().add("event_options_style.css");
+        myLabel.getStylesheets().add(STYLE);
         myLabel.setTextAlignment(TextAlignment.LEFT);
-        this.getChildren().add(new Label(labelText));
+        this.getChildren().add(new Label(labelText.toString()));
 
 
     }
     private void setUpEditToolBar(){
-        Button editButton = new Button("Edit");
-        Button removeButton = new Button("Remove");
+        Button editButton = new Button(EDIT);
+        Button removeButton = new Button(REMOVE);
         ChoiceBox<String> keyCode = new ChoiceBox<>();
         setUpKeyCodes(keyCode);
         removeButton.setOnMouseClicked(mouseEvent -> myEventRemover.editEvent(myEvent));
@@ -77,7 +86,7 @@ public class CurrentEventDisplay extends VBox {
         Collections.sort(keyCodesList);
         List<String> removedIndex = new ArrayList<>();
         for (String key: keyCodesList){
-            removedIndex.add(key.substring(key.indexOf(".") + 1));
+            removedIndex.add(key.substring(key.indexOf(DELIMITER) + 1));
         }
         myKeyCodesListing.setItems(FXCollections.observableList(removedIndex));
         myKeyCodesListing.setOnAction(actionEvent -> {

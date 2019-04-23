@@ -23,6 +23,9 @@ public class EventManager extends Stage {
     private AuthoringEntity myEntity;
     private String myEntityName;
     private Refresher refreshEventsListing = () -> refreshEventListing();
+    private static final String TITLE = "'s Events";
+    private static final String ADD_EVENT = "+ Event";
+    private static final String STYLE = "default.css";
     public EventManager(Propertable prop) { // Loads common Events for object instance based on type label
         myEntity = (AuthoringEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
         Scene myDefaultScene = createPane();
@@ -43,20 +46,20 @@ public class EventManager extends Stage {
         this.setMaxHeight(700);
         this.setMaxWidth(800);
         this.setResizable(false);
-        myScene.getStylesheets().add("default.css");
+        myScene.getStylesheets().add(STYLE);
         return myScene;
     }
 
     private VBox createTitle(){
         VBox myEntityTile = new VBox();
         myEntityTile.setAlignment(Pos.CENTER);
-        myEntityTile.getChildren().add(new Label(myEntityName + "'s Events"));
+        myEntityTile.getChildren().add(new Label(myEntityName + TITLE));
         return myEntityTile;
     }
 
     private VBox createEventsToolPane(){
         VBox myTools = new VBox();
-        Button myEventsPopUp = new Button("+ Event");
+        Button myEventsPopUp = new Button(ADD_EVENT);
         myEventsPopUp.setOnMouseClicked(e -> new EventsPopUpPane(myEntity.getEvents(), myEntityName,refreshEventsListing ));
         myTools.getChildren().add(myEventsPopUp);
         return myTools;

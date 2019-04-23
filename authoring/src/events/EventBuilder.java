@@ -39,6 +39,12 @@ public class EventBuilder {
         return (Event) Reflection.createInstance(eventClassName,entityName,myEventOptionsListener.get(COLLIDEE).getValue());
     }
 
+    public Condition createGeneralCondition(Map<String,StringProperty> myEventOptionsListener, Event modifiableEvent) throws Exception{
+        Condition generatedCondition = createGeneralCondition(myEventOptionsListener);
+        modifiableEvent.addConditions(generatedCondition);
+        return generatedCondition;
+    }
+
     public Condition createGeneralCondition(Map<String,StringProperty> myEventOptionsListener) throws Exception{
         ConditionType myConditionType = ConditionType.valueOf(myEventOptionsListener.get(COMPARATOR).getValue().replaceAll(" ",""));
         String conditionClassName = myConditionType.getClassName();
@@ -51,6 +57,11 @@ public class EventBuilder {
             String value = myEventOptionsListener.get(VALUE).getValue();
             return (Condition)Reflection.createInstance(conditionClassName,componentClass,value);
         }
+    }
+    public Action createGeneralAction(Map<String,StringProperty> myEventOptionsListener, Event modifiableEvent) throws Exception{
+        Action generatedAction = createGeneralAction(myEventOptionsListener);
+        modifiableEvent.addActions(generatedAction);
+        return generatedAction;
     }
 
     public Action createGeneralAction(Map<String,StringProperty> myActionOptionsListener) {
