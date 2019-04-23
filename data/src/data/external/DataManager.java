@@ -158,14 +158,8 @@ public class DataManager implements ExternalData {
      * @return deserialized game data that should be cast to a game object and the cast should be checked
      */
     @Override
-    public Object loadGameData(String gameName) {
-        Object ret = null;
-        try {
-            ret = mySerializer.fromXML(myDatabaseEngine.loadGameData(gameName));
-        } catch (SQLException e) {
-            System.out.println(CANT_LOAD_GAME_DATA_FROM_DATABASE + e.getMessage());
-        }
-        return ret;
+    public Object loadGameData(String gameName) throws SQLException {
+        return loadGameData(gameName, DEFAULT_AUTHOR);
     }
 
     /**
@@ -337,6 +331,17 @@ public class DataManager implements ExternalData {
     @Override
     public boolean removeSound(String soundName) throws SQLException {
         return myDatabaseEngine.removeSound(soundName);
+    }
+
+    @Override
+    public Object loadGameData(String gameName, String authorName) throws SQLException {
+        Object ret = null;
+        try {
+            ret = mySerializer.fromXML(myDatabaseEngine.loadGameData(gameName, authorName));
+        } catch (SQLException e) {
+            System.out.println(CANT_LOAD_GAME_DATA_FROM_DATABASE + e.getMessage());
+        }
+        return ret;
     }
 
 

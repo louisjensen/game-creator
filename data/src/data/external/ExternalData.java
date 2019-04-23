@@ -35,7 +35,7 @@ public interface ExternalData {
      * @param gameName the game whose data is to be loaded
      * @return the deserialized game data that should then be cast to a game object
      */
-    Object loadGameData(String gameName) throws FileNotFoundException;
+    Object loadGameData(String gameName) throws FileNotFoundException, SQLException;
 
     /**
      * Saves game information (game center data) to the data base
@@ -123,5 +123,7 @@ public interface ExternalData {
      * @return true if the image was successfully removed
      */
     boolean removeSound (String soundName) throws SQLException;
+
+    Object loadGameData (String gameName, String authorName) throws SQLException;
 
 }

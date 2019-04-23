@@ -21,6 +21,8 @@ public class DataTest {
     private String myFakeGameName1;
     private String myFakeGameName2;
     private String myFakeGameData1;
+    private String myFakeGameData2;
+    private String myFakeGameData3;
     private DataManager myDataManager;
 
     @BeforeEach
@@ -62,6 +64,8 @@ public class DataTest {
         myFakeGameName1 = "fakeGameName1";
         myFakeGameName2 = "fakeGameName2";
         myFakeGameData1 = "fakeGameData1";
+        myFakeGameData2 = "fakeGameData2";
+        myFakeGameData3 = "fakeGameData3";
     }
 
     @Test
@@ -83,9 +87,13 @@ public class DataTest {
     @Test
     public void testSaveAndLoadGameData() {
         // Data can save any object as "game data" and reload it as long as it is casted properly when loaded
-        myDataManager.saveGameData(myFakeGameName1, myUserName1, myFakeGameData1);
-        String loadedData = (String) myDataManager.loadGameData(myFakeGameName1);
-        assertEquals(loadedData, myFakeGameData1);
+        try {
+            myDataManager.saveGameData(myFakeGameName1, myUserName1, myFakeGameData1);
+            String loadedData = (String) myDataManager.loadGameData(myFakeGameName1, myUserName1);
+            assertEquals(loadedData, myFakeGameData1);
+        } catch (SQLException exception){
+            exception.printStackTrace(); // for debugging purposes in the test
+        }
     }
 
     @Test
@@ -94,5 +102,38 @@ public class DataTest {
         DatabaseEngine.getInstance().close();
         assertThrows(SQLException.class, () -> myDataManager.removeUser(myUserName1));
         DatabaseEngine.getInstance().open();
+    }
+
+    @Test
+    public void testSaveOverride() {
+        try {
+            myDataManager.saveGameData(myFakeGameName1, myUserName1, myFakeGameData1);
+            String loadedData = (String) myDataManager.loadGameData(myFakeGameName1, myUserName1);
+            assertEquals(loadedData, myFakeGameData1);
+            myDataManager.saveGameData(myFakeGameName1, myUserName1, myFakeGameData2);
+            loadedData = (String) myDataManager.loadGameData(myFakeGameName1, myUserName1);
+            assertEquals(loadedData, myFakeGameData2);
+        } catch (SQLException exception) {
+            exception.printStackTrace(); // for debugging info in the tests
+        }
+    }
+
+    @Test
+    public void testGameNameAuthorNameUniqueness() {
+        try {
+            myDataManager.saveGameData(myFakeGameName1, myUserName1, myFakeGameData1);
+            myDataManager.saveGameData(myFakeGameName1, myUserName2, myFakeGameData2);
+            myDataManager.saveGameData(myFakeGameName2, myUserName1, myFakeGameData3);
+            String loadedData1 = (String) myDataManager.loadGameData(myFakeGameName1, myUserName1);
+            String loadedData2 = (String) myDataManager.loadGameData(myFakeGameName1, myUserName2);
+            String loadedData3 = (String) myDataManager.loadGameData(myFakeGameName2, myUserName1);
+            assertNotEquals(loadedData1, loadedData2);
+            assertNotEquals(loadedData1, loadedData3);
+            assertEquals(loadedData1, myFakeGameData1);
+            assertEquals(loadedData2, myFakeGameData2);
+            assertEquals(loadedData3, myFakeGameData3);
+        } catch (SQLException exception){
+            exception.printStackTrace(); // for debugging info in tests
+        }
     }
 }

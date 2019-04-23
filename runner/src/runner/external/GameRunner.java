@@ -24,6 +24,7 @@ import runner.internal.TestEngine;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.*;
 
 public class GameRunner {
@@ -66,9 +67,11 @@ public class GameRunner {
         System.out.println("Serialization complete");
 
 
-        myGame = (Game) dm.loadGameData("YeetRevised3");
-
-
+        try {
+            myGame = (Game) dm.loadGameData("YeetRevised3");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 
         myCurrentKeys = new HashSet<KeyCode>();

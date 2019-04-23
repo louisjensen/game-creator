@@ -99,10 +99,6 @@ public class DatabaseEngine {
         myGameInformationQuerier.updateGameEntryInfo(gameName, authorName, myRawXML);
     }
 
-    String loadGameData(String gameName) throws SQLException {
-        return myGameInformationQuerier.loadGameData(gameName);
-    }
-
     void saveImage(String imageName, File imageToSave) {
         myAssetQuerier.saveImage(imageName, imageToSave);
     }
@@ -141,5 +137,9 @@ public class DatabaseEngine {
 
     public boolean removeSound(String soundName) throws SQLException{
         return myAssetQuerier.removeSound(soundName);
+    }
+
+    public String loadGameData(String gameName, String authorName) throws SQLException{
+        return myGameInformationQuerier.loadGameData(gameName, authorName);
     }
 }
