@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface ExternalData {
 
@@ -132,5 +133,19 @@ public interface ExternalData {
      * @throws SQLException if operation fails
      */
     Object loadGameData (String gameName, String authorName) throws SQLException;
+
+    /**
+     * Loads all the images involved in a game specified by prefix
+     * @param prefix the gameName + the authorName
+     * @return a map of the image names to the input stream data
+     */
+    Map<String, InputStream> loadAllImages(String prefix) throws SQLException;
+
+    /**
+     * Loads all the images involved in a game specified by prefix
+     * @param prefix the gameName + the authorName
+     * @return a map of the sound names to the input stream data
+     */
+    Map<String, InputStream> loadAllSounds(String prefix) throws SQLException;
 
 }

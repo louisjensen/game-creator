@@ -7,6 +7,7 @@ import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * DataManager is the wrapper class that allows other modules to interact with the database, saving and loading
@@ -373,6 +374,18 @@ public class DataManager implements ExternalData {
     public Object loadGameData(String gameName, String authorName) throws SQLException {
         return mySerializer.fromXML(myDatabaseEngine.loadGameData(gameName, authorName));
     }
+
+    @Override
+    public Map<String, InputStream> loadAllImages(String prefix) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public Map<String, InputStream> loadAllSounds(String prefix) throws SQLException {
+        return null;
+    }
+
+//    public List<String> loadAllImages(String prefix)
 
 
 }
