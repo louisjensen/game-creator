@@ -103,19 +103,7 @@ public class GameRunner {
     private void printKeys() {
         System.out.println(myCurrentKeys);
     }
-
-    private Node updateNode(Entity entity) {
-        Node toUpdate = (ImageView) entity.getComponent(ImageViewComponent.class).getValue();
-
-
-        List<Double> xyz = getXYZasList(entity);
-
-        toUpdate.setLayoutX(xyz.get(0));
-        toUpdate.setLayoutY(xyz.get(1));
-
-        return toUpdate;
-    }
-
+    
     protected List<Double> getXYZasList(Entity entity){
         List<Double> list = new ArrayList<>();
         XPositionComponent xPositionComponent = (XPositionComponent) entity.getComponent(XPositionComponent.class);
