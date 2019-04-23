@@ -1,5 +1,7 @@
 package data.external;
 
+import data.internal.UserQuerier;
+
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -51,27 +53,11 @@ public class DatabaseEngine {
             TIMESTAMP_COLUMN
     );
 
-    public static final String USERS_TABLE_NAME= "Users";
-    private static final String USERNAME_COLUMN = "UserName";
-    private static final String PASSWORD_COLUMN = "Password";
-    private static final String AUTHORED_GAMES_COLUMN = "AuthoredGames";
-    private static final String LAST_LOGIN_COLUMN = "LastLogin";
-    private static final String FIRST_LOGIN_COLUMN = "FirstLogin";
-    public static final List<String> USERS_COLUMN_NAMES = List.of(
-            USERNAME_COLUMN,
-            USER_ID_COLUMN,
-            PASSWORD_COLUMN,
-            AUTHORED_GAMES_COLUMN,
-            LAST_LOGIN_COLUMN,
-            FIRST_LOGIN_COLUMN
-    );
-
     public static final String CHECKPOINTS_TABLE_NAME = "Checkpoints";
     private static final String LEVEL_OBJECT_COLUMN = "LevelObjectXML";
     private static final String CHECKPOINT_COLUMN = "CheckpointTime";
     public static final List<String> CHECKPOINTS_COLUMN_NAMES = List.of(
-            USERNAME_COLUMN,
-            USER_ID_COLUMN,
+            UserQuerier.USERNAME_COLUMN,
             GAME_NAME_COLUMN,
             LEVEL_OBJECT_COLUMN,
             CHECKPOINT_COLUMN
@@ -133,14 +119,9 @@ public class DatabaseEngine {
             "SELECT " + SOUND_DATA_COLUMN + " FROM " + SOUNDS_TABLE_NAME + " WHERE " + SOUND_NAME_COLUMN + " = ?";
     private static final String LOAD_IMAGE =
             "SELECT " + IMAGE_DATA_COLUMN + " FROM " + IMAGES_TABLE_NAME + " WHERE " + IMAGE_NAME_COLUMN + " = ?";
-    private static final String GET_HASHED_PASSWORD = "SELECT " + PASSWORD_COLUMN + " FROM " + USERS_TABLE_NAME + " " +
-            "WHERE " + USERNAME_COLUMN + " = ?";
-    private static final String CREATE_USER =
-            "INSERT INTO " + USERS_TABLE_NAME + " (" + USERNAME_COLUMN + ", " + PASSWORD_COLUMN + ") VALUES (?, ?)";
 
 
     public static final String DEFAULT_AUTHOR = "DefaultAuthor";
-    public static final String HASH_ALGORITHM = "SHA-256";
 
     private Connection myConnection;
     private PreparedStatement myUpdateGameEntryDataStatement;
@@ -152,8 +133,6 @@ public class DatabaseEngine {
     private PreparedStatement myUpdateSoundsStatement;
     private PreparedStatement myLoadImageStatement;
     private PreparedStatement myLoadSoundStatement;
-    private PreparedStatement myGetPasswordStatement;
-    private PreparedStatement myCreateUserStatement;
 
     private static DatabaseEngine myInstance = new DatabaseEngine();
 
@@ -188,8 +167,7 @@ public class DatabaseEngine {
             myUpdateSoundsStatement = myConnection.prepareStatement(UPDATE_SOUNDS);
             myLoadImageStatement = myConnection.prepareStatement(LOAD_IMAGE);
             myLoadSoundStatement = myConnection.prepareStatement(LOAD_SOUND);
-            myGetPasswordStatement = myConnection.prepareStatement(GET_HASHED_PASSWORD);
-            myCreateUserStatement = myConnection.prepareStatement(CREATE_USER);
+
         } catch (SQLException exception){
             System.out.println("Statement Preparation Failed " + exception.getMessage());
         }
@@ -311,47 +289,4 @@ public class DatabaseEngine {
         prepareAndExecuteUpdate(myUpdateGameEntryInfoStatement, gameName, authorName, myRawXML);
     }
 
-    public boolean authenticateUser(String userName, String password) {
-        try {
-            String hashedPassword = generateHashedPassword(password);
-            String storedHash = retrieveStoredHash(userName);
-            return hashedPassword.equals(storedHash);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            System.out.println("Could not validate user: " + e.getMessage());
-        }
-        return false;
-    }
-
-    public boolean createUser(String userName, String password) throws SQLException{
-        myCreateUserStatement.setString(1, userName);
-        try {
-            myCreateUserStatement.setString(2, generateHashedPassword(password));
-        } catch (NoSuchAlgorithmException e) {
-            System.out.println("Could not generate hash: " + e.getMessage());
-        }
-        int updates = myCreateUserStatement.executeUpdate();
-        return updates == 1;
-    }
-
-    private String retrieveStoredHash(String userName) throws SQLException{
-        myGetPasswordStatement.setString(1, userName);
-        ResultSet resultSet = myGetPasswordStatement.executeQuery();
-        if (resultSet.next()){
-            return resultSet.getString(PASSWORD_COLUMN);
-        } else {
-            return "";
-        }
-    }
-
-    private String generateHashedPassword(String password) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance(HASH_ALGORITHM);
-        byte[] bytes = messageDigest.digest(password.getBytes());
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < bytes.length; i++){
-            stringBuilder.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        return stringBuilder.toString();
-    }
 }
