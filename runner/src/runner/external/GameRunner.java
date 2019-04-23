@@ -21,7 +21,8 @@ public class GameRunner {
 
     public GameRunner(String game) throws FileNotFoundException {
         myGame = loadGameObject(game);
-        runLevel();
+        Level levelOne = myGame.getLevels().get(0);
+        runLevel(levelOne);
     }
 
     private Game loadGameObject(String path){
@@ -34,11 +35,10 @@ public class GameRunner {
         return (Game) dm.loadGameData("YeetRevised2");
     }
 
-    private void runLevel(){
-        myLevels = myGame.getLevels();
+    private void runLevel(Level currentLevel){
         mySceneWidth = myGame.getWidth();
         mySceneHeight = myGame.getHeight();
         myGameStage = new Stage();
-        new LevelRunner(myLevels.get(0), mySceneWidth, mySceneHeight, myGameStage);
+        new LevelRunner(currentLevel, mySceneWidth, mySceneHeight, myGameStage);
     }
 }
