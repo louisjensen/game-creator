@@ -6,6 +6,6 @@
         <VisibilityComponent>true</VisibilityComponent>
         <WidthComponent>100.0</WidthComponent>
         <HeightComponent>50.0</HeightComponent>
-        <GravityComponent>0.0</GravityComponent>
+        <YAccelerationComponent>0.0</YAccelerationComponent>
     </Components>
 </DefaultEntity>

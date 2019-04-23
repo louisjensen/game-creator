@@ -3,17 +3,23 @@ package ui.panes;
 import engine.external.Entity;
 import engine.external.component.NameComponent;
 import engine.external.component.SpriteComponent;
-import javafx.event.EventHandler;
-import javafx.scene.input.*;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import ui.*;
+import ui.AuthoringEntity;
+import ui.DefaultTypeXMLReaderFactory;
+import ui.EntityField;
+import ui.Utility;
 import ui.manager.ObjectManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -25,9 +31,10 @@ public class UserCreatedTypesPane extends VBox {
     private static final ResourceBundle myResources = ResourceBundle.getBundle("default_entity_type");
     private static final ResourceBundle myGeneralResources = ResourceBundle.getBundle("authoring_general");
     private ObjectManager myObjectManager;
-    private DefaultTypesFactory myDefaultTypesFactory;
+    private DefaultTypeXMLReaderFactory myDefaultTypesFactory;
     private Entity myDraggedEntity;
     private AuthoringEntity myDraggedAuthoringEntity;
+    private Map<String, List<Pane>> myCategoryToList;
 
 
     /**
@@ -38,7 +45,8 @@ public class UserCreatedTypesPane extends VBox {
         myObjectManager = objectManager;
         String title = myResources.getString("UserCreatedTitle");
         myEntityMenu = new EntityMenu(title);
-        myDefaultTypesFactory = new DefaultTypesFactory();
+        myDefaultTypesFactory = new DefaultTypeXMLReaderFactory();
+        myCategoryToList = new HashMap<>();
         populateCategories();
         this.getChildren().add(myEntityMenu);
     }
@@ -64,9 +72,10 @@ public class UserCreatedTypesPane extends VBox {
         }
     }
 
-    public void addUserDefinedType(String category, Entity entity,String basedOn){
+    public void addUserDefinedType(Entity entity,String defaultName){
         String label = (String) entity.getComponent(NameComponent.class).getValue();
-        System.out.println("Label: " + label);
+        String category = myDefaultTypesFactory.getCategory(defaultName);
+        myCategoryToList.putIfAbsent(category, new ArrayList<>());
         String imageName = (String) entity.getComponent(SpriteComponent.class).getValue();
         try {
             AuthoringEntity originalAuthoringEntity = new AuthoringEntity(entity, myObjectManager);
@@ -74,19 +83,38 @@ public class UserCreatedTypesPane extends VBox {
             String assetImagesFilePath = myGeneralResources.getString("images_filepath");
             ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(assetImagesFilePath + "/" + imageName), originalAuthoringEntity);
             UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, originalAuthoringEntity);
-            List<Pane> paneList = new ArrayList<>();
-            paneList.add(subPane);
-            myEntityMenu.addToDropDown(category, paneList);
+            myCategoryToList.get(category).add(subPane);
+            myEntityMenu.setDropDown(category, myCategoryToList.get(category));
             subPane.setOnDragDetected(mouseEvent -> {
-                myDraggedEntity = myDefaultTypesFactory.getDefaultEntity(category, basedOn);
+                myDraggedEntity = myDefaultTypesFactory.createEntity(defaultName);
                 myDraggedEntity.addComponent(new NameComponent(originalAuthoringEntity.getPropertyMap().get(EntityField.LABEL)));
-                myDraggedEntity.addComponent(new SpriteComponent(imageName));
+                myDraggedEntity.addComponent(new SpriteComponent(originalAuthoringEntity.getPropertyMap().get(EntityField.IMAGE)));
                 myDraggedAuthoringEntity = originalAuthoringEntity;
                 Utility.setupDragAndDropImage(imageWithEntity);
             });
+            subPane.setOnContextMenuRequested(contextMenuEvent -> handleRightClick(contextMenuEvent, subPane, category));
         } catch (FileNotFoundException e) {
             //TODO: deal with this
             e.printStackTrace();
+        }
+    }
+
+    private void handleRightClick(ContextMenuEvent contextMenuEvent, UserDefinedTypeSubPane userDefinedTypeSubPane, String category){
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem menuItem = new MenuItem();
+        menuItem.setText("Delete");
+        menuItem.setOnAction(actionEvent -> {
+            myCategoryToList.get(category).remove(userDefinedTypeSubPane);
+            myObjectManager.removeEntityType(userDefinedTypeSubPane.getAuthoringEntity());
+            updateEntityMenu();
+        });
+        contextMenu.getItems().add(menuItem);
+        contextMenu.show(userDefinedTypeSubPane, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
+    }
+
+    private void updateEntityMenu(){
+        for(Map.Entry<String, List<Pane>> entry : myCategoryToList.entrySet()){
+            myEntityMenu.setDropDown(entry.getKey(), entry.getValue());
         }
     }
 }

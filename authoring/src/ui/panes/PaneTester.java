@@ -1,7 +1,6 @@
 package ui.panes;
 
 import javafx.application.Application;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -24,6 +23,7 @@ public class PaneTester extends Application {
     private static final String TEST_STYLESHEET = "default.css";
 
     @Override
+    @SuppressWarnings("Duplicates")
     public void start(Stage testStage) {
         testStage.setTitle("Pane Test");
         testStage.setResizable(false);
@@ -31,7 +31,7 @@ public class PaneTester extends Application {
         addTestLabels(manager.getLabelManager());
         AuthoringEntity obj1 = populateTestObjects(manager);
         SimpleObjectProperty<Propertable> testObj = new SimpleObjectProperty<>(obj1);
-        SimpleObjectProperty<Propertable> testLvl = new SimpleObjectProperty<>(new AuthoringLevel("Level_1"));
+        SimpleObjectProperty<Propertable> testLvl = new SimpleObjectProperty<>(new AuthoringLevel("Level_1", manager));
 
         try {
             PropertiesPane testPaneObj = new PropertiesPane(manager, PropertableType.OBJECT, testObj, manager.getLabelManager());

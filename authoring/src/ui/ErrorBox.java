@@ -8,7 +8,7 @@ import javafx.scene.control.Alert;
  */
 public class ErrorBox extends Alert {
 
-    public static final String DEFAULT_STYLE = "default.css";
+    private static final String DEFAULT_STYLE = "default.css";
 
     /**
      * Creates an ErrorBox with given type and message
