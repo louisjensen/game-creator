@@ -37,7 +37,6 @@ public class GameRunner {
     private Stage myStage;
     private Group myGroup;
     private Scene myScene;
-    //private TestEngine myEngine;
     private Engine myEngine;
     private Timeline myAnimation;
     private static final int FRAMES_PER_SECOND = 60;
@@ -48,8 +47,6 @@ public class GameRunner {
     private Game myGame;
     private Set<KeyCode> myCurrentKeys;
 
-
-
     public GameRunner(String game) throws FileNotFoundException{
        /* Actual way to get game object
         GameRunner will have parameter String name, not Game game
@@ -58,18 +55,11 @@ public class GameRunner {
         DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
         //dm2.serializeObject();
         Game gameMade = dm2.getGame(game);
-
-
         DataManager dm = new DataManager();
         dm.createGameFolder("YeetRevised2");
         dm.saveGameData("YeetRevised2", gameMade);
         System.out.println("Serialization complete");
-
-
         myGame = (Game) dm.loadGameData("YeetRevised2");
-
-
-
 
         myCurrentKeys = new HashSet<KeyCode>();
         myLevels = myGame.getLevels();
@@ -83,11 +73,8 @@ public class GameRunner {
         myScene.setFill(Color.BEIGE);
         myScene.setOnKeyPressed(e -> handleKeyPress(e.getCode()));
         myScene.setOnKeyReleased(e -> handleKeyRelease(e.getCode()));
-       // myEntitiesAndNodes = initializeMap();
         showEntities();
-
         myStage.setScene(myScene);
-
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         myAnimation = new Timeline();
         myAnimation.setCycleCount(Timeline.INDEFINITE);
@@ -106,35 +93,8 @@ public class GameRunner {
         myCurrentKeys.remove(code);
     }
 
-    private HashMap<Entity, Node> initializeMap() {
-        HashMap<Entity, Node> map = new HashMap<Entity, Node>();
-        for(Entity entity : myEntities){
-            //Add Error checking to set defaults
-
-            List<Double> xyz = getXYZasList(entity);
-            WidthComponent widthComponent = (WidthComponent) entity.getComponent(WidthComponent.class);
-//            Double width = (Double) widthComponent.getValue();
-//            HeightComponent heightComponent = (HeightComponent) entity.getComponent(HeightComponent.class);
-//            Double height = (Double) heightComponent.getValue();
-//            //ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
-//            //ImageView image = (ImageView) imageViewComponent.getValue();
-//            ImageView image = new ImageView("basketball.png");
-//
-//            image.setFitWidth(width);
-//            image.setFitHeight(height);
-////            image.setSmooth(false);
-//            image.setLayoutX(xyz.get(0));
-//            image.setLayoutY(xyz.get(1));
-//
-//            map.put(entity, image);
-
-        }
-        return map;
-    }
-
     private void step (double elapsedTime) {
         myEntities = myEngine.updateState(myCurrentKeys);
-       // updateMap();
         showEntities();
         printKeys();
         printEntityLocations();
@@ -142,12 +102,6 @@ public class GameRunner {
 
     private void printKeys() {
         System.out.println(myCurrentKeys);
-    }
-
-    private void updateMap(){
-        for(Entity entity : myEntities){
-            myEntitiesAndNodes.put(entity, updateNode(entity));
-        }
     }
 
     private Node updateNode(Entity entity) {
@@ -180,11 +134,6 @@ public class GameRunner {
         for(Entity entity : myEntities){
             List<Double> xyz = getXYZasList(entity);
             System.out.println(xyz);
-            //TODO: refactor code to use XPositionComponent, YPositionComponent, ZPositionComponent :)
-
-//            PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
-//            Point3D position = (Point3D) positionComponent.getValue();
-//            VoogaSystem.out.println(position.getX());
         }
     }
 
@@ -203,21 +152,10 @@ public class GameRunner {
                     myGroup.setTranslateX(-1 * x + xMaxBoundary);
                 }
             }
-//            Node toAdd = (Node) myEntitiesAndNodes.get(entity);
-//            System.out.println("begin");
-//            System.out.println(myGroup);
-//            System.out.println(myGroup.getChildren());
-//            System.out.println(myEntitiesAndNodes);
-//            System.out.println(myEntitiesAndNodes.get(entity));
-//            System.out.println(entity);
-//            System.out.println("end");
-//            myGroup.getChildren().add((Node) myEntitiesAndNodes.get(entity));
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
             System.out.println(imageViewComponent);
             ImageView image = (ImageView) imageViewComponent.getValue();
-
             myGroup.getChildren().add(image);
         }
     }
-
 }
