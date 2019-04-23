@@ -5,6 +5,8 @@ import java.sql.SQLException;
 
 public abstract class Querier {
 
+    protected static final String ON_DUPLICATE_UPDATE = "ON DUPLICATE KEY UPDATE";
+
     protected Connection myConnection;
 
     public Querier(Connection connection) throws SQLException{
