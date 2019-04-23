@@ -1,9 +1,9 @@
 package engine.external.component;
 
-//TODO: Figure out type of value component
+@Deprecated
 public class ValueComponent<T> extends Component<T> {
 
-    public ValueComponent(T t){
+    public ValueComponent(T t) {
         super(t);
     }
 }
