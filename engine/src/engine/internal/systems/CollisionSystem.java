@@ -148,19 +148,19 @@ public class CollisionSystem extends VoogaSystem {
     }
 
     private boolean wasLeftTo(Entity e1, Entity e2){
-        return (Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)<(Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE);
+        return ((Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)+(Double)getComponentValue(WIDTH_COMPONENT_CLASS,e1))<(Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE);
     }
 
     private boolean wasRightTo(Entity e1, Entity e2){
-        return (Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)>(Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE);
+        return (Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)>((Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE)+(Double)getComponentValue(WIDTH_COMPONENT_CLASS,e2));
     }
 
     private boolean wasAbove(Entity e1, Entity e2){
-        return (Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)<(Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE);
+        return ((Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)+(Double)getComponentValue(HEIGHT_COMPONENT_CLASS,e1))<(Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE);
     }
 
     private boolean wasBelow(Entity e1, Entity e2){
-        return (Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)>(Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE);
+        return (Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)>((Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE)+(Double)getComponentValue(HEIGHT_COMPONENT_CLASS,e2));
     }
 
     private boolean isMovingLeft(Entity entity){
