@@ -1,10 +1,7 @@
 package ui;
 
 
-import engine.external.actions.DestroyAction;
-import engine.external.actions.HealthAction;
-import engine.external.actions.NumericAction;
-import engine.external.actions.YPositionAction;
+import engine.external.actions.*;
 import engine.external.conditions.GreaterThanCondition;
 import engine.external.conditions.LessThanCondition;
 import engine.external.component.XPositionComponent;
@@ -56,14 +53,14 @@ public class EventManagerTester extends Application {
     private void makeTestEvents(AuthoringEntity currentEntity){
         List<Event> myTesterEvents = new ArrayList<>();
         RightCollisionEvent myRightCollisionEvent =  new RightCollisionEvent(currentEntity.getPropertyMap().get(EntityField.LABEL),
-                currentEntity.getPropertyMap().get(EntityField.LABEL));
+               "object2");
         myRightCollisionEvent.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, -10.0));
         myRightCollisionEvent.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE, -10.0));
         myTesterEvents.add(myRightCollisionEvent);
         Event myMultipleConditionEvent = new Event("object1");
         GreaterThanCondition myXBound = new GreaterThanCondition(new XPositionComponent(0.0).getClass(),30.0);
         LessThanCondition myYBound = new LessThanCondition(new YPositionComponent(20.0).getClass(),0.0);
-        myMultipleConditionEvent.addActions(new DestroyAction(Boolean.TRUE));
+        myMultipleConditionEvent.addActions(new SpriteAction("Happy Sprite"));
         myMultipleConditionEvent.addConditions(myXBound);
         myMultipleConditionEvent.addConditions(myYBound);
         myTesterEvents.add(myMultipleConditionEvent);

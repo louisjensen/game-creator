@@ -26,14 +26,17 @@ public class EventsPopUpPane extends Stage {
     private static final String SAVE = "Save";
     private static final String CANCEL = "Cancel";
 
+    private static final String STYLE = "default.css";
+
 
     public EventsPopUpPane(ObservableList<Event> myEntityEvents, String myEntityName, Refresher myEventsRefresher){
         VBox eventTypeChooser = setUpScene();
         HBox buttonOptions = setUpButtons(myEntityEvents,myEntityName,myEventsRefresher);
 
         eventTypeChooser.getChildren().add(buttonOptions);
-
         Scene myScene = new Scene(eventTypeChooser);
+        myScene.getStylesheets().add(STYLE);
+
         this.setScene(myScene);
         this.showAndWait();
     }

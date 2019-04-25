@@ -4,6 +4,7 @@ import center.external.CenterView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import page.CreateNewGamePage;
+import page.NewUserPage;
 import page.SplashPage;
 import page.WelcomeUserPage;
 import runner.external.Game;
@@ -18,11 +19,12 @@ public class SceneManager {
     private SplashPage myInitialPage;
     private WelcomeUserPage myWelcomeUserPage;
     private CreateNewGamePage myNewGamePage;
-
+    private NewUserPage myNewUserPage;
     private SwitchToUserOptions switchToWelcomeUserPage = this::goToWelcomeUserPage;
     private SwitchToUserOptions switchToNewGamePage = this::goToUserOptions;
     private SwitchToAuthoring switchToAuthoring = this::goToAuthoring;
     private SwitchToUserOptions switchToGameCenter = this::goToGameCenter;
+    private SwitchToUserOptions switchToNewUserPage = this::goToNewUserPage;
     private Stage myStage;
     /**
      * The SceneManager class distributes lambdas among the different scenes, depending upon which scene they need
@@ -41,10 +43,11 @@ public class SceneManager {
     }
     private void makePages(){
         myWelcomeUserPage = new WelcomeUserPage(switchToNewGamePage,switchToGameCenter);
-        myInitialPage = new SplashPage(switchToWelcomeUserPage);
+        myInitialPage = new SplashPage(switchToWelcomeUserPage,switchToNewUserPage);
         myNewGamePage = new CreateNewGamePage(switchToAuthoring,switchToGameCenter);
+        myNewUserPage = new NewUserPage(switchToWelcomeUserPage);
     }
-
+    private void goToNewUserPage(){ myScene.setRoot(myNewUserPage);}
     private void goToWelcomeUserPage(){
         myScene.setRoot(myWelcomeUserPage);
     }

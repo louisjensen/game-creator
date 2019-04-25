@@ -9,13 +9,16 @@ import java.util.Collection;
 import java.util.function.Predicate;
 
 public class CollisionCondition extends Condition {
-    String myDirection;
+    private String myDirection;
+    private String myEntity;
+    private static final String COLLIDEDCLASS = "CollidedComponent";
+    private static final String COLLISION = " Collision with ";
     public CollisionCondition(Class<? extends Component> directionalCollidedComponent, String entityType) {
         setPredicate((Predicate<Entity> & Serializable) (entity ->
                 ((Collection<Entity>)entity.getComponent(directionalCollidedComponent).getValue()).stream().anyMatch((Predicate<Entity> & Serializable) entity2 ->
                         matchNames(entityType, entity2)
                 )));
-
+        myEntity = entityType;
         myDirection = directionalCollidedComponent.getSimpleName();
     }
 
@@ -24,7 +27,7 @@ public class CollisionCondition extends Condition {
     }
     @Override
     public String toString(){
-        return myDirection;
+        return myDirection.replace(COLLIDEDCLASS,"") + COLLISION + myEntity;
     }
 
 }
