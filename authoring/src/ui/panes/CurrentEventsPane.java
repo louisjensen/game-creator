@@ -16,7 +16,7 @@ public class CurrentEventsPane extends ScrollPane {
         myCurrentEventsRefresher = eventsRefresher;
         VBox myEventsListing = new VBox();
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
-        this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+        this.setVbarPolicy(ScrollBarPolicy.ALWAYS);
         myEventsListing.getStyleClass().add(CSS_CLASS);
         Editor myEditor = this::editCurrentEvent;
         Editor myRemover = this::removeCurrentEvent;
@@ -27,7 +27,7 @@ public class CurrentEventsPane extends ScrollPane {
             }
         }
         this.setContent(myEventsListing);
-        //this.getStyleClass().add(CSS_CLASS);
+        this.getStyleClass().add(CSS_CLASS);
         this.setFitToWidth(true);
 
     }

@@ -65,15 +65,12 @@ import java.util.*;
         Button editButton = new Button(EDIT);
         Button removeButton = new Button(REMOVE);
         ChoiceBox<String> keyCode = new ChoiceBox<>();
-        keyCode.setMinSize(275,49);
-        keyCode.setMaxSize(275,49);
 
         setUpKeyCodes(keyCode);
         removeButton.setOnMouseClicked(mouseEvent -> myEventRemover.editEvent(myEvent));
         editButton.setOnMouseClicked(mouseEvent -> myEventModifier.editEvent(myEvent));
 
         VBox buttons = new VBox();
-        buttons.setAlignment(Pos.CENTER);
         buttons.getChildren().add(editButton);
         buttons.getChildren().add(removeButton);
         buttons.getChildren().add(keyCode);

@@ -312,15 +312,12 @@
 }
 
 .current-events-pane {
-    -fx-min-height: 500;
     -fx-min-width: 900;
-    -fx-max-height: 500;
     -fx-max-width: 900;
 }
 
 .current-events-pane .scroll-pane {
     -fx-background-color: transparent;
-    -fx-pref-height: 300;
     -fx-fit-to-width: true;
     -fx-border-color: #202020;
     -fx-alignment: center;
@@ -402,8 +399,8 @@
 }
 
 .event-manager {
-    -fx-min-height: 600;
     -fx-min-width: 900;
+    -fx-max-height: 600;
 }
 
 .event-manager-vbox {
@@ -420,13 +417,15 @@
 
 .event-manager .center-pane {
     -fx-alignment: center;
+    -fx-max-height: infinity;
 }
 
 .event-manager .scroll-pane {
     -fx-background-color: transparent;
-    -fx-pref-height: 300;
+    -fx-max-height: infinity;
     -fx-fit-to-width: true;
     -fx-border-color: #202020;
+
 }
 
 .event-manager .list-view {
@@ -499,4 +498,9 @@
 .event-editor .button{
     -fx-min-width: 350;
     -fx-max-width: 350;
+}
+
+.event-pop-up {
+    -fx-min-height: 400;
+    -fx-min-width: 500;
 }
