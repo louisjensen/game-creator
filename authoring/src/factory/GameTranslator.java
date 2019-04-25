@@ -74,7 +74,7 @@ public class GameTranslator {
     }
 
     private Entity translateEntity(AuthoringEntity authEntity) {
-        Entity basisEntity = authEntity.getBackingEntity();
+        Entity basisEntity = new Entity();
 
         // TODO account for new property types later
         addDoubleComponent(basisEntity, authEntity, XPositionComponent.class, EntityField.X); // Components!!!

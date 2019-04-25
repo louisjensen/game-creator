@@ -34,8 +34,8 @@ public enum EntityField {
     X (XPositionComponent.class, "X", "0.0", false, true, true),
     Y (YPositionComponent.class, "Y", "0.0", false, true, true),
     Z (ZPositionComponent.class, "Z", "0.0", false, true, false),
-    XSCALE (WidthComponent.class, "XScale", "0.0", false, true, true),
-    YSCALE (HeightComponent.class, "YScale" , "0.0", false, true, true),
+    XSCALE (WidthComponent.class, "XScale", "0.0", true, true, true),
+    YSCALE (HeightComponent.class, "YScale" , "0.0", true, true, true),
 
     CAMERA (CameraComponent.class, "Camera", "false", false, true, false),
     VISIBLE (VisibilityComponent.class, "Visible", "true", false, true, false),

@@ -27,6 +27,7 @@ public class ObjectManager {
     private LabelManager myLabelManager;
     private ObservableList<AuthoringLevel> myLevels;
     private ObjectProperty<Propertable> myCurrentLevel;
+    private Map<String, AuthoringEntity> myEntityTypeMap;
 
     /**
      * Class that keeps track of every single instance of an Entity, across Levels, for the purposes of authoring environment
@@ -39,6 +40,7 @@ public class ObjectManager {
         myLevels = FXCollections.observableArrayList(new ArrayList<>());
         myLabelManager.getLabels(EntityField.GROUP).addListener((ListChangeListener<? super String>) change -> groupRemoveAction(change));
         myCurrentLevel = levelProperty;
+        myEntityTypeMap = new HashMap<>();
     }
 
     /**
