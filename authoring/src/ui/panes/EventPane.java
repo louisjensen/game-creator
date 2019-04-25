@@ -1,10 +1,9 @@
 package ui.panes;
-import actions.Action;
-import actions.HealthAction;
-import actions.NumericAction;
-import events.Event;
+import engine.external.actions.Action;
+import engine.external.actions.HealthAction;
+import engine.external.actions.NumericAction;
+import engine.external.events.Event;
 import events.EventFactory;
-import events.EventType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,13 +19,12 @@ import ui.UIException;
 import ui.Utility;
 import ui.manager.Refresher;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
+
 /**
- * The EventPane displays a list of possible events that user may add. Upon selection of one of these options,
+ * The EventPane displays a list of possible engine.external.events that user may add. Upon selection of one of these options,
  * a window will pop up specific to that particular action for the user to input values needed to instantiate such
  * an event, which is then tied to the current entity of concern. Additionally, this pane will use reflection to
  * also instantiate Actions that the entity in focus will perform when the Event occurs while the game is running
@@ -53,50 +51,32 @@ public class EventPane extends Stage {
 
     public EventPane(String eventDisplayName, String actorName,
                      ObservableList<Event> myEvents, Refresher refreshEventOptions) throws UIException{
-        myEventName = eventDisplayName.replaceAll(" ","");
-        myClassName = ResourceBundle.getBundle(EVENT_CLASS_NAME).getString(myEventName);
-        
-        String eventDisplayOptions = ResourceBundle.getBundle(EVENT_PARAMETERS).getString(myEventName);
-        setUpEvent(eventDisplayOptions, actorName);
-
-        myEventDisplay = new VBox();
-        VBox myActions = setUpActions();
-        VBox myEventButtons = new VBox();
-
-        myEventDisplay.getChildren().add(myEventParameters);
-        myEventButtons.getChildren().add(makeButtons(myEvents,refreshEventOptions));
-
-        myEventDisplay.getChildren().add(myActions);
-        myEventDisplay.getChildren().add(myEventButtons);
-        myEventDisplay.getStylesheets().add("default.css");
-
-        Scene myScene = new Scene(myEventDisplay);
-        this.setScene(myScene);
-        this.show();
+//        myEventName = eventDisplayName.replaceAll(" ","");
+//        myClassName = ResourceBundle.getBundle(EVENT_CLASS_NAME).getString(myEventName);
+//
+//        String eventDisplayOptions = ResourceBundle.getBundle(EVENT_PARAMETERS).getString(myEventName);
+//        setUpEvent(eventDisplayOptions, actorName);
+//
+//        myEventDisplay = new VBox();
+//        VBox myActions = setUpActions();
+//        VBox myEventButtons = new VBox();
+//
+//        myEventDisplay.getChildren().add(myEventParameters);
+//        myEventButtons.getChildren().add(makeButtons(myEvents,refreshEventOptions));
+//
+//        myEventDisplay.getChildren().add(myActions);
+//        myEventDisplay.getChildren().add(myEventButtons);
+//        myEventDisplay.getStylesheets().add("default.css");
+//
+//        Scene myScene = new Scene(myEventDisplay);
+//        this.setScene(myScene);
+//        this.show();
     }
 
     private VBox setUpActions(){
         VBox actionsPanel = new VBox();
-        ComboBox<Button> myActionsListing = myEventFactory.createBoxFromResources(ACTION_LISTING);
-//        myActionsListing.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//                displayActionOptions(myActionsListing.getValue().getText());
-//            }
-//        });
-//        List<Label> simplisticActionsListing = new ArrayList<>();
-//        for (Button b: myActionsListing.getItems()) {
-//            Label currentLabel = new Label(b.getText());
-//            currentLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//                @Override
-//                public void handle(MouseEvent mouseEvent) {
-//                    displayActionOptions("hi");
-//                }
-//            });
-//            simplisticActionsListing.add(currentLabel);
-//        }
-//        ComboBox<Label> simplisticActions = new ComboBox<Label>(FXCollections.observableList(simplisticActionsListing));
-        actionsPanel.getChildren().add(myActionsListing);
+//        ComboBox<Button> myActionsListing = myEventFactory.createBoxFromResources(ACTION_LISTING);
+//        actionsPanel.getChildren().add(myActionsListing);
         return actionsPanel;
 
     }
@@ -134,29 +114,29 @@ public class EventPane extends Stage {
 
 
     private void setUpEvent(String eventDisplayOptions, String actorName) throws UIException {
-        eventParameters = new Object[eventDisplayOptions.split(",").length + 1];
-        eventParameters[0] = actorName;
-        int paramCounter = 1;
-        for (String nodeType: eventDisplayOptions.split(",")) {
-            String methodName = nodeType.substring(0,nodeType.indexOf("::"));
-            String methodParameter = nodeType.substring(nodeType.indexOf("::") + 2);
-            try {
-                Method m = myEventFactory.getClass().getDeclaredMethod(methodName, String.class);
-                Object[] paramMethod = {methodParameter};
-                Object addedOption = m.invoke(myEventFactory,paramMethod);
-                myEventParameters.getChildren().add((Node)addedOption);
-                if (addedOption instanceof ComboBox<?>) {
-                    eventParameters[paramCounter] = ((ComboBox<?>)addedOption).getValue().toString();
-                }
-                if (addedOption instanceof TextField)
-                    eventParameters[paramCounter] = ((TextField)addedOption).getText();
-                paramCounter++;
-            }
-            catch (Exception e){
-                throw new UIException(INVALID_EVENT_EXCEPTION);
-            }
-
-        }
+//        eventParameters = new Object[eventDisplayOptions.split(",").length + 1];
+//        eventParameters[0] = actorName;
+//        int paramCounter = 1;
+//        for (String nodeType: eventDisplayOptions.split(",")) {
+//            String methodName = nodeType.substring(0,nodeType.indexOf("::"));
+//            String methodParameter = nodeType.substring(nodeType.indexOf("::") + 2);
+//            try {
+//                Method m = myEventFactory.getClass().getDeclaredMethod(methodName, String.class);
+//                Object[] paramMethod = {methodParameter};
+//                Object addedOption = m.invoke(myEventFactory,paramMethod);
+//                myEventParameters.getChildren().add((Node)addedOption);
+//                if (addedOption instanceof ComboBox<?>) {
+//                    eventParameters[paramCounter] = ((ComboBox<?>)addedOption).getValue().toString();
+//                }
+//                if (addedOption instanceof TextField)
+//                    eventParameters[paramCounter] = ((TextField)addedOption).getText();
+//                paramCounter++;
+//            }
+//            catch (Exception e){
+//                throw new UIException(INVALID_EVENT_EXCEPTION);
+//            }
+//
+//        }
     }
 
     private Node makeButtons(ObservableList<Event> userMadeEvents, Refresher refreshOptions){
@@ -165,7 +145,7 @@ public class EventPane extends Stage {
             @Override
             public void handle(ActionEvent actionEvent) {
                 generateUserEvent(userMadeEvents);
-                refreshOptions.refresh();
+                //refreshOptions.refresh();
                 closeThisPane();
             }
         });
@@ -180,33 +160,33 @@ public class EventPane extends Stage {
         return Utility.createButtonBar(Arrays.asList(mySaveButton,myCancelButton));
     }
     private Object getParameterValue(Node param){
-        try {
-            Method m = param.getClass().getDeclaredMethod(GET_VALUE_METHOD);
-            return m.invoke(param);
-
-        } catch (Exception e) {
-            try {
-                Method m = param.getClass().getDeclaredMethod(GET_TEXT_METHOD);
-                return m.invoke(param);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        }
+//        try {
+//            Method m = param.getClass().getDeclaredMethod(GET_VALUE_METHOD);
+//            return m.invoke(param);
+//
+//        } catch (Exception e) {
+//            try {
+//                Method m = param.getClass().getDeclaredMethod(GET_TEXT_METHOD);
+//                return m.invoke(param);
+//            } catch (Exception e1) {
+//                e1.printStackTrace();
+//            }
+//        }
         return "";
     }
 
     private void generateUserEvent(ObservableList<Event> userMadeEvents){
-        Class<?>[] constructorClassReferences = EventType.valueOf(myEventName.toUpperCase()).getConstructorTypes();
-        try {
-            Class eventClass = EventType.valueOf(myEventName.toUpperCase()).getClassName();
-            Constructor eventConstructor = eventClass.getConstructor(constructorClassReferences);
-            Event userMadeEvent = (Event) eventConstructor.newInstance(eventParameters);
-            Action associatedAction = generateUserAction();
-            userMadeEvents.add(userMadeEvent);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+//        Class<?>[] constructorClassReferences = EventType.valueOf(myEventName.toUpperCase()).getConstructorTypes();
+//        try {
+//            Class eventClass = EventType.valueOf(myEventName.toUpperCase()).getClassName();
+//            Constructor eventConstructor = eventClass.getConstructor(constructorClassReferences);
+//            Event userMadeEvent = (Event) eventConstructor.newInstance(eventParameters);
+//            Action associatedAction = generateUserAction();
+//            userMadeEvents.add(userMadeEvent);
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
     }
 
     private Action generateUserAction() {

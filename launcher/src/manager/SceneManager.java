@@ -18,30 +18,16 @@ public class SceneManager {
     private SplashPage myInitialPage;
     private WelcomeUserPage myWelcomeUserPage;
     private CreateNewGamePage myNewGamePage;
-    private SwitchToUserOptions switchToWelcomeUserPage = new SwitchToUserOptions() {
-        @Override
-        public void switchPage() {
-            goToWelcomeUserPage();
-        }
-    };
-    private SwitchToUserOptions switchToNewGamePage = new SwitchToUserOptions() {
-        @Override
-        public void switchPage() {
-            goToUserOptions();
-        }
-    };
+
+    private SwitchToUserOptions switchToWelcomeUserPage = this::goToWelcomeUserPage;
+    private SwitchToUserOptions switchToNewGamePage = this::goToUserOptions;
     private SwitchToAuthoring switchToAuthoring = new SwitchToAuthoring() {
         @Override
-        public void switchScene() {
-            goToAuthoring();
+        public void switchScene(GameCenterData myGameData) {
+            goToAuthoring(myGameData);
         }
     };
-    private SwitchToUserOptions switchToGameCenter = new SwitchToUserOptions(){
-        @Override
-        public void switchPage() {
-            goToGameCenter();
-        }
-    };
+    private SwitchToUserOptions switchToGameCenter = this::goToGameCenter;
     private Stage myStage;
     /**
      * The SceneManager class distributes lambdas among the different scenes, depending upon which scene they need
@@ -70,8 +56,8 @@ public class SceneManager {
     private void goToUserOptions(){
         myScene.setRoot(myNewGamePage);
     }
-    private void goToAuthoring(){
-        MainGUI myGUI = new MainGUI();
+    private void goToAuthoring(GameCenterData myData){
+        MainGUI myGUI = new MainGUI(new Game(), myData);
         myGUI.launch();
     }
 

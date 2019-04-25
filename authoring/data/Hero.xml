@@ -1,0 +1,10 @@
+<DefaultEntity>
+    <Category>Characters</Category>
+    <Components>
+        <NameComponent>Hero</NameComponent>
+        <YAccelerationComponent>9.8</YAccelerationComponent>
+        <VisibilityComponent>true</VisibilityComponent>
+        <WidthComponent>25.0</WidthComponent>
+        <HeightComponent>75.0</HeightComponent>
+    </Components>
+</DefaultEntity>

@@ -24,6 +24,7 @@ import runner.internal.TestEngine;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.*;
 
 public class GameRunner {
@@ -56,13 +57,21 @@ public class GameRunner {
         code below */
 
         DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
-        dm2.serializeObject();
+        //dm2.serializeObject();
         Game gameMade = dm2.getGame(game);
 
+
         DataManager dm = new DataManager();
+        dm.createGameFolder("YeetRevised2");
+        dm.saveGameData("YeetRevised3", gameMade);
+        System.out.println("Serialization complete");
 
-        myGame = (Game) dm.loadGameData(game);
 
+        try {
+            myGame = (Game) dm.loadGameData("YeetRevised3");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 
         myCurrentKeys = new HashSet<KeyCode>();

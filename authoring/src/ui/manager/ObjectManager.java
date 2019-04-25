@@ -1,6 +1,6 @@
 package ui.manager;
 
-import events.Event;
+import engine.external.events.Event;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -8,12 +8,12 @@ import javafx.collections.ObservableList;
 import ui.AuthoringEntity;
 import ui.AuthoringLevel;
 import ui.EntityField;
+import ui.LevelField;
 import ui.Propertable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,17 +41,32 @@ public class ObjectManager {
         myCurrentLevel = levelProperty;
     }
 
+    /**
+     * Add a level to ObjectManager
+     * @param level AuthoringLevel to be added
+     */
     public void addLevel(AuthoringLevel level) {
         myLevels.add(level);
+        myLabelManager.addLabel(LevelField.LABEL, level.getPropertyMap().get(LevelField.LABEL));
     }
 
-    public void removeLevel(AuthoringLevel level) {
-        myLevels.remove(level);
+    /**
+     * Remove a level from ObjectManager
+     * @param label AuthoringLevel to be removed
+     */
+    public void removeLevel(String label) {
+        for (AuthoringLevel level : myLevels) {
+            if (level.getPropertyMap().get(LevelField.LABEL).equals(label)) {
+                myLevels.remove(level);
+                myLabelManager.removeLabel(LevelField.LABEL, level.getPropertyMap().get(LevelField.LABEL));
+                return;
+            }
+        }
     }
 
     /**
      * Use this for adding a new general type
-     * @param entity
+     * @param entity AuthoringEntity whose type is to be added
      */
     public void addEntityType(AuthoringEntity entity) {
         myEntities.add(entity);
@@ -61,24 +76,54 @@ public class ObjectManager {
 
     /**
      * Use this for instances that are added to a specific level
-     * @param entity
+     * @param entity AuthoringEntity instance to add
      */
     public void addEntityInstance(AuthoringEntity entity) {
         myEntities.add(entity);
         ((AuthoringLevel) myCurrentLevel.getValue()).addEntity(entity);
     }
 
-    //TODO remove entity??
+    /**
+     * Use to remove all instances of an entity type from ObjectManager, removes Instances, Events, Label for complete deletion
+     * @param entity AuthoringEntity with label corresponding to the type being deleted
+     */
+    public void removeEntityType(AuthoringEntity entity) { //TODO test to check working
+        myEntities.removeIf(authEntity ->
+                authEntity.getPropertyMap().get(EntityField.LABEL).equals(entity.getPropertyMap().get(EntityField.LABEL)));
+        for (AuthoringLevel level : myLevels)
+            level.getEntities().removeIf(authEntity ->
+                    authEntity.getPropertyMap().get(EntityField.LABEL).equals(entity.getPropertyMap().get(EntityField.LABEL)));
+
+        myLabelManager.removeLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL));
+        myEventMap.remove(entity.getPropertyMap().get(EntityField.LABEL));
+    }
+
+    /**
+     * Use to remove a single instance of an AuthoringEntity from the authoring environment
+     * @param entity Instance to be removed
+     */
+    public void removeEntityInstance(AuthoringEntity entity) {
+        myEntities.remove(entity);
+        ((AuthoringLevel) myCurrentLevel.getValue()).getEntities().remove(entity);
+    }
 
     public void propagate(String objectLabel, Enum property, String newValue) {
         for (AuthoringEntity entity : myEntities) {
             if (entity.getPropertyMap().get(EntityField.LABEL).equals(objectLabel)) { // Match found
                 entity.getPropertyMap().put(property, newValue);
-                myLabelManager.addLabel(EntityField.LABEL, newValue);
+                if (property.equals(EntityField.LABEL)) // TODO this may have solved group/entity label mix-up issue
+                    myLabelManager.addLabel(EntityField.LABEL, newValue);
             }
         } //TODO propagate changed label into Event Map
         if (property.equals(EntityField.LABEL))
             myLabelManager.removeLabel(EntityField.LABEL, objectLabel); // Remove old label from LabelManager if a label was just propagated
+    }
+
+    public void flushCameraAssignment(Propertable propagator) {
+        for(AuthoringEntity entity : ((AuthoringLevel) myCurrentLevel.getValue()).getEntities()) {
+            if (!entity.equals(propagator))
+                entity.getPropertyMap().put(EntityField.CAMERA, "false");
+        }
     }
 
     private void groupRemoveAction(ListChangeListener.Change<? extends String> change) {
@@ -89,7 +134,7 @@ public class ObjectManager {
             str = change.getAddedSubList().get(0);
 
         if (change.wasRemoved())
-            System.out.println("REMOVED");
+            System.out.println("REMOVED"); //TODO still debugging
 
         if (change.wasReplaced() || change.wasRemoved()) {
             for (AuthoringEntity entity : myEntities) {
@@ -100,6 +145,11 @@ public class ObjectManager {
         }
     }
 
+    public void updateLevelLabel(String oldValue, String newValue) {
+        myLabelManager.getLabels(LevelField.LABEL).add(myLabelManager.getLabels(LevelField.LABEL).indexOf(oldValue), newValue);
+        myLabelManager.getLabels(LevelField.LABEL).remove(oldValue);
+    }
+
     public LabelManager getLabelManager() {
         return myLabelManager;
     }
@@ -108,7 +158,7 @@ public class ObjectManager {
         return myEventMap.get(objectType);
     }
 
-    public List<AuthoringLevel> getLevels() {
+    public ObservableList<AuthoringLevel> getLevels() {
         return myLevels;
     }
 }

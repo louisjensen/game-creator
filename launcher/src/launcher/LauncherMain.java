@@ -1,4 +1,5 @@
 package launcher;
+import data.external.DatabaseEngine;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import manager.SceneManager;
@@ -15,6 +16,11 @@ public class LauncherMain extends Application {
         launch(args);
     }
 
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        DatabaseEngine.getInstance().close();
+    }
 }
 
 

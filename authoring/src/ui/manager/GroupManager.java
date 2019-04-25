@@ -58,6 +58,7 @@ public class GroupManager extends Stage {
         return contentBox;
     }
 
+    @SuppressWarnings("unused")
     private void addLabel(StringProperty newLabelProp, Stage stage) {
         myObjectManager.getLabelManager().addLabel(EntityField.GROUP, newLabelProp.getValue());
         if (stage != null)

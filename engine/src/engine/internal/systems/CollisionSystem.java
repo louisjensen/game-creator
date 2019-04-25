@@ -1,24 +1,30 @@
 package engine.internal.systems;
 
 import engine.external.Entity;
-import engine.external.component.*;
+import engine.external.component.Component;
+import engine.external.component.XPositionComponent;
+import engine.external.component.YPositionComponent;
 import engine.external.Engine;
+import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
+import voogasalad.util.reflection.Reflection;
+import voogasalad.util.reflection.ReflectionException;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.Collection;
+import java.util.Map;
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Arrays;
 
 /**
- *
  * @author Hsingchih Tang
  * Responsible for detecting collisions between the ImageView of two collidable Entities via JavaFX Node.intersects(),
- * and register the two parties of every collision in each other's BottomCollidedComponent, such that certain actions (defined
+ * and register the two parties of every collision in each other's BottomCollidedComponent, such that certain engine.external.actions (defined
  * in the Event tied to an Entity) could be triggered by the execute() call fired from EventHandlerSystem
  */
 public class CollisionSystem extends VoogaSystem {
 
-    private HashSet<Entity> collidedEntities;
+    private Map<Entity, Point2D> collidedEntities;
 
     /**
      * Accepts a reference to the Engine in charge of all Systems in current game, and a Collection of Component classes
@@ -30,30 +36,46 @@ public class CollisionSystem extends VoogaSystem {
         super(requiredComponents, engine);
     }
 
+    /**
+     * Revert the positions of collided Entities in this game loop in the directions where collisions happened
+     * and then remove all CollidedComponents from the Entities
+     */
+    public void adjustCollidedEntities(){
+        for (Map.Entry<Entity,Point2D> entry:collidedEntities.entrySet()){
+            Entity entity = entry.getKey();
+            if(horizontallyCollided(entity)){
+                ((XPositionComponent)entity.getComponent(X_POSITION_COMPONENT_CLASS)).revertValue(entry.getValue().getX());
+            }
+            if(verticallyCollided(entity)){
+                ((YPositionComponent)entity.getComponent(Y_POSITION_COMPONENT_CLASS)).revertValue(entry.getValue().getY());
+            }
+            removeCollidedComponents(entity);
+        }
+    }
+
 
     @Override
     /**
-     * loop through all collidable Entities and check for collision situations
-     * and record the other party in each collided Entity's Collided Component
+     * Loop through all collidable Entities to check for collisions and record CollidedComponents for each pair;
+     * Also record the past positions of collided Entities for adjusting their positions at the end of game loop.
      */
     protected void run() {
-        collidedEntities = new HashSet<>();
+        collidedEntities = new HashMap<>();
         this.getEntities().forEach(e1->this.getEntities().forEach(e2->{
             if(seemColliding(e1,e2)&& e1!=e2){
+//                System.out.println(e1.getComponent(SpriteComponent.class).getValue()+" collided by "+e2.getComponent(SpriteComponent.class).getValue());
                 Class horizontal = horizontalCollide(e1,e2);
                 Class vertical = verticalCollide(e1,e2);
                 registerCollidedEntity(horizontal,e1,e2);
                 registerCollidedEntity(vertical,e1,e2);
                 if(horizontal!=null||vertical!=null){
                     registerCollidedEntity(ANY_COLLIDED_COMPONENT_CLASS,e1,e2);
+                    Double oldX = (Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE);
+                    Double oldY = (Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE);
+                    collidedEntities.put(e1,new Point2D(oldX,oldY));
                 }
-                collidedEntities.addAll(Arrays.asList(e1,e2));
             }
         }));
-        for (Entity e:collidedEntities){
-            ((XPositionComponent)e.getComponent(X_POSITION_COMPONENT_CLASS)).revertValue();
-            ((YPositionComponent)e.getComponent(Y_POSITION_COMPONENT_CLASS)).revertValue();
-        }
     }
 
 
@@ -63,19 +85,18 @@ public class CollisionSystem extends VoogaSystem {
      * @param e1 Entity being collided
      * @param e2 Entity colliding the other
      */
-    private void registerCollidedEntity(Class<? extends Component> componentClazz, Entity e1, Entity e2){
+    private void registerCollidedEntity(Class<? extends Component> componentClazz, Entity e1, Entity e2) throws ReflectionException{
         if(componentClazz==null){
             return;
         }
         if(!e1.hasComponents(componentClazz)){
             try {
-                e1.addComponent((Component<?>) Class.forName(componentClazz.getName()).getConstructor(new Class[]{Collection.class}).newInstance(new HashSet<>()));
-            } catch (InstantiationException|IllegalAccessException|InvocationTargetException|NoSuchMethodException|ClassNotFoundException e) {
-                System.out.println("Invalid reflection instantiation call in CollisionSystem: "+componentClazz.getSimpleName());
-                return;
+                e1.addComponent((Component<?>) Reflection.createInstance(componentClazz.getName(),new HashSet<>()));
+            } catch (ReflectionException e) {
+                throw new ReflectionException(e,"Cannot create "+componentClazz.getName()+" for Entity "+getComponentValue(NAME_COMPONENT_CLASS,e1));
             }
         }
-        ((Collection<Entity>)e1.getComponent(componentClazz).getValue()).add(e2);
+        ((Collection<Entity>)getComponentValue(componentClazz,e1)).add(e2);
     }
 
 
@@ -88,11 +109,10 @@ public class CollisionSystem extends VoogaSystem {
      *         null if not e1, e2 are not performing collision behaviors on horizontal axis
      */
     private Class<? extends Component> horizontalCollide(Entity e1, Entity e2){
-        Double deltaX = Math.abs((Double)e1.getComponent(X_POSITION_COMPONENT_CLASS).getValue()-(Double)e2.getComponent(X_POSITION_COMPONENT_CLASS).getValue());
-        if(isLeftTo(e2,e1)&&(isMovingRight(e2)||isMovingLeft(e1))){
+        if(wasLeftTo(e2,e1)&&(isMovingRight(e2)||isMovingLeft(e1))){
 //            System.out.println(e2.getComponent(SpriteComponent.class).getValue()+" left collides on "+e1.getComponent(SpriteComponent.class).getValue());
             return LEFT_COLLIDED_COMPONENT_CLASS;
-        }else if(isRightTo(e2,e1)&&(isMovingLeft(e2)||isMovingRight(e1))){
+        }else if(wasRightTo(e2,e1)&&(isMovingLeft(e2)||isMovingRight(e1))){
 //            System.out.println(e2.getComponent(SpriteComponent.class).getValue()+" right collides on "+e1.getComponent(SpriteComponent.class).getValue());
             return RIGHT_COLLIDED_COMPONENT_CLASS;
         }
@@ -110,10 +130,10 @@ public class CollisionSystem extends VoogaSystem {
      *         null if not e1, e2 are not performing collision behaviors on vertical axis
      */
     private Class<? extends Component> verticalCollide(Entity e1, Entity e2){
-        if(isAbove(e2,e1)&&(isMovingDown(e2)||isMovingUp(e1))){
+        if(wasAbove(e2,e1)&&(isMovingDown(e2)||isMovingUp(e1))){
 //            System.out.println(e2.getComponent(SpriteComponent.class).getValue()+" top collides on "+e1.getComponent(SpriteComponent.class).getValue());
             return TOP_COLLIDED_COMPONENT_CLASS;
-        }else if(isBelow(e2,e1)&&(isMovingUp(e2)||isMovingDown(e1))){
+        }else if(wasBelow(e2,e1)&&(isMovingUp(e2)||isMovingDown(e1))){
 //            System.out.println(e2.getComponent(SpriteComponent.class).getValue()+" bottom collides on "+e1.getComponent(SpriteComponent.class).getValue());
             return BOTTOM_COLLIDED_COMPONENT_CLASS;
         }
@@ -124,40 +144,51 @@ public class CollisionSystem extends VoogaSystem {
 
 
     private boolean seemColliding(Entity e1, Entity e2){
-        return (getImageViewComponentValue(IMAGEVIEW_COMPONENT_CLASS,e1)).intersects((getImageViewComponentValue(IMAGEVIEW_COMPONENT_CLASS,e2)).getBoundsInLocal());
+        return ((ImageView) getComponentValue(IMAGEVIEW_COMPONENT_CLASS,e1)).intersects(((ImageView) getComponentValue(IMAGEVIEW_COMPONENT_CLASS,e2)).getBoundsInLocal());
     }
 
-    private boolean isLeftTo(Entity e1, Entity e2){
-        return ((XPositionComponent)e1.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue()<((XPositionComponent)e2.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue();
+    private boolean wasLeftTo(Entity e1, Entity e2){
+        return ((Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)+(Double)getComponentValue(WIDTH_COMPONENT_CLASS,e1))<(Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE);
     }
 
-    private boolean isRightTo(Entity e1, Entity e2){
-        return ((XPositionComponent)e1.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue()>((XPositionComponent)e2.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue();
+    private boolean wasRightTo(Entity e1, Entity e2){
+        return (Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)>((Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE)+(Double)getComponentValue(WIDTH_COMPONENT_CLASS,e2));
     }
 
-    private boolean isAbove(Entity e1, Entity e2){
-        return ((YPositionComponent)e1.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue()<((YPositionComponent)e2.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue();
+    private boolean wasAbove(Entity e1, Entity e2){
+        return ((Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)+(Double)getComponentValue(HEIGHT_COMPONENT_CLASS,e1))<(Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE);
     }
 
-    private boolean isBelow(Entity e1, Entity e2){
-        return ((YPositionComponent)e1.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue()>((YPositionComponent)e2.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue();
+    private boolean wasBelow(Entity e1, Entity e2){
+        return (Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e1,GET_OLD_VALUE)>((Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,e2,GET_OLD_VALUE)+(Double)getComponentValue(HEIGHT_COMPONENT_CLASS,e2));
     }
 
     private boolean isMovingLeft(Entity entity){
-        return ((XPositionComponent)entity.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue()>getDoubleComponentValue(X_POSITION_COMPONENT_CLASS,entity);
+        return (Double)getComponentValue(X_POSITION_COMPONENT_CLASS,entity,GET_OLD_VALUE)>(Double) getComponentValue(X_POSITION_COMPONENT_CLASS,entity);
     }
 
     private boolean isMovingRight(Entity entity){
-        return ((XPositionComponent)entity.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue()<getDoubleComponentValue(X_POSITION_COMPONENT_CLASS,entity);
+        return (Double)getComponentValue(X_POSITION_COMPONENT_CLASS,entity,GET_OLD_VALUE)<(Double) getComponentValue(X_POSITION_COMPONENT_CLASS,entity);
     }
 
     private boolean isMovingUp(Entity entity){
-        return ((YPositionComponent)entity.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue()>getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS,entity);
+        return (Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,entity,GET_OLD_VALUE)>(Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,entity);
     }
 
     private boolean isMovingDown(Entity entity){
-        return ((YPositionComponent)entity.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue()<getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS,entity);
+        return (Double)getComponentValue(Y_POSITION_COMPONENT_CLASS,entity,GET_OLD_VALUE)<(Double) getComponentValue(Y_POSITION_COMPONENT_CLASS,entity);
     }
 
+    private boolean verticallyCollided(Entity entity){
+        return entity.hasComponents(TOP_COLLIDED_COMPONENT_CLASS)||entity.hasComponents(BOTTOM_COLLIDED_COMPONENT_CLASS);
+    }
+
+    private boolean horizontallyCollided(Entity entity){
+        return entity.hasComponents(LEFT_COLLIDED_COMPONENT_CLASS)||entity.hasComponents(RIGHT_COLLIDED_COMPONENT_CLASS);
+    }
+
+    private void removeCollidedComponents(Entity entity){
+        entity.removeComponent(Arrays.asList(LEFT_COLLIDED_COMPONENT_CLASS,RIGHT_COLLIDED_COMPONENT_CLASS,TOP_COLLIDED_COMPONENT_CLASS,BOTTOM_COLLIDED_COMPONENT_CLASS,ANY_COLLIDED_COMPONENT_CLASS));
+    }
 
 }
