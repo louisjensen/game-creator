@@ -268,20 +268,26 @@ public class MainGUI {
     }
 
     //TODO make this work for audio too - need to differentiate which dataManager method using
-    private void saveAndClearFolder(DataManager dataManager, String folderFilePath){
+    //outerDirectory - folder that needs sub-folders "defaults" and "user-uploaded"
+    private void saveAndClearFolder(DataManager dataManager, File outerDirectory){
         System.out.println("Save and clear folder called");
-        File assetFolder = new File(folderFilePath);
-        System.out.println(assetFolder.getName());
-        for(File temp : assetFolder.listFiles()){
-            System.out.println(temp.getName());
-            String gameTitle = myGameData.getTitle();
-            String authorUsername = myGameData.getAuthorName();
-            String imageTitle = gameTitle + authorUsername + temp.getName();
-            dataManager.saveImage(imageTitle, temp);
-            //TODO: uncomment this
+        System.out.println(outerDirectory.getName());
+        for(File innerFolder : outerDirectory.listFiles()){
+            if(innerFolder.isDirectory()){
+                for(File asset : innerFolder.listFiles()){
+                    System.out.println(asset.getName());
+                    String gameTitle = myGameData.getTitle();
+                    String authorUsername = myGameData.getAuthorName();
+                    String imageTitle = gameTitle + authorUsername + asset.getName();
+                    dataManager.saveImage(imageTitle, asset);
+                    //TODO: uncomment this
 //            if(temp.delete()){
 //                System.out.println("deleted");
 //            }
+                }
+            }
+
+
         }
     }
 
