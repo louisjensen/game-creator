@@ -32,6 +32,14 @@ import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -259,6 +267,7 @@ public class MainGUI {
         myGameData.setDescription("A fun new game");
     }
 
+    //TODO make this work for audio too - need to differentiate which dataManager method using
     private void saveAndClearFolder(DataManager dataManager, String folderFilePath){
         System.out.println("Save and clear folder called");
         File assetFolder = new File(folderFilePath);
@@ -266,14 +275,31 @@ public class MainGUI {
         for(File temp : assetFolder.listFiles()){
             System.out.println(temp.getName());
             String gameTitle = myGameData.getTitle();
-            //TODO: add actual author name
-            String authorUsername = "";
+            String authorUsername = myGameData.getAuthorName();
             String imageTitle = gameTitle + authorUsername + temp.getName();
             dataManager.saveImage(imageTitle, temp);
             //TODO: uncomment this
-            if(temp.delete()){
-                System.out.println("deleted");
+//            if(temp.delete()){
+//                System.out.println("deleted");
+//            }
+        }
+    }
+
+    //TODO: differentiate between images and audio
+    //TODO: test the file copying
+    private void loadAssets(DataManager dataManager, String folderFilePath){
+        String prefix = myGameData.getTitle() + myGameData.getAuthorName();
+        try {
+            Map<String, InputStream> imagesMap = dataManager.loadAllImages(prefix);
+            for(Map.Entry<String, InputStream> entry : imagesMap.entrySet()){
+                Files.copy(entry.getValue(), Paths.get(GENERAL_RESOURCES.getString("images_filepath")), StandardCopyOption.REPLACE_EXISTING);
             }
+        } catch (SQLException e) {
+            //TODO: handle error
+            e.printStackTrace();
+        } catch (IOException e) {
+            //TODO: handle error
+            e.printStackTrace();
         }
     }
 
