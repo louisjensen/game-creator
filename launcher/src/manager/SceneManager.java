@@ -21,7 +21,12 @@ public class SceneManager {
 
     private SwitchToUserOptions switchToWelcomeUserPage = this::goToWelcomeUserPage;
     private SwitchToUserOptions switchToNewGamePage = this::goToUserOptions;
-    private SwitchToAuthoring switchToAuthoring = this::goToAuthoring;
+    private SwitchToAuthoring switchToAuthoring = new SwitchToAuthoring() {
+        @Override
+        public void switchScene(GameCenterData myGameData) {
+            goToAuthoring(myGameData);
+        }
+    };
     private SwitchToUserOptions switchToGameCenter = this::goToGameCenter;
     private Stage myStage;
     /**
@@ -51,8 +56,8 @@ public class SceneManager {
     private void goToUserOptions(){
         myScene.setRoot(myNewGamePage);
     }
-    private void goToAuthoring(){
-        MainGUI myGUI = new MainGUI();
+    private void goToAuthoring(GameCenterData myData){
+        MainGUI myGUI = new MainGUI(new Game(), myData);
         myGUI.launch();
     }
 

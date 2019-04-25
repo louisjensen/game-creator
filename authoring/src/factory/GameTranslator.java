@@ -44,6 +44,7 @@ public class GameTranslator {
         myNewGameData.setDescription(myOldGameData.getDescription());
         myNewGameData.setImageLocation(myOldGameData.getImageLocation());
         myNewGameData.setFolderName(myOldGameData.getFolderName());
+        myNewGameData.setAuthorName(myOldGameData.getAuthorName());
 
         for (AuthoringLevel authLevel : myObjectManager.getLevels()) {
             translatedGame.addLevel(translateLevel(authLevel));

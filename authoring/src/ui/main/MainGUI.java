@@ -206,11 +206,15 @@ public class MainGUI {
         Game exportableGame = translator.translate();
         GameCenterData gameData = translator.getNewGameData();
 
-
+        System.out.println("Made it to line");
         DataManager dm = new DataManager();
-        dm.createGameFolder(gameData.getFolderName());
-        dm.saveGameData(gameData.getFolderName(), exportableGame);
-        dm.saveGameInfo(gameData.getFolderName(), gameData);
+        System.out.println("Made it after the line");
+//        dm.createGameFolder(gameData.getFolderName());
+//        dm.saveGameData(gameData.getFolderName(), exportableGame);
+//        dm.saveGameInfo(gameData.getFolderName(), gameData);
+        dm.saveGameData(gameData.getFolderName(), gameData.getAuthorName(), exportableGame);
+        dm.saveGameInfo(gameData.getFolderName(), gameData.getAuthorName(), gameData);
+        System.out.println("Game saved");
     }
 
     @SuppressWarnings("unused")
