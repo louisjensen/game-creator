@@ -49,7 +49,7 @@ public class EventManagerTester extends Application {
 
     private AuthoringEntity populateTestObjects(ObjectManager manager) {
         AuthoringEntity a = new AuthoringEntity("object1", manager);
-        manager.addEntityType(a);
+        manager.addEntityType(a, "");
         return a;
     }
 

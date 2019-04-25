@@ -93,7 +93,7 @@ public class UserCreatedTypesPane extends VBox {
         myCategoryToList.putIfAbsent(category, new ArrayList<>());
         String imageName = (String) originalEntity.getComponent(SpriteComponent.class).getValue();
         try {
-            AuthoringEntity originalAuthoringEntity = new AuthoringEntity(originalEntity, myObjectManager);
+            AuthoringEntity originalAuthoringEntity = new AuthoringEntity(originalEntity, defaultName, myObjectManager);
             originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
             String assetImagesFilePath = myGeneralResources.getString("images_filepath");
             ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(assetImagesFilePath + "/" + imageName), originalAuthoringEntity);
