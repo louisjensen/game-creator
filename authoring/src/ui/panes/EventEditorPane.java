@@ -38,6 +38,7 @@ import java.util.Map;
 
     private static final String STYLE = "default.css";
     private static final String STYLE_CLASS = "event-editor";
+    private static final String VBOX_STYE = "event-component-vbox";
     private Stage myPopUpStage;
 
     EventEditorPane(Event unfinishedEvent,Refresher eventDisplayRefresher){
@@ -69,7 +70,7 @@ import java.util.Map;
         VBox myListing = new VBox();
         for (Object eventElement: myConditions){
             VBox eventSubInformation = new VBox();
-            eventSubInformation.getStyleClass().add("event-component-vbox");
+            eventSubInformation.getStyleClass().add(VBOX_STYE);
             Button removeButton = new Button(REMOVE);
             eventSubInformation.getChildren().add(EventFactory.createLabel(eventElement.toString()));
             eventSubInformation.getChildren().add(removeButton);
