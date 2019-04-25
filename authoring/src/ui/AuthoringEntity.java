@@ -20,7 +20,6 @@ public class AuthoringEntity implements Propertable {
 
     private ObservableMap<Enum, String> myPropertyMap;
     private ObjectManager myObjectManager;
-    private Entity myBackingEntity;
     private List<String> myInteractionListing = new ArrayList<>();
 
     private AuthoringEntity() { // Initialize default property map
@@ -33,7 +32,6 @@ public class AuthoringEntity implements Propertable {
     public AuthoringEntity(String label, ObjectManager manager) { // Create new type of AuthoringEntity from scratch
         this();
         myObjectManager = manager;
-        myBackingEntity = new Entity(); // Brand new backing Entity
         myPropertyMap.put(EntityField.LABEL, label);
         addPropertyListeners();
         myObjectManager.addEntityType(this);
@@ -41,22 +39,12 @@ public class AuthoringEntity implements Propertable {
 
     public AuthoringEntity(Entity basis, ObjectManager manager) { // Create new AuthoringEntity type from Entity
         this();
-        myBackingEntity = basis;
         myObjectManager = manager;
-        if (basis.hasComponents(NameComponent.class)) // TODO try to fix this
-            myPropertyMap.put(EntityField.LABEL, (String) basis.getComponent(NameComponent.class).getValue());
-        if (basis.hasComponents(SpriteComponent.class))
-            myPropertyMap.put(EntityField.IMAGE, (String) basis.getComponent(SpriteComponent.class).getValue());
-        if (basis.hasComponents(XPositionComponent.class))
-            myPropertyMap.put(EntityField.X, ("" + (basis.getComponent(XPositionComponent.class).getValue())));
-        if (basis.hasComponents(YPositionComponent.class))
-            myPropertyMap.put(EntityField.Y, ("" + (basis.getComponent(YPositionComponent.class).getValue())));
-        if (basis.hasComponents(ZPositionComponent.class))
-            myPropertyMap.put(EntityField.Z, ("" + (basis.getComponent(ZPositionComponent.class).getValue())));
-        if (basis.hasComponents(WidthComponent.class))
-            myPropertyMap.put(EntityField.XSCALE, ("" + (basis.getComponent(WidthComponent.class).getValue()))); //TODO add Group & other things??
-        if (basis.hasComponents(HeightComponent.class))
-            myPropertyMap.put(EntityField.YSCALE, ("" + (basis.getComponent(HeightComponent.class).getValue())));
+
+        for (EntityField field : EntityField.values())
+            if (basis.hasComponents(field.getComponentClass()))
+                myPropertyMap.put(field, String.valueOf(basis.getComponent(field.getComponentClass()).getValue()));
+
         addPropertyListeners();
         myObjectManager.addEntityType(this);
     }
@@ -68,7 +56,6 @@ public class AuthoringEntity implements Propertable {
             if (copyBasis.myPropertyMap.containsKey(commonField))
                 myPropertyMap.put(commonField, copyBasis.myPropertyMap.get(commonField));
         }
-        myBackingEntity = backingEntity;
         addPropertyListeners();
         myObjectManager.addEntityInstance(this);
     }
@@ -101,10 +88,6 @@ public class AuthoringEntity implements Propertable {
 
     public ObservableList<Event> getEvents() {
         return myObjectManager.getEvents(this.myPropertyMap.get(EntityField.LABEL));
-    }
-
-    public Entity getBackingEntity() {
-        return myBackingEntity;
     }
 
     public List<String> getInteractionListing(){ return myInteractionListing;}
