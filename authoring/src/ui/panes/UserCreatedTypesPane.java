@@ -52,6 +52,21 @@ public class UserCreatedTypesPane extends VBox {
     }
 
     /**
+     * This creates the same pane but allows for a map of previously defined user-created types to be
+     * passed in. Used for loading in a past game
+     * @param objectManager
+     * @param previouslyDefinedTypesMap the key is the String name of the default type it is associates with
+     *                                  and the value is the original entity it is associated with
+     */
+    public UserCreatedTypesPane(ObjectManager objectManager, Map<String, Entity> previouslyDefinedTypesMap){
+        this(objectManager);
+        System.out.println("Map Size: " + previouslyDefinedTypesMap.size());
+        for(Map.Entry<String, Entity> entry : previouslyDefinedTypesMap.entrySet()){
+            addUserDefinedType(entry.getValue(), entry.getKey());
+        }
+    }
+
+    /**
      * Used by Viewer to get the dragged Entity
      * @return Entity
      */
