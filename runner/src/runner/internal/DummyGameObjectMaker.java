@@ -27,23 +27,28 @@ public class DummyGameObjectMaker {
 
     private void initializeGame(Game dummyGame) {
         Level level1 = new Level();
-        addDummyEntities(level1);
-        addDummyEvents(level1);
+        addDummyEntities(level1, 1.0);
+        addDummyEvents(level1, 2.0);
         dummyGame.addLevel(level1);
 
         Level level2 = new Level();
-        addDummyEntities(level2);
-        addDummyEvents(level2);
+        addDummyEntities(level2, 2.0);
+        addDummyEvents(level2, 3.0);
         dummyGame.addLevel(level2);
 
         Level level3 = new Level();
-        addDummyEntities(level3);
-        addDummyEvents(level3);
+        addDummyEntities(level3, 3.0);
+        addDummyEvents(level3, 4.0);
         dummyGame.addLevel(level3);
+
+        Level level4 = new Level();
+        addDummyEntities(level4, 4.0);
+        addDummyEvents(level4, 5.0);
+        dummyGame.addLevel(level4);
 
     }
 
-    private void addDummyEvents(Level level1) {
+    private void addDummyEvents(Level level1, Double next) {
         Event event = new Event("one");
         event.addInputs(KeyCode.RIGHT);
         event.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
@@ -70,21 +75,21 @@ public class DummyGameObjectMaker {
 
 
 
-        RightCollisionEvent event4 = new RightCollisionEvent("one", "three");
-        event4.addActions(new ProgressionAction(true));
-        event4.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, 2.0));
+        RightCollisionEvent rce = new RightCollisionEvent("one", "three");
+        rce.addActions(new ProgressionAction(true));
+        rce.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
+
 
         level1.addEvent(event);
         level1.addEvent(event2);
         level1.addEvent(event3);
-        level1.addEvent(event4);
         level1.addEvent(moveup);
         level1.addEvent(movedown);
-
+        level1.addEvent(rce);
         level1.addEvent(lce);
     }
 
-    private void addDummyEntities(Level level) {
+    private void addDummyEntities(Level level, Double current) {
         Entity dummy1 = new Entity();
         Entity dummy2 = new Entity();
         Entity dummy3 = new Entity();
@@ -155,7 +160,7 @@ public class DummyGameObjectMaker {
         dummy6.addComponent(new SpriteComponent("basketball.png"));
         dummy6.addComponent(new NameComponent("six"));
 
-        dummy1.addComponent(new NextLevelComponent(1.0));
+        dummy1.addComponent(new NextLevelComponent(current));
         dummy1.addComponent(new ProgressionComponent(false));
 
         level.addEntity(dummy1);

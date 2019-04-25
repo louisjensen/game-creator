@@ -131,7 +131,15 @@ public class LevelRunner {
             if(entity.hasComponents(ProgressionComponent.class) && (Boolean) entity.getComponent(ProgressionComponent.class).getValue()){
                 System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
                 System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
-                endLevel((Double) entity.getComponent(NextLevelComponent.class).getValue());
+                Double nextLevel = (Double) entity.getComponent(NextLevelComponent.class).getValue();
+                for (Component<?> component : entity.getComponentMap().values()){
+                    component.resetToOriginal();
+                }
+                try {
+                    endLevel(nextLevel);
+                } catch (IndexOutOfBoundsException e){
+                    System.out.println("GAME BEATEN");
+                }
                 break;
             }
             if(entity.hasComponents(CameraComponent.class)){

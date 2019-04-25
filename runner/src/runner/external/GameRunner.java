@@ -31,19 +31,23 @@ public class GameRunner {
     private Game loadGameObject(String path){
         DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
         Game gameMade = dm2.getGame(path);
-        DataManager dm = new DataManager();
-        dm.createGameFolder("YeetRevised2");
-        dm.saveGameData("YeetRevised2", gameMade);
-        System.out.println("Serialization complete");
-        return (Game) dm.loadGameData("YeetRevised2");
+//        DataManager dm = new DataManager();
+//        dm.createGameFolder("YeetRevised2");
+//        dm.saveGameData("YeetRevised2", gameMade);
+//        System.out.println("Serialization complete");
+//        return (Game) dm.loadGameData("YeetRevised2");
+        return gameMade;
     }
 
     private void runLevel(int currentLevelNumber){
         Level currentLevel = myGame.getLevels().get(currentLevelNumber - 1);
         mySceneWidth = myGame.getWidth();
         mySceneHeight = myGame.getHeight();
-        Consumer<Double> goToNext = level -> {
-            nextLevel(level);
+        Consumer<Double> goToNext = new Consumer<Double>() {
+            @Override
+            public void accept(Double aDouble) {
+                nextLevel(aDouble);
+            }
         };
         new LevelRunner(currentLevel, mySceneWidth, mySceneHeight, myGameStage, goToNext);
     }
@@ -55,6 +59,7 @@ public class GameRunner {
         } catch (Exception e){
             levelToPlay = 10;
         }
+        System.out.println("progressing to level " + levelToPlay);
         this.runLevel(levelToPlay);
     }
 
