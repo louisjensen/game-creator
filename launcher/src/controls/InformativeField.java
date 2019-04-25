@@ -1,27 +1,15 @@
 package controls;
-
-import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 
 public class InformativeField extends TextField {
     private String informationRequested;
-    private CredentialValidator myField = new CredentialValidator() {
-        @Override
-        public String currentFieldValue() {
-            return getTextEntered();
-        }
-    };
+    private static final String DEFAULT = "";
+    private CredentialValidator myField = this::getTextEntered;
     public InformativeField(String message){
 
         informationRequested = message;
         this.setText(informationRequested);
-        this.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                handleDisplay();
-            }
-        });
+        this.setOnMouseClicked(mouseEvent -> handleDisplay());
     }
     /**
      * Provides access to values of InformativeField, which displays information concerning what the user should input
@@ -33,11 +21,11 @@ public class InformativeField extends TextField {
     }
     private void handleDisplay(){
         if (this.getText().equals(informationRequested)){
-            this.setText("");
+            this.setText(DEFAULT);
         }
     }
-    private String getTextEntered(){
-        return new String(this.getText());
+    public String getTextEntered(){
+        return this.getText();
     }
 
 

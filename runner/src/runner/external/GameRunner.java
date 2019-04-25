@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import runner.internal.DummyGameObjectMaker;
 import runner.internal.LevelRunner;
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -33,11 +34,16 @@ public class GameRunner {
         Game gameMade = dm2.getGame(path);
 //        DataManager dm = new DataManager();
 //        dm.createGameFolder("YeetRevised2");
-//        dm.saveGameData("YeetRevised2", gameMade);
+//        dm.saveGameData("YeetRevised3", gameMade);
 //        System.out.println("Serialization complete");
-//        return (Game) dm.loadGameData("YeetRevised2");
+//        try {
+//            return (Game) dm.loadGameData("YeetRevised3");
+//        } catch (SQLException e) {
+//            return null;
+//        }
         return gameMade;
     }
+
 
     private void runLevel(int currentLevelNumber){
         Level currentLevel = myGame.getLevels().get(currentLevelNumber - 1);
