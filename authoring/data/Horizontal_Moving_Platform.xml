@@ -1,0 +1,13 @@
+<DefaultEntity>
+    <Category>Obstacle</Category>
+    <Components>
+        <NameComponent>H Moving Platform</NameComponent>
+        <YAccelerationComponent>0.0</YAccelerationComponent>
+        <XAccelerationComponent>0.0</XAccelerationComponent>
+        <VisibilityComponent>true</VisibilityComponent>
+        <XVelocityComponent>10.0</XVelocityComponent>
+        <YVelocityComponent>0.0</YVelocityComponent>
+        <WidthComponent>50.0</WidthComponent>
+        <HeightComponent>25.0</HeightComponent>
+    </Components>
+</DefaultEntity>

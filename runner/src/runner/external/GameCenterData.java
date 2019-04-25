@@ -5,15 +5,17 @@ public class GameCenterData {
     private String myTitle;
     private String myImageLocation;
     private String myDescription;
+    private String myAuthorName;
 
     public GameCenterData(){
 
     }
-    public GameCenterData(String folder, String title, String description, String imageLocation){
+    public GameCenterData(String folder, String title, String description, String imageLocation, String authorName){
         myFolderName = folder;
         myTitle = title;
         myDescription = description;
         myImageLocation = imageLocation;
+        myAuthorName = authorName;
     }
 
     public String getFolderName() {
@@ -46,5 +48,13 @@ public class GameCenterData {
 
     public void setDescription(String description) {
         myDescription = description;
+    }
+
+    public String getAuthorName() {
+        return myAuthorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        myAuthorName = authorName;
     }
 }

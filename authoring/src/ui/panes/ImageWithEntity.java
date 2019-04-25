@@ -68,6 +68,18 @@ public class ImageWithEntity extends ImageView {
         this.setFitHeight(heightDouble);
         this.setFitWidth(widthDouble);
     }
+
+    private void updateVisibility(String visible){
+        boolean isVisible = Boolean.parseBoolean(visible);
+        if(isVisible){
+            this.opacityProperty().setValue(1);
+        }
+        else{
+            this.opacityProperty().setValue(.5);
+        }
+        System.out.println("Visible: " + visible);
+    }
+
     /**
      * Returns AuthoringEntity associated with this object
      * @return AuthoringEntity

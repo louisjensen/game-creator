@@ -13,6 +13,7 @@ import engine.external.events.Event;
 import engine.external.events.RightCollisionEvent;
 import javafx.application.Application;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import ui.manager.EventManager;
 import ui.manager.LabelManager;
@@ -37,6 +38,7 @@ public class EventManagerTester extends Application {
         testEntity.getEvents().add(new Event(testEntity.getPropertyMap().get(EntityField.LABEL)));
         makeTestEvents(testEntity);
         EventManager testEventManager = new EventManager(testEntity);
+
         testEventManager.show();
     }
 

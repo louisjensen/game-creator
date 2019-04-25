@@ -8,6 +8,7 @@
 
 package frontend.games;
 
+import data.external.DataManager;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -139,7 +140,8 @@ public class GameCard {
     private void addImage(BorderPane contentPane) throws FileNotFoundException {
         ImageView gameImage;
         try {
-            gameImage = new ImageView(new Image(new FileInputStream(myGame.getImageLocation())));
+            DataManager dataManager = new DataManager();
+            gameImage = new ImageView(new Image(dataManager.loadImage(myGame.getImageLocation())));
         } catch (Exception e) { // if any exceptions come from this, it should just become a default image.
             gameImage = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
         }

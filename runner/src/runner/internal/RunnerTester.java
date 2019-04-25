@@ -1,6 +1,7 @@
 package runner.internal;
 
 import data.external.DataManager;
+import data.external.DatabaseEngine;
 import engine.external.Level;
 import engine.external.component.*;
 import engine.external.Entity;
@@ -32,7 +33,13 @@ public class RunnerTester extends Application {
         GameRunner runner = new GameRunner("test");
     }
 
-//    private void initializeGame(Game dummyGame) {
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        DatabaseEngine.getInstance().close();
+    }
+
+    //    private void initializeGame(Game dummyGame) {
 //        Level level1 = new Level();
 //        addDummyEntities(level1);
 //        dummyGame.addLevel(level1);
@@ -71,3 +78,5 @@ public class RunnerTester extends Application {
 //    }
 
 }
+
+

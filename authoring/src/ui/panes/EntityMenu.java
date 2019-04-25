@@ -51,8 +51,9 @@ public class EntityMenu extends TitledPane {
      * @param category String name of the category/title of the dropdown
      * @param contentToAdd a List of Panes to add to the dropdown
      */
-    public void addToDropDown(String category, List<Pane> contentToAdd){
+    public void setDropDown(String category, List<Pane> contentToAdd){
         ListView vBox = myMap.get(category);
+        vBox.getItems().clear();
         vBox.getItems().addAll(contentToAdd);
     }
 }
