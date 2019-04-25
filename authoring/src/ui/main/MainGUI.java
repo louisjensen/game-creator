@@ -31,6 +31,7 @@ import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -57,6 +58,7 @@ public class MainGUI {
     private static final String DEFAULT_STYLESHEET = "default.css";
     private static final String MENU_ITEMS_FILE = "main_menu_items";
     private static final String STAGE_TITLE = "ByteMe Authoring Environment";
+    private static final ResourceBundle GENERAL_RESOURCES = ResourceBundle.getBundle("authoring_general");
 
     public MainGUI() { // Default constructor for creating a new game from scratch
         myGame = new Game();
@@ -199,9 +201,11 @@ public class MainGUI {
 
     @SuppressWarnings("unused")
     private void saveGame() {
+        System.out.println("save game called");
         GameTranslator translator = new GameTranslator(myGame, myGameData, myObjectManager);
         Game exportableGame = translator.translate();
         GameCenterData gameData = translator.getNewGameData();
+
 
         DataManager dm = new DataManager();
         dm.createGameFolder(gameData.getFolderName());
@@ -249,6 +253,24 @@ public class MainGUI {
         myGameData.setImageLocation("");
         myGameData.setTitle("New Game");
         myGameData.setDescription("A fun new game");
+    }
+
+    private void saveAndClearFolder(DataManager dataManager, String folderFilePath){
+        System.out.println("Save and clear folder called");
+        File assetFolder = new File(folderFilePath);
+        System.out.println(assetFolder.getName());
+        for(File temp : assetFolder.listFiles()){
+            System.out.println(temp.getName());
+            String gameTitle = myGameData.getTitle();
+            //TODO: add actual author name
+            String authorUsername = "";
+            String imageTitle = gameTitle + authorUsername + temp.getName();
+            dataManager.saveImage(imageTitle, temp);
+            //TODO: uncomment this
+            if(temp.delete()){
+                System.out.println("deleted");
+            }
+        }
     }
 
 }

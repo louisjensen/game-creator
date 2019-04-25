@@ -11,8 +11,9 @@ class LauncherControlDisplay extends VBox {
      * scenes, so this control helps to standardize this display between pages
      * @author Anna Darwish
      */
+    private static final String STYLE = "default_launcher.css";
     LauncherControlDisplay(String displayType){
-        this.getStylesheets().add("default_launcher.css");
+        this.getStylesheets().add(STYLE);
         this.setSpacing(50);
         this.setAlignment(Pos.CENTER);
         this.getChildren().add(0, new PaneLabel(displayType));
