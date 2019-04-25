@@ -73,7 +73,7 @@ public class GameTranslator {
         return newLevel;
     }
 
-    private Entity translateEntity(AuthoringEntity authEntity) {
+    private Entity translateEntity(AuthoringEntity authEntity) { //TODO save type map to game object
         Entity basisEntity = new Entity();
 
         // TODO account for new property types later

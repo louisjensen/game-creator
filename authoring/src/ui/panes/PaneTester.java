@@ -80,12 +80,12 @@ public class PaneTester extends Application {
         AuthoringEntity d = new AuthoringEntity("object4", manager);
         AuthoringEntity e = new AuthoringEntity("object1", manager);
         AuthoringEntity f = new AuthoringEntity("object1", manager);
-        manager.addEntityType(a);
-        manager.addEntityType(b);
-        manager.addEntityType(c);
-        manager.addEntityType(d);
-        manager.addEntityType(e);
-        manager.addEntityType(f);
+        manager.addEntityType(a, "");
+        manager.addEntityType(b, "");
+        manager.addEntityType(c, "");
+        manager.addEntityType(d, "");
+        manager.addEntityType(e, "");
+        manager.addEntityType(f, "");
         a.getPropertyMap().put(EntityField.GROUP, "Enemies");
         b.getPropertyMap().put(EntityField.GROUP, "Platforms");
         c.getPropertyMap().put(EntityField.GROUP, "Enemies");

@@ -27,7 +27,7 @@ public class ObjectManager {
     private LabelManager myLabelManager;
     private ObservableList<AuthoringLevel> myLevels;
     private ObjectProperty<Propertable> myCurrentLevel;
-    private Map<String, AuthoringEntity> myEntityTypeMap;
+    private Map<AuthoringEntity, String> myEntityTypeMap;
 
     /**
      * Class that keeps track of every single instance of an Entity, across Levels, for the purposes of authoring environment
@@ -70,10 +70,11 @@ public class ObjectManager {
      * Use this for adding a new general type
      * @param entity AuthoringEntity whose type is to be added
      */
-    public void addEntityType(AuthoringEntity entity) {
+    public void addEntityType(AuthoringEntity entity, String backingString) {
         myEntities.add(entity);
         myLabelManager.addLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL));
         myEventMap.put(entity.getPropertyMap().get(EntityField.LABEL), FXCollections.observableArrayList(new ArrayList<>()));
+        myEntityTypeMap.put(entity, backingString);
     }
 
     /**
@@ -98,6 +99,7 @@ public class ObjectManager {
 
         myLabelManager.removeLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL));
         myEventMap.remove(entity.getPropertyMap().get(EntityField.LABEL));
+        myEntityTypeMap.remove(entity);
     }
 
     /**
