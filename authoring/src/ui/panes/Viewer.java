@@ -167,9 +167,8 @@ public class Viewer extends ScrollPane {
                 isDragOnView = false;
             }
             else{
-                Entity entity = myUserCreatedPane.getDraggedEntity();
                 authoringEntity = myUserCreatedPane.getDraggedAuthoringEntity();
-                String imageName = (String) entity.getComponent(SpriteComponent.class).getValue();
+                String imageName = authoringEntity.getPropertyMap().get(EntityField.IMAGE);
                 authoringEntity = new AuthoringEntity(authoringEntity);
                 authoringEntity.getPropertyMap().put(EntityField.IMAGE, imageName);
                 addImage(Utility.createImageWithEntity(authoringEntity));
