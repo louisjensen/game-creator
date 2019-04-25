@@ -26,6 +26,7 @@ public class SerializationRunner {
 //            e.printStackTrace();
 //        }
 //        myTester.loadImagesToDatabase();
+        myTester.testSavingImages();
     }
 }
 

@@ -24,7 +24,7 @@ public class InformativeField extends TextField {
             this.setText(DEFAULT);
         }
     }
-    private String getTextEntered(){
+    public String getTextEntered(){
         return this.getText();
     }
 

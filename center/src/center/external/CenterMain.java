@@ -9,6 +9,8 @@
 
 package center.external;
 
+import data.external.DatabaseEngine;
+
 public class CenterMain {
 
     /**
@@ -17,6 +19,7 @@ public class CenterMain {
      * @param args the standard arguments passed into main
      */
     public static void main(String[] args) {
+        DatabaseEngine.getInstance().open();
         CenterView.main(args);
     }
 

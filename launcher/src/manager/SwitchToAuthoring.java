@@ -1,4 +1,7 @@
 package manager;
+
+import runner.external.GameCenterData;
+
 @FunctionalInterface
 
 public interface SwitchToAuthoring {
@@ -8,5 +11,5 @@ public interface SwitchToAuthoring {
      * environment by referring to a method in SceneManager
      * @author Anna Darwish
      */
-    void switchScene();
+    void switchScene(GameCenterData myGameData);
 }
