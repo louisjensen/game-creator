@@ -57,23 +57,23 @@ public class SerializationTester {
     }
 
     public void testDatabaseConnection(){
-        DatabaseEngine de = new DatabaseEngine();
-        de.open();
-        System.out.println("Before: ==========================================================");
-        de.printGameTable();
-        System.out.println("Create new entry: ==================================================");
-        de.createEntryForNewGame("RyanGame");
-        de.printGameTable();
-        System.out.println("Update Entry: =======================================================");
-        de.updateGameEntryData("RyanGame", "testing");
-        de.printGameTable();
-        de.close();
+//        DatabaseEngine de = new DatabaseEngine();
+//        de.open();
+//        System.out.println("Before: ==========================================================");
+//        de.printGameTable();
+//        System.out.println("Create new entry: ==================================================");
+//        de.createEntryForNewGame("RyanGame");
+//        de.printGameTable();
+//        System.out.println("Update Entry: =======================================================");
+//        de.updateGameEntryData("RyanGame", "testing");
+//        de.printGameTable();
+//        de.close();
     }
 
     public void testSavingImages(){
         DataManager dm = new DataManager();
-        dm.saveImage("flower_test1", new File("D:\\Pictures\\2018-03\\IMG_1408.jpg"));
-        DatabaseEngine de = new DatabaseEngine();
+        dm.saveImage("flappy_bird", new File("runner/resources/flappy_bird.png"));
+//        DatabaseEngine de = new DatabaseEngine();
 //        try {
 //            de.printTable("Images");
 //        } catch (SQLException e) {

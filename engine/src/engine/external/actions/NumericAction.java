@@ -11,7 +11,6 @@ import java.util.function.Consumer;
  * - setting the existing value to a new value
  * - scaling the existing value by a new value
  * - adding a new value to the existing value
-
  *
  * @param <Double>
  * @author Feroze
@@ -25,8 +24,9 @@ public abstract class NumericAction<Double> extends Action<Double> {
     /**
      * This method is used when subclass objects are constructed in order to specify what kind of
      * operation is being done to the existing value
-     * @param type either an absolute set, a scaling, or an addition
-     * @param newValue value used in the operation
+     *
+     * @param type           either an absolute set, a scaling, or an addition
+     * @param newValue       value used in the operation
      * @param componentClass component which this action affects, whose getValue() method should return a DOUBLE
      */
     public void setAction(ModifyType type, Double newValue, Class<? extends Component<Double>> componentClass) {
@@ -49,6 +49,7 @@ public abstract class NumericAction<Double> extends Action<Double> {
 
     /**
      * This method scales the current value of a component by a scaleFactor
+     *
      * @param scaleFactor
      * @param componentClass
      */
@@ -86,10 +87,12 @@ public abstract class NumericAction<Double> extends Action<Double> {
         private final String displayName;
         private final String modifierName;
         ModifyType(String displayName, String modifierName) {
+
             this.displayName = displayName;
             this.modifierName = modifierName;
         }
-        public String getDisplayName(){
+
+        public String getDisplayName() {
             return this.displayName;
         }
         public String getModifierName(){ return this.modifierName; }
