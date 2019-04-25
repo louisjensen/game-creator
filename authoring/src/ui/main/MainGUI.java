@@ -142,11 +142,11 @@ public class MainGUI {
         try {
             LevelsPane levelsPane = new LevelsPane(myObjectManager, myCurrentLevel);
             PropertiesPane objectProperties =
-                    new PropertiesPane(myObjectManager, PropertableType.OBJECT, mySelectedEntity, myObjectManager.getLabelManager());
+                    new PropertiesPane(myObjectManager, PropertableType.OBJECT, mySelectedEntity);
             PropertiesPane levelProperties =
-                    new PropertiesPane(myObjectManager, PropertableType.LEVEL, myCurrentLevel, myObjectManager.getLabelManager());
+                    new PropertiesPane(myObjectManager, PropertableType.LEVEL, myCurrentLevel);
             PropertiesPane instanceProperties =
-                    new PropertiesPane(myObjectManager, PropertableType.INSTANCE, mySelectedEntity, myObjectManager.getLabelManager());
+                    new PropertiesPane(myObjectManager, PropertableType.INSTANCE, mySelectedEntity);
             levelsPane.prefWidthProperty().bind(mainScene.widthProperty().divide(4));
             objectProperties.prefWidthProperty().bind(mainScene.widthProperty().divide(4));
             levelProperties.prefWidthProperty().bind(mainScene.widthProperty().divide(4));

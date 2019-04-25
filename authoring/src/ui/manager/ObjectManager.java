@@ -87,7 +87,7 @@ public class ObjectManager {
      * Use to remove all instances of an entity type from ObjectManager, removes Instances, Events, Label for complete deletion
      * @param entity AuthoringEntity with label corresponding to the type being deleted
      */
-    public void removeEntityType(AuthoringEntity entity) { //TODO test to check working
+    public void removeEntityType(AuthoringEntity entity) {
         myEntities.removeIf(authEntity ->
                 authEntity.getPropertyMap().get(EntityField.LABEL).equals(entity.getPropertyMap().get(EntityField.LABEL)));
         for (AuthoringLevel level : myLevels)
@@ -111,12 +111,15 @@ public class ObjectManager {
         for (AuthoringEntity entity : myEntities) {
             if (entity.getPropertyMap().get(EntityField.LABEL).equals(objectLabel)) { // Match found
                 entity.getPropertyMap().put(property, newValue);
-                if (property.equals(EntityField.LABEL)) // TODO this may have solved group/entity label mix-up issue
+                if (property.equals(EntityField.LABEL))
                     myLabelManager.addLabel(EntityField.LABEL, newValue);
             }
-        } //TODO propagate changed label into Event Map
-        if (property.equals(EntityField.LABEL))
+        }
+        if (property.equals(EntityField.LABEL)) {
+            myEventMap.putIfAbsent(newValue, myEventMap.get(objectLabel));
+            myEventMap.remove(objectLabel);
             myLabelManager.removeLabel(EntityField.LABEL, objectLabel); // Remove old label from LabelManager if a label was just propagated
+        }
     }
 
     public void flushCameraAssignment(Propertable propagator) {
@@ -132,9 +135,6 @@ public class ObjectManager {
 
         if (change.wasReplaced())
             str = change.getAddedSubList().get(0);
-
-        if (change.wasRemoved())
-            System.out.println("REMOVED"); //TODO still debugging
 
         if (change.wasReplaced() || change.wasRemoved()) {
             for (AuthoringEntity entity : myEntities) {

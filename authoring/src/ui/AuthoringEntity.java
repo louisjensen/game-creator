@@ -22,19 +22,12 @@ public class AuthoringEntity implements Propertable {
     private ObjectManager myObjectManager;
     private Entity myBackingEntity;
     private List<String> myInteractionListing = new ArrayList<>();
-    private static final List<? extends Enum> PROP_VAR_NAMES = Arrays.asList(EntityField.values());
 
     private AuthoringEntity() { // Initialize default property map
         myPropertyMap = FXCollections.observableHashMap();
-        for (Enum name : PROP_VAR_NAMES)
-            myPropertyMap.put(name, null);
-        myPropertyMap.put(EntityField.X, "0.0");
-        myPropertyMap.put(EntityField.Y, "0.0");
-        myPropertyMap.put(EntityField.Z, "0.0");
-        myPropertyMap.put(EntityField.XSCALE, "1.0");
-        myPropertyMap.put(EntityField.YSCALE, "1.0");
-        myPropertyMap.put(EntityField.CAMERA, "false");
-        myPropertyMap.put(EntityField.VISIBLE, "true");
+        for (EntityField defaultField : EntityField.getDefaultFields()) {
+            myPropertyMap.put(defaultField, defaultField.getDefaultValue());
+        }
     }
 
     public AuthoringEntity(String label, ObjectManager manager) { // Create new type of AuthoringEntity from scratch
@@ -71,14 +64,10 @@ public class AuthoringEntity implements Propertable {
     public AuthoringEntity(AuthoringEntity copyBasis, Entity backingEntity) { // Create new AuthoringEntity instance from pre-existing type
         this();
         myObjectManager = copyBasis.myObjectManager;
-        myPropertyMap.put(EntityField.LABEL, copyBasis.myPropertyMap.get(EntityField.LABEL));
-        myPropertyMap.put(EntityField.IMAGE, copyBasis.myPropertyMap.get(EntityField.IMAGE));
-        myPropertyMap.put(EntityField.GROUP, copyBasis.myPropertyMap.get(EntityField.GROUP));
-        myPropertyMap.put(EntityField.X, copyBasis.myPropertyMap.get(EntityField.X));
-        myPropertyMap.put(EntityField.Y, copyBasis.myPropertyMap.get(EntityField.Y));
-        myPropertyMap.put(EntityField.Z, copyBasis.myPropertyMap.get(EntityField.Z));
-        myPropertyMap.put(EntityField.XSCALE, copyBasis.myPropertyMap.get(EntityField.XSCALE));
-        myPropertyMap.put(EntityField.YSCALE, copyBasis.myPropertyMap.get(EntityField.YSCALE));
+        for (EntityField commonField : EntityField.getCommonFields()) {
+            if (copyBasis.myPropertyMap.containsKey(commonField))
+                myPropertyMap.put(commonField, copyBasis.myPropertyMap.get(commonField));
+        }
         myBackingEntity = backingEntity;
         addPropertyListeners();
         myObjectManager.addEntityInstance(this);
@@ -94,8 +83,10 @@ public class AuthoringEntity implements Propertable {
             myObjectManager.propagate(oldVal, key, newVal);
         else if (key.equals(EntityField.IMAGE) || key.equals(EntityField.GROUP)) // If we're changing the Image or Group, just do it
             myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
-        else if (key.equals(EntityField.CAMERA)) {
+        else if (key.equals(EntityField.CAMERA))
             myObjectManager.flushCameraAssignment(this);
+        else if (!((EntityField) key).isDefault()) {
+            myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
         }
     }
 
