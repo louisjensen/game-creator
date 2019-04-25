@@ -72,13 +72,13 @@ public class UserCreatedTypesPane extends VBox {
         }
     }
 
-    public void addUserDefinedType(Entity entity,String defaultName){
-        String label = (String) entity.getComponent(NameComponent.class).getValue();
+    public void addUserDefinedType(Entity originalEntity,String defaultName){
+        String label = (String) originalEntity.getComponent(NameComponent.class).getValue();
         String category = myDefaultTypesFactory.getCategory(defaultName);
         myCategoryToList.putIfAbsent(category, new ArrayList<>());
-        String imageName = (String) entity.getComponent(SpriteComponent.class).getValue();
+        String imageName = (String) originalEntity.getComponent(SpriteComponent.class).getValue();
         try {
-            AuthoringEntity originalAuthoringEntity = new AuthoringEntity(entity, myObjectManager);
+            AuthoringEntity originalAuthoringEntity = new AuthoringEntity(originalEntity, myObjectManager);
             originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
             String assetImagesFilePath = myGeneralResources.getString("images_filepath");
             ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(assetImagesFilePath + "/" + imageName), originalAuthoringEntity);
