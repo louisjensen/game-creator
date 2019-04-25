@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class LevelRunner {
     private PauseButton myPauseButton;
@@ -35,14 +36,16 @@ public class LevelRunner {
     private Level myLevel;
     private Set<KeyCode> myCurrentKeys;
     private boolean canPause = false;
+    private Consumer<Double> myLevelChanger;
 
-    public LevelRunner(Level level, int width, int height, Stage stage){
+    public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
         myLevel = level;
         mySceneWidth = width;
         mySceneHeight = height;
         myCurrentKeys = new HashSet<>();
         myEngine = new Engine(level);
         myEntities = myEngine.updateState(myCurrentKeys);
+        myLevelChanger = playNext;
         buildStage(stage);
         startAnimation();
         addPauseButton();
@@ -87,7 +90,7 @@ public class LevelRunner {
         myEntities = myEngine.updateState(myCurrentKeys);
         showEntities();
         printKeys();
-        printEntityLocations();
+        //printEntityLocations();
     }
 
     private void printKeys() {
@@ -119,12 +122,20 @@ public class LevelRunner {
         myGroup.getChildren().retainAll(myPause);
         //myGroup.getChildren().clear();
         for(Entity entity : myEntities){
-            if(entity.hasComponents(CameraComponent.class)){
-                scrollOnMainCharacter(entity);
-            }
-            if(entity.hasComponents(NextLevelComponent.class)){
+            try {
                 System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
                 System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
+            } catch (Exception e){
+                //do nothing
+            }
+            if(entity.hasComponents(ProgressionComponent.class) && (Boolean) entity.getComponent(ProgressionComponent.class).getValue()){
+                System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
+                System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
+                endLevel((Double) entity.getComponent(NextLevelComponent.class).getValue());
+                break;
+            }
+            if(entity.hasComponents(CameraComponent.class)){
+                scrollOnMainCharacter(entity);
             }
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
             ImageView image = imageViewComponent.getValue();
@@ -133,6 +144,14 @@ public class LevelRunner {
         if (canPause) {
             movePauseButton();
         }
+    }
+
+    private void endLevel(Double levelToProgressTo) {
+        System.out.println(myAnimation);
+        myGroup.getChildren().clear();
+        myAnimation.stop();
+        myStage.setScene(new Scene(new Group(), mySceneWidth, mySceneHeight));
+        myLevelChanger.accept(levelToProgressTo);
     }
 
     private void movePauseButton(){

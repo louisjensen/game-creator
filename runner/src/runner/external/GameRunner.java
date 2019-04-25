@@ -7,6 +7,7 @@ import runner.internal.DummyGameObjectMaker;
 import runner.internal.LevelRunner;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class GameRunner {
     /**
@@ -21,8 +22,10 @@ public class GameRunner {
 
     public GameRunner(String game) throws FileNotFoundException {
         myGame = loadGameObject(game);
+        myGameStage = new Stage();
         Level levelOne = myGame.getLevels().get(0);
-        runLevel(levelOne);
+        int firstLevel = 1;
+        runLevel(firstLevel);
     }
 
     private Game loadGameObject(String path){
@@ -35,10 +38,24 @@ public class GameRunner {
         return (Game) dm.loadGameData("YeetRevised2");
     }
 
-    private void runLevel(Level currentLevel){
+    private void runLevel(int currentLevelNumber){
+        Level currentLevel = myGame.getLevels().get(currentLevelNumber - 1);
         mySceneWidth = myGame.getWidth();
         mySceneHeight = myGame.getHeight();
-        myGameStage = new Stage();
-        new LevelRunner(currentLevel, mySceneWidth, mySceneHeight, myGameStage);
+        Consumer<Double> goToNext = level -> {
+            nextLevel(level);
+        };
+        new LevelRunner(currentLevel, mySceneWidth, mySceneHeight, myGameStage, goToNext);
     }
+
+    private void nextLevel(Double level) {
+        int levelToPlay;
+        try{
+            levelToPlay = level.intValue();
+        } catch (Exception e){
+            levelToPlay = 10;
+        }
+        this.runLevel(levelToPlay);
+    }
+
 }

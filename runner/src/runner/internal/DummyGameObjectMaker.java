@@ -36,6 +36,11 @@ public class DummyGameObjectMaker {
         addDummyEvents(level2);
         dummyGame.addLevel(level2);
 
+        Level level3 = new Level();
+        addDummyEntities(level3);
+        addDummyEvents(level3);
+        dummyGame.addLevel(level3);
+
     }
 
     private void addDummyEvents(Level level1) {
@@ -64,8 +69,9 @@ public class DummyGameObjectMaker {
         movedown.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
 
 
-        Event event4 = new Event("one");
-        event4.addInputs(KeyCode.D);
+
+        RightCollisionEvent event4 = new RightCollisionEvent("one", "three");
+        event4.addActions(new ProgressionAction(true));
         event4.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, 2.0));
 
         level1.addEvent(event);
