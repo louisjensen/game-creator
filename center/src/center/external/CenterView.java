@@ -8,6 +8,7 @@
 
 package center.external;
 
+import data.external.DatabaseEngine;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -72,4 +73,9 @@ public class CenterView extends Application {
         myScene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT, BACKGROUND_COLOR);
     }
 
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        DatabaseEngine.getInstance().close();
+    }
 }
