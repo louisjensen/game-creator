@@ -32,16 +32,15 @@ public class GameRunner {
     private Game loadGameObject(String path){
         DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
         Game gameMade = dm2.getGame(path);
-//        DataManager dm = new DataManager();
-//        dm.createGameFolder("YeetRevised2");
-//        dm.saveGameData("YeetRevised3", gameMade);
-//        System.out.println("Serialization complete");
-//        try {
-//            return (Game) dm.loadGameData("YeetRevised3");
-//        } catch (SQLException e) {
-//            return null;
-//        }
-        return gameMade;
+        DataManager dm = new DataManager();
+        dm.createGameFolder("YeetRevised2");
+        dm.saveGameData("YeetRevised3", gameMade);
+        System.out.println("Serialization complete");
+        try {
+            return (Game) dm.loadGameData("YeetRevised3");
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
 
