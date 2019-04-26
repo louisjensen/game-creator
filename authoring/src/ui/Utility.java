@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -17,8 +18,11 @@ import ui.panes.ImageWithEntity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -219,8 +223,10 @@ public class Utility {
     }
 
     public static void setupDragAndDropImage(ImageWithEntity imageWithEntity){
+        System.out.println("Made it to drag and drop");
         Dragboard db = imageWithEntity.startDragAndDrop(TransferMode.MOVE);
         ClipboardContent content = new ClipboardContent();
+        Image image = imageWithEntity.getImage();
         content.putImage(imageWithEntity.getImage());
         db.setContent(content);
         db.setDragView(imageWithEntity.getImage(), 0, 0);
@@ -256,16 +262,31 @@ public class Utility {
      * Takes in an upper directory and iterates through all sub-files
      * and sub-directories and creates a list of every file within those
      * @param upperDirectory File of the starting directory
-     * @return Map of the subdirectories to a list of their files
+     * @return Map of the subdirectories to a list of their files, Note: some of these files may be directories in an dof themselves
      */
     public static Map<File, List<File>> getSubFoldersToFiles(File upperDirectory){
         Map<File, List<File>> map = new HashMap<>();
         for(File file : upperDirectory.listFiles()){
             if(file.isDirectory()){
-                map.put(file, getAllFiles(file));
+                map.put(file, Arrays.asList(file.listFiles()));
             }
         }
         return map;
+    }
+
+    /**
+     * Takes in a directory and returns a list of all the files contained
+     * @param directory Folder from which user wants files
+     * @return List<File> all files contained in directory, omitting any sub-directories
+     */
+    public static List<File> getFilesFromFolder(File directory){
+        List<File> result = new ArrayList<>();
+        for(File file : directory.listFiles()){
+            if(!file.isDirectory()){
+                result.add(file);
+            }
+        }
+        return result;
     }
 
     private static List<File> getAllFiles(File upperDirectory){

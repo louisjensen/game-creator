@@ -16,7 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ui.ErrorBox;
 import ui.Utility;
-import ui.control.TreeNode;
+import ui.TreeNode;
 
 import java.io.File;
 import java.nio.file.Files;
