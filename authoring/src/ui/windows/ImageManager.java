@@ -1,6 +1,7 @@
 package ui.windows;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -92,13 +93,14 @@ public class ImageManager extends AssetManager {
      * @param file File to be added
      */
     @Override
-    protected void addAsset(File file) {
+    protected void addAsset(File file, ScrollPane scrollPane) {
         if(myCol == MAX_NUM_COLS){
             myCol = 0;
             myRow += 1;
         }
         myGridPane.add(createSubPane(file), myCol, myRow);
         myCol++;
+        scrollPane.setContent(myGridPane);
     }
 
     /**

@@ -7,16 +7,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TitledPane;
-import javafx.scene.layout.*;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ui.*;
+import ui.ErrorBox;
+import ui.Utility;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -33,10 +38,9 @@ abstract public class AssetManager extends Stage {
     private static final ResourceBundle RESOURCES = ResourceBundle.getBundle("asset_manager");
     protected static final ResourceBundle GENERAL_RESOURCES = ResourceBundle.getBundle("authoring_general");
     private Set<String> myExtensions;
-    private ScrollPane myScrollPane;
     private HBox myButtonHBox;
     protected String mySelectedAssetName;
-    private TitledPane myImageTitledPane;
+    private TabPane myTabPane;
     private VBox myOuterVBox;
     private static final String BUTTON_INFO = "Buttons";
 
@@ -67,8 +71,9 @@ abstract public class AssetManager extends Stage {
         mySelectedAssetName = "";
         initializeVariables();
         initializeStage();
+        createAndFormatScrollPaneContent();
         fillExtensionSet();
-        populateScrollPane();
+        populateTabs();
         createButtonPane();
         fillVBox();
     }
@@ -76,7 +81,7 @@ abstract public class AssetManager extends Stage {
 
 
     private void fillVBox() {
-        myOuterVBox.getChildren().add(myImageTitledPane);
+        myOuterVBox.getChildren().add(myTabPane);
         myOuterVBox.getChildren().add(myButtonHBox);
     }
 
@@ -99,30 +104,33 @@ abstract public class AssetManager extends Stage {
         myButtonHBox.setAlignment(Pos.CENTER);
     }
 
-    private void populateScrollPane() {
-        myScrollPane.setPadding(INSETS);
-        myScrollPane.setContent(createAndFormatScrollPaneContent());
+    private void populateTabs() {
         File assetFolder = new File(myAssetFolderPath);
-        for(File temp : assetFolder.listFiles()){
-            try {
-                String lowerCaseExtension = temp.getName().split("\\.")[1].toLowerCase();
+        Map<File, List<File>> map = Utility.getSubFoldersToFiles(assetFolder);
+        for(Map.Entry<File, List<File>> entry : map.entrySet()){
+            System.out.println("Directory Name: " + entry.getKey().getName());
+            System.out.println("\tNum Files: " + entry.getValue().size());
+            ScrollPane scrollPane = new ScrollPane();
+            Tab tab = new Tab();
+            tab.setText(entry.getKey().getName());
+            tab.setContent(scrollPane);
+            for(File file : entry.getValue()){
+                System.out.println("\t" + file.getName());
+                String lowerCaseExtension = file.getName().split("\\.")[1].toLowerCase();
                 if(myExtensions.contains(lowerCaseExtension)){
-                    addAsset(temp);
+                    addAsset(file, scrollPane);
                 }
             }
-            catch (IndexOutOfBoundsException e){
-                //this occurs when there is no file extension
-                //this file should be skipped over and nothing should happen
-                //this catch should be empty
-            }
+            myTabPane.getTabs().add(tab);
         }
     }
 
     /**
      * Method that adds a file to the manager
      * @param file File to be added
+     * @param scrollPane Pane to add the asset to
      */
-    abstract protected void addAsset(File file);
+    abstract protected void addAsset(File file, ScrollPane scrollPane);
 
     /**
      * Method that should create and format a pane that
@@ -150,11 +158,8 @@ abstract public class AssetManager extends Stage {
         myExtensions = new HashSet<>();
         myOuterVBox = new VBox();
         myOuterVBox.setPrefHeight(STAGE_HEIGHT);
-        myScrollPane = new ScrollPane();
         myButtonHBox = new HBox();
-        myImageTitledPane = new TitledPane();
-        myImageTitledPane.setContent(myScrollPane);
-        myImageTitledPane.setText(RESOURCES.getString(myTitleKey));
+        myTabPane = new TabPane();
     }
 
     private void initializeStage(){
@@ -163,7 +168,7 @@ abstract public class AssetManager extends Stage {
         this.setHeight(STAGE_HEIGHT);
         Scene scene = new Scene(myOuterVBox);
         scene.getStylesheets().add(DEFAULT_STYLE_SHEET);
-        myImageTitledPane.getStyleClass().add(ASSET_SPECIFIC_SHEET);
+        myTabPane.getStyleClass().add(ASSET_SPECIFIC_SHEET);
         this.setScene(scene);
     }
 
@@ -185,7 +190,7 @@ abstract public class AssetManager extends Stage {
         File selectedFile = chooser.showOpenDialog(stage);
         if(selectedFile != null){
             saveAsset(selectedFile);
-            populateScrollPane();
+            populateTabs();
         }
     }
 
@@ -228,6 +233,7 @@ abstract public class AssetManager extends Stage {
     /**
      * should apply whatever needs to happen after an image has been selected
      */
+    @SuppressWarnings("unused")
     abstract protected void handleApply();
 
 

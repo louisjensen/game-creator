@@ -2,6 +2,7 @@ package ui.windows;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -33,7 +34,7 @@ public class AudioManager extends AssetManager {
      * @param file File to be added
      */
     @Override
-    protected void addAsset(File file) {
+    protected void addAsset(File file, ScrollPane scrollPane) {
         Label text = new Label(file.getName());
         VBox vBox = new VBox(text);
         vBox.setOnMouseClicked(mouseEvent -> {
@@ -46,6 +47,7 @@ public class AudioManager extends AssetManager {
             }
         });
         myListView.getItems().add(vBox);
+        scrollPane.setContent(myListView);
     }
 
     /**
