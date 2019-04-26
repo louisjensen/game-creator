@@ -41,7 +41,7 @@ import java.util.ResourceBundle;
  */
 public class MainGUI {
 
-    private Game myGame;
+    private Game myLoadedGame;
     private GameCenterData myGameData;
     private Stage myStage;
     private HBox myViewerBox;
@@ -61,7 +61,7 @@ public class MainGUI {
     private static final ResourceBundle GENERAL_RESOURCES = ResourceBundle.getBundle("authoring_general");
 
     public MainGUI() { // Default constructor for creating a new game from scratch
-        myGame = new Game();
+        myLoadedGame = new Game();
         myGameData = new GameCenterData();
         myStage = new Stage();
         myViewers = new HashMap<>();
@@ -81,7 +81,7 @@ public class MainGUI {
 
     public MainGUI(Game game, GameCenterData gameData) {
         this();
-        myGame = game;
+        myLoadedGame = game;
         myGameData = gameData;
     }
 
@@ -201,20 +201,12 @@ public class MainGUI {
 
     @SuppressWarnings("unused")
     private void saveGame() {
-        System.out.println("save game called");
-        GameTranslator translator = new GameTranslator(myGame, myGameData, myObjectManager);
+        GameTranslator translator = new GameTranslator(myObjectManager);
         Game exportableGame = translator.translate();
-        GameCenterData gameData = translator.getNewGameData();
 
-        System.out.println("Made it to line");
         DataManager dm = new DataManager();
-        System.out.println("Made it after the line");
-//        dm.createGameFolder(gameData.getFolderName());
-//        dm.saveGameData(gameData.getFolderName(), exportableGame);
-//        dm.saveGameInfo(gameData.getFolderName(), gameData);
-        dm.saveGameData(gameData.getFolderName(), gameData.getAuthorName(), exportableGame);
-        dm.saveGameInfo(gameData.getFolderName(), gameData.getAuthorName(), gameData);
-        System.out.println("Game saved");
+        dm.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
+        dm.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
     }
 
     @SuppressWarnings("unused")

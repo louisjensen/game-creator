@@ -95,5 +95,8 @@ public class AuthoringEntity implements Propertable {
 
     public List<String> getInteractionListing(){ return myInteractionListing;}
 
+    public ObjectManager getObjectManager() {
+        return myObjectManager;
+    }
 
 }
