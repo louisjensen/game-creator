@@ -9,13 +9,10 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -42,6 +39,7 @@ public class LevelRunner {
     private ImageDisplaySystem myImageDisplaySystem;
     private ScoringSystem myScoringSystem;
     private LivesSystem myLivesSystem;
+    private LevelSystem myLevelSystem;
 
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
         myLevel = level;
@@ -79,6 +77,10 @@ public class LevelRunner {
         Collection<Class<? extends Component>> comp1 = new ArrayList<>();
         comp1.add(ScoreComponent.class);
         myLivesSystem = new LivesSystem(comp1, this);
+
+        Collection<Class<? extends Component>> comp2 = new ArrayList<>();
+        comp2.add(NextLevelComponent.class);
+        myLevelSystem = new LevelSystem(comp2, this);
     }
 
     private void addPauseButton() {
@@ -127,9 +129,8 @@ public class LevelRunner {
         myImageDisplaySystem.update(myEntities);
         myScoringSystem.update(myEntities);
         myLivesSystem.update(myEntities);
-        if (canPause) {
-            movePauseButton();
-        }
+        myLevelSystem.update(myEntities);
+        if (canPause) movePauseButton();
     }
 
     private void movePauseButton(){
