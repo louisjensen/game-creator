@@ -86,7 +86,7 @@ public class DummyGameObjectMaker {
         //double jump logic (next 2 events)
         Event flappyJump = new Event("one");
         flappyJump.addInputs(KeyCode.UP);
-        flappyJump.addConditions(new LessThanCondition(ValueComponent.class,5.0));
+        flappyJump.addConditions(new LessThanCondition(ValueComponent.class,10.0));
         flappyJump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
         flappyJump.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-2.0));
         //flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
