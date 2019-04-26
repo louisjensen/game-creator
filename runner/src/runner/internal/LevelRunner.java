@@ -8,9 +8,10 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import runner.internal.runnerSystems.*;
@@ -37,7 +38,7 @@ public class LevelRunner {
     protected Consumer<Double> myLevelChanger;
     private List<RunnerSystem> mySystems;
     protected HeadsUpDisplay myHUD;
-    private Label myLabel;
+    private Text myLabel;
 
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
         myLevel = level;
@@ -77,6 +78,8 @@ public class LevelRunner {
         myScene.setFill(Color.BEIGE);
         myScene.setOnKeyPressed(e -> handleKeyPress(e.getCode()));
         myScene.setOnKeyReleased(e -> handleKeyRelease(e.getCode()));
+        myScene.getStylesheets().add("runnerStyle.css");
+        myScene.getStylesheets().add("https://fonts.googleapis.com/css?family=Gugi");
         initializeSystems();
         updateGUI();
         myStage.setScene(myScene);
