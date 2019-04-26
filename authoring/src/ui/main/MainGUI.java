@@ -22,6 +22,7 @@ import ui.ErrorBox;
 import ui.Propertable;
 import ui.PropertableType;
 import ui.UIException;
+import ui.Utility;
 import ui.manager.GroupManager;
 import ui.manager.InfoEditor;
 import ui.manager.ObjectManager;
@@ -30,10 +31,9 @@ import ui.panes.LevelsPane;
 import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
+import voogasalad.util.reflection.Reflection;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -41,6 +41,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -67,6 +68,7 @@ public class MainGUI {
     private static final String MENU_ITEMS_FILE = "main_menu_items";
     private static final String STAGE_TITLE = "ByteMe Authoring Environment";
     private static final ResourceBundle GENERAL_RESOURCES = ResourceBundle.getBundle("authoring_general");
+    private static final ResourceBundle SAVING_ASSETS_RESOURCES = ResourceBundle.getBundle("mainGUI_assets");
 
     public MainGUI() { // Default constructor for creating a new game from scratch
         myGame = new Game();
@@ -222,6 +224,8 @@ public class MainGUI {
 //        dm.saveGameInfo(gameData.getFolderName(), gameData);
         dm.saveGameData(gameData.getFolderName(), gameData.getAuthorName(), exportableGame);
         dm.saveGameInfo(gameData.getFolderName(), gameData.getAuthorName(), gameData);
+
+        saveAndClearFolder(dm, "authoring/assets/images");
         System.out.println("Game saved");
     }
 
@@ -269,26 +273,36 @@ public class MainGUI {
 
     //TODO make this work for audio too - need to differentiate which dataManager method using
     //outerDirectory - folder that needs sub-folders "defaults" and "user-uploaded"
-    private void saveAndClearFolder(DataManager dataManager, File outerDirectory){
-        System.out.println("Save and clear folder called");
-        System.out.println(outerDirectory.getName());
-        for(File innerFolder : outerDirectory.listFiles()){
-            if(innerFolder.isDirectory()){
-                for(File asset : innerFolder.listFiles()){
-                    System.out.println(asset.getName());
-                    String gameTitle = myGameData.getTitle();
-                    String authorUsername = myGameData.getAuthorName();
-                    String imageTitle = gameTitle + authorUsername + asset.getName();
-                    dataManager.saveImage(imageTitle, asset);
-                    //TODO: uncomment this
-//            if(temp.delete()){
-//                System.out.println("deleted");
-//            }
+    private void saveAndClearFolder(DataManager dataManager, String outerDirectoryPath){
+        File outerDirectory = new File(outerDirectoryPath);
+        System.out.println("Save and clear folder called on " + outerDirectory.getName());
+        //images or audio
+        if(SAVING_ASSETS_RESOURCES.containsKey(outerDirectory.getName())){  //name used for determining save method (audio or image)
+            Map<File, List<File>> map;
+            map = Utility.getSubFoldersToFiles(outerDirectory);
+            //defaults/user_uploaded
+            for(File directory : map.keySet()){
+                String prefix = determinePrefix(directory);
+                for(File assetFile : directory.listFiles()){
+                    Reflection.callMethod(dataManager, SAVING_ASSETS_RESOURCES.getString(outerDirectory.getName()), prefix + assetFile.getName(), assetFile);
+                    //TODO: uncomment
+                    //assetFile.delete();
                 }
             }
-
-
         }
+    }
+
+    //takes in a directory and checks if it's in the properties file for a specific prefix
+    //if not, it defaults to GameName + AuthorName
+    private String determinePrefix(File directory) {
+        String prefix;
+        if(SAVING_ASSETS_RESOURCES.containsKey(directory.getName())){
+            prefix = SAVING_ASSETS_RESOURCES.getString(directory.getName());
+        }
+        else{
+            prefix = myGameData.getTitle() + myGameData.getAuthorName();
+        }
+        return prefix;
     }
 
     //TODO: differentiate between images and audio
