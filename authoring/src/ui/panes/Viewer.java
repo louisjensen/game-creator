@@ -201,6 +201,17 @@ public class Viewer extends ScrollPane {
         applyDragHandler(imageView);
         applyRightClickHandler(imageView);
         myStackPane.getChildren().add(imageView);
+        myObjectManager.getTypeMap().addListener(new MapChangeListener<AuthoringEntity, String>() {
+            @Override
+            public void onChanged(Change<? extends AuthoringEntity, ? extends String> change) {
+                if(change.wasRemoved()){
+                    if(imageView.getAuthoringEntity().getPropertyMap().get(EntityField.LABEL).equals(change.getKey().getPropertyMap().get(EntityField.LABEL))){
+                        myStackPane.getChildren().remove(imageView);
+                    }
+
+                }
+            }
+        });
     }
 
     private void applyRightClickHandler(ImageWithEntity imageView) {
