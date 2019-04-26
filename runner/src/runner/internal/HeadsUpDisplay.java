@@ -9,19 +9,20 @@ public class HeadsUpDisplay extends Node {
     private Double myScore;
     private Double myLevel;
     private Text myLabel;
-    private static final double DEFAULT_X = 200.0;
-    private static final double DEFAULT_Y = 50.0;
+    private double xPosition;
+    private static final double DEFAULT_Y = 30.0;
 
-    public HeadsUpDisplay(){
+    public HeadsUpDisplay(int width){
         myLives = 3.0;
         myLevel = 1.0;
         myScore = 0.0;
+        xPosition = width * 3 / 4.0;
         Text text = new Text ("Level: " + myLevel.intValue() +
                 "\nScore: " + myScore.intValue() +
                 "\nLives: " +myLives.intValue());
         text.setId("HeadsUpDisplay");
         myLabel = text;
-        myLabel.setLayoutX(DEFAULT_X);
+        myLabel.setLayoutX(xPosition);
         myLabel.setLayoutY(DEFAULT_Y);
     }
 
@@ -32,7 +33,7 @@ public class HeadsUpDisplay extends Node {
     }
 
     public Double getX(){
-        return DEFAULT_X;
+        return xPosition;
     }
 
     public Text getLabel(){

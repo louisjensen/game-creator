@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -46,13 +45,13 @@ public class LevelRunner {
         mySceneHeight = height;
         myCurrentKeys = new HashSet<>();
         myEngine = new Engine(level);
-        myHUD = new HeadsUpDisplay();
+        myHUD = new HeadsUpDisplay(width);
         myEntities = myEngine.updateState(myCurrentKeys);
         myLevelChanger = playNext;
         myAnimation = new Timeline();
         buildStage(stage);
         startAnimation();
-        addPauseButton();
+        addButtonsAndHUD();
         myStage.show();
     }
 
@@ -61,18 +60,18 @@ public class LevelRunner {
         mySystems = systems.getSystems();
     }
 
-    private void addPauseButton() {
+    private void addButtonsAndHUD() {
         myPauseButton = new PauseButton(myAnimation);
         myPause = myPauseButton.getPauseButton();
         myGroup.getChildren().add(myPause);
         canPause = true;
-
         myLabel = myHUD.getLabel();
         myGroup.getChildren().add(myLabel);
     }
 
     private void buildStage(Stage stage) {
         myStage = stage;
+        myStage.setResizable(false);
         myGroup = new Group();
         myScene = new Scene(myGroup, mySceneWidth, mySceneHeight);
         myScene.setFill(Color.BEIGE);
@@ -110,10 +109,10 @@ public class LevelRunner {
         for(RunnerSystem system : mySystems){
             system.update(myEntities);
         }
-        if (canPause) updateButtons();
+        if (canPause) updateButtonsAndHUD();
     }
 
-    private void updateButtons(){
+    private void updateButtonsAndHUD(){
         myPause.setLayoutX(myPauseButton.getButtonX() - myGroup.getTranslateX());
         myLabel.setLayoutX(myHUD.getX() - myGroup.getTranslateX());
         myHUD.updateLabel();
