@@ -14,9 +14,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ui.panes.ImageWithEntity;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -29,7 +32,8 @@ import java.util.ResourceBundle;
  */
 public class Utility {
 
-    private static final String RESOURCE = "utility";
+    private static final String UTILITY_RESOURCES = "utility";
+    private static final String GENERAL_RESOURCES = "authoring_general";
     private static final String DEFAULT_STYLESHEET = "default.css";
 
     /**
@@ -45,7 +49,7 @@ public class Utility {
      * @return A Button with the above parameters
      */
     public static Button makeButton(Object o, String methodName, String buttonText){
-        ResourceBundle resources = ResourceBundle.getBundle(RESOURCE);
+        ResourceBundle resources = ResourceBundle.getBundle(UTILITY_RESOURCES);
         Button button = new Button();
         button.setOnMouseClicked(e -> {
             try {
@@ -61,7 +65,7 @@ public class Utility {
     }
 
     public static Button makeButton(Object o, String methodName, String buttonText, Object... methodParams){
-        ResourceBundle resources = ResourceBundle.getBundle(RESOURCE);
+        ResourceBundle resources = ResourceBundle.getBundle(UTILITY_RESOURCES);
         Button button = new Button();
         Method reference = findMethod(o, methodName, methodParams);
         button.setOnAction(e -> {
@@ -181,31 +185,37 @@ public class Utility {
         ResourceBundle generalResources = ResourceBundle.getBundle("authoring_general");
 
         String imageName = entity.getPropertyMap().get(EntityField.IMAGE);
-        String imagePath = generalResources.getString("images_filepath");
-        ImageWithEntity imageWithEntity = new ImageWithEntity(makeFileInputStream(imagePath + imageName), entity);
+        ImageWithEntity imageWithEntity = new ImageWithEntity(makeImageAssetInputStream(imageName), entity);
         return imageWithEntity;
 
     }
 
     /**
      * Attempts to create a file input stream with the given string path
-     * @param path String of the path to the desired fileinputstream file
+     * @param imageName String of the path to the desired fileinputstream file
      * @return FileInputStream
      */
-    public static FileInputStream makeFileInputStream(String path){
-        ResourceBundle utilityResources = ResourceBundle.getBundle(RESOURCE);
-        try {
-            FileInputStream fileInputStream = new FileInputStream(path);
-            return fileInputStream;
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found in trying to create an image with entity in Utility");
-            String[] info = utilityResources.getString("FileException").split(",");
-            ErrorBox errorBox = new ErrorBox(info[0], info[1]);
-            errorBox.display();
-            //TODO: get rid of this stack trace. rn it's just in case this happens and we need to know where
-            e.printStackTrace();
-            return null;
+    public static FileInputStream makeImageAssetInputStream(String imageName){
+        ResourceBundle pathResources = ResourceBundle.getBundle(GENERAL_RESOURCES);
+        File imageAssetFolder = new File(pathResources.getString("images_filepath"));
+        FileInputStream result = null;
+        for(File file : getAllFiles(imageAssetFolder)){
+            if(file.getName().equals(imageName)){
+                try {
+                    result = new FileInputStream(file.getPath());
+                    return result;
+                } catch (FileNotFoundException e) {
+                    System.out.println("File not found in trying to create an image with entity in Utility");
+                    String[] info = pathResources.getString("FileException").split(",");
+                    ErrorBox errorBox = new ErrorBox(info[0], info[1]);
+                    errorBox.display();
+                    //TODO: get rid of this stack trace. rn it's just in case this happens and we need to know where
+                    e.printStackTrace();
+                    return result;
+                }
+            }
         }
+        return result;
     }
 
     public static void setupDragAndDropImage(ImageWithEntity imageWithEntity){
@@ -242,4 +252,32 @@ public class Utility {
         }
     }
 
+    /**
+     * Takes in an upper directory and iterates through all sub-files
+     * and sub-directories and creates a list of every file within those
+     * @param upperDirectory File of the starting directory
+     * @return Map of the subdirectories to a list of their files
+     */
+    public static Map<File, List<File>> getSubFoldersToFiles(File upperDirectory){
+        Map<File, List<File>> map = new HashMap<>();
+        for(File file : upperDirectory.listFiles()){
+            if(file.isDirectory()){
+                map.put(file, getAllFiles(file));
+            }
+        }
+        return map;
+    }
+
+    private static List<File> getAllFiles(File upperDirectory){
+        List<File> list = new ArrayList<>();
+        for(File file : upperDirectory.listFiles()){
+            if(file.isDirectory()){
+                list.addAll(getAllFiles(file));
+            }
+            else{
+                list.add(file);
+            }
+        }
+        return list;
+    }
 }
