@@ -63,8 +63,6 @@ public class LevelRunner {
         systemComponents.clear();
         systemComponents.add(CameraComponent.class);
         myScrollingSystem = new ScrollingSystem(systemComponents, this, myGroup, myScene);
-
-
     }
 
     private void addPauseButton() {
@@ -105,38 +103,12 @@ public class LevelRunner {
     private void step (double elapsedTime) {
         myEntities = myEngine.updateState(myCurrentKeys);
         showEntities();
-        printKeys();
-        //printEntityLocations();
-    }
-
-    private void printKeys() {
-        System.out.println(myCurrentKeys);
-    }
-
-    protected List<Double> getXYZasList(Entity entity){
-        List<Double> list = new ArrayList<>();
-        XPositionComponent xPositionComponent = (XPositionComponent) entity.getComponent(XPositionComponent.class);
-        Double xPosition = xPositionComponent.getValue();
-        YPositionComponent yPositionComponent = (YPositionComponent) entity.getComponent(YPositionComponent.class);
-        Double yPosition = yPositionComponent.getValue();
-        ZPositionComponent zPositionComponent = (ZPositionComponent) entity.getComponent(ZPositionComponent.class);
-        Double zPosition = zPositionComponent.getValue();
-        list.add(xPosition);
-        list.add(yPosition);
-        list.add(zPosition);
-        return list;
-    }
-
-    private void printEntityLocations(){
-        for(Entity entity : myEntities){
-            List<Double> xyz = getXYZasList(entity);
-            System.out.println(xyz);
-        }
     }
 
     private void showEntities(){
         myGroup.getChildren().retainAll(myPause);
-        //myGroup.getChildren().clear();
+        myProgressionSystem.update(myEntities);
+        myScrollingSystem.update(myEntities);
         for(Entity entity : myEntities){
             try {
                 System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
@@ -147,27 +119,6 @@ public class LevelRunner {
             if (entity.hasComponents(ScoreComponent.class)) {
                 System.out.println("Score: " + entity.getComponent(ScoreComponent.class).getValue());
             }
-//            if(entity.hasComponents(ProgressionComponent.class) && (Boolean) entity.getComponent(ProgressionComponent.class).getValue()){
-//                System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
-//                System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
-//                Double nextLevel = (Double) entity.getComponent(NextLevelComponent.class).getValue();
-//                for(Entity e : myEntities) {
-//                    for (Component<?> component : e.getComponentMap().values()) {
-//                        component.resetToOriginal();
-//                    }
-//                }
-//                try {
-//                    endLevel(nextLevel);
-//                } catch (IndexOutOfBoundsException e){
-//                    System.out.println("GAME BEATEN");
-//                }
-//                break;
-//            }
-            myProgressionSystem.update(myEntities);
-//            if(entity.hasComponents(CameraComponent.class)){
-//                scrollOnMainCharacter(entity);
-//            }
-            myScrollingSystem.update(myEntities);
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
             try {
                 ImageView image = imageViewComponent.getValue();
@@ -176,7 +127,6 @@ public class LevelRunner {
             catch (NullPointerException e) {
                  //TODO fix this
             }
-
         }
         if (canPause) {
             movePauseButton();
@@ -193,19 +143,6 @@ public class LevelRunner {
     private void movePauseButton(){
         myPause.setLayoutX(myPauseButton.getButtonX() - myGroup.getTranslateX());
     }
-
-//    private void scrollOnMainCharacter(Entity entity){
-//        Double x = (Double) entity.getComponent(XPositionComponent.class).getValue();
-//        Double origin = myGroup.getTranslateX();
-//        Double xMinBoundary = myScene.getWidth()/5.0;
-//        Double xMaxBoundary = myScene.getWidth()/4.0*3;
-//        if (x < xMinBoundary - origin) {
-//            myGroup.setTranslateX(-1 * x + xMinBoundary);
-//        }
-//        if (x > xMaxBoundary - origin) {
-//            myGroup.setTranslateX(-1 * x + xMaxBoundary);
-//        }
-//    }
 
     public Collection<Entity> getEntities(){
         return myEntities;

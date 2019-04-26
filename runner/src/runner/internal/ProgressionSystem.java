@@ -9,6 +9,7 @@ import java.util.Collection;
 
 public class ProgressionSystem extends RunnerSystem {
 
+
     public ProgressionSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner) {
         super(requiredComponents, levelRunner);
     }
@@ -21,6 +22,10 @@ public class ProgressionSystem extends RunnerSystem {
                 break;
             }
         }
+    }
+
+    public void addNecessaryPermissions(){
+
     }
 
     private void progressIfNecessary(Entity entity){
