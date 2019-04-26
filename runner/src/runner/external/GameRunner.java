@@ -21,22 +21,22 @@ public class GameRunner {
     private Game myGame;
     private Stage myGameStage;
 
-    public GameRunner(String game) throws FileNotFoundException {
-        myGame = loadGameObject(game);
+    public GameRunner(String gameName, String authorName) throws FileNotFoundException {
+        myGame = loadGameObject(gameName, authorName);
         myGameStage = new Stage();
         Level levelOne = myGame.getLevels().get(0);
         int firstLevel = 1;
         runLevel(firstLevel);
     }
 
-    private Game loadGameObject(String path){
+    private Game loadGameObject(String gameName, String authorName){
         DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
-        Game gameMade = dm2.getGame(path);
+        Game gameMade = dm2.getGame(gameName);
         DataManager dm = new DataManager();
-        dm.saveGameData("YeetRevised3", gameMade);
+        dm.saveGameData(gameName, authorName,gameMade);
         System.out.println("Serialization complete");
         try {
-            return (Game) dm.loadGameData("YeetRevised3");
+            return (Game) dm.loadGameData(gameName, authorName);
         } catch (SQLException e) {
             return null;
         }
