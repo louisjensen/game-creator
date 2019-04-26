@@ -397,7 +397,11 @@
     -fx-border-radius: 5;
     -fx-border-color: white;
 }
-
+.event-component-vbox .button {
+    -fx-min-width: 350;
+    -fx-pref-width: 350;
+    -fx-max-width: 370;
+}
 .event-manager {
     -fx-min-width: 900;
     -fx-max-height: 600;
