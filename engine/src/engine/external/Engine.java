@@ -81,6 +81,14 @@ public class Engine {
     }
 
     /**
+     * Expected to be called by AddEntitySystem for adding an Entity to the running game
+     * @param e Entity to be added
+     */
+    public void addEntity(Entity e){
+        myEntities.add(e);
+    }
+
+    /**
      * Clean up all Components that have been created in Engine for Runner to save the status of game
      * @return a copy of all currently existing Entities that have had Components cleaned up
      */

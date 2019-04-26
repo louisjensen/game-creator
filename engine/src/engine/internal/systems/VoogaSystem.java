@@ -39,6 +39,7 @@ public abstract class VoogaSystem {
     protected final Class<? extends Component> AUDIO_COMPONENT_CLASS = AudioComponent.class;
     protected final Class<? extends Component> SOUND_COMPONENT_CLASS = SoundComponent.class;
     protected final Class<? extends Component> SPRITE_COMPONENT_CLASS = SpriteComponent.class;
+    protected final Class<? extends Component> SPAWN_ENTITY_COMPONENT_CLASS = SpawnEntityComponent.class;
     protected final String GET_OLD_VALUE = "getOldValue";
 
 

@@ -131,6 +131,25 @@ public class DummyGameObjectMaker {
         rce.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
 
 
+        //Adds new entity
+        Event AddEntity = new Event("one");
+        AddEntity.addInputs(KeyCode.I);
+        Entity dummy7 = new Entity();
+        dummy7.addComponent(new XPositionComponent(400.0));
+        dummy7.addComponent(new YPositionComponent(50.0));
+        dummy7.addComponent(new ZPositionComponent(0.0));
+        dummy7.addComponent(new WidthComponent(40.0));
+        dummy7.addComponent(new HeightComponent(40.0));
+        dummy7.addComponent(new SpriteComponent("mushroom.png"));
+        dummy7.addComponent(new NameComponent("two"));
+        dummy7.addComponent(new XVelocityComponent(-2.0));
+        dummy7.addComponent(new YVelocityComponent(0.0));
+        dummy7.addComponent(new XAccelerationComponent(0.0));
+        dummy7.addComponent(new YAccelerationComponent(0.2));
+        dummy7.addComponent(new CollisionComponent(true));
+        AddEntity.addActions(new AddEntityAction(dummy7));
+
+
         level1.addEvent(event);
         level1.addEvent(event2);
 
@@ -143,6 +162,7 @@ public class DummyGameObjectMaker {
         level1.addEvent(flappyOnPlatform);
         level1.addEvent(mushroomOnPlatform);
         level1.addEvent(flappyJump);
+        level1.addEvent(AddEntity);
     }
 
     private void addDummyEntities(Level level, Double current) {
@@ -164,6 +184,7 @@ public class DummyGameObjectMaker {
         Entity dummy4 = new Entity();
         Entity dummy5 = new Entity();
         Entity dummy6 = new Entity();
+        Entity dummy8 = new Entity();
 
 
 
@@ -179,6 +200,9 @@ public class DummyGameObjectMaker {
         dummy3.addComponent(new XPositionComponent(90.0));
         dummy3.addComponent(new YPositionComponent(100.0));
         dummy3.addComponent(new ZPositionComponent(0.0));
+        dummy8.addComponent(new XPositionComponent(200.0));
+        dummy8.addComponent(new YPositionComponent(50.0));
+        dummy8.addComponent(new ZPositionComponent(0.0));
 
         dummy1.addComponent(new WidthComponent(40.0));
         dummy1.addComponent(new HeightComponent(50.0));
@@ -186,6 +210,8 @@ public class DummyGameObjectMaker {
         dummy2.addComponent(new HeightComponent(40.0));
         dummy3.addComponent(new WidthComponent(200.0));
         dummy3.addComponent(new HeightComponent(80.0));
+        dummy8.addComponent(new WidthComponent(40.0));
+        dummy8.addComponent(new HeightComponent(40.0));
 
 //        dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
 //        dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
@@ -193,12 +219,14 @@ public class DummyGameObjectMaker {
         dummy1.addComponent(new SpriteComponent("flappy_bird"));
         dummy2.addComponent(new SpriteComponent("mushroom.png"));
         dummy3.addComponent(new SpriteComponent("basketball"));
+        dummy8.addComponent(new SpriteComponent("mushroom.png"));
 
         dummy1.addComponent(new CameraComponent(true));
 
         dummy1.addComponent(new NameComponent("one"));
         dummy2.addComponent(new NameComponent("two"));
         dummy3.addComponent(new NameComponent("three"));
+        dummy8.addComponent(new NameComponent("five"));
 
         dummy1.addComponent(new XVelocityComponent(2.0));
         dummy1.addComponent(new YVelocityComponent(0.0));
@@ -209,9 +237,14 @@ public class DummyGameObjectMaker {
         dummy2.addComponent(new YVelocityComponent(0.0));
         dummy2.addComponent(new XAccelerationComponent(0.0));
         dummy2.addComponent(new YAccelerationComponent(0.2));
+        dummy8.addComponent(new XVelocityComponent(-2.0));
+        dummy8.addComponent(new YVelocityComponent(0.0));
+        dummy8.addComponent(new XAccelerationComponent(0.0));
+        dummy8.addComponent(new YAccelerationComponent(0.2));
 
         dummy1.addComponent(new CollisionComponent(true));
         dummy2.addComponent(new CollisionComponent(true));
+        dummy8.addComponent(new CollisionComponent(true));
 
 
         dummy4.addComponent(new XPositionComponent(170.0));
@@ -254,6 +287,13 @@ public class DummyGameObjectMaker {
         level.addEntity(gameObject);
 //        level.addEntity(dummy5);
 //        level.addEntity(dummy6);
+        level.addEntity(dummy8);
+//        try{
+//            level.addEntity((Entity) dummy2.clone());
+//        }catch(CloneNotSupportedException e){
+//            System.out.println("Could not clone the dummy");
+//        }
+
 
     }
 
