@@ -71,7 +71,7 @@ public class LevelRunner {
         myScene.setOnKeyPressed(e -> handleKeyPress(e.getCode()));
         myScene.setOnKeyReleased(e -> handleKeyRelease(e.getCode()));
         initializeSystems();
-        showEntities();
+        updateGUI();
         myStage.setScene(myScene);
     }
 
@@ -92,10 +92,10 @@ public class LevelRunner {
 
     private void step (double elapsedTime) {
         myEntities = myEngine.updateState(myCurrentKeys);
-        showEntities();
+        updateGUI();
     }
 
-    private void showEntities(){
+    private void updateGUI(){
         myGroup.getChildren().retainAll(myPause);
         for(RunnerSystem system : mySystems){
             system.update(myEntities);
