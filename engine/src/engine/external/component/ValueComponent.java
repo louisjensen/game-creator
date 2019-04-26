@@ -5,9 +5,9 @@ package engine.external.component;
  * @param <T>
  *     Useful component for storing a value which is custom to a particular game. One could store a double, String, or even another Entity
  */
-public class ValueComponent<T> extends Component<T> {
+public class ValueComponent extends Component<Double> {
 
-    public ValueComponent(T t) {
+    public ValueComponent(Double t) {
         super(t);
     }
 }
