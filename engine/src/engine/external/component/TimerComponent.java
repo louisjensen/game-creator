@@ -1,8 +1,8 @@
 package engine.external.component;
 
-public class TimerComponent extends Component<Integer> {
+public class TimerComponent extends Component<Double> {
 
-    public TimerComponent(Integer value) {
+    public TimerComponent(Double value) {
         super(value);
     }
 }
