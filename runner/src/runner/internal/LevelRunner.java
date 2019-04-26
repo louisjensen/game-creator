@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -35,6 +36,8 @@ public class LevelRunner {
     private boolean canPause = false;
     protected Consumer<Double> myLevelChanger;
     private List<RunnerSystem> mySystems;
+    protected HeadsUpDisplay myHUD;
+    private Label myLabel;
 
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
         myLevel = level;
@@ -42,6 +45,7 @@ public class LevelRunner {
         mySceneHeight = height;
         myCurrentKeys = new HashSet<>();
         myEngine = new Engine(level);
+        myHUD = new HeadsUpDisplay();
         myEntities = myEngine.updateState(myCurrentKeys);
         myLevelChanger = playNext;
         myAnimation = new Timeline();
@@ -61,6 +65,9 @@ public class LevelRunner {
         myPause = myPauseButton.getPauseButton();
         myGroup.getChildren().add(myPause);
         canPause = true;
+
+        myLabel = myHUD.getLabel();
+        myGroup.getChildren().add(myLabel);
     }
 
     private void buildStage(Stage stage) {
@@ -96,15 +103,17 @@ public class LevelRunner {
     }
 
     private void updateGUI(){
-        myGroup.getChildren().retainAll(myPause);
+        myGroup.getChildren().retainAll(myPause, myLabel);
         for(RunnerSystem system : mySystems){
             system.update(myEntities);
         }
-        if (canPause) movePauseButton();
+        if (canPause) updateButtons();
     }
 
-    private void movePauseButton(){
+    private void updateButtons(){
         myPause.setLayoutX(myPauseButton.getButtonX() - myGroup.getTranslateX());
+        myLabel.setLayoutX(myHUD.getX() - myGroup.getTranslateX());
+        myHUD.updateLabel();
     }
 
     public Collection<Entity> getEntities(){

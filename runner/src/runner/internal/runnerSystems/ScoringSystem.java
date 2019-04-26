@@ -3,15 +3,16 @@ package runner.internal.runnerSystems;
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.ScoreComponent;
+import runner.internal.HeadsUpDisplay;
 import runner.internal.LevelRunner;
-import runner.internal.runnerSystems.RunnerSystem;
-
 import java.util.Collection;
 
 public class ScoringSystem extends RunnerSystem {
+    private HeadsUpDisplay myHUD;
 
-    public ScoringSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner) {
+    public ScoringSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner, HeadsUpDisplay hud) {
         super(requiredComponents, levelRunner);
+        myHUD = hud;
     }
 
     @Override
@@ -27,6 +28,6 @@ public class ScoringSystem extends RunnerSystem {
     private void displayScore(Entity entity) {
         //TODO make update HUD
         System.out.println("Score: " + entity.getComponent(ScoreComponent.class).getValue());
-
+        myHUD.updateScore((Double) entity.getComponent(ScoreComponent.class).getValue());
     }
 }

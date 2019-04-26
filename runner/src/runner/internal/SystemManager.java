@@ -32,15 +32,15 @@ public class SystemManager {
 
         Collection<Class<? extends Component>> components4 = new ArrayList<>();
         components4.add(ScoreComponent.class);
-        mySystems.add(new ScoringSystem(components4, myLevelRunner));
+        mySystems.add(new ScoringSystem(components4, myLevelRunner, myLevelRunner.myHUD));
 
         Collection<Class<? extends Component>> components5 = new ArrayList<>();
         components5.add(ScoreComponent.class);
-        mySystems.add(new LivesSystem(components5, myLevelRunner));
+        mySystems.add(new LivesSystem(components5, myLevelRunner, myLevelRunner.myHUD));
 
         Collection<Class<? extends Component>> components6 = new ArrayList<>();
         components6.add(NextLevelComponent.class);
-        mySystems.add(new LevelSystem(components6, myLevelRunner));
+        mySystems.add(new LevelSystem(components6, myLevelRunner, myLevelRunner.myHUD));
     }
 
     public List<RunnerSystem> getSystems(){
