@@ -33,7 +33,6 @@ public class GameRunner {
         DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
         Game gameMade = dm2.getGame(path);
         DataManager dm = new DataManager();
-        dm.createGameFolder("YeetRevised2");
         dm.saveGameData("YeetRevised3", gameMade);
         System.out.println("Serialization complete");
         try {
@@ -41,6 +40,7 @@ public class GameRunner {
         } catch (SQLException e) {
             return null;
         }
+//        return gameMade;
     }
 
 

@@ -179,6 +179,7 @@ public class DummyGameObjectMaker {
 
         dummy1.addComponent(new CameraComponent(true));
 
+
         dummy1.addComponent(new NameComponent("one"));
         dummy2.addComponent(new NameComponent("two"));
         dummy3.addComponent(new NameComponent("three"));

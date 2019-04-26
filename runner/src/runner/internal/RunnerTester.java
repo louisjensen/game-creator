@@ -29,7 +29,6 @@ public class RunnerTester extends Application {
       //  DataManager dm = new DataManager();
        // dm.createGameFolder("game1");
        // dm.saveGameData("game1", dummyGame);
-
         GameRunner runner = new GameRunner("test");
     }
 
