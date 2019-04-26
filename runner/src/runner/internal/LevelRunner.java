@@ -37,12 +37,9 @@ public class LevelRunner {
     private boolean canPause = false;
     private Consumer<Double> myLevelChanger;
     private ProgressionSystem myProgressionSystem;
+    private ScrollingSystem myScrollingSystem;
 
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
-        Collection<Class<? extends Component>> systemComponents = new ArrayList<>();
-        systemComponents.add(ProgressionComponent.class);
-        systemComponents.add(NextLevelComponent.class);
-        myProgressionSystem = new ProgressionSystem(systemComponents, this);
         myLevel = level;
         mySceneWidth = width;
         mySceneHeight = height;
@@ -51,9 +48,23 @@ public class LevelRunner {
         myEntities = myEngine.updateState(myCurrentKeys);
         myLevelChanger = playNext;
         buildStage(stage);
+        //initializeSystems();
         startAnimation();
         addPauseButton();
         myStage.show();
+    }
+
+    private void initializeSystems() {
+        Collection<Class<? extends Component>> systemComponents = new ArrayList<>();
+        systemComponents.add(ProgressionComponent.class);
+        systemComponents.add(NextLevelComponent.class);
+        myProgressionSystem = new ProgressionSystem(systemComponents, this);
+
+        systemComponents.clear();
+        systemComponents.add(CameraComponent.class);
+        myScrollingSystem = new ScrollingSystem(systemComponents, this, myGroup, myScene);
+
+
     }
 
     private void addPauseButton() {
@@ -70,6 +81,7 @@ public class LevelRunner {
         myScene.setFill(Color.BEIGE);
         myScene.setOnKeyPressed(e -> handleKeyPress(e.getCode()));
         myScene.setOnKeyReleased(e -> handleKeyRelease(e.getCode()));
+        initializeSystems();
         showEntities();
         myStage.setScene(myScene);
     }
@@ -152,9 +164,10 @@ public class LevelRunner {
 //                break;
 //            }
             myProgressionSystem.update(myEntities);
-            if(entity.hasComponents(CameraComponent.class)){
-                scrollOnMainCharacter(entity);
-            }
+//            if(entity.hasComponents(CameraComponent.class)){
+//                scrollOnMainCharacter(entity);
+//            }
+            myScrollingSystem.update(myEntities);
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
             try {
                 ImageView image = imageViewComponent.getValue();
@@ -181,18 +194,18 @@ public class LevelRunner {
         myPause.setLayoutX(myPauseButton.getButtonX() - myGroup.getTranslateX());
     }
 
-    private void scrollOnMainCharacter(Entity entity){
-        Double x = (Double) entity.getComponent(XPositionComponent.class).getValue();
-        Double origin = myGroup.getTranslateX();
-        Double xMinBoundary = myScene.getWidth()/5.0;
-        Double xMaxBoundary = myScene.getWidth()/4.0*3;
-        if (x < xMinBoundary - origin) {
-            myGroup.setTranslateX(-1 * x + xMinBoundary);
-        }
-        if (x > xMaxBoundary - origin) {
-            myGroup.setTranslateX(-1 * x + xMaxBoundary);
-        }
-    }
+//    private void scrollOnMainCharacter(Entity entity){
+//        Double x = (Double) entity.getComponent(XPositionComponent.class).getValue();
+//        Double origin = myGroup.getTranslateX();
+//        Double xMinBoundary = myScene.getWidth()/5.0;
+//        Double xMaxBoundary = myScene.getWidth()/4.0*3;
+//        if (x < xMinBoundary - origin) {
+//            myGroup.setTranslateX(-1 * x + xMinBoundary);
+//        }
+//        if (x > xMaxBoundary - origin) {
+//            myGroup.setTranslateX(-1 * x + xMaxBoundary);
+//        }
+//    }
 
     public Collection<Entity> getEntities(){
         return myEntities;

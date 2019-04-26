@@ -33,6 +33,7 @@ public abstract class RunnerSystem {
 
     public abstract void run();
 
+
     public Collection<Entity> getEntities() {
         return myEntities;
     }
