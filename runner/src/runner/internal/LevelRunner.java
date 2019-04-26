@@ -21,22 +21,22 @@ public class LevelRunner {
     private PauseButton myPauseButton;
     private Node myPause;
     private Collection<Entity> myEntities;
-    protected int mySceneWidth;
-    protected int mySceneHeight;
-    protected Stage myStage;
-    protected Group myGroup;
-    protected Scene myScene;
+    private int mySceneWidth;
+    private int mySceneHeight;
+    private Stage myStage;
+    private Group myGroup;
+    private Scene myScene;
     private Engine myEngine;
-    protected Timeline myAnimation;
+    private Timeline myAnimation;
     private static final int FRAMES_PER_SECOND = 60;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private Level myLevel;
     private Set<KeyCode> myCurrentKeys;
     private boolean canPause = false;
-    protected Consumer<Double> myLevelChanger;
+    private Consumer<Double> myLevelChanger;
     private List<RunnerSystem> mySystems;
-    protected HeadsUpDisplay myHUD;
+    private HeadsUpDisplay myHUD;
     private Text myLabel;
 
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
@@ -56,7 +56,8 @@ public class LevelRunner {
     }
 
     private void initializeSystems() {
-        SystemManager systems = new SystemManager(this);
+        SystemManager systems = new SystemManager(this, myGroup, myStage, myAnimation,
+                mySceneWidth, mySceneHeight, myLevelChanger, myScene, myHUD);
         mySystems = systems.getSystems();
     }
 
