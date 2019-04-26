@@ -32,7 +32,6 @@ public class UserCreatedTypesPane extends VBox {
     private static final ResourceBundle myGeneralResources = ResourceBundle.getBundle("authoring_general");
     private ObjectManager myObjectManager;
     private DefaultTypeXMLReaderFactory myDefaultTypesFactory;
-    private Entity myDraggedEntity;
     private AuthoringEntity myDraggedAuthoringEntity;
     private Map<String, List<Pane>> myCategoryToList;
 
@@ -67,14 +66,6 @@ public class UserCreatedTypesPane extends VBox {
     }
 
     /**
-     * Used by Viewer to get the dragged Entity
-     * @return Entity
-     */
-    public Entity getDraggedEntity(){
-        return myDraggedEntity;
-    }
-
-    /**
      * Used by Viewer to get the dragged AuthoringEntity
      * @return AuthoringEntity
      */
@@ -101,9 +92,6 @@ public class UserCreatedTypesPane extends VBox {
             myCategoryToList.get(category).add(subPane);
             myEntityMenu.setDropDown(category, myCategoryToList.get(category));
             subPane.setOnDragDetected(mouseEvent -> {
-                myDraggedEntity = myDefaultTypesFactory.createEntity(defaultName);
-                myDraggedEntity.addComponent(new NameComponent(originalAuthoringEntity.getPropertyMap().get(EntityField.LABEL)));
-                myDraggedEntity.addComponent(new SpriteComponent(originalAuthoringEntity.getPropertyMap().get(EntityField.IMAGE)));
                 myDraggedAuthoringEntity = originalAuthoringEntity;
                 Utility.setupDragAndDropImage(imageWithEntity);
             });
