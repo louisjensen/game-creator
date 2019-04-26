@@ -1,11 +1,13 @@
-package runner.internal;
+package runner.internal.runnerSystems;
 
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.NextLevelComponent;
+import runner.internal.LevelRunner;
+
 import java.util.Collection;
 
-public class LevelSystem extends RunnerSystem{
+public class LevelSystem extends RunnerSystem {
 
     public LevelSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner) {
         super(requiredComponents, levelRunner);

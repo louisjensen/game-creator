@@ -1,12 +1,14 @@
-package runner.internal;
+package runner.internal.runnerSystems;
 
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.ScoreComponent;
+import runner.internal.LevelRunner;
+import runner.internal.runnerSystems.RunnerSystem;
 
 import java.util.Collection;
 
-public class ScoringSystem extends RunnerSystem{
+public class ScoringSystem extends RunnerSystem {
 
     public ScoringSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner) {
         super(requiredComponents, levelRunner);

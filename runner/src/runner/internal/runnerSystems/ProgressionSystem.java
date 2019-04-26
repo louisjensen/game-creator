@@ -1,4 +1,4 @@
-package runner.internal;
+package runner.internal.runnerSystems;
 
 import engine.external.Entity;
 import engine.external.component.Component;
@@ -8,6 +8,7 @@ import javafx.animation.Animation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import runner.internal.LevelRunner;
 
 import java.util.Collection;
 import java.util.function.Consumer;

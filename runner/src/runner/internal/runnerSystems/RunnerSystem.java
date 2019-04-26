@@ -1,7 +1,9 @@
-package runner.internal;
+package runner.internal.runnerSystems;
 
 import engine.external.Entity;
 import engine.external.component.Component;
+import runner.internal.LevelRunner;
+
 import java.util.ArrayList;
 import java.util.Collection;
 

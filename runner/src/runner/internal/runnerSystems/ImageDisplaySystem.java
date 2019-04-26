@@ -1,10 +1,12 @@
-package runner.internal;
+package runner.internal.runnerSystems;
 
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.ImageViewComponent;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
+import runner.internal.LevelRunner;
+import runner.internal.runnerSystems.RunnerSystem;
 
 import java.util.Collection;
 

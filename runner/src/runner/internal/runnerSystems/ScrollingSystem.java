@@ -1,14 +1,15 @@
-package runner.internal;
+package runner.internal.runnerSystems;
 
 import engine.external.Entity;
 import engine.external.component.*;
-import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import runner.internal.LevelRunner;
+import runner.internal.runnerSystems.RunnerSystem;
 
 import java.util.Collection;
 
-public class ScrollingSystem extends RunnerSystem{
+public class ScrollingSystem extends RunnerSystem {
     private Group myGroup;
     private Scene myScene;
 
