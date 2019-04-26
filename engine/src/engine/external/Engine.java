@@ -57,6 +57,7 @@ public class Engine {
     public synchronized Collection<Entity> updateState(Collection<KeyCode> inputs){
         for(int i = 0; i<SYSTEM_ORDER_RESOURCES.keySet().size(); i++){
             if(mySystems.get(i)!=null){
+
                 mySystems.get(i).update(myEntities,inputs);
             }
         }
