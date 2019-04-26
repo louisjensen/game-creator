@@ -118,17 +118,16 @@ public class DummyGameObjectMaker {
 //        mushroomOnPlatform.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.0));
 
 
+        Event levelOver = new Event("one");
+        levelOver.addInputs(KeyCode.SPACE);
+        levelOver.addActions(new ProgressionAction(true));
+        levelOver.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
 
-
-
-        RightCollisionEvent rce = new RightCollisionEvent("one", "three");
-        rce.addActions(new ProgressionAction(true));
-        rce.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
 
 
         level1.addEvent(event);
         level1.addEvent(event2);
-
+        level1.addEvent(levelOver);
         level1.addEvent(flappyMoveLeft);
         //level1.addEvent(flappyMoveUp);
         level1.addEvent(mushroomJump);

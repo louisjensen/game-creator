@@ -132,8 +132,10 @@ public class LevelRunner {
                 System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
                 System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
                 Double nextLevel = (Double) entity.getComponent(NextLevelComponent.class).getValue();
-                for (Component<?> component : entity.getComponentMap().values()){
-                    component.resetToOriginal();
+                for(Entity e : myEntities) {
+                    for (Component<?> component : e.getComponentMap().values()) {
+                        component.resetToOriginal();
+                    }
                 }
                 try {
                     endLevel(nextLevel);
