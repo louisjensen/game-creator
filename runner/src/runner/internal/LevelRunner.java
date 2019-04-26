@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -39,6 +40,7 @@ public class LevelRunner {
     private ProgressionSystem myProgressionSystem;
     private ScrollingSystem myScrollingSystem;
     private ImageDisplaySystem myImageDisplaySystem;
+    private ScoringSystem myScoringSystem;
 
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
         myLevel = level;
@@ -50,7 +52,6 @@ public class LevelRunner {
         myLevelChanger = playNext;
         myAnimation = new Timeline();
         buildStage(stage);
-        //initializeSystems();
         startAnimation();
         addPauseButton();
         myStage.show();
@@ -69,6 +70,10 @@ public class LevelRunner {
         systemComponents.clear();
         systemComponents.add(ImageViewComponent.class);
         myImageDisplaySystem = new ImageDisplaySystem(systemComponents, this, myGroup);
+
+        Collection<Class<? extends Component>> comps = new ArrayList<>();
+        comps.add(ScoreComponent.class);
+        myScoringSystem = new ScoringSystem(comps, this);
     }
 
     private void addPauseButton() {
@@ -116,11 +121,7 @@ public class LevelRunner {
         myProgressionSystem.update(myEntities);
         myScrollingSystem.update(myEntities);
         myImageDisplaySystem.update(myEntities);
-        for(Entity entity : myEntities){
-            if (entity.hasComponents(ScoreComponent.class)) {
-                System.out.println("Score: " + entity.getComponent(ScoreComponent.class).getValue());
-            }
-        }
+        myScoringSystem.update(myEntities);
         if (canPause) {
             movePauseButton();
         }
