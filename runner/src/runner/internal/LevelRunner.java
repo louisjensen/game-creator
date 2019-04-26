@@ -41,6 +41,7 @@ public class LevelRunner {
     private ScrollingSystem myScrollingSystem;
     private ImageDisplaySystem myImageDisplaySystem;
     private ScoringSystem myScoringSystem;
+    private LivesSystem myLivesSystem;
 
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
         myLevel = level;
@@ -74,6 +75,10 @@ public class LevelRunner {
         Collection<Class<? extends Component>> comps = new ArrayList<>();
         comps.add(ScoreComponent.class);
         myScoringSystem = new ScoringSystem(comps, this);
+
+        Collection<Class<? extends Component>> comp1 = new ArrayList<>();
+        comp1.add(ScoreComponent.class);
+        myLivesSystem = new LivesSystem(comp1, this);
     }
 
     private void addPauseButton() {
@@ -97,7 +102,6 @@ public class LevelRunner {
 
     private void startAnimation(){
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-//        myAnimation = new Timeline();
         myAnimation.setCycleCount(Timeline.INDEFINITE);
         myAnimation.getKeyFrames().add(frame);
         myAnimation.play();
@@ -122,6 +126,7 @@ public class LevelRunner {
         myScrollingSystem.update(myEntities);
         myImageDisplaySystem.update(myEntities);
         myScoringSystem.update(myEntities);
+        myLivesSystem.update(myEntities);
         if (canPause) {
             movePauseButton();
         }

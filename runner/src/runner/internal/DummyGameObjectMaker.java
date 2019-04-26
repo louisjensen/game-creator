@@ -152,6 +152,7 @@ public class DummyGameObjectMaker {
 //            put("Lives", 3.0);
 //        }}));
         gameObject.addComponent(new ScoreComponent(0.0));
+        gameObject.addComponent(new LivesComponent(3.0));
 
 
 
