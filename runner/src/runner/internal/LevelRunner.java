@@ -48,6 +48,7 @@ public class LevelRunner {
         myEngine = new Engine(level);
         myEntities = myEngine.updateState(myCurrentKeys);
         myLevelChanger = playNext;
+        myAnimation = new Timeline();
         buildStage(stage);
         //initializeSystems();
         startAnimation();
@@ -59,8 +60,8 @@ public class LevelRunner {
         Collection<Class<? extends Component>> systemComponents = new ArrayList<>();
         systemComponents.add(ProgressionComponent.class);
         systemComponents.add(NextLevelComponent.class);
-        myProgressionSystem = new ProgressionSystem(systemComponents, this);
-
+        myProgressionSystem = new ProgressionSystem(systemComponents, this,
+                myGroup, myStage, myAnimation, mySceneWidth, mySceneHeight, myLevelChanger);
         systemComponents.clear();
         systemComponents.add(CameraComponent.class);
         myScrollingSystem = new ScrollingSystem(systemComponents, this, myGroup, myScene);
@@ -91,7 +92,7 @@ public class LevelRunner {
 
     private void startAnimation(){
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-        myAnimation = new Timeline();
+//        myAnimation = new Timeline();
         myAnimation.setCycleCount(Timeline.INDEFINITE);
         myAnimation.getKeyFrames().add(frame);
         myAnimation.play();
@@ -119,25 +120,10 @@ public class LevelRunner {
             if (entity.hasComponents(ScoreComponent.class)) {
                 System.out.println("Score: " + entity.getComponent(ScoreComponent.class).getValue());
             }
-//            ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
-//            try {
-//                ImageView image = imageViewComponent.getValue();
-//                myGroup.getChildren().add(image);
-//            }
-//            catch (NullPointerException e) {
-//                 //TODO fix this
-//            }
         }
         if (canPause) {
             movePauseButton();
         }
-    }
-
-    public void endLevel(Double levelToProgressTo) {
-        myGroup.getChildren().clear();
-        myAnimation.stop();
-        myStage.setScene(new Scene(new Group(), mySceneWidth, mySceneHeight));
-        myLevelChanger.accept(levelToProgressTo);
     }
 
     private void movePauseButton(){

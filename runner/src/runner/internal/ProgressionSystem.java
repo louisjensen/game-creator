@@ -4,14 +4,31 @@ import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.NextLevelComponent;
 import engine.external.component.ProgressionComponent;
+import javafx.animation.Animation;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 public class ProgressionSystem extends RunnerSystem {
+    private Group myGroup;
+    private Stage myStage;
+    private Animation myAnimation;
+    private int myWidth;
+    private int myHeight;
+    private Consumer myLevelChanger;
 
-
-    public ProgressionSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner) {
+    public ProgressionSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner,
+                              Group group, Stage stage, Animation animation, int width, int height, Consumer consumer) {
         super(requiredComponents, levelRunner);
+        myGroup = group;
+        myStage = stage;
+        myAnimation = animation;
+        myWidth = width;
+        myHeight = height;
+        myLevelChanger = consumer;
     }
 
     @Override
@@ -34,9 +51,16 @@ public class ProgressionSystem extends RunnerSystem {
             }
         }
         try {
-            myLevelRunner.endLevel(nextLevel);
+            endLevel(nextLevel);
         } catch (IndexOutOfBoundsException e){
             System.out.println("GAME BEATEN");
         }
+    }
+
+    private void endLevel(Double levelToProgressTo) {
+        myGroup.getChildren().clear();
+        myAnimation.stop();
+        myStage.setScene(new Scene(new Group(), myWidth, myHeight));
+        myLevelChanger.accept(levelToProgressTo);
     }
 }
