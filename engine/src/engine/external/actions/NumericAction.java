@@ -12,11 +12,11 @@ import java.util.function.Consumer;
  * - scaling the existing value by a new value
  * - adding a new value to the existing value
  *
- * @param <Double>
+ *
  * @author Feroze
  * @author Lucas
  */
-public abstract class NumericAction<Double> extends Action<Double> {
+public abstract class NumericAction extends Action<Double> {
     private ModifyType myModifier;
     private Double myArgument;
     private Class<? extends Component<Double>> myComponentClass;
