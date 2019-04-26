@@ -9,7 +9,6 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -128,6 +127,9 @@ public class LevelRunner {
             } catch (Exception e){
                 //do nothing
             }
+            if (entity.hasComponents(ScoreComponent.class)) {
+                System.out.println("Score: " + entity.getComponent(ScoreComponent.class).getValue());
+            }
             if(entity.hasComponents(ProgressionComponent.class) && (Boolean) entity.getComponent(ProgressionComponent.class).getValue()){
                 System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
                 System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
@@ -148,8 +150,14 @@ public class LevelRunner {
                 scrollOnMainCharacter(entity);
             }
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
-            ImageView image = imageViewComponent.getValue();
-            myGroup.getChildren().add(image);
+            try {
+                ImageView image = imageViewComponent.getValue();
+                myGroup.getChildren().add(image);
+            }
+            catch (NullPointerException e) {
+                 //TODO fix this
+            }
+
         }
         if (canPause) {
             movePauseButton();

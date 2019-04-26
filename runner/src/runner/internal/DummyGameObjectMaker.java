@@ -21,6 +21,8 @@ import engine.external.conditions.LessThanCondition;
 import runner.external.Game;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
+
 
 public class DummyGameObjectMaker {
     private Game myGame;
@@ -54,6 +56,8 @@ public class DummyGameObjectMaker {
     }
 
     private void addDummyEvents(Level level1, Double next) {
+
+
         Event event = new Event("one");
         event.addInputs(KeyCode.RIGHT);
         event.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
@@ -91,6 +95,7 @@ public class DummyGameObjectMaker {
         flappyJump.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-2.0));
         //flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
         flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
+        flappyJump.addActions(new ChangeScoreAction(NumericAction.ModifyType.RELATIVE, 100.0));
 
 
         BottomCollisionEvent flappyOnPlatform = new BottomCollisionEvent("one","four");
@@ -140,6 +145,18 @@ public class DummyGameObjectMaker {
     }
 
     private void addDummyEntities(Level level, Double current) {
+        // this is the dummy object that authoring has to make for each game
+        Entity gameObject = new Entity();
+//        gameObject.addComponent(new VariablesComponent(new HashMap<>(){{
+//            put("Score", 0.0);
+//            put("Lives", 3.0);
+//        }}));
+        gameObject.addComponent(new ScoreComponent(0.0));
+
+
+
+
+
         Entity dummy1 = new Entity();
         Entity dummy2 = new Entity();
         Entity dummy3 = new Entity();
@@ -228,10 +245,13 @@ public class DummyGameObjectMaker {
         dummy1.addComponent(new NextLevelComponent(current));
         dummy1.addComponent(new ProgressionComponent(false));
 
+        dummy1.addComponent(new AssociatedEntityComponent(gameObject));
+
         level.addEntity(dummy1);
         level.addEntity(dummy2);
         level.addEntity(dummy3);
         level.addEntity(dummy4);
+        level.addEntity(gameObject);
 //        level.addEntity(dummy5);
 //        level.addEntity(dummy6);
 
