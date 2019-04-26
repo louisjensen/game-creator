@@ -377,15 +377,22 @@ public class DataManager implements ExternalData {
 
     @Override
     public Map<String, InputStream> loadAllImages(String prefix) throws SQLException {
-        return null;
+        return myDatabaseEngine.loadAllImages(prefix);
     }
 
     @Override
     public Map<String, InputStream> loadAllSounds(String prefix) throws SQLException {
-        return null;
+        return myDatabaseEngine.loadAllSounds(prefix);
     }
 
-//    public List<String> loadAllImages(String prefix)
+    @Override
+    public List<String> loadUserGameNames(String userName) throws SQLException {
+        return myDatabaseEngine.loadAllGameNames(userName);
+    }
 
+    @Override
+    public boolean updatePassword(String userName, String newPassword) throws SQLException {
+        return myDatabaseEngine.updatePassword(userName, newPassword);
+    }
 
 }
