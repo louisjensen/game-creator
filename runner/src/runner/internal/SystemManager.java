@@ -37,13 +37,10 @@ public class SystemManager {
         myScene = scene;
         myHUD = hud;
         mySystems = new ArrayList<>();
-        Collection<Class<? extends Component>> components = new ArrayList<>();
-        components.add(ProgressionComponent.class);
-        components.add(NextLevelComponent.class);
-        mySystems.add(new ProgressionSystem(components, myLevelRunner,
-                myGroup, myStage, myAnimation,
-                mySceneWidth, mySceneHeight, myLevelChanger));
+        addSystems();
+    }
 
+    private void addSystems() {
         Collection<Class<? extends Component>> components2 = new ArrayList<>();
         components2.add(CameraComponent.class);
         mySystems.add(new ScrollingSystem(components2, myLevelRunner, myGroup, myScene));
@@ -63,6 +60,13 @@ public class SystemManager {
         Collection<Class<? extends Component>> components6 = new ArrayList<>();
         components6.add(NextLevelComponent.class);
         mySystems.add(new LevelSystem(components6, myLevelRunner, myHUD));
+
+        Collection<Class<? extends Component>> components = new ArrayList<>();
+        components.add(ProgressionComponent.class);
+        components.add(NextLevelComponent.class);
+        mySystems.add(new ProgressionSystem(components, myLevelRunner,
+                myGroup, myStage, myAnimation,
+                mySceneWidth, mySceneHeight, myLevelChanger));
     }
 
     public List<RunnerSystem> getSystems(){

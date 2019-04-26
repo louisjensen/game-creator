@@ -26,8 +26,6 @@ public class ScoringSystem extends RunnerSystem {
     }
 
     private void displayScore(Entity entity) {
-        //TODO make update HUD
-        System.out.println("Score: " + entity.getComponent(ScoreComponent.class).getValue());
         myHUD.updateScore((Double) entity.getComponent(ScoreComponent.class).getValue());
     }
 }

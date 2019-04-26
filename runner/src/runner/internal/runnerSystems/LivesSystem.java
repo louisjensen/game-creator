@@ -26,10 +26,6 @@ public class LivesSystem extends RunnerSystem {
     }
 
     private void displayLives(Entity entity) {
-        //TODO make update HUD
-        System.out.println("Lives: " + entity.getComponent(LivesComponent.class).getValue());
         myHUD.updateLives((Double) entity.getComponent(LivesComponent.class).getValue());
-
     }
 }
-

@@ -26,8 +26,6 @@ public class LevelSystem extends RunnerSystem {
     }
 
     private void displayLevel(Entity entity) {
-        //TODO make update HUD
-        System.out.println("Level: " + entity.getComponent(NextLevelComponent.class).getValue());
         myHUD.updateLevel((Double) entity.getComponent(NextLevelComponent.class).getValue());
     }
 }
