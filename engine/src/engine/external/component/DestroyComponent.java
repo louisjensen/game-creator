@@ -1,5 +1,4 @@
 package engine.external.component;
-@Deprecated
 
 
 /**
