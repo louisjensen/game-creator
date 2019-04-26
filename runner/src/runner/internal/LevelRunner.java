@@ -36,8 +36,13 @@ public class LevelRunner {
     private Set<KeyCode> myCurrentKeys;
     private boolean canPause = false;
     private Consumer<Double> myLevelChanger;
+    private ProgressionSystem myProgressionSystem;
 
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
+        Collection<Class<? extends Component>> systemComponents = new ArrayList<>();
+        systemComponents.add(ProgressionComponent.class);
+        systemComponents.add(NextLevelComponent.class);
+        myProgressionSystem = new ProgressionSystem(systemComponents, this);
         myLevel = level;
         mySceneWidth = width;
         mySceneHeight = height;
@@ -130,22 +135,23 @@ public class LevelRunner {
             if (entity.hasComponents(ScoreComponent.class)) {
                 System.out.println("Score: " + entity.getComponent(ScoreComponent.class).getValue());
             }
-            if(entity.hasComponents(ProgressionComponent.class) && (Boolean) entity.getComponent(ProgressionComponent.class).getValue()){
-                System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
-                System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
-                Double nextLevel = (Double) entity.getComponent(NextLevelComponent.class).getValue();
-                for(Entity e : myEntities) {
-                    for (Component<?> component : e.getComponentMap().values()) {
-                        component.resetToOriginal();
-                    }
-                }
-                try {
-                    endLevel(nextLevel);
-                } catch (IndexOutOfBoundsException e){
-                    System.out.println("GAME BEATEN");
-                }
-                break;
-            }
+//            if(entity.hasComponents(ProgressionComponent.class) && (Boolean) entity.getComponent(ProgressionComponent.class).getValue()){
+//                System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
+//                System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
+//                Double nextLevel = (Double) entity.getComponent(NextLevelComponent.class).getValue();
+//                for(Entity e : myEntities) {
+//                    for (Component<?> component : e.getComponentMap().values()) {
+//                        component.resetToOriginal();
+//                    }
+//                }
+//                try {
+//                    endLevel(nextLevel);
+//                } catch (IndexOutOfBoundsException e){
+//                    System.out.println("GAME BEATEN");
+//                }
+//                break;
+//            }
+            myProgressionSystem.update(myEntities);
             if(entity.hasComponents(CameraComponent.class)){
                 scrollOnMainCharacter(entity);
             }
@@ -164,8 +170,7 @@ public class LevelRunner {
         }
     }
 
-    private void endLevel(Double levelToProgressTo) {
-        System.out.println(myAnimation);
+    public void endLevel(Double levelToProgressTo) {
         myGroup.getChildren().clear();
         myAnimation.stop();
         myStage.setScene(new Scene(new Group(), mySceneWidth, mySceneHeight));
@@ -188,4 +193,9 @@ public class LevelRunner {
             myGroup.setTranslateX(-1 * x + xMaxBoundary);
         }
     }
+
+    public Collection<Entity> getEntities(){
+        return myEntities;
+    }
 }
+
