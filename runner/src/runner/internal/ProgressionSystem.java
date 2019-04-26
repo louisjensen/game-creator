@@ -24,10 +24,6 @@ public class ProgressionSystem extends RunnerSystem {
         }
     }
 
-    public void addNecessaryPermissions(){
-
-    }
-
     private void progressIfNecessary(Entity entity){
         System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
         System.out.println(entity.getComponent(ProgressionComponent.class).getValue());

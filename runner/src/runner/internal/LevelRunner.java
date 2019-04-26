@@ -38,6 +38,7 @@ public class LevelRunner {
     private Consumer<Double> myLevelChanger;
     private ProgressionSystem myProgressionSystem;
     private ScrollingSystem myScrollingSystem;
+    private ImageDisplaySystem myImageDisplaySystem;
 
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
         myLevel = level;
@@ -63,6 +64,10 @@ public class LevelRunner {
         systemComponents.clear();
         systemComponents.add(CameraComponent.class);
         myScrollingSystem = new ScrollingSystem(systemComponents, this, myGroup, myScene);
+
+        systemComponents.clear();
+        systemComponents.add(ImageViewComponent.class);
+        myImageDisplaySystem = new ImageDisplaySystem(systemComponents, this, myGroup);
     }
 
     private void addPauseButton() {
@@ -109,24 +114,19 @@ public class LevelRunner {
         myGroup.getChildren().retainAll(myPause);
         myProgressionSystem.update(myEntities);
         myScrollingSystem.update(myEntities);
+        myImageDisplaySystem.update(myEntities);
         for(Entity entity : myEntities){
-            try {
-                System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
-                System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
-            } catch (Exception e){
-                //do nothing
-            }
             if (entity.hasComponents(ScoreComponent.class)) {
                 System.out.println("Score: " + entity.getComponent(ScoreComponent.class).getValue());
             }
-            ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
-            try {
-                ImageView image = imageViewComponent.getValue();
-                myGroup.getChildren().add(image);
-            }
-            catch (NullPointerException e) {
-                 //TODO fix this
-            }
+//            ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
+//            try {
+//                ImageView image = imageViewComponent.getValue();
+//                myGroup.getChildren().add(image);
+//            }
+//            catch (NullPointerException e) {
+//                 //TODO fix this
+//            }
         }
         if (canPause) {
             movePauseButton();
