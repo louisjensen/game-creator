@@ -37,11 +37,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -207,6 +205,8 @@ public class MainGUI {
     @SuppressWarnings("unused")
     private void openGame() {
         System.out.println("Open"); //TODO
+        DataManager dataManager = new DataManager();
+        loadAllAssets(dataManager);
     }
 
     @SuppressWarnings("unused")
@@ -218,6 +218,7 @@ public class MainGUI {
         dm.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
         dm.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
         saveAndClearFolder(dm, "authoring/assets/images/");
+        saveAndClearFolder(dm, "authoring/assets/audio");
     }
 
     @SuppressWarnings("unused")
@@ -272,22 +273,31 @@ public class MainGUI {
         }
     }
 
-    //TODO: differentiate between images and audio
-    //TODO: test the file copying
-    private void loadAssets(DataManager dataManager, String folderFilePath){
+    private void loadAllAssets(DataManager dataManager){
         String prefix = myGameData.getTitle() + myGameData.getAuthorName();
-        try {
-            Map<String, InputStream> imagesMap = dataManager.loadAllImages(prefix);
-            for(Map.Entry<String, InputStream> entry : imagesMap.entrySet()){
-                Files.copy(entry.getValue(), Paths.get(GENERAL_RESOURCES.getString("images_filepath")), StandardCopyOption.REPLACE_EXISTING);
-            }
-        } catch (SQLException e) {
-            //TODO: handle error
-            e.printStackTrace();
-        } catch (IOException e) {
-            //TODO: handle error
-            e.printStackTrace();
-        }
+        //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), prefix);
+        loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), GENERAL_RESOURCES.getString("defaults"));
+        //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), prefix);
+        loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), GENERAL_RESOURCES.getString("defaults"));
     }
 
+
+    //TODO: differentiate between images and audio
+    //TODO: test the file copying
+    private void loadAssets(DataManager dataManager, String folderFilePath, String prefix){
+//        System.out.println("Made it to loadAssets");
+//        String key = folderFilePath.split("/")[folderFilePath.split("/").length-1];
+//        try {
+//            System.out.println("Key: " + key);
+//            Map<String, InputStream> imagesMap = (Map<String, InputStream>) Reflection.callMethod(dataManager, GENERAL_RESOURCES.getString(key), prefix);
+//            for(Map.Entry<String, InputStream> entry : imagesMap.entrySet()){
+//                InputStream inputStream = entry.getValue();
+//                File destination = new File(folderFilePath + entry.getKey());
+//                Files.copy(inputStream, destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//            }
+//        } catch (IOException e) {
+//            //TODO: handle error
+//            e.printStackTrace();
+//        }
+    }
 }
