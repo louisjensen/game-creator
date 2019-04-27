@@ -35,8 +35,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -88,12 +86,14 @@ public class MainGUI {
         myCurrentStyle = new SimpleStringProperty(DEFAULT_STYLESHEET);
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
         myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
+        myObjectManager.setGameCenterData(myGameData);
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
         this();
         myLoadedGame = game;
         myGameData = gameData;
+        myObjectManager.setGameCenterData(myGameData);
     }
 
     public void launch() {
@@ -178,7 +178,7 @@ public class MainGUI {
     private MenuBar addMenu() {
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(createMenu("File", "New", "Open", "Save"), //TODO make this better
-                createMenu("Edit", "Info", "Groups", "Preferences"), createMenu("View", "Fullscreen"));
+                createMenu("Edit", "Info", "Groups"), createMenu("View", "Fullscreen"));
         return menuBar;
     }
 
@@ -226,13 +226,12 @@ public class MainGUI {
 
     private void loadDatabaseGame() {
         // Populate ObjectManager (Translate Entities/Levels)
+        // Create labels for Entities, Groups, Levels in LabelManager
+        // Populate EventsMap
         GameTranslator translator = new GameTranslator(myObjectManager);
         myObjectManager.removeAllLevels();
 
-        translator.populateObjectManager();
-            // Create labels for Entities, Groups, Levels in LabelManager
-            // Populate EventsMap
-
+        translator.populateObjectManager(myLoadedGame);
 
         // Set selectedLevel to first level
         myCurrentLevel.setValue(myObjectManager.getLevels().get(0));
@@ -270,11 +269,6 @@ public class MainGUI {
     private void openGameInfo() {
         InfoEditor infoEditor = new InfoEditor(myGameData);
         infoEditor.showAndWait();
-    }
-
-    @SuppressWarnings("unused")
-    private void openPreferences() {
-        System.out.println("Preferences"); //TODO
     }
 
     @SuppressWarnings("unused")
