@@ -40,11 +40,13 @@ public class LevelRunner {
     private HeadsUpDisplay myHUD;
     private Text myLabel;
     private Rectangle myHudBackground;
+    private int myLevelCount;
 
     private AudioManager myAudioManager;
 
-    public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
+    public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext, int numLevels){
         myLevel = level;
+        myLevelCount = numLevels;
         mySceneWidth = width;
         mySceneHeight = height;
         myCurrentKeys = new HashSet<>();
@@ -62,7 +64,7 @@ public class LevelRunner {
 
     private void initializeSystems() {
         SystemManager systems = new SystemManager(this, myGroup, myStage, myAnimation,
-                mySceneWidth, mySceneHeight, myLevelChanger, myScene, myHUD, myAudioManager);
+                mySceneWidth, mySceneHeight, myLevelChanger, myScene, myHUD, myAudioManager, myLevelCount);
         mySystems = systems.getSystems();
     }
 

@@ -25,10 +25,11 @@ public class SystemManager {
     private Scene myScene;
     private HeadsUpDisplay myHUD;
     private AudioManager myAudioManger;
+    private int myLevelCount;
 
     public SystemManager(LevelRunner levelRunner, Group group, Stage stage, Timeline animation,
                          int width, int height, Consumer changer, Scene scene, HeadsUpDisplay hud,
-                         AudioManager audioManager){
+                         AudioManager audioManager, int numLevels){
         myLevelRunner = levelRunner;
         myGroup = group;
         myStage = stage;
@@ -39,6 +40,7 @@ public class SystemManager {
         myScene = scene;
         myHUD = hud;
         myAudioManger = audioManager;
+        myLevelCount = numLevels;
         mySystems = new ArrayList<>();
         addSystems();
     }
@@ -62,7 +64,7 @@ public class SystemManager {
 
         Collection<Class<? extends Component>> components6 = new ArrayList<>();
         components6.add(NextLevelComponent.class);
-        mySystems.add(new LevelSystem(components6, myLevelRunner, myHUD));
+        mySystems.add(new LevelSystem(components6, myLevelRunner, myHUD, myLevelCount));
 
         Collection<Class<? extends Component>> components7 = new ArrayList<>();
         components7.add(PlayAudioComponent.class);
@@ -72,8 +74,8 @@ public class SystemManager {
         components.add(ProgressionComponent.class);
         components.add(NextLevelComponent.class);
         mySystems.add(new ProgressionSystem(components, myLevelRunner,
-                myGroup, myStage, myAnimation,
-                mySceneWidth, mySceneHeight, myLevelChanger));
+                myGroup, myStage, myAnimation, mySceneWidth,
+                mySceneHeight, myLevelChanger, myLevelCount));
     }
 
     public List<RunnerSystem> getSystems(){

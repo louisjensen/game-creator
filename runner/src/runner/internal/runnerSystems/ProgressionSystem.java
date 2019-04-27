@@ -20,9 +20,11 @@ public class ProgressionSystem extends RunnerSystem {
     private int myWidth;
     private int myHeight;
     private Consumer myLevelChanger;
+    private int myLevelCount;
 
     public ProgressionSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner,
-                              Group group, Stage stage, Animation animation, int width, int height, Consumer consumer) {
+                              Group group, Stage stage, Animation animation, int width, int height,
+                              Consumer consumer, int numLevels) {
         super(requiredComponents, levelRunner);
         myGroup = group;
         myStage = stage;
@@ -30,6 +32,7 @@ public class ProgressionSystem extends RunnerSystem {
         myWidth = width;
         myHeight = height;
         myLevelChanger = consumer;
+        myLevelCount = numLevels;
     }
 
     @Override
@@ -46,15 +49,11 @@ public class ProgressionSystem extends RunnerSystem {
         System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
         System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
         Double nextLevel = (Double) entity.getComponent(NextLevelComponent.class).getValue();
-        for(Entity e : myLevelRunner.getEngine().saveGame()) {
-            for (Component<?> component : e.getComponentMap().values()) {
-                component.resetToOriginal();
-            }
-        }
-        try {
+        if(nextLevel.intValue() > myLevelCount){
+            myAnimation.stop();
+            myGroup.getChildren().add(new GameBeatenScreen(myStage, myGroup.getTranslateX()).getNode());
+        } else {
             endLevel(nextLevel);
-        } catch (IndexOutOfBoundsException e){
-            System.out.println("GAME BEATEN");
         }
     }
 

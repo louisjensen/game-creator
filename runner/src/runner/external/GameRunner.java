@@ -63,7 +63,8 @@ public class GameRunner {
         Consumer<Double> goToNext = (level) -> {
             nextLevel(level);
         };
-        new LevelRunner(currentLevel, mySceneWidth, mySceneHeight, myGameStage, goToNext);
+        new LevelRunner(currentLevel, mySceneWidth, mySceneHeight, myGameStage,
+                goToNext, gameToPlay.getLevels().size());
     }
 
     private void nextLevel(Double level) {

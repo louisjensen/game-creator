@@ -24,7 +24,7 @@ public class PauseScreen {
         myLevelRunner = levelRunner;
         initializeButtons();
         myPauseMenu.getChildren().addAll(myResumeButton, myRestartButton, myExitButton);
-        myPauseMenu.setLayoutX(180 - translatedX);
+        myPauseMenu.setLayoutX(160 - translatedX);
         myPauseMenu.setLayoutY(180);
         myToggler = toggle;
         myStage = stage;

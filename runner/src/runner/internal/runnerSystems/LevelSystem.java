@@ -9,16 +9,18 @@ import java.util.Collection;
 
 public class LevelSystem extends RunnerSystem {
     private HeadsUpDisplay myHUD;
+    private int myLevelCount;
 
-    public LevelSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner, HeadsUpDisplay hud) {
+    public LevelSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner, HeadsUpDisplay hud, int numLevels) {
         super(requiredComponents, levelRunner);
         myHUD = hud;
+        myLevelCount = numLevels;
     }
 
     @Override
     public void run() {
         for(Entity entity:this.getEntities()){
-            if(entity.hasComponents(NextLevelComponent.class)){
+            if(entity.hasComponents(NextLevelComponent.class) && !(((Double) entity.getComponent(NextLevelComponent.class).getValue()).intValue() > myLevelCount)){
                 displayLevel(entity);
                 break;
             }
