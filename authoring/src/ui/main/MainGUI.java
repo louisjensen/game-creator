@@ -206,7 +206,8 @@ public class MainGUI {
     private void openGame() {
         System.out.println("Open"); //TODO
         DataManager dataManager = new DataManager();
-        loadAllAssets(dataManager);
+        System.out.println("About to load all assets");
+        //loadAllAssets(dataManager);
     }
 
     @SuppressWarnings("unused")
@@ -278,30 +279,41 @@ public class MainGUI {
     }
 
     private void loadAllAssets(DataManager dataManager){
+        System.out.println("Made it to loadAllAssetsMethod");
         String prefix = myGameData.getTitle() + myGameData.getAuthorName();
         //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), prefix);
-        loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), GENERAL_RESOURCES.getString("defaults"));
+        try {
+            Map<String, InputStream> defaultImages = dataManager.loadAllImages("defaults");
+            Map<String, InputStream> userUploadedImages = dataManager.loadAllImages(prefix);
+            Map<String, InputStream> defaultAudio = dataManager.loadAllSounds("defaults");
+            Map<String, InputStream> userUploadedAudio = dataManager.loadAllSounds("defaults");
+
+            loadAssets(SAVING_ASSETS_RESOURCES.getString("images_filepath"), defaultImages);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), prefix);
-        loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), GENERAL_RESOURCES.getString("defaults"));
+        //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), GENERAL_RESOURCES.getString("defaults"));
     }
 
 
     //TODO: differentiate between images and audio
     //TODO: test the file copying
-    private void loadAssets(DataManager dataManager, String folderFilePath, String prefix){
+    private void loadAssets(String folderFilePath, Map<String, InputStream> databaseInfo){
 //        System.out.println("Made it to loadAssets");
 //        String key = folderFilePath.split("/")[folderFilePath.split("/").length-1];
-//        try {
-//            System.out.println("Key: " + key);
-//            Map<String, InputStream> imagesMap = (Map<String, InputStream>) Reflection.callMethod(dataManager, GENERAL_RESOURCES.getString(key), prefix);
-//            for(Map.Entry<String, InputStream> entry : imagesMap.entrySet()){
-//                InputStream inputStream = entry.getValue();
-//                File destination = new File(folderFilePath + entry.getKey());
-//                Files.copy(inputStream, destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
-//            }
-//        } catch (IOException e) {
-//            //TODO: handle error
-//            e.printStackTrace();
-//        }
+        try {
+            for(Map.Entry<String, InputStream> entry : databaseInfo.entrySet()){
+                InputStream inputStream = entry.getValue();
+                File destination = new File(folderFilePath + entry.getKey());
+                Files.copy(inputStream, destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException e) {
+            //TODO: handle error
+            e.printStackTrace();
+        }
+
+
     }
 }
