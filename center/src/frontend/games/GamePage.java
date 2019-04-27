@@ -1,9 +1,9 @@
 package frontend.games;
 
+import data.external.GameCenterData;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import runner.external.GameCenterData;
 
 public class GamePage {
     private GameCenterData myData;
