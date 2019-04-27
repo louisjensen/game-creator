@@ -3,6 +3,7 @@ package runner.internal;
 import engine.external.Entity;
 import engine.external.component.ProgressionComponent;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 

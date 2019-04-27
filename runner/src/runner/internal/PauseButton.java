@@ -12,8 +12,8 @@ public class PauseButton extends ImageView {
     private boolean myPlayingStatus = true;
     private Animation myAnimation;
     private AudioManager myAudioManager;
-    private final Double X_LOCATION = 20.0;
-    private final Double Y_LOCATION = 20.0;
+    private final Double X_LOCATION = 460.0;
+    private final Double Y_LOCATION = 6.0;
     private static final Double WIDTH = 30.0;
     private static final Double HEIGHT = 30.0;
     private Group myGroup;

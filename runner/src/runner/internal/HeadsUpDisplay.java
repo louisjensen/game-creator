@@ -1,7 +1,6 @@
 package runner.internal;
 
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 
 public class HeadsUpDisplay extends Node {
@@ -16,10 +15,11 @@ public class HeadsUpDisplay extends Node {
         myLives = 3.0;
         myLevel = 1.0;
         myScore = 0.0;
-        xPosition = width * 3 / 4.0;
-        Text text = new Text ("Level: " + myLevel.intValue() +
-                "\nScore: " + myScore.intValue() +
-                "\nLives: " +myLives.intValue());
+        xPosition = 20;
+        Text text = new Text ("ByteMe   " +
+                "   Level: " + myLevel.intValue() +
+                "   Score: " + myScore.intValue() +
+                "   Lives: " +myLives.intValue());
         text.setId("HeadsUpDisplay");
         myLabel = text;
         myLabel.setLayoutX(xPosition);
@@ -27,9 +27,10 @@ public class HeadsUpDisplay extends Node {
     }
 
     public void updateLabel(){
-        myLabel.setText("Level: " + myLevel.intValue() +
-                "\nScore: " + myScore.intValue() +
-                "\nLives: " +myLives.intValue());
+        myLabel.setText("ByteMe   " +
+                "   Level: " + myLevel.intValue() +
+                "   Score: " + myScore.intValue() +
+                "   Lives: " +myLives.intValue());
     }
 
     public Double getX(){

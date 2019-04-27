@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -38,6 +39,7 @@ public class LevelRunner {
     private List<RunnerSystem> mySystems;
     private HeadsUpDisplay myHUD;
     private Text myLabel;
+    private Rectangle myHudBackground;
 
     private AudioManager myAudioManager;
 
@@ -65,6 +67,8 @@ public class LevelRunner {
     }
 
     private void addButtonsAndHUD() {
+        myHudBackground = new Rectangle(0,0,mySceneWidth, 40);
+        myGroup.getChildren().add(myHudBackground);
         myPauseButton = new PauseButton(this, myAnimation, myGroup, myStage, myAudioManager);
         myPause = myPauseButton.getPauseButton();
         myGroup.getChildren().add(myPause);
@@ -109,7 +113,7 @@ public class LevelRunner {
     }
 
     private void updateGUI(){
-        myGroup.getChildren().retainAll(myPause, myLabel);
+        myGroup.getChildren().retainAll(myPause, myLabel, myHudBackground);
         for(RunnerSystem system : mySystems){
             system.update(myEntities);
         }
@@ -119,6 +123,7 @@ public class LevelRunner {
     private void updateButtonsAndHUD(){
         myPause.setLayoutX(myPauseButton.getButtonX() - myGroup.getTranslateX());
         myLabel.setLayoutX(myHUD.getX() - myGroup.getTranslateX());
+        myHudBackground.setLayoutX(myHudBackground.getX() - myGroup.getTranslateX());
         myHUD.updateLabel();
 
     }

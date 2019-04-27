@@ -1,6 +1,6 @@
 #HeadsUpDisplay {
     -fx-font: 20px Gugi, cursive;
-    -fx-fill: black;
-    -fx-stroke: black;
+    -fx-fill: white;
+    -fx-stroke: white;
     -fx-stroke-width: 0.5;
 }
