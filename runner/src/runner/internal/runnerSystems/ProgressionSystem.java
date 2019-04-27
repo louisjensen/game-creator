@@ -46,7 +46,7 @@ public class ProgressionSystem extends RunnerSystem {
         System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
         System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
         Double nextLevel = (Double) entity.getComponent(NextLevelComponent.class).getValue();
-        for(Entity e : myLevelRunner.getEntities()) {
+        for(Entity e : myLevelRunner.getEngine().saveGame()) {
             for (Component<?> component : e.getComponentMap().values()) {
                 component.resetToOriginal();
             }

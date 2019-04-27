@@ -19,11 +19,13 @@ public class PauseButton extends ImageView {
     private Group myGroup;
     private Stage myStage;
     private Consumer myToggle;
+    private LevelRunner myLevelRunner;
 
-    public PauseButton(Animation animation, Group group, Stage stage, AudioManager audioManager){
+    public PauseButton(LevelRunner levelRunner, Animation animation, Group group, Stage stage, AudioManager audioManager){
         super(new Image("pause.png", WIDTH, HEIGHT, true, false));
         this.setLayoutX(X_LOCATION);
         this.setLayoutY(Y_LOCATION);
+        myLevelRunner = levelRunner;
         myAnimation = animation;
         myAudioManager = audioManager;
         this.setOnMouseClicked(event ->{
@@ -47,7 +49,7 @@ public class PauseButton extends ImageView {
 
     private void pauseGame() {
         myAnimation.pause();
-        myGroup.getChildren().add(new PauseScreen(myToggle, myStage, myGroup.getTranslateX()).getPauseMenu());
+        myGroup.getChildren().add(new PauseScreen(myLevelRunner, myToggle, myStage, myGroup.getTranslateX()).getPauseMenu());
         myAudioManager.pauseAllSound();
     }
 

@@ -5,7 +5,8 @@ import engine.external.Level;
 import javafx.stage.Stage;
 import runner.internal.DummyGameObjectMaker;
 import runner.internal.LevelRunner;
-import java.io.FileNotFoundException;
+
+import java.io.*;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
@@ -20,11 +21,14 @@ public class GameRunner {
     private List<Level> myLevels;
     private Game myGame;
     private Stage myGameStage;
+    private String myGameName;
+    private String myAuthorName;
 
     public GameRunner(String gameName, String authorName) throws FileNotFoundException {
         myGame = loadGameObject(gameName, authorName);
+        myGameName = gameName;
+        myAuthorName = authorName;
         myGameStage = new Stage();
-        Level levelOne = myGame.getLevels().get(0);
         int firstLevel = 1;
         runLevel(firstLevel);
     }
@@ -45,7 +49,15 @@ public class GameRunner {
 
 
     private void runLevel(int currentLevelNumber){
-        Level currentLevel = myGame.getLevels().get(currentLevelNumber - 1);
+        DataManager dm = new DataManager();
+        dm.saveGameData(myGameName, myAuthorName, myGame);
+        Game gameToPlay;
+        try {
+            gameToPlay = (Game) dm.loadGameData(myGameName, myAuthorName);
+        } catch(SQLException e){
+            gameToPlay = myGame;
+        }
+        Level currentLevel = gameToPlay.getLevels().get(currentLevelNumber - 1);
         mySceneWidth = myGame.getWidth();
         mySceneHeight = myGame.getHeight();
         Consumer<Double> goToNext = (level) -> {

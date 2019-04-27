@@ -1,5 +1,7 @@
 package runner.internal;
 
+import engine.external.Entity;
+import engine.external.component.ProgressionComponent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -13,12 +15,13 @@ public class PauseScreen {
     private Button myExitButton;
     private Consumer myToggler;
     private Stage myStage;
+    private LevelRunner myLevelRunner;
 
-    public PauseScreen(Consumer toggle, Stage stage, Double translatedX){
+    public PauseScreen(LevelRunner levelRunner, Consumer toggle, Stage stage, Double translatedX){
         myPauseMenu = new VBox(8); // spacing = 8
+        myLevelRunner = levelRunner;
         initializeButtons();
         myPauseMenu.getChildren().addAll(myResumeButton, myRestartButton, myExitButton);
-        System.out.println(200-translatedX);
         myPauseMenu.setLayoutX(200 - translatedX);
         myPauseMenu.setLayoutY(200);
         myToggler = toggle;
@@ -32,12 +35,22 @@ public class PauseScreen {
         });
         myRestartButton = new Button("Restart Level");
         myRestartButton.setOnMouseClicked(event ->{
-
+            restartLevel();
         });
         myExitButton = new Button("Exit Game");
         myExitButton.setOnMouseClicked(event ->{
             myStage.close();
         });
+    }
+
+    private void restartLevel() {
+        for(Entity entity : myLevelRunner.getEntities()){
+            if(entity.hasComponents(ProgressionComponent.class)){
+                ((ProgressionComponent)entity.getComponent(ProgressionComponent.class)).setValue(true);
+                break;
+            }
+        }
+        myToggler.accept(null);
     }
 
     public VBox getPauseMenu(){

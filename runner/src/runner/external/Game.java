@@ -3,10 +3,7 @@ package runner.external;
 import engine.external.Entity;
 import engine.external.Level;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Game {
     private List<Level> myLevels;
@@ -30,7 +27,7 @@ public class Game {
     }
 
     public List<Level> getLevels(){
-        return myLevels;
+        return Collections.unmodifiableList(myLevels);
     }
 
     public int getWidth(){

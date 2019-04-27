@@ -65,7 +65,7 @@ public class LevelRunner {
     }
 
     private void addButtonsAndHUD() {
-        myPauseButton = new PauseButton(myAnimation, myGroup, myStage, myAudioManager);
+        myPauseButton = new PauseButton(this, myAnimation, myGroup, myStage, myAudioManager);
         myPause = myPauseButton.getPauseButton();
         myGroup.getChildren().add(myPause);
         canPause = true;
@@ -125,5 +125,9 @@ public class LevelRunner {
 
     public Collection<Entity> getEntities(){
         return myEntities;
+    }
+
+    public Engine getEngine(){
+        return myEngine;
     }
 }
