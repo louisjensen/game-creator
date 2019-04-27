@@ -3,7 +3,6 @@ package runner.internal;
 import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.Level;
-import engine.external.component.PlayAudioComponent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -61,7 +60,7 @@ public class LevelRunner {
 
     private void initializeSystems() {
         SystemManager systems = new SystemManager(this, myGroup, myStage, myAnimation,
-                mySceneWidth, mySceneHeight, myLevelChanger, myScene, myHUD);
+                mySceneWidth, mySceneHeight, myLevelChanger, myScene, myHUD, myAudioManager);
         mySystems = systems.getSystems();
     }
 
@@ -115,11 +114,6 @@ public class LevelRunner {
             system.update(myEntities);
         }
         if (canPause) updateButtonsAndHUD();
-        for(Entity entity : myEntities) {
-            if (entity.hasComponents(PlayAudioComponent.class)) {
-                myAudioManager.playSound(entity);
-            }
-        }
     }
 
     private void updateButtonsAndHUD(){

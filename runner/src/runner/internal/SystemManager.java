@@ -24,9 +24,11 @@ public class SystemManager {
     private Consumer myLevelChanger;
     private Scene myScene;
     private HeadsUpDisplay myHUD;
+    private AudioManager myAudioManger;
 
     public SystemManager(LevelRunner levelRunner, Group group, Stage stage, Timeline animation,
-                         int width, int height, Consumer changer, Scene scene, HeadsUpDisplay hud){
+                         int width, int height, Consumer changer, Scene scene, HeadsUpDisplay hud,
+                         AudioManager audioManager){
         myLevelRunner = levelRunner;
         myGroup = group;
         myStage = stage;
@@ -36,6 +38,7 @@ public class SystemManager {
         myLevelChanger = changer;
         myScene = scene;
         myHUD = hud;
+        myAudioManger = audioManager;
         mySystems = new ArrayList<>();
         addSystems();
     }
@@ -60,6 +63,10 @@ public class SystemManager {
         Collection<Class<? extends Component>> components6 = new ArrayList<>();
         components6.add(NextLevelComponent.class);
         mySystems.add(new LevelSystem(components6, myLevelRunner, myHUD));
+
+        Collection<Class<? extends Component>> components7 = new ArrayList<>();
+        components7.add(PlayAudioComponent.class);
+        mySystems.add(new SoundSystem(components7, myLevelRunner, myAudioManger));
 
         Collection<Class<? extends Component>> components = new ArrayList<>();
         components.add(ProgressionComponent.class);
