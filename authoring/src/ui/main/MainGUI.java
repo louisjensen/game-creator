@@ -217,6 +217,7 @@ public class MainGUI {
         DataManager dm = new DataManager();
         dm.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
         dm.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
+        saveAndClearFolder(dm, "authoring/assets/images/");
     }
 
     @SuppressWarnings("unused")
@@ -265,34 +266,10 @@ public class MainGUI {
     //outerDirectory - folder that needs sub-folders "defaults" and "user-uploaded"
     private void saveAndClearFolder(DataManager dataManager, String outerDirectoryPath){
         File outerDirectory = new File(outerDirectoryPath);
-        System.out.println("Save and clear folder called on " + outerDirectory.getName());
-        //images or audio
-        if(SAVING_ASSETS_RESOURCES.containsKey(outerDirectory.getName())){  //name used for determining save method (audio or image)
-            Map<File, List<File>> map;
-            map = Utility.getSubFoldersToFiles(outerDirectory);
-            //defaults/user_uploaded
-            for(File directory : map.keySet()){
-                String prefix = determinePrefix(directory);
-                for(File assetFile : directory.listFiles()){
-                    Reflection.callMethod(dataManager, SAVING_ASSETS_RESOURCES.getString(outerDirectory.getName()), prefix + assetFile.getName(), assetFile);
-                    //TODO: uncomment
-                    //assetFile.delete();
-                }
-            }
+        for(File file : outerDirectory.listFiles()){
+            dataManager.saveImage(file.getName(), file);
+            //TODO uncomment file.delete();
         }
-    }
-
-    //takes in a directory and checks if it's in the properties file for a specific prefix
-    //if not, it defaults to GameName + AuthorName
-    private String determinePrefix(File directory) {
-        String prefix;
-        if(SAVING_ASSETS_RESOURCES.containsKey(directory.getName())){
-            prefix = SAVING_ASSETS_RESOURCES.getString(directory.getName());
-        }
-        else{
-            prefix = myGameData.getTitle() + myGameData.getAuthorName();
-        }
-        return prefix;
     }
 
     //TODO: differentiate between images and audio
