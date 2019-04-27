@@ -2,6 +2,7 @@ package frontend.games;
 
 import data.external.DataManager;
 import data.external.GameCenterData;
+import frontend.Utilities;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -17,6 +18,8 @@ public class GamePage {
     private static final String BODY_SELECTOR = "bodyfont";
     private static final double POPUP_WIDTH = 750;
     private static final double POPUP_HEIGHT = 500;
+    private static final double IMAGE_SIZE = 500;
+    private static final double WRAP_OFFSET = 20;
     private DataManager myManager;
 
     public GamePage(GameCenterData data, DataManager manager) {
@@ -41,10 +44,13 @@ public class GamePage {
     }
 
     private void addBody() {
-
+        BorderPane contentPane = new BorderPane();
+        contentPane.setTop(Utilities.getImagePane(myManager, myData.getImageLocation(), IMAGE_SIZE));
         Text body = new Text(myData.getDescription());
         body.getStyleClass().add(BODY_SELECTOR);
-
+        body.setWrappingWidth(POPUP_WIDTH - WRAP_OFFSET);
+        contentPane.setCenter(body);
+        myDisplay.setCenter(contentPane);
     }
 
     private void addHeader() {

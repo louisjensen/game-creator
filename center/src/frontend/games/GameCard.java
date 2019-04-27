@@ -10,7 +10,6 @@ package frontend.games;
 
 import data.external.DataManager;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -22,7 +21,6 @@ import data.external.GameCenterData;
 import frontend.Utilities;
 import runner.external.GameRunner;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ResourceBundle;
 
@@ -141,12 +139,7 @@ public class GameCard {
     }
 
     private void addImage(BorderPane contentPane) {
-        ImageView gameImage = Utilities.getImageView(myManager, myGame.getImageLocation());
-        gameImage.setPreserveRatio(true);
-        gameImage.setFitWidth(GAME_IMAGE_SIZE);
-        BorderPane imagePane = new BorderPane();
-        imagePane.setCenter(gameImage);
-        contentPane.setTop(imagePane);
+        contentPane.setTop(Utilities.getImagePane(myManager, myGame.getImageLocation(), GAME_IMAGE_SIZE));
     }
 
     private void addTitleContent(BorderPane foreground) {

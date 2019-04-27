@@ -76,6 +76,7 @@
     -fx-fill: white;
     -fx-font-size: 18;
     -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 .cardpadding {

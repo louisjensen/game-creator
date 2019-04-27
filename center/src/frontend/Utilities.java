@@ -12,6 +12,9 @@ package frontend;
 import data.external.DataManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -35,14 +38,18 @@ public class Utilities {
         }
     }
 
-    public static ImageView getImageView(DataManager manager, String imageLocation) {
+    public static Pane getImagePane(DataManager manager, String imageLocation, double gameSize) {
         ImageView gameImage;
         try {
             gameImage = new ImageView(new Image(manager.loadImage(imageLocation)));
         } catch (Exception e) { // if any exceptions come from this, it should just become a default image.
             gameImage = new ImageView(new Image(manager.loadImage(DEFAULT_IMAGE_LOCATION)));
         }
-        return gameImage;
+        gameImage.setPreserveRatio(true);
+        gameImage.setFitWidth(gameSize);
+        BorderPane imagePane = new BorderPane();
+        imagePane.setCenter(gameImage);
+        return imagePane;
     }
 
 }
