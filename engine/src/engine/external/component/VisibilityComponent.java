@@ -1,6 +1,6 @@
 package engine.external.component;
-
-public class VisibilityComponent extends Component<Boolean> {
+@Deprecated
+public class  VisibilityComponent extends Component<Boolean> {
 
     private final static boolean DEFAULT = true;
 
