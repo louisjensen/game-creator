@@ -210,11 +210,16 @@ public class MainGUI {
     @SuppressWarnings("unused")
     private void saveGame() {
         GameTranslator translator = new GameTranslator(myObjectManager);
-        Game exportableGame = translator.translate();
 
-        DataManager dm = new DataManager();
-        dm.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
-        dm.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
+        try {
+            Game exportableGame = translator.translate();
+            DataManager dm = new DataManager();
+            dm.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
+            dm.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
+        } catch (UIException e) {
+            ErrorBox errorBox = new ErrorBox("Save Error", e.getMessage());
+            errorBox.showAndWait();
+        }
     }
 
     @SuppressWarnings("unused")
