@@ -70,10 +70,10 @@ public class GameCard {
     }
 
     private void initializeDisplay() {
-        BorderPane tempDisplay = new BorderPane();
+        BorderPane cardDisplay = new BorderPane();
         StackPane cardContents = fillCardContents();
-        tempDisplay.setCenter(cardContents);
-        myDisplay = tempDisplay;
+        cardDisplay.setCenter(cardContents);
+        myDisplay = cardDisplay;
     }
 
     private StackPane fillCardContents() {

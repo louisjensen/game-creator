@@ -5,8 +5,10 @@ import data.external.GameCenterData;
 import frontend.Utilities;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -16,10 +18,14 @@ public class GamePage {
     private static final String TITLE_SELECTOR = "titlefont";
     private static final String SUBTITLE_SELECTOR = "subtitlefont";
     private static final String BODY_SELECTOR = "bodyfont";
+    private static final String SCROLLER_SELECTOR = "scroller";
+    private static final String GAME_PAGE_SELECTOR = "gamepage";
     private static final double POPUP_WIDTH = 750;
     private static final double POPUP_HEIGHT = 500;
     private static final double IMAGE_SIZE = 500;
     private static final double WRAP_OFFSET = 20;
+    private static final double SCROLL_OFFSET = 20;
+    private static final Color BACKGROUND_COLOR = Color.rgb(46, 43, 51);
     private DataManager myManager;
 
     public GamePage(GameCenterData data, DataManager manager) {
@@ -29,7 +35,11 @@ public class GamePage {
     }
 
     public void display() {
-        Scene scene = new Scene(myDisplay, POPUP_WIDTH, POPUP_HEIGHT);
+        ScrollPane scroller = new ScrollPane(myDisplay);
+        scroller.getStylesheets().add("center.css");
+        scroller.getStyleClass().add(SCROLLER_SELECTOR);
+        scroller.setMaxHeight(POPUP_HEIGHT - SCROLL_OFFSET);
+        Scene scene = new Scene(scroller, POPUP_WIDTH, POPUP_HEIGHT, BACKGROUND_COLOR);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setResizable(false);
@@ -47,6 +57,7 @@ public class GamePage {
     private void initializeDisplay() {
         myDisplay = new BorderPane();
         myDisplay.getStylesheets().add("center.css");
+        myDisplay.getStyleClass().add(GAME_PAGE_SELECTOR);
         addHeader();
         addBody();
         addButtons();
