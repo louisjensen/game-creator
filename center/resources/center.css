@@ -112,3 +112,16 @@
     -fx-background-color: transparent;
     -fx-background: transparent;
 }
+
+.commentbox {
+    -fx-pref-width: 100;
+    -fx-pref-height: 100;
+    -fx-padding: 5 5 5 5;
+    -fx-background-color: #524b5d;
+    -fx-control-inner-background: #696176;
+    -fx-text-fill: white;
+}
+
+.ratingpadding {
+    -fx-padding: 20;
+}
