@@ -64,12 +64,14 @@
     -fx-fill: white;
     -fx-font-size: 48;
     -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 .subtitlefont {
     -fx-fill: white;
     -fx-font-size: 24;
     -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 .bodyfont {
@@ -104,4 +106,9 @@
 
 .gamepage {
     -fx-padding: 0 0 20 0;
+}
+
+.pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
 }

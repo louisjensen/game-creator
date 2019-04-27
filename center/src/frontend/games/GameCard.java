@@ -61,8 +61,7 @@ public class GameCard {
     }
 
     public void readMoreButton(GameCenterData data) {
-        GamePage page = new GamePage(data, myManager);
-        page.display();
+        new GamePage(data, myManager);
     }
 
     public void playGameButton(GameCenterData data) {

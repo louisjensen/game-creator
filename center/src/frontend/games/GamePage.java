@@ -3,20 +3,16 @@ package frontend.games;
 import data.external.DataManager;
 import data.external.GameCenterData;
 import frontend.Utilities;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
+import frontend.ratings.RatingScreen;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class GamePage {
     private GameCenterData myData;
     private BorderPane myDisplay;
-    private static final String TITLE_SELECTOR = "titlefont";
-    private static final String SUBTITLE_SELECTOR = "subtitlefont";
     private static final String BODY_SELECTOR = "bodyfont";
     private static final String SCROLLER_SELECTOR = "scroller";
     private static final String GAME_PAGE_SELECTOR = "gamepage";
@@ -25,25 +21,22 @@ public class GamePage {
     private static final double IMAGE_SIZE = 500;
     private static final double WRAP_OFFSET = 20;
     private static final double SCROLL_OFFSET = 20;
-    private static final Color BACKGROUND_COLOR = Color.rgb(46, 43, 51);
     private DataManager myManager;
 
     public GamePage(GameCenterData data, DataManager manager) {
         myData = data;
         myManager = manager;
         initializeDisplay();
+        display();
     }
 
-    public void display() {
+    private void display() {
         ScrollPane scroller = new ScrollPane(myDisplay);
         scroller.getStylesheets().add("center.css");
         scroller.getStyleClass().add(SCROLLER_SELECTOR);
         scroller.setMaxHeight(POPUP_HEIGHT - SCROLL_OFFSET);
-        Scene scene = new Scene(scroller, POPUP_WIDTH, POPUP_HEIGHT, BACKGROUND_COLOR);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.showAndWait();
+        Pane pane = new StackPane(scroller);
+        Utilities.showScene(pane, POPUP_WIDTH, POPUP_HEIGHT);
     }
 
     public void playGameButton(GameCenterData data) {
@@ -51,7 +44,7 @@ public class GamePage {
     }
 
     public void rateGameButton(GameCenterData data) {
-        // todo: implement this method!
+        new RatingScreen(data);
     }
 
     private void initializeDisplay() {
@@ -74,14 +67,7 @@ public class GamePage {
     }
 
     private void addHeader() {
-        Text title = new Text(myData.getTitle());
-        title.getStyleClass().add(TITLE_SELECTOR);
-        Text author = new Text(myData.getAuthorName());
-        author.getStyleClass().add(SUBTITLE_SELECTOR);
-        VBox text = new VBox(title, author);
-        text.setAlignment(Pos.CENTER);
-        BorderPane.setAlignment(text, Pos.CENTER);
-        myDisplay.setTop(text);
+        Utilities.addTitleAndSubtitle(myDisplay, myData.getTitle(), myData.getAuthorName());
     }
 
     private void addButtons() {
