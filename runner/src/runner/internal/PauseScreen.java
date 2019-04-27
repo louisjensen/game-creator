@@ -20,11 +20,12 @@ public class PauseScreen {
 
     public PauseScreen(LevelRunner levelRunner, Consumer toggle, Stage stage, Double translatedX){
         myPauseMenu = new VBox(8); // spacing = 8
+        myPauseMenu.setId("PauseMenu");
         myLevelRunner = levelRunner;
         initializeButtons();
         myPauseMenu.getChildren().addAll(myResumeButton, myRestartButton, myExitButton);
-        myPauseMenu.setLayoutX(200 - translatedX);
-        myPauseMenu.setLayoutY(200);
+        myPauseMenu.setLayoutX(180 - translatedX);
+        myPauseMenu.setLayoutY(180);
         myToggler = toggle;
         myStage = stage;
     }
@@ -34,14 +35,17 @@ public class PauseScreen {
         myResumeButton.setOnMouseClicked(event ->{
             myToggler.accept(null);
         });
+        myResumeButton.setId("button");
         myRestartButton = new Button("Restart Level");
         myRestartButton.setOnMouseClicked(event ->{
             restartLevel();
         });
+        myRestartButton.setId("button");
         myExitButton = new Button("Exit Game");
         myExitButton.setOnMouseClicked(event ->{
             myStage.close();
         });
+        myExitButton.setId("button");
     }
 
     private void restartLevel() {
