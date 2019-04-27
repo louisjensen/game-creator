@@ -254,13 +254,13 @@ public class Viewer extends ScrollPane {
         myObjectManager.removeEntityInstance(imageWithEntity.getAuthoringEntity());
     }
 
-    private void applyDragHandler(ImageWithEntity imageView) {
-        imageView.setOnDragDetected(new EventHandler<MouseEvent>() {
+    private void applyDragHandler(ImageWithEntity imageWithEntity) {
+        imageWithEntity.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Utility.setupDragAndDropImage(imageView);
+                Utility.setupDragAndDropImage(imageWithEntity);
                 isDragOnView = true;
-                myDraggedAuthoringEntity = imageView.getAuthoringEntity();
+                myDraggedAuthoringEntity = imageWithEntity.getAuthoringEntity();
             }
         });
     }

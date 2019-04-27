@@ -15,14 +15,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ui.panes.ImageWithEntity;
 
+
+import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -223,13 +223,10 @@ public class Utility {
     }
 
     public static void setupDragAndDropImage(ImageWithEntity imageWithEntity){
-        System.out.println("Made it to drag and drop");
         Dragboard db = imageWithEntity.startDragAndDrop(TransferMode.MOVE);
         ClipboardContent content = new ClipboardContent();
-        Image image = imageWithEntity.getImage();
         content.putImage(imageWithEntity.getImage());
         db.setContent(content);
-        db.setDragView(imageWithEntity.getImage(), 0, 0);
     }
 
     /**
