@@ -4,14 +4,12 @@ import engine.external.Entity;
 import engine.external.Level;
 import engine.external.actions.Action;
 import engine.external.actions.SoundAction;
-import engine.external.actions.TimerAction;
 import engine.external.actions.ValueAction;
+import engine.external.component.CameraComponent;
 import engine.external.component.CollisionComponent;
 import engine.external.component.Component;
 import engine.external.component.SoundComponent;
-import engine.external.component.TimerComponent;
 import engine.external.component.ValueComponent;
-import engine.external.conditions.Condition;
 import engine.external.events.BottomCollisionEvent;
 import engine.external.events.Event;
 import engine.external.events.LeftCollisionEvent;
@@ -22,6 +20,7 @@ import ui.AuthoringEntity;
 import ui.AuthoringLevel;
 import ui.EntityField;
 import ui.LevelField;
+import ui.UIException;
 import ui.manager.ObjectManager;
 
 import java.util.HashMap;
@@ -39,14 +38,14 @@ public class GameTranslator {
         myObjectManager = objectManager;
     }
 
-    public Game translate() {
+    public Game translate() throws UIException {
         Game translatedGame = new Game();
         Map<Entity, String> typeMap = new HashMap<>();
 
-        for (AuthoringLevel authLevel : myObjectManager.getLevels()) {
+        for (AuthoringLevel authLevel : myObjectManager.getLevels()) { // Translate Levels
             translatedGame.addLevel(translateLevel(authLevel));
         }
-        for (AuthoringEntity key : myObjectManager.getTypeMap().keySet()) {
+        for (AuthoringEntity key : myObjectManager.getTypeMap().keySet()) { // Translate Entity type map
             Entity translatedType = translateEntity(key);
             typeMap.put(translatedType, myObjectManager.getTypeMap().get(key));
         }
@@ -54,8 +53,13 @@ public class GameTranslator {
         return translatedGame;
     }
 
-    private Level translateLevel(AuthoringLevel authLevel) {
+    private Level translateLevel(AuthoringLevel authLevel) throws UIException {
         Level newLevel = new Level();
+        boolean mainCharExists = false;
+
+        if (authLevel.getEntities().isEmpty()) {
+            throw new UIException("All levels must have at least one Entity");
+        }
 
         newLevel.setBackground(authLevel.getPropertyMap().get(LevelField.BACKGROUND)); // Level properties!!!
         newLevel.setLabel(authLevel.getPropertyMap().get(LevelField.LABEL));
@@ -68,6 +72,16 @@ public class GameTranslator {
             for (Event event : myObjectManager.getEvents(authEntity.getPropertyMap().get(EntityField.LABEL))) // Events!!!
                 newLevel.addEvent(event);
         }
+        for (Entity entity : newLevel.getEntities()) {
+            if (entity.hasComponents(CameraComponent.class)) {
+                mainCharExists = true;
+                break;
+            }
+        }
+        if (!mainCharExists) {
+            throw new UIException("One Entity per Level must be selected as Focus");
+        }
+
         return newLevel;
     }
 
@@ -75,34 +89,31 @@ public class GameTranslator {
         Entity basisEntity = new Entity();
 
         for (EntityField field : EntityField.values()) {
-            if (authEntity.getPropertyMap().containsKey(field) && !field.equals(EntityField.CAMERA) && !field.equals(EntityField.EVENTS) && !field.equals(EntityField.IMAGE)) {
+            if (authEntity.getPropertyMap().containsKey(field) && !field.equals(EntityField.FOCUS) && !field.equals(EntityField.EVENTS) && !field.equals(EntityField.IMAGE)) {
                     addComponent(field, basisEntity, authEntity);
                 }
-            else if (field.equals(EntityField.CAMERA) && Boolean.parseBoolean(authEntity.getPropertyMap().get(EntityField.CAMERA))) { // main character found
-                //basisEntity.addComponent(new LivesComponent());
+            else if (field.equals(EntityField.FOCUS) && Boolean.parseBoolean(authEntity.getPropertyMap().get(EntityField.FOCUS))) { // main character found
+                basisEntity.addComponent(new CameraComponent(true));
+                //basisEntity.addComponent(new LivesComponent(3.0)); //TODO
                 //basisEntity.addComponent(new ScoreComponent(0.0));
             }
         }
-        // TODO do special image/sound thing
 
-        //TODO group events?
+        //TODO group events, group collision events?
         for (AuthoringLevel authLevel : myObjectManager.getLevels()) {
             for (AuthoringEntity entity : authLevel.getEntities()) {
                 for (Event event : myObjectManager.getEvents(entity.getPropertyMap().get(EntityField.LABEL))) {
                     if (event.getClass().equals(BottomCollisionEvent.class) || event.getClass().equals(LeftCollisionEvent.class) ||
                     event.getClass().equals(RightCollisionEvent.class) || event.getClass().equals(TopCollisionEvent.class)) {
-                    basisEntity.addComponent(new CollisionComponent(true));
-                    }        // TODO add components from Events? (Collision, ValueComponent)
+                        basisEntity.addComponent(new CollisionComponent(true));
+
+                    // TODO add collisioncomponent to other actor
+                    }
                     for (Action action : (List<Action>) event.getEventInformation().get(Action.class)) {
                         if (action.getClass().equals(SoundAction.class) && !basisEntity.hasComponents(SoundComponent.class))
-                            basisEntity.addComponent(new SoundComponent("")); //TODO
-                        if (action.getClass().equals(TimerAction.class) && !basisEntity.hasComponents(TimerComponent.class))
-                            basisEntity.addComponent(new TimerComponent(0));
+                            basisEntity.addComponent(new SoundComponent(""));
                         if (action.getClass().equals(ValueAction.class) && !basisEntity.hasComponents(ValueComponent.class))
                             basisEntity.addComponent(new ValueComponent<>(0));
-                    }
-                    for (Condition condition : (List<Condition>) event.getEventInformation().get(Condition.class)) {
-                        //TODO what even
                     }
                 }
             }

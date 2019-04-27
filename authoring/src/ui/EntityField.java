@@ -37,7 +37,7 @@ public enum EntityField {
     XSCALE (WidthComponent.class, Double.class, "XScale", "0.0", true, true, true),
     YSCALE (HeightComponent.class, Double.class, "YScale" , "0.0", true, true, true),
 
-    CAMERA (CameraComponent.class, Boolean.class, "Camera", "false", false, true, false),
+    FOCUS (CameraComponent.class, Boolean.class, "Focus", "false", false, true, false),
     VISIBLE (VisibilityComponent.class, Boolean.class, "Visible", "true", false, true, false),
 
     XSPEED (XVelocityComponent.class, Double.class, "XSpeed", "0.0", true, false, true),
