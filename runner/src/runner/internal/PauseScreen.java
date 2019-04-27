@@ -14,17 +14,18 @@ public class PauseScreen {
     private Consumer myToggler;
     private Stage myStage;
 
-    public PauseScreen(Consumer toggle, Stage stage){
+    public PauseScreen(Consumer toggle, Stage stage, Double translatedX){
         myPauseMenu = new VBox(8); // spacing = 8
-        initailizeButtons();
+        initializeButtons();
         myPauseMenu.getChildren().addAll(myResumeButton, myRestartButton, myExitButton);
-        myPauseMenu.setLayoutX(200);
+        System.out.println(200-translatedX);
+        myPauseMenu.setLayoutX(200 - translatedX);
         myPauseMenu.setLayoutY(200);
         myToggler = toggle;
         myStage = stage;
     }
 
-    private void initailizeButtons() {
+    private void initializeButtons() {
         myResumeButton = new Button("Resume");
         myResumeButton.setOnMouseClicked(event ->{
             myToggler.accept(null);

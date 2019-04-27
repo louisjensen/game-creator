@@ -17,11 +17,10 @@ public class PauseButton extends ImageView {
     private static final Double WIDTH = 30.0;
     private static final Double HEIGHT = 30.0;
     private Group myGroup;
-    private PauseScreen myPauseMenu;
     private Stage myStage;
+    private Consumer myToggle;
 
     public PauseButton(Animation animation, Group group, Stage stage, AudioManager audioManager){
-
         super(new Image("pause.png", WIDTH, HEIGHT, true, false));
         this.setLayoutX(X_LOCATION);
         this.setLayoutY(Y_LOCATION);
@@ -32,10 +31,9 @@ public class PauseButton extends ImageView {
         });
         myGroup = group;
         myStage = stage;
-        Consumer toggle = (event)->{
+        myToggle = (event)->{
             toggleAnimation();
         };
-        myPauseMenu = new PauseScreen(toggle, myStage);
     }
 
     private void toggleAnimation() {
@@ -49,7 +47,7 @@ public class PauseButton extends ImageView {
 
     private void pauseGame() {
         myAnimation.pause();
-        myGroup.getChildren().add(myPauseMenu.getPauseMenu());
+        myGroup.getChildren().add(new PauseScreen(myToggle, myStage, myGroup.getTranslateX()).getPauseMenu());
         myAudioManager.pauseAllSound();
     }
 

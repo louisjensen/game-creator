@@ -120,6 +120,7 @@ public class LevelRunner {
         myPause.setLayoutX(myPauseButton.getButtonX() - myGroup.getTranslateX());
         myLabel.setLayoutX(myHUD.getX() - myGroup.getTranslateX());
         myHUD.updateLabel();
+
     }
 
     public Collection<Entity> getEntities(){
