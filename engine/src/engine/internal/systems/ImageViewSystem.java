@@ -3,6 +3,7 @@ package engine.internal.systems;
 import data.external.DataManager;
 import engine.external.Entity;
 import engine.external.component.Component;
+import engine.external.component.DirectionComponent;
 import engine.external.component.ImageViewComponent;
 import engine.external.Engine;
 import javafx.scene.image.Image;
@@ -10,7 +11,6 @@ import javafx.scene.image.ImageView;
 import voogasalad.util.reflection.ReflectionException;
 
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
@@ -79,6 +79,17 @@ public class ImageViewSystem extends VoogaSystem {
         }
         entity.addComponent(new ImageViewComponent(setImgViewHeight(setImgViewWidth(setImgViewY(setImgViewX(imageView, entity), entity), entity), entity)));
 
+        updateDirection(entity);
+    }
+
+    private void updateDirection(Entity entity){
+        if(!entity.hasComponents(DirectionComponent.class)){
+            entity.addComponent(new DirectionComponent());
+        } else if(((DirectionComponent)entity.getComponent(DirectionComponent.class)).getValue()== DirectionComponent.PI){
+            ((ImageViewComponent)entity.getComponent(ImageViewComponent.class)).getValue().setScaleX(-1);
+        } else if(((DirectionComponent)entity.getComponent(DirectionComponent.class)).getValue()==DirectionComponent.DIRECTION_ZERO){
+            ((ImageViewComponent)entity.getComponent(ImageViewComponent.class)).getValue().setScaleX(1);
+        }
     }
 
 
