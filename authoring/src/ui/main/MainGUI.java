@@ -37,6 +37,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -51,6 +53,7 @@ public class MainGUI {
     private Game myLoadedGame;
     private GameCenterData myGameData;
     private Stage myStage;
+    private DataManager myDataManager;
     private HBox myViewerBox;
     private UserCreatedTypesPane myCreatedTypesPane;
     private ObjectManager myObjectManager;
@@ -72,6 +75,7 @@ public class MainGUI {
         myLoadedGame = new Game();
         myGameData = new GameCenterData();
         myStage = new Stage();
+        myDataManager = new DataManager();
         myViewers = new HashMap<>();
         defaultGameData();
         myCurrentLevel = new SimpleObjectProperty<>();
@@ -207,7 +211,7 @@ public class MainGUI {
         System.out.println("Open"); //TODO
         DataManager dataManager = new DataManager();
         System.out.println("About to load all assets");
-        //loadAllAssets(dataManager);
+        loadAllAssets(myDataManager);
     }
 
     @SuppressWarnings("unused")
@@ -215,12 +219,13 @@ public class MainGUI {
         GameTranslator translator = new GameTranslator(myObjectManager);
         try {
             Game exportableGame = translator.translate();
-            DataManager dm = new DataManager();
-            dm.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
-            dm.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
-            saveAndClearFolder(dm, "authoring/assets/images/");
-            saveAndClearFolder(dm, "authoring/assets/audio");
+            myDataManager = new DataManager();
+            myDataManager.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
+            myDataManager.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
+            saveAndClearFolder(myDataManager, "authoring/assets/images");
+            saveAndClearFolder(myDataManager, "authoring/assets/audio");
         } catch (UIException e) {
+            e.printStackTrace();
             ErrorBox errorBox = new ErrorBox("Save Error", e.getMessage());
             errorBox.showAndWait();
         }
@@ -268,28 +273,31 @@ public class MainGUI {
         myGameData.setDescription("A fun new game");
     }
 
-    //TODO make this work for audio too - need to differentiate which dataManager method using
     //outerDirectory - folder that needs sub-folders "defaults" and "user-uploaded"
     private void saveAndClearFolder(DataManager dataManager, String outerDirectoryPath){
         File outerDirectory = new File(outerDirectoryPath);
         for(File file : outerDirectory.listFiles()){
+            System.out.println("Saving and deleting: " + file.getName());
             dataManager.saveImage(file.getName(), file);
-            //TODO uncomment file.delete();
+
+            file.deleteOnExit();
         }
     }
 
     private void loadAllAssets(DataManager dataManager){
-        System.out.println("Made it to loadAllAssetsMethod");
         String prefix = myGameData.getTitle() + myGameData.getAuthorName();
         //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), prefix);
         try {
-            Map<String, InputStream> defaultImages = dataManager.loadAllImages("defaults");
+            Map<String, InputStream> defaultImages = dataManager.loadAllImages(SAVING_ASSETS_RESOURCES.getString("defaults"));
             Map<String, InputStream> userUploadedImages = dataManager.loadAllImages(prefix);
-            Map<String, InputStream> defaultAudio = dataManager.loadAllSounds("defaults");
-            Map<String, InputStream> userUploadedAudio = dataManager.loadAllSounds("defaults");
-
-            loadAssets(SAVING_ASSETS_RESOURCES.getString("images_filepath"), defaultImages);
+            Map<String, InputStream> defaultAudio = dataManager.loadAllSounds(SAVING_ASSETS_RESOURCES.getString("defaults"));
+            Map<String, InputStream> userUploadedAudio = dataManager.loadAllSounds(prefix);
+            loadAssets(GENERAL_RESOURCES.getString("images_filepath"), defaultImages);
+            loadAssets(GENERAL_RESOURCES.getString("images_filepath"), userUploadedImages);
+            loadAssets(GENERAL_RESOURCES.getString("audio_filepath"), defaultAudio);
+            loadAssets((GENERAL_RESOURCES.getString("audio_filepath")), userUploadedAudio);
         } catch (SQLException e) {
+            //TODO deal with this
             e.printStackTrace();
         }
 
@@ -297,17 +305,14 @@ public class MainGUI {
         //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), GENERAL_RESOURCES.getString("defaults"));
     }
 
-
-    //TODO: differentiate between images and audio
-    //TODO: test the file copying
     private void loadAssets(String folderFilePath, Map<String, InputStream> databaseInfo){
-//        System.out.println("Made it to loadAssets");
-//        String key = folderFilePath.split("/")[folderFilePath.split("/").length-1];
+       System.out.println("Made it to loadAssets");
         try {
             for(Map.Entry<String, InputStream> entry : databaseInfo.entrySet()){
                 InputStream inputStream = entry.getValue();
                 File destination = new File(folderFilePath + entry.getKey());
                 Files.copy(inputStream, destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                inputStream.close();
             }
         } catch (IOException e) {
             //TODO: handle error

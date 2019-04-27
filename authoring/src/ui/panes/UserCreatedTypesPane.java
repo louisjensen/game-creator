@@ -85,7 +85,7 @@ public class UserCreatedTypesPane extends VBox {
         String imageName = (String) originalEntity.getComponent(SpriteComponent.class).getValue();
         AuthoringEntity originalAuthoringEntity = new AuthoringEntity(originalEntity, defaultName, myObjectManager);
         originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
-        ImageWithEntity imageWithEntity = new ImageWithEntity(Utility.makeImageAssetInputStream(imageName), originalAuthoringEntity);
+        ImageWithEntity imageWithEntity = new ImageWithEntity(Utility.makeImageAssetInputStream(imageName), originalAuthoringEntity); //closed
         UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, originalAuthoringEntity);
         myCategoryToList.get(category).add(subPane);
         myEntityMenu.setDropDown(category, myCategoryToList.get(category));
