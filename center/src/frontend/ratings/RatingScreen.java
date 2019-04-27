@@ -2,10 +2,8 @@ package frontend.ratings;
 
 import data.external.GameCenterData;
 import frontend.Utilities;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.geometry.Pos;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.util.ResourceBundle;
@@ -27,6 +25,14 @@ public class RatingScreen {
         display();
     }
 
+    public void addRatingButton(GameCenterData data) {
+
+    }
+
+    public void cancelButton(GameCenterData data) {
+
+    }
+
     private void initializeDisplay() {
         myDisplay = new BorderPane();
         addTitle();
@@ -35,7 +41,7 @@ public class RatingScreen {
     }
 
     private void addRatingInput() {
-        VBox ratingOptions = new VBox();
+        BorderPane ratingOptions = new BorderPane();
         addStars(ratingOptions);
         addCommentBox(ratingOptions);
         myDisplay.setCenter(ratingOptions);
@@ -45,16 +51,20 @@ public class RatingScreen {
         myDisplay.setBottom(Utilities.makeButtons(this, myData));
     }
 
-    private void addStars(Pane pane) {
-        HBox stars = new HBox();
-        Text starTitle = new Text();
+    private void addStars(BorderPane pane) {
+        BorderPane stars = new BorderPane();
+        Text starTitle = new Text(Utilities.getValue(myLanguageBundle, "starTitle"));
         starTitle.getStyleClass().add(BODY_SELECTOR);
-        stars.getChildren().add(starTitle);
-
+        BorderPane.setAlignment(starTitle, Pos.CENTER);
+        stars.setTop(starTitle);
+        StarBox visualStars = new StarBox();
+        BorderPane.setAlignment(visualStars.getDisplay(), Pos.CENTER);
+        stars.setCenter(visualStars.getDisplay());
+        pane.setTop(stars);
     }
 
     private void addCommentBox(Pane pane) {
-
+//
     }
 
     private void addTitle() {
