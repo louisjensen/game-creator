@@ -36,11 +36,20 @@ public class GamePage {
         stage.showAndWait();
     }
 
+    public void playGameButton(GameCenterData data) {
+        Utilities.launchGameRunner(data.getFolderName());
+    }
+
+    public void rateGameButton(GameCenterData data) {
+        // todo: implement this method!
+    }
+
     private void initializeDisplay() {
         myDisplay = new BorderPane();
         myDisplay.getStylesheets().add("center.css");
         addHeader();
         addBody();
+        addButtons();
     }
 
     private void addBody() {
@@ -62,6 +71,12 @@ public class GamePage {
         text.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(text, Pos.CENTER);
         myDisplay.setTop(text);
+    }
+
+    private void addButtons() {
+        BorderPane buttonPane = new BorderPane();
+        buttonPane.setCenter(Utilities.makeButtons(this, myData));
+        myDisplay.setBottom(buttonPane);
     }
 
 }
