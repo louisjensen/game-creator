@@ -44,7 +44,10 @@ public class DummyGameObjectMaker {
     }
 
     private void addDummyEvents(Level level1, Double next) {
-
+        Event life = new Event();
+        life.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
+        life.addInputs(KeyCode.L);
+        life.addActions(new ChangeLivesAction(NumericAction.ModifyType.RELATIVE, -1.0));
 
         Event event = new Event();
         event.addConditions(new StringEqualToCondition(NameComponent.class, "one"));
@@ -169,6 +172,7 @@ public class DummyGameObjectMaker {
         level1.addEvent(mushroomOnPlatform);
         level1.addEvent(flappyJump);
         level1.addEvent(AddEntity);
+        level1.addEvent(life);
     }
 
     private void addDummyEntities(Level level, Double current) {
@@ -235,6 +239,7 @@ public class DummyGameObjectMaker {
         dummy2.addComponent(new NameComponent("two"));
         dummy3.addComponent(new NameComponent("three"));
         dummy8.addComponent(new NameComponent("five"));
+        gameObject.addComponent(new NameComponent("game"));
 
         dummy1.addComponent(new XVelocityComponent(2.0));
         dummy1.addComponent(new YVelocityComponent(0.0));
