@@ -46,15 +46,12 @@ public class AudioManager {
      */
     public void pauseAllSound(){
         int i = 0;
-        System.out.println(myMediaPlayers.size()+" MediaPlayers in the map");
         for(MediaPlayer mp: myMediaPlayers){
             if(mp.getStatus()== MediaPlayer.Status.PLAYING){
-                System.out.println("Pausing MediaPlayer "+i);
                 mp.pause();
             }
             i++;
         }
-        System.out.println("All paused");
     }
 
     /**
