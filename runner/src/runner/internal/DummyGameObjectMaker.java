@@ -54,7 +54,7 @@ public class DummyGameObjectMaker {
         Event event2 = new Event();
         event2.addConditions(new StringEqualToCondition(NameComponent.class, "one"));
         event2.addInputs(KeyCode.S);
-        event2.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 2.0));
+        event2.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -2.0));
 
         RightCollisionEvent oneByTwo = new RightCollisionEvent("two", false);
         oneByTwo.addConditions(new StringEqualToCondition(NameComponent.class, "one"));
