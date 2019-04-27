@@ -25,7 +25,7 @@ public class MovementSystem extends VoogaSystem {
      */
     protected void run() {
         for (Entity e: getEntities()) {
-            Double oldX = (Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e,GET_OLD_VALUE);
+            //Double oldX = (Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e,GET_OLD_VALUE);
             double x = calcPosition((Double) getComponentValue(X_POSITION_COMPONENT_CLASS,e),
                     e.hasComponents(X_VELOCITY_COMPONENT_CLASS)?
                             (Double) getComponentValue(X_VELOCITY_COMPONENT_CLASS,e):0.0,
@@ -53,7 +53,6 @@ public class MovementSystem extends VoogaSystem {
             if(e.hasComponents(Y_VELOCITY_COMPONENT_CLASS)){
                 ((YVelocityComponent)e.getComponent(Y_VELOCITY_COMPONENT_CLASS)).setValue(vY);
             }
-            updateDirectionComponent(e,oldX);
 //            if(e.getComponent(SpriteComponent.class).getValue().equals("flappy_bird.png")){
 //                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x pos = "+x+ " y pos = "+y);
 //                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x vel = "+vX+ " y vel = "+vY);

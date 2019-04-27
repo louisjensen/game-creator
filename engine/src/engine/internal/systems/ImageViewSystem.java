@@ -79,7 +79,6 @@ public class ImageViewSystem extends VoogaSystem {
         }
         entity.addComponent(new ImageViewComponent(setImgViewHeight(setImgViewWidth(setImgViewY(setImgViewX(imageView, entity), entity), entity), entity)));
 
-        updateDirection(entity);
     }
 
     private void updateDirection(Entity entity){
