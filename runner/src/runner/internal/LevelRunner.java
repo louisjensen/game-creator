@@ -3,6 +3,7 @@ package runner.internal;
 import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.Level;
+import engine.external.component.PlayAudioComponent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -39,6 +40,8 @@ public class LevelRunner {
     private HeadsUpDisplay myHUD;
     private Text myLabel;
 
+    private AudioManager myAudioManager;
+
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
         myLevel = level;
         mySceneWidth = width;
@@ -47,6 +50,7 @@ public class LevelRunner {
         myEngine = new Engine(level);
         myHUD = new HeadsUpDisplay(width);
         myEntities = myEngine.updateState(myCurrentKeys);
+        myAudioManager = new AudioManager(5);
         myLevelChanger = playNext;
         myAnimation = new Timeline();
         buildStage(stage);
@@ -62,7 +66,7 @@ public class LevelRunner {
     }
 
     private void addButtonsAndHUD() {
-        myPauseButton = new PauseButton(myAnimation, myGroup, myStage);
+        myPauseButton = new PauseButton(myAnimation, myGroup, myStage, myAudioManager);
         myPause = myPauseButton.getPauseButton();
         myGroup.getChildren().add(myPause);
         canPause = true;
@@ -111,6 +115,11 @@ public class LevelRunner {
             system.update(myEntities);
         }
         if (canPause) updateButtonsAndHUD();
+        for(Entity entity : myEntities) {
+            if (entity.hasComponents(PlayAudioComponent.class)) {
+                myAudioManager.playSound(entity);
+            }
+        }
     }
 
     private void updateButtonsAndHUD(){

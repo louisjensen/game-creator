@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 public class PauseButton extends ImageView {
     private boolean myPlayingStatus = true;
     private Animation myAnimation;
+    private AudioManager myAudioManager;
     private final Double X_LOCATION = 20.0;
     private final Double Y_LOCATION = 20.0;
     private static final Double WIDTH = 30.0;
@@ -19,11 +20,13 @@ public class PauseButton extends ImageView {
     private PauseScreen myPauseMenu;
     private Stage myStage;
 
-    public PauseButton(Animation animation, Group group, Stage stage){
+    public PauseButton(Animation animation, Group group, Stage stage, AudioManager audioManager){
+
         super(new Image("pause.png", WIDTH, HEIGHT, true, false));
         this.setLayoutX(X_LOCATION);
         this.setLayoutY(Y_LOCATION);
         myAnimation = animation;
+        myAudioManager = audioManager;
         this.setOnMouseClicked(event ->{
             toggleAnimation();
         });
@@ -47,10 +50,12 @@ public class PauseButton extends ImageView {
     private void pauseGame() {
         myAnimation.pause();
         myGroup.getChildren().add(myPauseMenu.getPauseMenu());
+        myAudioManager.pauseAllSound();
     }
 
     private void resumeGame(){
         myAnimation.play();
+        myAudioManager.resumeAllSound();
     }
 
     public ImageView getPauseButton(){
