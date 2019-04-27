@@ -35,8 +35,8 @@ public class CenterView extends Application {
      * @param stage the stage given to start that holds the display
      */
     public void start (Stage stage) {
-        //CenterView view = new CenterView();
-        GamePage view = new GamePage(new GameCenterData("", "test", "this is a test game", "", "megan"));
+        CenterView view = new CenterView();
+        //GamePage view = new GamePage(new GameCenterData("", "test", "this is a test game", "", "megan"));
         stage.setScene(view.getScene());
         stage.setResizable(false);
         stage.show();

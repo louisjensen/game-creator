@@ -72,6 +72,12 @@
     -fx-alignment: center;
 }
 
+.bodyfont {
+    -fx-fill: white;
+    -fx-font-size: 18;
+    -fx-alignment: center;
+}
+
 .cardpadding {
     -fx-padding: 0 0 20 0;
 }

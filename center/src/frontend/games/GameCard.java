@@ -46,16 +46,18 @@ public class GameCard {
     private ResourceBundle myLanguageBundle;
     private GameCenterData myGame;
     private Pane myDisplay;
+    private DataManager myManager;
 
     /**
      * @purpose constructor that sets up parameters of the game and initializes the resource bundle used for text.
      * @param game the GameCenterData object that represents the contents of the GameCard
      * @param index the index that the game card is in a list. This is used for styling purposes
      */
-    public GameCard(GameCenterData game, int index) {
+    public GameCard(GameCenterData game, int index, DataManager manager) {
         myGame = game;
         myIndex = index % 2 + 1;
         myLanguageBundle = ResourceBundle.getBundle(DEFAULT_LANGUAGE_LOCATION);
+        myManager = manager;
         initializeDisplay();
     }
 
@@ -102,6 +104,7 @@ public class GameCard {
     private void addButtons(BorderPane foreground) {
         Button readMore = new Button(Utilities.getValue(myLanguageBundle, "readMoreButton"));
         readMore.getStyleClass().add(INDIVIDUAL_BUTTON_SELECTOR);
+        readMore.setOnAction(e -> openReadMore());
         Button play = new Button(Utilities.getValue(myLanguageBundle, "playGameButton"));
         play.getStyleClass().add(INDIVIDUAL_BUTTON_SELECTOR);
         play.setOnAction(e -> handleButton(myGame.getFolderName()));
@@ -110,6 +113,11 @@ public class GameCard {
         BorderPane buttonPane = new BorderPane();
         buttonPane.setCenter(buttons);
         foreground.setBottom(buttonPane);
+    }
+
+    private void openReadMore() {
+        GamePage page = new GamePage(myGame, myManager);
+        page.display();
     }
 
     private void handleButton(String folderName) {
@@ -122,12 +130,7 @@ public class GameCard {
 
     private void addImageAndContent(BorderPane foreground) {
         BorderPane contentPane = new BorderPane();
-        try {
-            addImage(contentPane);
-        } catch (FileNotFoundException e) { // this means that even the default image could not be found
-            // do nothing, because in this case there would just be no image on the card which is fine
-            // todo: possibly create a type of card with no image & turn this into a factory type class
-        }
+        addImage(contentPane);
         Text imageDescription = new Text(myGame.getDescription());
         imageDescription.getStyleClass().add(BODY_SELECTOR);
         imageDescription.getStyleClass().add(TEXT_SELECTOR + myIndex);
@@ -137,14 +140,8 @@ public class GameCard {
         foreground.setCenter(contentPane);
     }
 
-    private void addImage(BorderPane contentPane) throws FileNotFoundException {
-        ImageView gameImage;
-        try {
-            DataManager dataManager = new DataManager();
-            gameImage = new ImageView(new Image(dataManager.loadImage(myGame.getImageLocation())));
-        } catch (Exception e) { // if any exceptions come from this, it should just become a default image.
-            gameImage = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
-        }
+    private void addImage(BorderPane contentPane) {
+        ImageView gameImage = Utilities.getImageView(myManager, myGame.getImageLocation());
         gameImage.setPreserveRatio(true);
         gameImage.setFitWidth(GAME_IMAGE_SIZE);
         BorderPane imagePane = new BorderPane();

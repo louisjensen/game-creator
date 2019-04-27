@@ -9,11 +9,15 @@
 
 package frontend;
 
+import data.external.DataManager;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Utilities {
     private static final String ERROR_MESSAGE = "error";
+    private static final String DEFAULT_IMAGE_LOCATION = "default_game";
 
     /**
      * @purpose given a resource bundle and a key, get the value. This was pulled out for the sole purpose of adding in
@@ -29,6 +33,16 @@ public class Utilities {
         catch (MissingResourceException e) {
             return ERROR_MESSAGE;
         }
+    }
+
+    public static ImageView getImageView(DataManager manager, String imageLocation) {
+        ImageView gameImage;
+        try {
+            gameImage = new ImageView(new Image(manager.loadImage(imageLocation)));
+        } catch (Exception e) { // if any exceptions come from this, it should just become a default image.
+            gameImage = new ImageView(new Image(manager.loadImage(DEFAULT_IMAGE_LOCATION)));
+        }
+        return gameImage;
     }
 
 }
