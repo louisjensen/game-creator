@@ -67,6 +67,10 @@ public class ObjectManager {
         }
     }
 
+    public void removeAllLevels() {
+        myLevels = FXCollections.observableArrayList(new ArrayList<>());
+    }
+
     /**
      * Use this for adding a new general type
      * @param entity AuthoringEntity whose type is to be added

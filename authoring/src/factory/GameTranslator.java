@@ -150,4 +150,8 @@ public class GameTranslator {
         }
     }
 
+    public void populateObjectManager() {
+
+    }
+
 }

@@ -22,7 +22,6 @@ import ui.ErrorBox;
 import ui.Propertable;
 import ui.PropertableType;
 import ui.UIException;
-import ui.Utility;
 import ui.manager.GroupManager;
 import ui.manager.InfoEditor;
 import ui.manager.ObjectManager;
@@ -31,15 +30,11 @@ import ui.panes.LevelsPane;
 import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
-import voogasalad.util.reflection.Reflection;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -95,13 +90,13 @@ public class MainGUI {
 
     public void launch() {
         myStage.setTitle(STAGE_TITLE);
-        myStage.setScene(createMainGUI());
+        myStage.setScene(createMainGUI(false));
         myStage.setMinHeight(STAGE_MIN_HEIGHT);
         myStage.show();
         myStage.setMinWidth(myStage.getWidth());
     }
 
-    private Scene createMainGUI() { //TODO clean up
+    private Scene createMainGUI(boolean load) { //TODO clean up
         BorderPane mainBorderPane = new BorderPane();
         Scene mainScene = new Scene(mainBorderPane);
         HBox propPaneBox = new HBox();
@@ -109,7 +104,7 @@ public class MainGUI {
         HBox entityPaneBox = new HBox();
         entityPaneBox.getStyleClass().add("entity-pane-box");
 
-        myCreatedTypesPane = createTypePanes(entityPaneBox, mainScene);
+        myCreatedTypesPane = createTypePanes(entityPaneBox, mainScene, load);
         createViewersForExistingLevels();
 
         createPropertiesPanes(propPaneBox, mainScene);
@@ -133,8 +128,12 @@ public class MainGUI {
         }
     }
 
-    private UserCreatedTypesPane createTypePanes(HBox entityPaneBox, Scene mainScene) {
-        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager);
+    private UserCreatedTypesPane createTypePanes(HBox entityPaneBox, Scene mainScene, boolean load) {
+        UserCreatedTypesPane userCreatedTypesPane;
+        if (load)
+            userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager, myLoadedGame.getUserCreatedTypes());
+        else
+            userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager);
         DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane);
         entityPaneBox.getChildren().addAll(defaultTypesPane, userCreatedTypesPane);
         entityPaneBox.prefHeightProperty().bind(mainScene.heightProperty().subtract(PROP_PANE_HEIGHT));
@@ -204,9 +203,36 @@ public class MainGUI {
 
     @SuppressWarnings("unused")
     private void openGame() {
-        System.out.println("Open"); //TODO
+        String authorName = "";
         DataManager dataManager = new DataManager();
+        try {
+            List<String> gameNames = dataManager.loadUserGameNames(authorName); //TODO
+            myLoadedGame = (Game) dataManager.loadGameData(authorName, gameNames.get(0)); //TODO
+            //myGameData = null; //TODO
+        } catch (SQLException e) {
+            ErrorBox error = new ErrorBox("Load", "Error loading from database");
+        }
         loadAllAssets(dataManager);
+        loadDatabaseGame();
+    }
+
+    private void loadDatabaseGame() {
+        // Populate ObjectManager (Translate Entities/Levels)
+        GameTranslator translator = new GameTranslator(myObjectManager);
+        myObjectManager.removeAllLevels();
+
+        translator.populateObjectManager();
+            // Create labels for Entities, Groups, Levels in LabelManager
+            // Populate EventsMap
+
+
+        // Set selectedLevel to first level
+        myCurrentLevel.setValue(myObjectManager.getLevels().get(0));
+        // Assign selectedEntity to something in the level, triggers Properties Panes
+        mySelectedEntity.setValue(myObjectManager.getLevels().get(0).getEntities().get(0));
+        // Populate Levels Pane
+        // Create UI panes (Viewers, UserCreatedTypePane)
+        myStage.setScene(createMainGUI(true));
     }
 
     @SuppressWarnings("unused")
