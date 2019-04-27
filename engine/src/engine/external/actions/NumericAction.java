@@ -100,11 +100,8 @@ public abstract class NumericAction extends Action<Double> {
 
     public String toString() {
         return myModifier.getDisplayName() +
-<<<<<<< HEAD
-                " " + getMyComponentClass().getSimpleName() + " " + myArgument.toString();
-=======
                 " " + myComponentClass.getSimpleName().replaceAll(COMPONENT,"") + " " + myModifier.modifierName + " " + myArgument.toString();
->>>>>>> 16c4d72d2b74cea136996140787be12fd99765ef
+
 
     }
 }
