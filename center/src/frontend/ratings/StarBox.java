@@ -28,27 +28,30 @@ public class StarBox {
         HBox stars = new HBox();
         for(int i = 0; i < NUMBER_OF_STARS; i++) {
             Star currentStar = new Star(i);
-            currentStar.getImageDisplay().setOnMouseClicked(e-> handleStarClick(currentStar));
+            setUpStar(currentStar, stars);
             myStars.add(currentStar);
-            stars.getChildren().add(currentStar.getImageDisplay());
         }
         stars.setAlignment(Pos.CENTER);
         myDisplay.setCenter(stars);
     }
 
-    private void handleStarClick(Star currentStar) {
-        System.out.println("FASJDIAFJAS");
-        resetAllStars();
-        for(int i = 0; i <= currentStar.getIndex(); i++) {
-            myStars.get(i).setSelected(true);
-        }
-        initializeDisplay();
+    private void setUpStar(Star currentStar, HBox stars) {
+        currentStar.getImageDisplay().setOnMouseClicked(e-> handleStarClick(currentStar));
+        stars.getChildren().add(currentStar.getImageDisplay());
     }
 
-    private void resetAllStars() {
+    private void handleStarClick(Star currentStar) {
+        HBox newStars = new HBox();
         for(Star star : myStars) {
-            star.setSelected(false);
+            if(star.getIndex() <= currentStar.getIndex()) {
+                star.setSelected(true);
+            } else {
+                star.setSelected(false);
+            }
+            setUpStar(star, newStars);
         }
+        newStars.setAlignment(Pos.CENTER);
+        myDisplay.setCenter(newStars);
     }
 
 }
