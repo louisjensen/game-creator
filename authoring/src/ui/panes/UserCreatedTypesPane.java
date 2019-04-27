@@ -57,11 +57,11 @@ public class UserCreatedTypesPane extends VBox {
      * @param previouslyDefinedTypesMap the key is the String name of the default type it is associates with
      *                                  and the value is the original entity it is associated with
      */
-    public UserCreatedTypesPane(ObjectManager objectManager, Map<String, Entity> previouslyDefinedTypesMap){
+    public UserCreatedTypesPane(ObjectManager objectManager, Map<Entity, String> previouslyDefinedTypesMap){
         this(objectManager);
         System.out.println("Map Size: " + previouslyDefinedTypesMap.size());
-        for(Map.Entry<String, Entity> entry : previouslyDefinedTypesMap.entrySet()){
-            addUserDefinedType(entry.getValue(), entry.getKey());
+        for(Map.Entry<Entity, String> entry : previouslyDefinedTypesMap.entrySet()){
+            addUserDefinedType(entry.getKey(), entry.getValue());
         }
     }
 
