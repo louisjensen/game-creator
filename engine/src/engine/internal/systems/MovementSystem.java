@@ -3,7 +3,11 @@ package engine.internal.systems;
 import engine.external.Entity;
 
 import engine.external.Engine;
-import engine.external.component.*;
+import engine.external.component.Component;
+import engine.external.component.XPositionComponent;
+import engine.external.component.XVelocityComponent;
+import engine.external.component.YPositionComponent;
+import engine.external.component.YVelocityComponent;
 
 import java.util.Collection;
 
@@ -25,7 +29,6 @@ public class MovementSystem extends VoogaSystem {
      */
     protected void run() {
         for (Entity e: getEntities()) {
-            //Double oldX = (Double)getComponentValue(X_POSITION_COMPONENT_CLASS,e,GET_OLD_VALUE);
             double x = calcPosition((Double) getComponentValue(X_POSITION_COMPONENT_CLASS,e),
                     e.hasComponents(X_VELOCITY_COMPONENT_CLASS)?
                             (Double) getComponentValue(X_VELOCITY_COMPONENT_CLASS,e):0.0,
@@ -57,19 +60,8 @@ public class MovementSystem extends VoogaSystem {
 //                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x pos = "+x+ " y pos = "+y);
 //                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x vel = "+vX+ " y vel = "+vY);
 //            }
-        }
-    }
 
-    private void updateDirectionComponent(Entity e, Double oldX){
-        Double newX = (Double)e.getComponent(X_POSITION_COMPONENT_CLASS).getValue();
-        Double difference = newX-oldX;
-        if(difference < 0.0){
-            System.out.println("Difference in X position is " + difference);
-            ((DirectionComponent)e.getComponent(DirectionComponent.class)).setValue(DirectionComponent.PI);
-        } else if(difference > 0.0){
-            ((DirectionComponent)e.getComponent(DirectionComponent.class)).setValue(DirectionComponent.DIRECTION_ZERO);
         }
-
     }
 
     private double calcPosition(double position, double velocity, double acceleration){
