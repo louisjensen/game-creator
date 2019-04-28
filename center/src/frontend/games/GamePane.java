@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 public class GamePane {
     public static final int GAME_PANE_TOP_PADDING = 10;
     public static final int GAME_PANE_PADDING = 100;
+    public static final int GAME_PANE_BOTTOM_PADDING = 150;
     private static final String SUBTITLE_SELECTOR = "subtitlefont";
     private Pane myDisplay;
     private ResourceBundle myResources;
@@ -45,7 +46,7 @@ public class GamePane {
 
     private void initializeDisplay() {
         BorderPane gamePane = new BorderPane();
-        gamePane.setPadding(new Insets(GAME_PANE_TOP_PADDING, GAME_PANE_PADDING, GAME_PANE_PADDING, GAME_PANE_PADDING));
+        gamePane.setPadding(new Insets(GAME_PANE_TOP_PADDING, GAME_PANE_PADDING, GAME_PANE_BOTTOM_PADDING, GAME_PANE_PADDING));
         Text subtitle = new Text(Utilities.getValue(myResources, "gamePaneTitle"));
         subtitle.getStyleClass().add(SUBTITLE_SELECTOR);
         BorderPane.setAlignment(subtitle, Pos.CENTER);
