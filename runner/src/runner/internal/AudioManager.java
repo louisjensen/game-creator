@@ -3,10 +3,8 @@ package runner.internal;
 import engine.external.Entity;
 import engine.external.component.AudioComponent;
 import engine.external.component.PlayAudioComponent;
-import engine.external.component.SoundComponent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

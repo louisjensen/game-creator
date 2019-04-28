@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -137,7 +138,6 @@ public class LevelRunner {
         myLabel.setLayoutX(myHUD.getX() - myGroup.getTranslateX());
         myHudBackground.setLayoutX(myHudBackground.getX() - myGroup.getTranslateX());
         myHUD.updateLabel();
-
     }
 
     /**

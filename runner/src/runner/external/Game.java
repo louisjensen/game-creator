@@ -3,6 +3,9 @@ package runner.external;
 import engine.external.Entity;
 import engine.external.Level;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Game Object contains all information to play a game
@@ -10,10 +13,7 @@ import java.util.*;
  */
 public class Game {
     private List<Level> myLevels;
-    private Map<String, Entity> myUserCreatedTypes;
-    private String myIconName;
-    private String myGameName;
-    private String myGameDescription;
+    private Map<Entity, String> myUserCreatedTypes;
     private int myWidth;
     private int myHeight;
 
@@ -21,7 +21,7 @@ public class Game {
      * Constructor to create a game object with initial size
      */
     public Game(){
-        myLevels = new ArrayList<Level>();
+        myLevels = new ArrayList<>();
 
         //Temporary defaults
         myHeight = 500;
@@ -64,7 +64,11 @@ public class Game {
      * Adds types created by user
      * @param userCreatedTypes - map of user defined type
      */
-    public void addUserCreatedTypes(Map<String, Entity> userCreatedTypes){
+    public void addUserCreatedTypes(Map<Entity, String> userCreatedTypes){
         myUserCreatedTypes = userCreatedTypes;
+    }
+
+    public Map<Entity, String> getUserCreatedTypes() {
+        return myUserCreatedTypes;
     }
 }

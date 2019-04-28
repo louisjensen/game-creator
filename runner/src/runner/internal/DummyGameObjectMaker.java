@@ -55,6 +55,7 @@ public class DummyGameObjectMaker {
         life.addInputs(KeyCode.L);
         life.addActions(new ChangeLivesAction(NumericAction.ModifyType.RELATIVE, -1.0));
 
+
         Event event = new Event();
         event.addConditions(new StringEqualToCondition(NameComponent.class, "one"));
         event.addInputs(KeyCode.RIGHT);
@@ -137,7 +138,6 @@ public class DummyGameObjectMaker {
         levelOver.addActions(new ProgressionAction(true));
         levelOver.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
 
-
         RightCollisionEvent rce = new RightCollisionEvent("three", false);
         rce.addConditions(new StringEqualToCondition(NameComponent.class, "one"));
         rce.addActions(new ProgressionAction(true));
@@ -179,6 +179,7 @@ public class DummyGameObjectMaker {
         level1.addEvent(flappyJump);
         level1.addEvent(AddEntity);
         level1.addEvent(life);
+
     }
 
     private void addDummyEntities(Level level, Double current) {
@@ -190,10 +191,6 @@ public class DummyGameObjectMaker {
 //        }}));
         gameObject.addComponent(new ScoreComponent(0.0));
         gameObject.addComponent(new LivesComponent(3.0));
-
-
-
-
 
         Entity dummy1 = new Entity();
         Entity dummy2 = new Entity();
@@ -246,7 +243,6 @@ public class DummyGameObjectMaker {
         dummy3.addComponent(new NameComponent("three"));
         dummy8.addComponent(new NameComponent("five"));
         gameObject.addComponent(new NameComponent("game"));
-
         dummy1.addComponent(new XVelocityComponent(2.0));
         dummy1.addComponent(new YVelocityComponent(0.0));
         dummy1.addComponent(new XAccelerationComponent(0.0));
