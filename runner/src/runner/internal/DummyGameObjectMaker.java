@@ -5,6 +5,7 @@ import engine.external.Entity;
 import engine.external.Level;
 import engine.external.actions.*;
 import engine.external.component.*;
+import engine.external.conditions.EqualToCondition;
 import engine.external.conditions.LessThanCondition;
 import engine.external.conditions.StringEqualToCondition;
 import engine.external.events.*;
@@ -152,10 +153,15 @@ public class DummyGameObjectMaker {
         AddEntity.addActions(new AddEntityAction(dummy7));
         AddEntity.addActions(new SoundAction("mario_theme"));
 
+        Event timeEvent = new Event();
+        timeEvent.addConditions(new StringEqualToCondition(NameComponent.class, "three"));
+        timeEvent.addConditions(new EqualToCondition(TimerComponent.class, 0.0));
+        timeEvent.addActions(new AddEntityAction(dummy7));
+        timeEvent.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
 
         level1.addEvent(event);
         level1.addEvent(event2);
-
+        level1.addEvent(timeEvent);
         level1.addEvent(flappyMoveLeft);
         //level1.addEvent(flappyMoveUp);
         level1.addEvent(mushroomJump);
@@ -284,6 +290,8 @@ public class DummyGameObjectMaker {
         dummy1.addComponent(new AssociatedEntityComponent(gameObject));
 
         dummy1.addComponent(new SoundComponent("mario_theme"));
+
+        dummy3.addComponent(new TimerComponent(100.0));
 
         level.addEntity(dummy1);
         level.addEntity(dummy2);
