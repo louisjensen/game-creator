@@ -88,31 +88,17 @@ abstract public class AssetManager extends Stage {
         initializeVariables();
         initializeSubClassVariables();
         initializeStage();
-        this.setOnShown(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                fillExtensionSet();
-                populateTabs();
-                createButtonPane();
-                setUpOuterPanes();
-            }
+        this.setOnShown(windowEvent -> {
+            handleOnShown();
         });
     }
 
-
-    public AssetManager(String assetFolderPath, String titleKey, String extensionKey, ObjectManager objectManager){
-        this(assetFolderPath, titleKey, extensionKey);
-        myObjectManager = objectManager;
-        GameCenterData gameCenterData = myObjectManager.getGameCenterData();
-        mySavingPrefix = gameCenterData.getTitle() + gameCenterData.getAuthorName();
+    private void handleOnShown() {
+        fillExtensionSet();
+        populateTabs();
+        createButtonPane();
+        setUpOuterPanes();
     }
-
-    public AssetManager(String assetFolderPath, String titleKey, String extensionKey,Propertable propertable){
-        this(assetFolderPath, titleKey, extensionKey);
-        myPropertable = propertable;
-    }
-
-
 
     private void setUpOuterPanes() {
         myOuterVBox.getChildren().add(myTabPane);
