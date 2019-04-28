@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 
 public class SingleRating {
     private static final String BODY_SELECTOR = "bodyfont";
+    private static final String PADDING_SELECTOR = "contentpadding";
     private GameRating myRating;
     private DataManager myManager;
     private GameCenterData myData;
@@ -65,6 +66,7 @@ public class SingleRating {
         BorderPane ratingBody = new BorderPane();
         addHeader(ratingBody);
         addText(ratingBody);
+        ratingBody.getStyleClass().add(PADDING_SELECTOR);
         myDisplay.setCenter(ratingBody);
     }
 
@@ -73,6 +75,7 @@ public class SingleRating {
         Text username = new Text(myUsername);
         username.getStyleClass().add(BODY_SELECTOR);
         box.getChildren().add(username);
+        box.setSpacing(5);
         StarBox stars = new StarBox();
         stars.setStars(myRating.getNumberOfStars());
         box.getChildren().add(stars.getDisplay());

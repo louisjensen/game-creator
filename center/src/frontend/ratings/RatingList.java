@@ -38,6 +38,7 @@ public class RatingList {
             SingleRating ratingDisplay = new SingleRating(rating, myManager, myData);
             allRatings.getChildren().add(ratingDisplay.getDisplay());
         }
+        allRatings.setSpacing(10);
         myDisplay.setCenter(allRatings);
     }
 

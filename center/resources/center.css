@@ -126,3 +126,7 @@
 .ratingpadding {
     -fx-padding: 0 0 20 0;
 }
+
+.borderpadding {
+    -fx-padding: 20;
+}
