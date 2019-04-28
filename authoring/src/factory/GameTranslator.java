@@ -177,7 +177,7 @@ public class GameTranslator {
             currentLevel.setValue(newLevel);
 
             loadEntities(level);
-            //loadEvents(level); //TODO
+            loadEvents(level);
         }
     }
 
@@ -196,8 +196,8 @@ public class GameTranslator {
         for (IEventEngine event : level.getEvents()) {
             boolean noName = true;
             for(Condition c : (List<Condition>) ((Event) event).getEventInformation().get(Condition.class)) {
-                if (c.getClass().equals(StringEqualToCondition.class)) {
-                    String entityType = ((StringEqualToCondition) c).getPredicate().toString(); //TODO
+                if (c.getClass().equals(StringEqualToCondition.class) && ((StringEqualToCondition) c).getComponentClass().equals(NameComponent.class)) {
+                    String entityType = ((StringEqualToCondition) c).getValue(); // Guaranteed to be associated with NameComponent
                     if (!myObjectManager.getEvents(entityType).contains(event))
                         myObjectManager.getEvents(entityType).add((Event) event);
                     noName = false;
