@@ -41,9 +41,7 @@ public class AudioSystem extends VoogaSystem {
 
     protected void run() throws ReflectionException {
         for (Entity entity : this.getEntities()) {
-            if (!entity.hasComponents(AUDIO_COMPONENT_CLASS)) {
-                generateAudio(entity);
-            }
+            generateAudio(entity);
         }
     }
 
