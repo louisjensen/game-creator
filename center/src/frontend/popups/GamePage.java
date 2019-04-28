@@ -4,6 +4,7 @@ import data.external.DataManager;
 import data.external.GameCenterData;
 import frontend.Utilities;
 import frontend.ratings.RatingList;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -40,12 +41,7 @@ public class GamePage extends Popup {
 
     @Override
     protected void display() {
-        ScrollPane scroller = new ScrollPane(myDisplay);
-        scroller.getStylesheets().add("center.css");
-        scroller.getStyleClass().add(SCROLLER_SELECTOR);
-        scroller.setMaxHeight(POPUP_HEIGHT - SCROLL_OFFSET);
-        Pane pane = new StackPane(scroller);
-        showScene(pane, POPUP_WIDTH, POPUP_HEIGHT);
+        showScene(myDisplay, POPUP_WIDTH, POPUP_HEIGHT);
     }
 
     @Override
@@ -58,7 +54,11 @@ public class GamePage extends Popup {
         contentPane.setCenter(body);
         RatingList gameRatings = new RatingList(myData, myManager);
         contentPane.setBottom(gameRatings.getDisplay());
-        myDisplay.setCenter(contentPane);
+        ScrollPane scroller = new ScrollPane(contentPane);
+        scroller.getStylesheets().add("center.css");
+        scroller.getStyleClass().add(SCROLLER_SELECTOR);
+        scroller.setMaxHeight(POPUP_HEIGHT - SCROLL_OFFSET);
+        myDisplay.setCenter(scroller);
     }
 
     @Override
