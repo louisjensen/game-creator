@@ -54,7 +54,7 @@ public class RatingScreen extends Popup {
 
     @Override
     protected void addHeader() {
-        addTitleAndSubtitle(myDisplay, Utilities.getValue(myLanguageBundle, "ratingTitle"), myData.getTitle());
+        addTitleAndSubtitle(myDisplay, Utilities.getValue(myLanguageBundle, "ratingTitle"), myData.getTitle(), RATING_WIDTH);
     }
 
     @Override

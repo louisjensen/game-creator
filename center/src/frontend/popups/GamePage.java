@@ -60,7 +60,7 @@ public class GamePage extends Popup {
 
     @Override
     protected void addHeader() {
-        addTitleAndSubtitle(myDisplay, myData.getTitle(), myData.getAuthorName());
+        addTitleAndSubtitle(myDisplay, myData.getTitle(), myData.getAuthorName(), POPUP_WIDTH);
     }
 
     @Override
