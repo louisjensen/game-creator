@@ -1,7 +1,7 @@
 package ui.main;
 
 import data.external.DataManager;
-import data.external.DatabaseEngine;
+import data.external.GameCenterData;
 import factory.GameTranslator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -16,9 +16,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import runner.external.Game;
-import data.external.GameCenterData;
 import ui.AuthoringLevel;
 import ui.ErrorBox;
 import ui.Propertable;
@@ -89,6 +87,7 @@ public class MainGUI {
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
         myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
         myObjectManager.setGameCenterData(myGameData);
+        loadAllAssets();
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
@@ -222,7 +221,7 @@ public class MainGUI {
         } catch (SQLException e) {
             ErrorBox error = new ErrorBox("Load", "Error loading from database");
         }
-        loadAllAssets(dataManager);
+        loadAllAssets();
         loadDatabaseGame();
     }
 
@@ -252,7 +251,6 @@ public class MainGUI {
             myDataManager = new DataManager();
             myDataManager.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
             myDataManager.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
-            System.out.println("Going into saveAndClearFolder");
 
             saveFolderToDataBase(GENERAL_RESOURCES.getString("images_filepath"));
             saveFolderToDataBase(GENERAL_RESOURCES.getString("audio_filepath"));
@@ -311,14 +309,14 @@ public class MainGUI {
         }
     }
 
-    private void loadAllAssets(DataManager dataManager){
+    private void loadAllAssets(){
         String prefix = myGameData.getTitle() + myGameData.getAuthorName();
         //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), prefix);
         try {
-            Map<String, InputStream> defaultImages = dataManager.loadAllImages(SAVING_ASSETS_RESOURCES.getString("defaults"));
-            Map<String, InputStream> userUploadedImages = dataManager.loadAllImages(prefix);
-            Map<String, InputStream> defaultAudio = dataManager.loadAllSounds(SAVING_ASSETS_RESOURCES.getString("defaults"));
-            Map<String, InputStream> userUploadedAudio = dataManager.loadAllSounds(prefix);
+            Map<String, InputStream> defaultImages = myDataManager.loadAllImages(SAVING_ASSETS_RESOURCES.getString("defaults"));
+            Map<String, InputStream> userUploadedImages = myDataManager.loadAllImages(prefix);
+            Map<String, InputStream> defaultAudio = myDataManager.loadAllSounds(SAVING_ASSETS_RESOURCES.getString("defaults"));
+            Map<String, InputStream> userUploadedAudio = myDataManager.loadAllSounds(prefix);
             loadAssets(GENERAL_RESOURCES.getString("images_filepath"), defaultImages);
             loadAssets(GENERAL_RESOURCES.getString("images_filepath"), userUploadedImages);
             loadAssets(GENERAL_RESOURCES.getString("audio_filepath"), defaultAudio);
