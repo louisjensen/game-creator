@@ -54,12 +54,13 @@ abstract public class AssetManager extends Stage {
     private static final String EXTENSION_PREFIX = "*.";
     private static final String DEFAULT_STYLE_SHEET = "default.css";
     private static final String ASSET_SPECIFIC_SHEET = "asset-manager";
+    private static final String BUTTON_PANE_SHEET = "asset-manager-hbox";
     protected String myAssetFolderPath;
     protected String myTitleKey;
     protected String myExtensionKey;
     protected static final double SPACING = 10;
     protected static final int STAGE_WIDTH = 400;
-    private static final int STAGE_HEIGHT = 300;
+    private static final int STAGE_HEIGHT = 400;
     private static final int BUTTON_SPACING = 20;
     protected static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
 
@@ -116,6 +117,7 @@ abstract public class AssetManager extends Stage {
 
         Tab defaultTab = new Tab();
         defaultTab.setText("Default");
+        defaultTab.setClosable(false);
         VBox vBox = new VBox();
         myTabPane.getTabs().add(defaultTab);
         ScrollPane defaultScrollPane = new ScrollPane();
@@ -125,7 +127,8 @@ abstract public class AssetManager extends Stage {
         TreeNode root = new TreeNode("root");
 
         Tab userUploaded = new Tab();
-        userUploaded.setText("User Uploaded");
+        userUploaded.setText("Uploaded");
+        userUploaded.setClosable(false);
         VBox userVBox = new VBox();
         ScrollPane userScrollPane = new ScrollPane();
         userScrollPane.setFitToWidth(true);
@@ -208,6 +211,7 @@ abstract public class AssetManager extends Stage {
         myOuterVBox = new VBox();
         myOuterVBox.setPrefHeight(STAGE_HEIGHT);
         myButtonHBox = new HBox();
+        myButtonHBox.setMinHeight(50);
         myTabPane = new TabPane();
         myScrollPane = new ScrollPane();
     }
@@ -218,7 +222,8 @@ abstract public class AssetManager extends Stage {
         this.setHeight(STAGE_HEIGHT);
         Scene scene = new Scene(myOuterVBox);
         scene.getStylesheets().add(DEFAULT_STYLE_SHEET);
-        myTabPane.getStyleClass().add(ASSET_SPECIFIC_SHEET);
+        myOuterVBox.getStyleClass().add(ASSET_SPECIFIC_SHEET);
+        myButtonHBox.getStyleClass().add(BUTTON_PANE_SHEET);
         this.setScene(scene);
     }
 

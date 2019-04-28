@@ -79,6 +79,7 @@ public class MainGUI {
         myDataManager = new DataManager();
         myViewers = new HashMap<>();
         defaultGameData();
+        loadAllAssets();
         myCurrentLevel = new SimpleObjectProperty<>();
         mySelectedEntity = new SimpleObjectProperty<>();
         myObjectManager = new ObjectManager(myCurrentLevel);
@@ -92,7 +93,6 @@ public class MainGUI {
         myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
         myObjectManager.setGameCenterData(myGameData);
         createMainGUI(false);
-        loadAllAssets();
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
