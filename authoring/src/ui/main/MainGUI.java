@@ -1,6 +1,8 @@
 package ui.main;
 
 import data.external.DataManager;
+import data.external.DatabaseEngine;
+import data.external.GameCenterData;
 import factory.GameTranslator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -16,7 +18,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import runner.external.Game;
-import data.external.GameCenterData;
 import ui.AuthoringLevel;
 import ui.ErrorBox;
 import ui.Propertable;
@@ -30,6 +31,7 @@ import ui.panes.LevelsPane;
 import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
+import voogasalad.util.reflection.Reflection;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +39,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -86,6 +90,7 @@ public class MainGUI {
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
         myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
         myObjectManager.setGameCenterData(myGameData);
+        loadAllAssets();
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
@@ -93,7 +98,7 @@ public class MainGUI {
         myLoadedGame = game;
         myGameData = gameData;
         myObjectManager.setGameCenterData(myGameData);
-        loadAllAssets(myDataManager); //TODO
+        loadAllAssets(); //TODO
         loadDatabaseGame();
     }
 
@@ -230,8 +235,7 @@ public class MainGUI {
         } catch (Exception e) {
 
         }
-
-        //loadAllAssets(dataManager); //TODO
+        //loadAllAssets(); //TODO
     }
 
     private void loadDatabaseGame() {
@@ -260,8 +264,11 @@ public class MainGUI {
             myDataManager = new DataManager();
             myDataManager.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
             myDataManager.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
-            saveAndClearFolder(myDataManager, "authoring/assets/images");
-            saveAndClearFolder(myDataManager, "authoring/assets/audio");
+
+            saveFolderToDataBase(GENERAL_RESOURCES.getString("images_filepath"));
+            saveFolderToDataBase(GENERAL_RESOURCES.getString("audio_filepath"));
+
+            DatabaseEngine.getInstance().open();
         } catch (UIException e) {
             e.printStackTrace();
             ErrorBox errorBox = new ErrorBox("Save Error", e.getMessage());
@@ -308,25 +315,43 @@ public class MainGUI {
         myGameData.setDescription("A fun new game");
     }
 
-    //outerDirectory - folder that needs sub-folders "defaults" and "user-uploaded"
-    private void saveAndClearFolder(DataManager dataManager, String outerDirectoryPath){
-        File outerDirectory = new File(outerDirectoryPath);
-        for(File file : outerDirectory.listFiles()){
-            System.out.println("Saving and deleting: " + file.getName());
-            dataManager.saveImage(file.getName(), file);
 
-            file.deleteOnExit();
+
+    private void saveFolderToDataBase(String outerDirectoryPath){
+        File outerDirectory = new File(outerDirectoryPath);
+        String methodName = SAVING_ASSETS_RESOURCES.getString(outerDirectory.getName());
+        System.out.println("Saving Directory: " + outerDirectory.getName() + " using " + methodName);
+        for(File file : outerDirectory.listFiles()){
+            System.out.println("\tSaving: " + file.getName());
+            Reflection.callMethod(myDataManager, methodName, file.getName(), file);
         }
     }
 
-    private void loadAllAssets(DataManager dataManager){
+    private void clearFolder(String outerDirectoryPath){
+        File outerDirectory = new File(outerDirectoryPath);
+        System.out.println("Directory: " + outerDirectory.getName());
+        List<File> didntDelete = new ArrayList<>();
+        for(File file : outerDirectory.listFiles()){
+            System.out.println("\t trying to delete " + file.getName());
+            file.deleteOnExit();
+        }
+//        if(didntDelete.size() > 0){
+//            StringBuilder stringBuilder = new StringBuilder();
+//            for(File f : didntDelete){
+//                stringBuilder.append(f.getName() + "\n");
+//            }
+//            ErrorBox errorBox = new ErrorBox("Didn't delete", stringBuilder.toString());
+//            errorBox.display();
+//        }
+    }
+
+    private void loadAllAssets(){
         String prefix = myGameData.getTitle() + myGameData.getAuthorName();
-        //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), prefix);
         try {
-            Map<String, InputStream> defaultImages = dataManager.loadAllImages(SAVING_ASSETS_RESOURCES.getString("defaults"));
-            Map<String, InputStream> userUploadedImages = dataManager.loadAllImages(prefix);
-            Map<String, InputStream> defaultAudio = dataManager.loadAllSounds(SAVING_ASSETS_RESOURCES.getString("defaults"));
-            Map<String, InputStream> userUploadedAudio = dataManager.loadAllSounds(prefix);
+            Map<String, InputStream> defaultImages = myDataManager.loadAllImages(SAVING_ASSETS_RESOURCES.getString("defaults"));
+            Map<String, InputStream> userUploadedImages = myDataManager.loadAllImages(prefix);
+            Map<String, InputStream> defaultAudio = myDataManager.loadAllSounds(SAVING_ASSETS_RESOURCES.getString("defaults"));
+            Map<String, InputStream> userUploadedAudio = myDataManager.loadAllSounds(prefix);
             loadAssets(GENERAL_RESOURCES.getString("images_filepath"), defaultImages);
             loadAssets(GENERAL_RESOURCES.getString("images_filepath"), userUploadedImages);
             loadAssets(GENERAL_RESOURCES.getString("audio_filepath"), defaultAudio);
