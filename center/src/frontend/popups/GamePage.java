@@ -3,6 +3,7 @@ package frontend.popups;
 import data.external.DataManager;
 import data.external.GameCenterData;
 import frontend.Utilities;
+import frontend.ratings.RatingList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -55,6 +56,8 @@ public class GamePage extends Popup {
         body.getStyleClass().add(BODY_SELECTOR);
         body.setWrappingWidth(POPUP_WIDTH - WRAP_OFFSET);
         contentPane.setCenter(body);
+        RatingList gameRatings = new RatingList(myData, myManager);
+        contentPane.setBottom(gameRatings.getDisplay());
         myDisplay.setCenter(contentPane);
     }
 
