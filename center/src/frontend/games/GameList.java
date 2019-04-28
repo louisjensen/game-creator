@@ -43,6 +43,7 @@ public class GameList {
 
     public GameList(String user, String desiredAuthor) {
         myManager = new DataManager();
+        System.out.println(desiredAuthor);
         myGames = myManager.loadAllGameInfoObjects(desiredAuthor);
         myCurrentUser = user;
         initializeDisplay();
