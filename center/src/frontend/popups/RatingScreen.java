@@ -93,6 +93,7 @@ public class RatingScreen extends Popup {
         comment.setTop(commentTitle);
         myText = new TextArea();
         myText.getStyleClass().add(TEXT_FIELD_SELECTOR);
+        BorderPane.setAlignment(myText, Pos.CENTER);
         comment.setCenter(myText);
         pane.setCenter(comment);
     }

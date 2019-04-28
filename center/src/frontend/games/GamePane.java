@@ -9,13 +9,16 @@
 
 package frontend.games;
 
+import center.external.CenterView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import frontend.Utilities;
 
+import java.time.chrono.HijrahEra;
 import java.util.ResourceBundle;
 
 public class GamePane {
@@ -51,7 +54,7 @@ public class GamePane {
         subtitle.getStyleClass().add(SUBTITLE_SELECTOR);
         BorderPane.setAlignment(subtitle, Pos.CENTER);
         gamePane.setTop(subtitle);
-        gamePane.setCenter((new GameList(myCurrentUser)).getDisplay());
+        gamePane.setCenter((new GameList(myCurrentUser, CenterView.STAGE_HEIGHT)).getDisplay());
         myDisplay = gamePane;
     }
 }

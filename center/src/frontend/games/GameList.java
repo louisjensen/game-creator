@@ -30,22 +30,24 @@ public class GameList {
     private List<GameCenterData> myGames;
     private DataManager myManager;
     private String myCurrentUser;
+    private double myHeight;
 
     /**
      * @purpose constructor, reads in the list of original GameData objects and saves it, then sets up the display of cards.
      */
-    public GameList(String user) {
+    public GameList(String user, double height) {
         myManager = new DataManager();
         myGames = myManager.loadAllGameInfoObjects();
         myCurrentUser = user;
+        myHeight = height;
         initializeDisplay();
     }
 
-    public GameList(String user, String desiredAuthor) {
+    public GameList(String user, String desiredAuthor, double height) {
         myManager = new DataManager();
-        System.out.println(desiredAuthor);
         myGames = myManager.loadAllGameInfoObjects(desiredAuthor);
         myCurrentUser = user;
+        myHeight = height;
         initializeDisplay();
     }
 
@@ -72,7 +74,7 @@ public class GameList {
         ScrollPane scroller = new ScrollPane();
         scroller.getStyleClass().add(SCROLLER_SELECTOR);
         scroller.setContent(gameList);
-        scroller.setMinHeight(CenterView.STAGE_HEIGHT - SCROLL_OFFSET);
+        scroller.setMinHeight(myHeight - SCROLL_OFFSET);
         BorderPane content = new BorderPane(scroller);
         myDisplay = content;
     }

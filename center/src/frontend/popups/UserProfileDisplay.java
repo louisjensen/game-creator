@@ -19,9 +19,10 @@ public class UserProfileDisplay extends Popup {
     private String myCurrentUser;
     private GameCenterData myData;
 
-    private static final double USER_WIDTH = 750;
-    private static final double USER_HEIGHT = 500;
+    private static final double USER_WIDTH = 1100;
+    private static final double USER_HEIGHT = 650;
     private static final double IMAGE_WIDTH = 125;
+    private static final double SCROLL_OFFSET = 50;
     private static final double SUBTITLE_WRAP_LENGTH = USER_WIDTH - 2 * IMAGE_WIDTH - 20;
     private static final String BODY_SELECTOR = "bodyfont";
     private static final String TITLE_SELECTOR = "titlefont";
@@ -72,17 +73,17 @@ public class UserProfileDisplay extends Popup {
         title.getStyleClass().add(SUBTITLE_SELECTOR);
         BorderPane.setAlignment(title, Pos.CENTER);
         gameListPane.setTop(title);
-        gameListPane.setCenter(new GameList(myCurrentUser, myUsername).getDisplay());
+        gameListPane.setCenter(new GameList(myCurrentUser, myUsername, USER_HEIGHT).getDisplay());
         myDisplay.setCenter(gameListPane);
     }
 
     @Override
     protected void addButtons() {
-        myDisplay.setBottom(Utilities.makeButtons(this, myData));
+        // intentionally doing nothing here because this screen doesn't  need buttons
     }
 
     @Override
     protected void display() {
-        showScene(myDisplay, USER_WIDTH, USER_HEIGHT);
+        showScene(myDisplay, USER_WIDTH, USER_HEIGHT + SCROLL_OFFSET);
     }
 }

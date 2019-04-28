@@ -142,7 +142,6 @@ public class GameCard {
     }
 
     private void openUserPage(String author) {
-        System.out.println("I mean we're TRYING to open a user page");
         new UserProfileDisplay(myGame, myManager, myCurrentUser, author);
     }
 
