@@ -40,6 +40,7 @@ import java.util.Set;
 abstract public class AssetManager extends Stage {
     private static final ResourceBundle RESOURCES = ResourceBundle.getBundle("asset_manager");
     protected static final ResourceBundle GENERAL_RESOURCES = ResourceBundle.getBundle("authoring_general");
+    private static final ResourceBundle SEPARATOR_RESOURCES = ResourceBundle.getBundle("mainGUI_assets");
     private Set<String> myExtensions;
     private HBox myButtonHBox;
     protected String mySelectedAssetName;
@@ -304,5 +305,16 @@ abstract public class AssetManager extends Stage {
      */
     public String getAssetName(){
         return mySelectedAssetName;
+    }
+
+    /**
+     * Used by subclasses (Audio/Image manager) to take in a filename that may have the file separator
+     * and find the original name of the image purely for display purposes
+     * @param fileName name of the file to extract the name from
+     * @return String of the image name to be displayed
+     */
+    protected String extractDisplayName(String fileName){
+        String[] splitText = fileName.split(SEPARATOR_RESOURCES.getString("defaults"));
+        return splitText[splitText.length-1];
     }
 }

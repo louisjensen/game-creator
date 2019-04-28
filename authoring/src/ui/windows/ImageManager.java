@@ -77,7 +77,8 @@ public class ImageManager extends AssetManager {
 
     private AssetImageSubPane createSubPane(File temp) {
         ImageView imageView = createImageView(temp);
-        AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
+        String name = extractDisplayName(temp.getName());
+        AssetImageSubPane subPane = new AssetImageSubPane(name, imageView);
         subPane.setOnMouseClicked(mouseEvent -> {
             mySelectedAssetName = temp.getName();
             mySelectedImageView = imageView;

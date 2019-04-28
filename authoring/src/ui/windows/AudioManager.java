@@ -42,7 +42,7 @@ public class AudioManager extends AssetManager {
     protected void addAsset(File file, Pane pane) {
         myMap.putIfAbsent(pane, createAndFormatNewListView());
         ListView listView = myMap.get(pane);
-        Label text = new Label(file.getName());
+        Label text = new Label(extractDisplayName(file.getName()));
         VBox vBox = new VBox(text);
         vBox.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
