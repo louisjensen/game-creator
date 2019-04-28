@@ -51,7 +51,7 @@ public class GameRunner {
             return null;
         }
     }
-    
+
     private void runLevel(int currentLevelNumber){
         DataManager dm = new DataManager();
         dm.saveGameData(myGameName, myAuthorName, myGame);
