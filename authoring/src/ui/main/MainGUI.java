@@ -294,15 +294,15 @@ public class MainGUI {
     @SuppressWarnings("unused")
     private void openImageAssets() {
         //TODO
-        ImageManager manager = new ImageManager();
-        manager.showAndWait();
+        //ImageManager manager = new ImageManager();
+        //manager.showAndWait();
     }
 
     @SuppressWarnings("unused")
     private void openAudioAssets() {
         //TODO
-        AudioManager manager = new AudioManager();
-        manager.showAndWait();
+        //AudioManager manager = new AudioManager();
+        //manager.showAndWait();
     }
 
     @SuppressWarnings("unused")
