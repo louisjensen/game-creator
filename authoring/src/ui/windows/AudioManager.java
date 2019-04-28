@@ -1,5 +1,6 @@
 package ui.windows;
 
+import data.external.GameCenterData;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -25,13 +26,21 @@ public class AudioManager extends AssetManager {
     private Map<Pane, ListView> myMap;
     private Propertable myPropertable;
 
-    public AudioManager(){
-        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
+    /**
+     * Called when a user needs to select and audio asset
+     * @param objectManager provide the game info such as author/name for saving purposes
+     */
+//    public AudioManager(ObjectManager objectManager){
+//
+//    }
+
+    public AudioManager(Propertable propertable, ObjectManager objectManager){
+        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY, objectManager);
+        myPropertable = propertable;
     }
 
-    public AudioManager(Propertable propertable, ObjectManager manager){
-        this();
-        myPropertable = propertable;
+    public AudioManager(GameCenterData gameCenterData){
+        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY, gameCenterData);
     }
 
     /**

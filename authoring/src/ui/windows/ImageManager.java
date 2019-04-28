@@ -1,5 +1,6 @@
 package ui.windows;
 
+import data.external.GameCenterData;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -35,11 +36,22 @@ public class ImageManager extends AssetManager {
     private Map<Pane, FlowPane> myMap;
 
     /**
-     * This default Constructor is needed when the user is choosing an image for
-     * a new type before the entity actually needs to be made and kept track of
+     * This default Constructor is needed when the user is choosing an image
+     * The object manager provides the gamename and authorname
+     * @param objectManager has all of the game info/objects
      */
-    public ImageManager(){
-        super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
+    public ImageManager(ObjectManager objectManager){
+        super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY, objectManager);
+        mySelectedImageView = null;
+        myProp = null;
+    }
+
+    /**
+     * This constructor is needed when the user is choosing an image
+     * @param gameCenterData associated with the game
+     */
+    public ImageManager(GameCenterData gameCenterData){
+        super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY, gameCenterData);
         mySelectedImageView = null;
         myProp = null;
     }
@@ -49,8 +61,8 @@ public class ImageManager extends AssetManager {
      * is tied to a properties object
      * @param prop
      */
-    public ImageManager(Propertable prop, ObjectManager manager){
-        this();
+    public ImageManager(Propertable prop, ObjectManager objectManager){
+        this(objectManager);
         myProp = prop;
     }
 
