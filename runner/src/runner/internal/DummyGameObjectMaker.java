@@ -245,6 +245,8 @@ public class DummyGameObjectMaker {
         dummy7.addComponent(new YAccelerationComponent(0.2));
         dummy7.addComponent(new CollisionComponent(true));
         AddEntity.addActions(new AddEntityAction(dummy7));
+        AddEntity.addActions(new SoundAction("mario_theme"));
+
 
         Event AddEntity2 = new Event();
         AddEntity2.addConditions(new StringEqualToCondition(NameComponent.class, "one"));
@@ -263,7 +265,6 @@ public class DummyGameObjectMaker {
         dummy72.addComponent(new YAccelerationComponent(0.2));
         dummy72.addComponent(new CollisionComponent(true));
         AddEntity2.addActions(new AddEntityAction(dummy72));
-        //AddEntity.addActions(new SoundAction("mario_theme"));
 
         Event timeEvent = new Event();
         timeEvent.addConditions(new StringEqualToCondition(NameComponent.class, "three"));
