@@ -20,6 +20,8 @@ import javafx.scene.text.Text;
 import data.external.GameCenterData;
 import frontend.Utilities;
 
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class GameCard {
@@ -118,12 +120,25 @@ public class GameCard {
         imageDescription.getStyleClass().add(TEXT_SELECTOR + myIndex);
         imageDescription.setWrappingWidth(DISPLAY_WIDTH - WRAP_OFFSET);
         contentPane.setCenter(imageDescription);
+        try {
+            Text ratingText = new Text(Utilities.getValue(myLanguageBundle, "ratingStartText") + myManager.getAverageRating(myGame.getTitle()) + Utilities.getValue(myLanguageBundle, "ratingEndText"));
+            ratingText.getStyleClass().add(BODY_SELECTOR);
+            ratingText.getStyleClass().add(TEXT_SELECTOR + myIndex);
+            BorderPane.setAlignment(ratingText, Pos.CENTER);
+            contentPane.setBottom(ratingText);
+        } catch (SQLException e) {
+            //todo: do something
+        }
         contentPane.getStyleClass().add(CONTENT_SELECTOR);
         foreground.setCenter(contentPane);
     }
 
     private void addImage(BorderPane contentPane) {
-        contentPane.setTop(Utilities.getImagePane(myManager, myGame.getImageLocation(), GAME_IMAGE_SIZE));
+        try {
+            contentPane.setTop(Utilities.getImagePane(myManager, myGame.getImageLocation(), GAME_IMAGE_SIZE));
+        } catch (FileNotFoundException e) {
+            // do nothing, in this case there just won't be an image which is fine
+        }
     }
 
     private void addTitleContent(BorderPane foreground) {

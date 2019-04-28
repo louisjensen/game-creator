@@ -14,6 +14,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
+import java.io.FileNotFoundException;
+
 public class GamePage extends Popup {
     private static final String BODY_SELECTOR = "bodyfont";
     private static final String SCROLLER_SELECTOR = "scroller";
@@ -52,7 +54,12 @@ public class GamePage extends Popup {
     @Override
     protected void addBody() {
         BorderPane contentPane = new BorderPane();
-        Pane gamePreview = Utilities.getImagePane(myManager, myData.getImageLocation(), IMAGE_SIZE);
+        Pane gamePreview = null;
+        try {
+            gamePreview = Utilities.getImagePane(myManager, myData.getImageLocation(), IMAGE_SIZE);
+        } catch (FileNotFoundException e) {
+            // do nothing
+        }
         gamePreview.setPadding(new Insets(20));
         contentPane.setTop(gamePreview);
         Text body = new Text(myData.getDescription());
