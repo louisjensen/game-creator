@@ -113,15 +113,6 @@ abstract public class AssetManager extends Stage {
         File assetFolder = new File(myAssetFolderPath);     //going to images directory
         List<File> fileList = Utility.getFilesFromFolder(assetFolder);
 
-        Tab userUploaded = new Tab();
-        userUploaded.setText("User Uploaded");
-        VBox userVBox = new VBox();
-        ScrollPane userScrollPane = new ScrollPane();
-        userScrollPane.setFitToWidth(true);
-        userScrollPane.setContent(userVBox);
-        userUploaded.setContent(userScrollPane);
-        myTabPane.getTabs().add(userUploaded);
-
         Tab defaultTab = new Tab();
         defaultTab.setText("Default");
         VBox vBox = new VBox();
@@ -131,6 +122,17 @@ abstract public class AssetManager extends Stage {
         defaultScrollPane.setContent(vBox);
         defaultTab.setContent(defaultScrollPane);
         TreeNode root = new TreeNode("root");
+
+        Tab userUploaded = new Tab();
+        userUploaded.setText("User Uploaded");
+        VBox userVBox = new VBox();
+        ScrollPane userScrollPane = new ScrollPane();
+        userScrollPane.setFitToWidth(true);
+        userScrollPane.setContent(userVBox);
+        userUploaded.setContent(userScrollPane);
+        myTabPane.getTabs().add(userUploaded);
+
+
 
         for(File file : fileList){
             //TODO check extensions here

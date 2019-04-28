@@ -257,6 +257,8 @@ public class MainGUI {
 
             saveFolderToDataBase(GENERAL_RESOURCES.getString("images_filepath"));
             saveFolderToDataBase(GENERAL_RESOURCES.getString("audio_filepath"));
+
+            DatabaseEngine.getInstance().open();
         } catch (UIException e) {
             e.printStackTrace();
             ErrorBox errorBox = new ErrorBox("Save Error", e.getMessage());
@@ -311,9 +313,6 @@ public class MainGUI {
             System.out.println("\tSaving: " + file.getName());
             Reflection.callMethod(myDataManager, methodName, file.getName(), file);
         }
-        DatabaseEngine.getInstance().close();
-        clearFolder(outerDirectoryPath);
-        DatabaseEngine.getInstance().open();
     }
 
     private void clearFolder(String outerDirectoryPath){
@@ -321,7 +320,8 @@ public class MainGUI {
         System.out.println("Directory: " + outerDirectory.getName());
         List<File> didntDelete = new ArrayList<>();
         for(File file : outerDirectory.listFiles()){
-            file.delete();
+            System.out.println("\t trying to delete " + file.getName());
+            file.deleteOnExit();
         }
 //        if(didntDelete.size() > 0){
 //            StringBuilder stringBuilder = new StringBuilder();
