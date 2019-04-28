@@ -17,10 +17,10 @@ public class LevelSystem extends RunnerSystem {
 
     /**
      * Constructor for LevelSystem
-     * @param requiredComponents
-     * @param levelRunner
-     * @param hud
-     * @param numLevels
+     * @param requiredComponents - list of all components necessary for system
+     * @param levelRunner - LevelRunner object so that system can modify the level
+     * @param hud - Heads up display access so the system can modify it
+     * @param numLevels - Number of levels in the game that is being played
      */
     public LevelSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner, HeadsUpDisplay hud, int numLevels) {
         super(requiredComponents, levelRunner);
@@ -28,6 +28,9 @@ public class LevelSystem extends RunnerSystem {
         myLevelCount = numLevels;
     }
 
+    /**
+     * Updates the Level display in HUD
+     */
     @Override
     public void run() {
         for(Entity entity:this.getEntities()){

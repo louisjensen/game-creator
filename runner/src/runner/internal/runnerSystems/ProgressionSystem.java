@@ -10,10 +10,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import runner.GameBeatenScreen;
 import runner.internal.LevelRunner;
-
 import java.util.Collection;
 import java.util.function.Consumer;
 
+/**
+ * System that checks if the level is over and updates accordingly
+ * @author Louis Jensen
+ */
 public class ProgressionSystem extends RunnerSystem {
     private Group myGroup;
     private Stage myStage;
@@ -23,6 +26,18 @@ public class ProgressionSystem extends RunnerSystem {
     private Consumer myLevelChanger;
     private int myLevelCount;
 
+    /**
+     * Constructor for the progression system
+     * @param requiredComponents - list of all components necessary for system
+     * @param levelRunner - LevelRunner object so that system can modify the level
+     * @param group - Group so that system can modify things on screen
+     * @param stage - Stage of level to be modified
+     * @param animation - Timeline that runs game loop
+     * @param width - width of screen
+     * @param height - height of screen
+     * @param consumer - allows the system to change level
+     * @param numLevels - total number of levels in the game
+     */
     public ProgressionSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner,
                               Group group, Stage stage, Animation animation, int width, int height,
                               Consumer consumer, int numLevels) {
@@ -36,6 +51,9 @@ public class ProgressionSystem extends RunnerSystem {
         myLevelCount = numLevels;
     }
 
+    /**
+     * Goes to next level or resets level if necessary
+     */
     @Override
     public void run() {
         for(Entity entity:this.getEntities()){
