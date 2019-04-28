@@ -11,6 +11,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import ui.LevelField;
 import ui.Propertable;
+import ui.manager.ObjectManager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class AudioManager extends AssetManager {
         super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
     }
 
-    public AudioManager(Propertable propertable){
+    public AudioManager(Propertable propertable, ObjectManager manager){
         this();
         System.out.println("Made it to constructor");
         myPropertable = propertable;

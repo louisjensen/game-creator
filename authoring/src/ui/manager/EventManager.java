@@ -26,7 +26,7 @@ public class EventManager extends Stage {
     private static final String STYLE_CLASS = "event-manager";
     private static final String STYLE_VBOX = "event-manager-vbox";
     private static final String BIGBUTTON = "BigButton";
-    public EventManager(Propertable prop) { // Loads common Events for object instance based on type label
+    public EventManager(Propertable prop, ObjectManager manager) { // Loads common Events for object instance based on type label
         myEntity = (AuthoringEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
         Scene myDefaultScene = createPane();
         this.setScene(myDefaultScene);

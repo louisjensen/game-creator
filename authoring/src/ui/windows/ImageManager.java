@@ -11,6 +11,7 @@ import ui.EntityField;
 import ui.LevelField;
 import ui.Propertable;
 import ui.Utility;
+import ui.manager.ObjectManager;
 import ui.panes.AssetImageSubPane;
 
 import java.io.File;
@@ -48,7 +49,7 @@ public class ImageManager extends AssetManager {
      * is tied to a properties object
      * @param prop
      */
-    public ImageManager(Propertable prop){
+    public ImageManager(Propertable prop, ObjectManager manager){
         this();
         myProp = prop;
     }
