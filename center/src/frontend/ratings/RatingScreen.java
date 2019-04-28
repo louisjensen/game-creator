@@ -1,12 +1,16 @@
 package frontend.ratings;
 
+import data.external.DataManager;
 import data.external.GameCenterData;
+import data.external.GameRating;
 import frontend.Utilities;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class RatingScreen {
@@ -20,20 +24,30 @@ public class RatingScreen {
     private BorderPane myDisplay;
     private ResourceBundle myLanguageBundle;
     private GameCenterData myData;
+    private DataManager myManager;
+    private TextArea myText;
+    private StarBox myStars;
 
-    public RatingScreen(GameCenterData data) {
+    public RatingScreen(GameCenterData data, DataManager manager) {
         myLanguageBundle = ResourceBundle.getBundle(DEFAULT_LANGUAGE);
         myData = data;
+        myManager = manager;
         initializeDisplay();
         display();
     }
 
     public void addRatingButton(GameCenterData data) {
-
+        try {
+            myManager.addRating(new GameRating("DEFAULT", data.getTitle(), data.getAuthorName(), myStars.getCurrentNumberOfStars(), myText.getText()));
+        } catch (SQLException e) {
+            // todo: handle this
+            System.out.println("Adding rating was unsuccessful");
+        }
+        ((Stage) myDisplay.getScene().getWindow()).close();
     }
 
     public void cancelButton(GameCenterData data) {
-
+        ((Stage) myDisplay.getScene().getWindow()).close();
     }
 
     private void initializeDisplay() {
@@ -62,9 +76,9 @@ public class RatingScreen {
         starTitle.getStyleClass().add(BODY_SELECTOR);
         BorderPane.setAlignment(starTitle, Pos.CENTER);
         stars.setTop(starTitle);
-        StarBox visualStars = new StarBox();
-        BorderPane.setAlignment(visualStars.getDisplay(), Pos.CENTER);
-        stars.setCenter(visualStars.getDisplay());
+        myStars = new StarBox();
+        BorderPane.setAlignment(myStars.getDisplay(), Pos.CENTER);
+        stars.setCenter(myStars.getDisplay());
         stars.getStyleClass().add(PADDING_SELECTOR);
         pane.setTop(stars);
     }
@@ -75,9 +89,9 @@ public class RatingScreen {
         commentTitle.getStyleClass().add(BODY_SELECTOR);
         BorderPane.setAlignment(commentTitle, Pos.CENTER);
         comment.setTop(commentTitle);
-        TextArea commentBox = new TextArea();
-        commentBox.getStyleClass().add(TEXT_FIELD_SELECTOR);
-        comment.setCenter(commentBox);
+        myText = new TextArea();
+        myText.getStyleClass().add(TEXT_FIELD_SELECTOR);
+        comment.setCenter(myText);
         pane.setCenter(comment);
     }
 

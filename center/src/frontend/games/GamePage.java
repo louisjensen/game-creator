@@ -44,7 +44,7 @@ public class GamePage {
     }
 
     public void rateGameButton(GameCenterData data) {
-        new RatingScreen(data);
+        new RatingScreen(data, myManager);
     }
 
     private void initializeDisplay() {
