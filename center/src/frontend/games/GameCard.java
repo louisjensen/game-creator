@@ -9,6 +9,7 @@
 package frontend.games;
 
 import data.external.DataManager;
+import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -24,7 +25,7 @@ public class GameCard {
     private static final int WRAP_OFFSET = 25;
 
     public static final double DISPLAY_WIDTH = 300;
-    public static final double DISPLAY_HEIGHT = 300;
+    public static final double DISPLAY_HEIGHT = 350;
     private static final String DEFAULT_LANGUAGE_LOCATION = "languages/English";
     private static final String BACKGROUND_SELECTOR = "rectangle";
     private static final String TEXT_SELECTOR = "cardtext";
@@ -94,9 +95,14 @@ public class GameCard {
         BorderPane foreground = new BorderPane();
         foreground.getStyleClass().add(FOREGROUND_SELECTOR);
         addTitleContent(foreground);
+        addAuthor(foreground);
         addImageAndContent(foreground);
         addButtons(foreground);
         pane.getChildren().add(foreground);
+    }
+
+    private void addAuthor(BorderPane foreground) {
+
     }
 
     private void addButtons(BorderPane foreground) {
@@ -127,6 +133,11 @@ public class GameCard {
         title.getStyleClass().add(TEXT_SELECTOR + myIndex);
         BorderPane titlePane = new BorderPane();
         titlePane.setCenter(title);
+        Text author = new Text(myGame.getAuthorName());
+        author.getStyleClass().add(BODY_SELECTOR);
+        author.getStyleClass().add(TEXT_SELECTOR + myIndex);
+        BorderPane.setAlignment(author, Pos.CENTER);
+        titlePane.setBottom(author);
         foreground.setTop(titlePane);
     }
 
