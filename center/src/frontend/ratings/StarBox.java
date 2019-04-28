@@ -13,6 +13,7 @@ public class StarBox {
 
     private List<Star> myStars;
     private BorderPane myDisplay;
+    private int myCurrentNumberOfStars;
 
     public StarBox() {
         myDisplay = new BorderPane();
@@ -21,6 +22,10 @@ public class StarBox {
 
     public Pane getDisplay() {
         return myDisplay;
+    }
+
+    public int getCurrentNumberOfStars() {
+        return myCurrentNumberOfStars;
     }
 
     private void initializeDisplay() {
@@ -50,6 +55,7 @@ public class StarBox {
             }
             setUpStar(star, newStars);
         }
+        myCurrentNumberOfStars = currentStar.getIndex();
         newStars.setAlignment(Pos.CENTER);
         myDisplay.setCenter(newStars);
     }
