@@ -64,7 +64,7 @@ public class AuthoringEntity implements Propertable {
 
     private void addPropertyListeners() {
         myPropertyMap.addListener((MapChangeListener<Enum, String>) change ->
-           propagateChanges(change.getKey(),  change.getValueRemoved(), change.getValueAdded()));
+                propagateChanges(change.getKey(),  change.getValueRemoved(), change.getValueAdded()));
     }
 
     private void propagateChanges(Enum key, String oldVal, String newVal) { // At this point value is assumed valid or untaken label

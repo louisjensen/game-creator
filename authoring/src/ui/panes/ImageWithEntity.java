@@ -1,6 +1,5 @@
 package ui.panes;
 
-import engine.external.Entity;
 import javafx.collections.MapChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

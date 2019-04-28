@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,14 @@ public interface ExternalData {
      * @param gameInfoObject the game center data object to be serialized and saved
      */
     void saveGameInfo(String gameName, String authorName, Object gameInfoObject);
+
+    /**
+     *
+     * @param gameName
+     * @param authorName
+     * @return
+     */
+    GameCenterData loadGameInfo(String gameName, String authorName) throws SQLException;
 
     /**
      * Loads and deserializes all the game info objects from the database to pass to the game center
@@ -215,5 +224,55 @@ public interface ExternalData {
      */
     List<GameCenterData> loadAllGameInfoObjects(String userName);
 
+    /**
+     * 
+     * @param userName
+     * @param gameName
+     * @param authorName
+     * @return
+     * @throws SQLException
+     */
+    Map<Timestamp, Object> getCheckpoints(String userName, String gameName, String authorName) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @param gameName
+     * @param authorName
+     * @param checkpoint
+     * @throws SQLException
+     */
+    void saveCheckpoint(String userName, String gameName, String authorName, Object checkpoint) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @param profilePic
+     * @throws SQLException
+     */
+    void setProfilePic(String userName, File profilePic) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @throws SQLException
+     */
+    void setBio(String userName, String bio) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @return
+     * @throws SQLException
+     */
+    InputStream getProfilePic(String userName) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @return
+     * @throws SQLException
+     */
+    String getBio(String userName) throws SQLException;
 
 }

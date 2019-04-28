@@ -1,6 +1,7 @@
 package data.external;
 
 import data.internal.AssetQuerier;
+import data.internal.CheckpointQuerier;
 import data.internal.GameInformationQuerier;
 import data.internal.Querier;
 import data.internal.RatingsQuerier;
@@ -35,6 +36,7 @@ public class DatabaseEngine {
     private AssetQuerier myAssetQuerier;
     private UserQuerier myUserQuerier;
     private RatingsQuerier myRatingsQuerier;
+    private CheckpointQuerier myCheckpointQuerier;
     private List<Querier> myQueriers;
 
     private static DatabaseEngine myInstance = new DatabaseEngine();
@@ -74,7 +76,8 @@ public class DatabaseEngine {
         myGameInformationQuerier = new GameInformationQuerier(myConnection);
         myUserQuerier = new UserQuerier(myConnection);
         myRatingsQuerier = new RatingsQuerier(myConnection);
-        myQueriers = List.of(myAssetQuerier, myGameInformationQuerier, myUserQuerier, myRatingsQuerier);
+        myCheckpointQuerier = new CheckpointQuerier(myConnection);
+        myQueriers = List.of(myAssetQuerier, myGameInformationQuerier, myUserQuerier, myRatingsQuerier, myCheckpointQuerier);
     }
 
     /**
@@ -141,47 +144,80 @@ public class DatabaseEngine {
         return myAssetQuerier.removeImage(imageName);
     }
 
-    public boolean removeSound(String soundName) throws SQLException {
+    boolean removeSound(String soundName) throws SQLException {
         return myAssetQuerier.removeSound(soundName);
     }
 
-    public String loadGameData(String gameName, String authorName) throws SQLException {
+    String loadGameData(String gameName, String authorName) throws SQLException {
         return myGameInformationQuerier.loadGameData(gameName, authorName);
+    }
+
+
+    public String loadGameInfo(String gameName, String authorName) throws SQLException {
+        return myGameInformationQuerier.loadGameInformation(gameName, authorName);
     }
 
     public Map<String, InputStream> loadAllImages(String prefix) throws SQLException {
         return myAssetQuerier.loadAllImages(prefix);
     }
 
-    public Map<String, InputStream> loadAllSounds(String prefix) throws SQLException {
+    Map<String, InputStream> loadAllSounds(String prefix) throws SQLException {
         return myAssetQuerier.loadAllSounds(prefix);
     }
 
-    public List<String> loadAllGameNames(String userName) throws SQLException {
+    List<String> loadAllGameNames(String userName) throws SQLException {
         return myGameInformationQuerier.loadAllGameNames(userName);
     }
 
-    public boolean updatePassword(String userName, String newPassword) throws SQLException {
+    boolean updatePassword(String userName, String newPassword) throws SQLException {
         return myUserQuerier.updatePassword(userName, newPassword);
     }
 
-    public void addGameRating(GameRating rating) throws SQLException {
+    void addGameRating(GameRating rating) throws SQLException {
         myRatingsQuerier.addGameRating(rating);
     }
 
-    public double getAverageRating(String gameName) throws SQLException {
+    double getAverageRating(String gameName) throws SQLException {
         return myRatingsQuerier.getAverageRating(gameName);
     }
 
-    public List<GameRating> getAllRatings(String gameName) throws SQLException {
+    List<GameRating> getAllRatings(String gameName) throws SQLException {
         return myRatingsQuerier.getAllRatings(gameName);
     }
 
-    public List<String> loadAllGameInformationXMLs(String userName) throws SQLException {
+    List<String> loadAllGameInformationXMLs(String userName) throws SQLException {
         return myGameInformationQuerier.loadAllGameInformationXMLs(userName);
     }
 
-    public void removeRating(String gameName, String authorName) throws SQLException{
+    void removeRating(String gameName, String authorName) throws SQLException{
         myRatingsQuerier.removeAllGameRatings(gameName, authorName);
+    }
+
+    Map<Timestamp, String> getCheckpoints(String userName, String gameName, String authorName) throws SQLException {
+        return myCheckpointQuerier.getCheckpoints(userName, gameName, authorName);
+    }
+
+    void saveCheckpoint(String userName, String gameName, String authorName, String rawXML) throws SQLException {
+        myCheckpointQuerier.saveCheckpoint(userName,gameName, authorName, rawXML);
+    }
+
+    void deleteCheckpoint(String userName, String gameName, String authorName) throws SQLException {
+        myCheckpointQuerier.deleteCheckpoints(userName, gameName, authorName);
+    }
+
+    void setProfilePic(String userName, File profilePic) throws SQLException {
+        myUserQuerier.setProfilePic(userName, profilePic);
+    }
+
+    void setBio(String userName, String bio) throws SQLException {
+        myUserQuerier.setBio(userName, bio);
+    }
+
+    InputStream getProfilePic(String userName) throws SQLException {
+        return myUserQuerier.getProfilePic(userName);
+    }
+
+    String getBio(String userName) throws SQLException {
+        return myUserQuerier.getBio(userName);
     }
 }
