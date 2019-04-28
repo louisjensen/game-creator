@@ -19,7 +19,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ui.AuthoringEntity;
 import ui.DefaultTypeXMLReaderFactory;
+import ui.EntityField;
 import ui.ErrorBox;
 import ui.Utility;
 import ui.manager.ObjectManager;
@@ -29,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -58,16 +61,17 @@ public class CreateNewTypeWindow extends Stage {
     private static final int INPUT_WIDTH = 100;
     private static final int PICTURE_SIZE = 50;
     private static final String STYLE_SHEET = "default.css";
-    private GameCenterData myGameCenterData;
+    private ObjectManager myObjectManager;
+
 
     /**
      * Creates a window for the user to create a new type
      * @param defaultName Name of the defaultEntity the user is basing their
      *                    object off of
      */
-    public CreateNewTypeWindow(String defaultName, GameCenterData gameCenterData){
+    public CreateNewTypeWindow(String defaultName, ObjectManager objectManager){
         mySelectedImageName = null;
-        myGameCenterData = gameCenterData;
+        myObjectManager = objectManager;
         initializeGridPane();
         initializeVariables();
         createContent(myDefaultTypesFactory.getCategory(defaultName), defaultName);
@@ -191,7 +195,18 @@ public class CreateNewTypeWindow extends Stage {
         System.out.println("TextField Not Empty: " + (!myTextField.getText().isEmpty()));
         checkerSet.add(myTextField.getText().matches(SYNTAX_RESOURCES.getString("LABEL")));
         System.out.println("TextField good for label: " + (myTextField.getText().matches(SYNTAX_RESOURCES.getString("LABEL"))));
+        checkerSet.add(isUniqueTypeName(myTextField.getText()));
         return !checkerSet.contains(false);
+    }
+
+    private boolean isUniqueTypeName(String name){
+        Map<AuthoringEntity, String> typeMap = myObjectManager.getTypeMap();
+        for(AuthoringEntity entity : typeMap.keySet()){
+            if(entity.getPropertyMap().get(EntityField.LABEL).equals(name)){
+                return false;
+            }
+        }
+        return true;
     }
 
 

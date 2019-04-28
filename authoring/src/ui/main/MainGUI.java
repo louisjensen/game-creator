@@ -41,7 +41,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +48,7 @@ import java.util.ResourceBundle;
 
 /**
  * @author Harry Ross
+ * @author Carrie Hunner
  */
 public class MainGUI {
 
@@ -152,7 +152,7 @@ public class MainGUI {
         else {
             userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager);
         }
-        DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane, myGameData);
+        DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane, myObjectManager);
         entityPaneBox.getChildren().addAll(defaultTypesPane, userCreatedTypesPane);
         entityPaneBox.prefHeightProperty().bind(mainScene.heightProperty().subtract(PROP_PANE_HEIGHT));
         userCreatedTypesPane.prefHeightProperty().bind(entityPaneBox.heightProperty());
