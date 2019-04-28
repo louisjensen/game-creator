@@ -126,7 +126,6 @@ public class DefaultTypeXMLReaderFactory {
             }
             resultEntity.addComponent(component);
         } catch (Exception e) {
-            e.printStackTrace();
             makeAndDisplayError("ReflectionError");
 
         }
