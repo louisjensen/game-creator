@@ -98,7 +98,6 @@ public class MainGUI {
         myLoadedGame = game;
         myGameData = gameData;
         myObjectManager.setGameCenterData(myGameData);
-        loadAllAssets(); //TODO
         loadDatabaseGame();
     }
 
@@ -235,7 +234,6 @@ public class MainGUI {
         } catch (Exception e) {
 
         }
-        //loadAllAssets(); //TODO
     }
 
     private void loadDatabaseGame() {
