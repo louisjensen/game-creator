@@ -233,6 +233,9 @@ public class DummyGameObjectMaker {
         Ghost1Jump.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
         Ghost1Jump.addInputs(KeyCode.J);
         Ghost1Jump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
+        Ghost1Jump.addActions(new SoundAction("coin"));
+        Ghost1Jump.addActions((new SpriteAction("mushroom.png")));
+
 
         /**
          * Event: flappy jumps only if his jump counter is less than 10 (prevents him from performing infinite consecutive jumps before landing again:
@@ -312,7 +315,7 @@ public class DummyGameObjectMaker {
         Event levelOver = new Event();
         levelOver.addInputs(KeyCode.SPACE);
         levelOver.addActions(new ProgressionAction(true));
-        levelOver.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
+        levelOver.addActions(new NextLevelAction(next));
 
         /**
          * Event: When flappy collides with Basketball on the RIGHT:
@@ -321,7 +324,7 @@ public class DummyGameObjectMaker {
         RightCollisionEvent rce = new RightCollisionEvent("Basketball", false);
         rce.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
         rce.addActions(new ProgressionAction(true));
-        rce.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
+        rce.addActions(new NextLevelAction(next));
 
         /**
          * Event: Spawn a new Mushroom when you press I:
@@ -331,6 +334,7 @@ public class DummyGameObjectMaker {
         Event SpawnMushroomEvent = new Event();
         SpawnMushroomEvent.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
         SpawnMushroomEvent.addInputs(KeyCode.I);
+
         Entity Mushroom = new Entity();
         Mushroom.addComponent(new XPositionComponent(400.0));
         Mushroom.addComponent(new YPositionComponent(50.0));
@@ -344,6 +348,7 @@ public class DummyGameObjectMaker {
         Mushroom.addComponent(new XAccelerationComponent(0.0));
         Mushroom.addComponent(new YAccelerationComponent(0.2));
         Mushroom.addComponent(new CollisionComponent(true));
+
         SpawnMushroomEvent.addActions(new AddEntityAction(Mushroom));
         SpawnMushroomEvent.addActions(new SoundAction("mario_theme"));
 
@@ -484,7 +489,7 @@ public class DummyGameObjectMaker {
         Ghost1.addComponent(new ZPositionComponent(0.0));
         Ghost1.addComponent(new WidthComponent(40.0));
         Ghost1.addComponent(new HeightComponent(40.0));
-        Ghost1.addComponent(new SpriteComponent("ghost.png"));
+        //Ghost1.addComponent(new SpriteComponent("ghost.png"));
         Ghost1.addComponent(new NameComponent("Ghost1"));
         Ghost1.addComponent(new XVelocityComponent(-2.0));
         Ghost1.addComponent(new YVelocityComponent(0.0));

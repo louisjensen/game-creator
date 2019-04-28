@@ -56,6 +56,7 @@ public class ImageViewSystem extends VoogaSystem {
      * Only access database to retrieve new image if the Sprite String has changed since the last game loop
      * Cache all seen images with corresponding Sprite Strings in the System to reduce database accesses
      * Set an Entity as not collidable if its image cannot be found from database
+     *
      * @param entity the entity for which to manage ImageView
      */
     private void generateImageView(Entity entity) {
@@ -65,19 +66,19 @@ public class ImageViewSystem extends VoogaSystem {
 //            System.out.println("generating ImageView for "+imageName);
             myEntityPastSprite.put(entity, imageName);
             retrieveImage(imageName);
-            if(myImages.get(imageName)==null){
+            if (myImages.get(imageName) == null) {
                 System.out.println("Image file " + imageName + " not found in database.");
                 entity.removeComponent(COLLISION_COMPONENT_CLASS);
                 return;
             }
             imageView = new ImageView(myImages.get(imageName));
         } else {
-            if(myImages.get(imageName)==null){
+            if (myImages.get(imageName) == null) {
                 return;
             }
-            imageView = (ImageView) getComponentValue(IMAGEVIEW_COMPONENT_CLASS,entity);
+            imageView = (ImageView) getComponentValue(IMAGEVIEW_COMPONENT_CLASS, entity);
         }
-        entity.addComponent(new ImageViewComponent(setImageViewOpacity(setImgViewHeight(setImgViewWidth(setImgViewY(setImgViewX(imageView, entity), entity), entity), entity),entity)));
+        entity.addComponent(new ImageViewComponent(setImageViewOpacity(setImgViewHeight(setImgViewWidth(setImgViewY(setImgViewX(imageView, entity), entity), entity), entity), entity)));
     }
 
 
@@ -114,7 +115,15 @@ public class ImageViewSystem extends VoogaSystem {
     }
 
     private ImageView setImageViewOpacity(ImageView m, Entity e) {
-        m.setOpacity((Double) getComponentValue(OPACITY_COMPONENT_CLASS, e));
+        double opacity;
+        try {
+            opacity = (Double) getComponentValue(OPACITY_COMPONENT_CLASS, e);
+        } catch (NullPointerException e1) {
+            e.addComponent(new OpacityComponent(1.0));
+            opacity = (Double) getComponentValue(OPACITY_COMPONENT_CLASS, e);
+
+        }
+        m.setOpacity(opacity);
         return m;
     }
 
