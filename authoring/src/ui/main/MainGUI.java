@@ -38,7 +38,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -94,6 +93,8 @@ public class MainGUI {
         myLoadedGame = game;
         myGameData = gameData;
         myObjectManager.setGameCenterData(myGameData);
+        loadAllAssets(myDataManager); //TODO
+        loadDatabaseGame();
     }
 
     public void launch() {
@@ -213,15 +214,24 @@ public class MainGUI {
     private void openGame() {
         String authorName = "";
         DataManager dataManager = new DataManager();
-        try {
+        /*try {
             List<String> gameNames = dataManager.loadUserGameNames(authorName); //TODO
             myLoadedGame = (Game) dataManager.loadGameData(authorName, gameNames.get(0)); //TODO
             //myGameData = null; //TODO
         } catch (SQLException e) {
             ErrorBox error = new ErrorBox("Load", "Error loading from database");
+        }*/
+
+        GameTranslator translator = new GameTranslator(myObjectManager);
+        try {
+            Game exportableGame = translator.translate();
+            MainGUI newWorkspace = new MainGUI(exportableGame, myGameData);
+            newWorkspace.launch();
+        } catch (Exception e) {
+
         }
-        loadAllAssets(dataManager);
-        loadDatabaseGame();
+
+        //loadAllAssets(dataManager); //TODO
     }
 
     private void loadDatabaseGame() {
@@ -231,7 +241,7 @@ public class MainGUI {
         GameTranslator translator = new GameTranslator(myObjectManager);
         myObjectManager.removeAllLevels();
 
-        translator.populateObjectManager(myLoadedGame);
+        translator.populateObjectManager(myLoadedGame, myCurrentLevel);
 
         // Set selectedLevel to first level
         myCurrentLevel.setValue(myObjectManager.getLevels().get(0));
@@ -277,11 +287,13 @@ public class MainGUI {
     }
 
     private void swapViewer(Propertable oldLevel, Propertable newLevel) {
-        myViewerBox.getChildren().remove(myViewers.get(oldLevel));
-        if (!myViewers.containsKey(newLevel))
-            myViewers.put(newLevel, createViewer((AuthoringLevel) newLevel));
+        if (!myViewers.isEmpty()) {
+            myViewerBox.getChildren().remove(myViewers.get(oldLevel));
+            if (!myViewers.containsKey(newLevel))
+                myViewers.put(newLevel, createViewer((AuthoringLevel) newLevel));
 
-        myViewerBox.getChildren().add(myViewers.get(newLevel));
+            myViewerBox.getChildren().add(myViewers.get(newLevel));
+        }
     }
 
     private void swapStylesheet(String oldVal, String newVal) {

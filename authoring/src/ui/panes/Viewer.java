@@ -72,6 +72,8 @@ public class Viewer extends ScrollPane {
         setupDragDropped();
         setRoomSize();
         updateGridLines();
+        if (authoringLevel.getPropertyMap().get(LevelField.BACKGROUND) != null)
+            updateBackground(authoringLevel.getPropertyMap().get(LevelField.BACKGROUND));
     }
 
     private void addAllExistingEntities(AuthoringLevel authoringLevel) {
@@ -79,14 +81,14 @@ public class Viewer extends ScrollPane {
         authoringEntityList.sort(new Comparator<AuthoringEntity>() {
             @Override
             public int compare(AuthoringEntity o1, AuthoringEntity o2) {
-                int firstZ = Integer.parseInt(o1.getPropertyMap().get(EntityField.Z));
-                int secondZ = Integer.parseInt(o2.getPropertyMap().get(EntityField.Z));
+                int firstZ = (int) Double.parseDouble(o1.getPropertyMap().get(EntityField.Z));
+                int secondZ = (int) Double.parseDouble(o2.getPropertyMap().get(EntityField.Z));
                 return firstZ - secondZ;
             }
         });
 
         for(AuthoringEntity authoringEntity : authoringEntityList){
-            String imagePath = GENERAL_RESOURCES.getString("images_filepath/") + authoringEntity.getPropertyMap().get(EntityField.IMAGE);
+            String imagePath = authoringEntity.getPropertyMap().get(EntityField.IMAGE);
             FileInputStream fileInputStream = Utility.makeImageAssetInputStream(imagePath); //closed
             ImageWithEntity imageWithEntity = new ImageWithEntity(fileInputStream, authoringEntity); //closed
             Utility.closeInputStream(fileInputStream); //closed
@@ -275,8 +277,8 @@ public class Viewer extends ScrollPane {
     private void setRoomSize(){
         myRoomHeight = Double.parseDouble(myAuthoringLevel.getPropertyMap().get(LevelField.HEIGHT));
         myRoomWidth = Double.parseDouble(myAuthoringLevel.getPropertyMap().get(LevelField.WIDTH));
-        this.setPrefHeight(myRoomHeight);
-        this.setPrefWidth(myRoomWidth);
+        this.setPrefHeight(Integer.MAX_VALUE);
+        this.setPrefWidth(Integer.MAX_VALUE);
         myStackPane.setMinWidth(myRoomWidth);
         myStackPane.setMinHeight(myRoomHeight);
     }
