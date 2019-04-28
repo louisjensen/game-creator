@@ -77,10 +77,11 @@ public class MainGUI {
     public MainGUI() { // Default constructor for creating a new game from scratch
         myLoadedGame = new Game();
         myGameData = new GameCenterData();
+        defaultGameData();
         myStage = new Stage();
         myDataManager = new DataManager();
         myViewers = new HashMap<>();
-        defaultGameData();
+        loadAllAssets();
         myCurrentLevel = new SimpleObjectProperty<>();
         mySelectedEntity = new SimpleObjectProperty<>();
         myObjectManager = new ObjectManager(myCurrentLevel);
@@ -94,7 +95,6 @@ public class MainGUI {
         myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
         myObjectManager.setGameCenterData(myGameData);
         createMainGUI(false);
-        loadAllAssets();
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
@@ -152,7 +152,7 @@ public class MainGUI {
         else {
             userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager);
         }
-        DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane);
+        DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane, myGameData);
         entityPaneBox.getChildren().addAll(defaultTypesPane, userCreatedTypesPane);
         entityPaneBox.prefHeightProperty().bind(mainScene.heightProperty().subtract(PROP_PANE_HEIGHT));
         userCreatedTypesPane.prefHeightProperty().bind(entityPaneBox.heightProperty());
@@ -330,6 +330,7 @@ public class MainGUI {
         myGameData.setImageLocation("");
         myGameData.setTitle("New Game");
         myGameData.setDescription("A fun new game");
+        myGameData.setAuthorName("Carrie");
     }
 
 

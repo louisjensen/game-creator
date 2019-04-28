@@ -94,8 +94,8 @@ public class GameTranslator {
 
         for (EntityField field : EntityField.values()) {
             if (authEntity.getPropertyMap().containsKey(field) && !field.equals(EntityField.VISIBLE) && !field.equals(EntityField.FOCUS) && !field.equals(EntityField.EVENTS)) {
-                    addComponent(field, basisEntity, authEntity);
-                }
+                addComponent(field, basisEntity, authEntity);
+            }
             else if (field.equals(EntityField.FOCUS) && Boolean.parseBoolean(authEntity.getPropertyMap().get(EntityField.FOCUS))) { // main character found
                 basisEntity.addComponent(new CameraComponent(true));
                 //basisEntity.addComponent(new LivesComponent(3.0)); //TODO
@@ -114,16 +114,16 @@ public class GameTranslator {
             for (AuthoringEntity entity : authLevel.getEntities()) {
                 for (Event event : myObjectManager.getEvents(entity.getPropertyMap().get(EntityField.LABEL))) {
                     if (event.getClass().equals(BottomCollisionEvent.class) || event.getClass().equals(LeftCollisionEvent.class) ||
-                    event.getClass().equals(RightCollisionEvent.class) || event.getClass().equals(TopCollisionEvent.class)) {
+                            event.getClass().equals(RightCollisionEvent.class) || event.getClass().equals(TopCollisionEvent.class)) {
                         basisEntity.addComponent(new CollisionComponent(true));
 
-                    // TODO add collisioncomponent to other actor
+                        // TODO add collisioncomponent to other actor
                     }
                     for (Action action : (List<Action>) event.getEventInformation().get(Action.class)) {
                         if (action.getClass().equals(SoundAction.class) && !basisEntity.hasComponents(SoundComponent.class))
                             basisEntity.addComponent(new SoundComponent(""));
                         if (action.getClass().equals(ValueAction.class) && !basisEntity.hasComponents(ValueComponent.class))
-                            basisEntity.addComponent(new ValueComponent<>(0));
+                            basisEntity.addComponent(new ValueComponent(0.0));
                     }
                 }
             }
