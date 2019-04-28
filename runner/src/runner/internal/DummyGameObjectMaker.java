@@ -11,10 +11,16 @@ import engine.external.events.*;
 import javafx.scene.input.KeyCode;
 import runner.external.Game;
 
-
+/**
+ * Makes a game object for use in Runner Test
+ * @author Louis Jensen, Feroze Mohideen
+ */
 public class DummyGameObjectMaker {
     private Game myGame;
 
+    /**
+     * Constructor that creates a dummy Game
+     */
     public DummyGameObjectMaker(){
         myGame = new Game();
         initializeGame(myGame);
@@ -312,10 +318,18 @@ public class DummyGameObjectMaker {
 
     }
 
+    /**
+     * Gets dummy game
+     * @param dummyString symbolizes game name in actual call
+     * @return dummy Game object
+     */
     public Game getGame(String dummyString){
         return myGame;
     }
 
+    /**
+     * Saves dummy game to data base
+     */
     public void serializeObject(){
         DataManager dm = new DataManager();
         dm.saveGameData("game1", myGame);

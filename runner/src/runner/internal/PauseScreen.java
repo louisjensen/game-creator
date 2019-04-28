@@ -3,12 +3,14 @@ package runner.internal;
 import engine.external.Entity;
 import engine.external.component.ProgressionComponent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.util.function.Consumer;
 
+/**
+ * Creates the screen to be displayed when user clicks pause button
+ * @author Louis Jensen
+ */
 public class PauseScreen {
     private VBox myPauseMenu;
     private Button myResumeButton;
@@ -18,6 +20,13 @@ public class PauseScreen {
     private Stage myStage;
     private LevelRunner myLevelRunner;
 
+    /**
+     * Constructor for PauseScreen
+     * @param levelRunner - LevelRunner so that level can be restarted
+     * @param toggle - Allows the level to change
+     * @param stage - Stage to be closed on game exit
+     * @param translatedX - Current translateX value so that pause menu can be initialized in correct location
+     */
     public PauseScreen(LevelRunner levelRunner, Consumer toggle, Stage stage, Double translatedX){
         myPauseMenu = new VBox(8); // spacing = 8
         myPauseMenu.setId("PauseMenu");
@@ -58,6 +67,10 @@ public class PauseScreen {
         myToggler.accept(null);
     }
 
+    /**
+     * Gets the pause menu
+     * @return VBox menu to be placed on screen
+     */
     public VBox getPauseMenu(){
         return myPauseMenu;
     }

@@ -6,13 +6,15 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import runner.internal.runnerSystems.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Creates and stores all systems used by runner in the game loop
+ * @author Louis Jensen
+ */
 public class SystemManager {
     private List<RunnerSystem> mySystems;
     private LevelRunner myLevelRunner;
@@ -27,6 +29,21 @@ public class SystemManager {
     private AudioManager myAudioManger;
     private int myLevelCount;
 
+    /**
+     * Constructor for SystemManager
+     * Must hold all things the various systems need to do their job
+     * @param levelRunner
+     * @param group
+     * @param stage
+     * @param animation
+     * @param width
+     * @param height
+     * @param changer
+     * @param scene
+     * @param hud
+     * @param audioManager
+     * @param numLevels
+     */
     public SystemManager(LevelRunner levelRunner, Group group, Stage stage, Timeline animation,
                          int width, int height, Consumer changer, Scene scene, HeadsUpDisplay hud,
                          AudioManager audioManager, int numLevels){
@@ -78,6 +95,10 @@ public class SystemManager {
                 mySceneHeight, myLevelChanger, myLevelCount));
     }
 
+    /**
+     * Gets all the systems
+     * @return List of Systems so that LevelRunner can access them all to update level
+     */
     public List<RunnerSystem> getSystems(){
         return mySystems;
     }

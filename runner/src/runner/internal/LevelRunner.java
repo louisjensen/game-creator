@@ -18,6 +18,10 @@ import runner.internal.runnerSystems.*;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * LevelRunner runs the game loop and displays level on screen
+ * @author Louis Jensen
+ */
 public class LevelRunner {
     private PauseButton myPauseButton;
     private Node myPause;
@@ -32,7 +36,6 @@ public class LevelRunner {
     private static final int FRAMES_PER_SECOND = 60;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-    private Level myLevel;
     private Set<KeyCode> myCurrentKeys;
     private boolean canPause = false;
     private Consumer<Double> myLevelChanger;
@@ -41,11 +44,18 @@ public class LevelRunner {
     private Text myLabel;
     private Rectangle myHudBackground;
     private int myLevelCount;
-
     private AudioManager myAudioManager;
 
+    /**
+     * Constructor for level runner
+     * @param level - current level to be played
+     * @param width - width of screen
+     * @param height - height of screen
+     * @param stage - stage to create level on
+     * @param playNext - consumer to change levels
+     * @param numLevels - total number of levels in the current game
+     */
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext, int numLevels){
-        myLevel = level;
         myLevelCount = numLevels;
         mySceneWidth = width;
         mySceneHeight = height;
@@ -130,10 +140,18 @@ public class LevelRunner {
 
     }
 
+    /**
+     * Gets entities currently in the level
+     * @return Collection of current entities
+     */
     public Collection<Entity> getEntities(){
         return myEntities;
     }
 
+    /**
+     * Gets the engine being used to create level
+     * @return Engine
+     */
     public Engine getEngine(){
         return myEngine;
     }
