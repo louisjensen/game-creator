@@ -8,6 +8,7 @@ import javafx.animation.Animation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import runner.GameBeatenScreen;
 import runner.internal.LevelRunner;
 
 import java.util.Collection;
