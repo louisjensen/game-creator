@@ -1,6 +1,7 @@
 package ui.main;
 
 import data.external.DataManager;
+import data.external.DatabaseEngine;
 import factory.GameTranslator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -15,6 +16,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import runner.external.Game;
 import data.external.GameCenterData;
 import ui.AuthoringLevel;
@@ -250,8 +252,10 @@ public class MainGUI {
             myDataManager = new DataManager();
             myDataManager.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
             myDataManager.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
-            saveAndClearFolder(myDataManager, "authoring/assets/images");
-            saveAndClearFolder(myDataManager, "authoring/assets/audio");
+            System.out.println("Going into saveAndClearFolder");
+
+            saveFolderToDataBase(GENERAL_RESOURCES.getString("images_filepath"));
+            saveFolderToDataBase(GENERAL_RESOURCES.getString("audio_filepath"));
         } catch (UIException e) {
             e.printStackTrace();
             ErrorBox errorBox = new ErrorBox("Save Error", e.getMessage());
@@ -296,14 +300,14 @@ public class MainGUI {
         myGameData.setDescription("A fun new game");
     }
 
-    //outerDirectory - folder that needs sub-folders "defaults" and "user-uploaded"
-    private void saveAndClearFolder(DataManager dataManager, String outerDirectoryPath){
-        File outerDirectory = new File(outerDirectoryPath);
-        for(File file : outerDirectory.listFiles()){
-            System.out.println("Saving and deleting: " + file.getName());
-            dataManager.saveImage(file.getName(), file);
 
-            file.deleteOnExit();
+
+    private void saveFolderToDataBase(String outerDirectoryPath){
+        File outerDirectory = new File(outerDirectoryPath);
+        System.out.println("Directory: " + outerDirectory.getName());
+        for(File file : outerDirectory.listFiles()){
+            System.out.println("Saving: " + file.getName());
+            myDataManager.saveImage(file.getName(), file);
         }
     }
 
