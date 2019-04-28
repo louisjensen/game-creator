@@ -23,10 +23,14 @@ public class RatingScreen extends Popup {
     private TextArea myText;
     private StarBox myStars;
     private String myCurrentUser;
+    private GameCenterData myData;
 
     public RatingScreen(GameCenterData data, DataManager manager, String user) {
-        super(data, manager);
+        super(manager);
+        myData = data;
         myCurrentUser = user;
+        initializeDisplay();
+        display();
     }
 
     public void addRatingButton(GameCenterData data) {

@@ -41,6 +41,14 @@ public class GameList {
         initializeDisplay();
     }
 
+    public GameList(String user, String desiredAuthor) {
+        myManager = new DataManager();
+        myGames = myManager.loadAllGameInfoObjects(desiredAuthor);
+        myCurrentUser = user;
+        initializeDisplay();
+    }
+
+
     /**
      * @purpose give the display of the GameList to the GamePane
      * @return the current display attached to the GameList.

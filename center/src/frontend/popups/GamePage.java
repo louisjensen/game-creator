@@ -19,10 +19,14 @@ public class GamePage extends Popup {
     private static final double SCROLL_OFFSET = 20;
 
     private String myCurrentUser;
+    private GameCenterData myData;
 
     public GamePage(GameCenterData data, DataManager manager, String user) {
-        super(data, manager);
+        super(manager);
+        myData = data;
         myCurrentUser = user;
+        initializeDisplay();
+        display();
     }
 
     public void playGameButton(GameCenterData data) {
