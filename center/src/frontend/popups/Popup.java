@@ -29,11 +29,16 @@ public abstract class Popup {
 
     public Popup(GameCenterData data, DataManager manager) {
         myData = data;
+    }
+
+    public Popup(DataManager manager) {
         myManager = manager;
         myLanguageBundle = ResourceBundle.getBundle(DEFAULT_LANGUAGE);
         initializeDisplay();
         display();
     }
+
+
 
     protected void initializeDisplay() {
         myDisplay = new BorderPane();
