@@ -29,11 +29,18 @@ import java.util.Map;
  */
 public class ImageManager extends AssetManager {
     private ImageView mySelectedImageView;
-    private Propertable myProp;
     private static final String EXTENSION_KEY = "AcceptableImageExtensions";
     private static final String TITLE_KEY = "ImagesTitle";
     private static final String ASSET_IMAGE_FOLDER_PATH = GENERAL_RESOURCES.getString("images_filepath");
     private Map<Pane, FlowPane> myMap;
+
+
+    public ImageManager(){
+        super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
+        mySelectedImageView = null;
+        myPropertable = null;
+        myObjectManager = null;
+    }
 
     /**
      * This default Constructor is needed when the user is choosing an image
@@ -41,9 +48,8 @@ public class ImageManager extends AssetManager {
      * @param objectManager has all of the game info/objects
      */
     public ImageManager(ObjectManager objectManager){
-        super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY, objectManager);
-        mySelectedImageView = null;
-        myProp = null;
+        this();
+        myObjectManager = objectManager;
     }
 
     /**
@@ -52,16 +58,11 @@ public class ImageManager extends AssetManager {
      * @param prop
      */
     public ImageManager(Propertable prop){
-        super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
-        mySelectedImageView = null;
-        myProp = prop;
+        this();
+        myPropertable = prop;
     }
 
-    public ImageManager(){
-        super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
-        mySelectedImageView = null;
-        myProp = null;
-    }
+
 
     /**
      * Gets the ImageView associated with the selected image
@@ -137,11 +138,11 @@ public class ImageManager extends AssetManager {
     @Override
     protected void handleApply() {
         if(!mySelectedAssetName.equals("")){
-            if(myProp != null && myProp.getPropertyMap().containsKey(EntityField.IMAGE)){
-                myProp.getPropertyMap().put(EntityField.IMAGE, mySelectedAssetName);
+            if(myPropertable != null && myPropertable.getPropertyMap().containsKey(EntityField.IMAGE)){
+                myPropertable.getPropertyMap().put(EntityField.IMAGE, mySelectedAssetName);
             }
-            else if(myProp != null && myProp.getPropertyMap().containsKey(LevelField.BACKGROUND)){
-                myProp.getPropertyMap().put(LevelField.BACKGROUND, mySelectedAssetName);
+            else if(myPropertable != null && myPropertable.getPropertyMap().containsKey(LevelField.BACKGROUND)){
+                myPropertable.getPropertyMap().put(LevelField.BACKGROUND, mySelectedAssetName);
             }
             this.close();
         }

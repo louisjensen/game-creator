@@ -81,11 +81,11 @@ public class MainGUI {
         myStage = new Stage();
         myDataManager = new DataManager();
         myViewers = new HashMap<>();
-        loadAllAssets();
+
         myCurrentLevel = new SimpleObjectProperty<>();
         mySelectedEntity = new SimpleObjectProperty<>();
         myObjectManager = new ObjectManager(myCurrentLevel);
-
+        loadAllAssets();
         AuthoringLevel blankLevel = new AuthoringLevel(DEFAULT_FIRST_LEVEL, myObjectManager);
         myObjectManager.addLevel(blankLevel);
         myCurrentLevel.setValue(blankLevel);
@@ -293,16 +293,15 @@ public class MainGUI {
 
     @SuppressWarnings("unused")
     private void openImageAssets() {
-        //TODO
-        //ImageManager manager = new ImageManager();
-        //manager.showAndWait();
+        ImageManager manager = new ImageManager(myObjectManager);
+        System.out.println("object manager is null: " + myObjectManager == null);
+        manager.show();
     }
 
     @SuppressWarnings("unused")
     private void openAudioAssets() {
-        //TODO
-        //AudioManager manager = new AudioManager();
-        //manager.showAndWait();
+        AudioManager manager = new AudioManager(myObjectManager);
+        manager.show();
     }
 
     @SuppressWarnings("unused")

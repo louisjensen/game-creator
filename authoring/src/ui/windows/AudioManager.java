@@ -24,20 +24,24 @@ public class AudioManager extends AssetManager {
     private static final String TITLE_KEY = "AudioTitle";
     private static final String ASSET_AUDIO_FOLDER_PATH = GENERAL_RESOURCES.getString("audio_filepath");
     private Map<Pane, ListView> myMap;
-    private Propertable myPropertable;
+
+    public AudioManager(){
+        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
+        myObjectManager = null;
+        myPropertable = null;
+    }
 
     public AudioManager(Propertable propertable){
-        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
+        this();
         myPropertable = propertable;
     }
 
     public AudioManager(ObjectManager objectManager){
-        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
+        this();
+        myObjectManager = objectManager;
     }
 
-    public AudioManager(){
-        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
-    }
+
 
     /**
      * Method that adds a file to the manager
