@@ -223,13 +223,13 @@ public class MainGUI {
     private void openGame() {
         String authorName = "";
         DataManager dataManager = new DataManager();
-        try {
+        /*try {
             List<String> gameNames = dataManager.loadUserGameNames(authorName); //TODO
             myLoadedGame = (Game) dataManager.loadGameData(authorName, gameNames.get(0)); //TODO
             //myGameData = null; //TODO
         } catch (SQLException e) {
             ErrorBox error = new ErrorBox("Load", "Error loading from database");
-        }
+        }*/
 
         GameTranslator translator = new GameTranslator(myObjectManager);
         try {
@@ -237,7 +237,7 @@ public class MainGUI {
             MainGUI newWorkspace = new MainGUI(exportableGame, myGameData);
             newWorkspace.launch();
         } catch (Exception e) {
-
+            //TODO
         }
     }
 
@@ -248,7 +248,12 @@ public class MainGUI {
         GameTranslator translator = new GameTranslator(myObjectManager);
         myObjectManager.removeAllLevels();
 
-        translator.populateObjectManager(myLoadedGame, myCurrentLevel);
+        try {
+            translator.populateObjectManager(myLoadedGame, myCurrentLevel);
+        } catch (UIException e) {
+            ErrorBox error = new ErrorBox("Load Error", e.getMessage());
+            error.display();
+        }
 
         // Set selectedLevel to first level
         myCurrentLevel.setValue(myObjectManager.getLevels().get(0));
