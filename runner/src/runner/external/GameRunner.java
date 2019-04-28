@@ -5,17 +5,17 @@ import engine.external.Level;
 import javafx.stage.Stage;
 import runner.internal.DummyGameObjectMaker;
 import runner.internal.LevelRunner;
-
 import java.io.*;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * Primary class that runs the game
+ * Gets game object from database and plays it
+ * @author Louis Jensen
+ */
 public class GameRunner {
-    /**
-     * This will be the primary class that creates a new game engine
-     * and displays sprites on a stage
-     */
     private int mySceneWidth;
     private int mySceneHeight;
     private List<Level> myLevels;
@@ -24,6 +24,12 @@ public class GameRunner {
     private String myGameName;
     private String myAuthorName;
 
+    /**
+     * Constructor for GameRunner
+     * @param gameName - name of the game
+     * @param authorName - name of the game's author
+     * @throws FileNotFoundException if game is not found
+     */
     public GameRunner(String gameName, String authorName) throws FileNotFoundException {
         myGame = loadGameObject(gameName, authorName);
         myGameName = gameName;
@@ -44,10 +50,8 @@ public class GameRunner {
         } catch (SQLException e) {
             return null;
         }
-//        return gameMade;
     }
-
-
+    
     private void runLevel(int currentLevelNumber){
         DataManager dm = new DataManager();
         dm.saveGameData(myGameName, myAuthorName, myGame);
