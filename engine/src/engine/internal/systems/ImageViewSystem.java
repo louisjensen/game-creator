@@ -5,12 +5,12 @@ import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.ImageViewComponent;
 import engine.external.Engine;
+import engine.external.component.OpacityComponent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import voogasalad.util.reflection.ReflectionException;
 
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class ImageViewSystem extends VoogaSystem {
     }
 
     /**
-     * Generate or adjust the height/width/positions of an Entity's ImageView
+     * Generate or adjust the height/width/positions/opacity of an Entity's ImageView
      * Only access database to retrieve new image if the Sprite String has changed since the last game loop
      * Cache all seen images with corresponding Sprite Strings in the System to reduce database accesses
      * Set an Entity as not collidable if its image cannot be found from database
@@ -75,10 +75,9 @@ public class ImageViewSystem extends VoogaSystem {
             if(myImages.get(imageName)==null){
                 return;
             }
-            imageView = (ImageView) entity.getComponent(IMAGEVIEW_COMPONENT_CLASS).getValue();
+            imageView = (ImageView) getComponentValue(IMAGEVIEW_COMPONENT_CLASS,entity);
         }
-        entity.addComponent(new ImageViewComponent(setImgViewHeight(setImgViewWidth(setImgViewY(setImgViewX(imageView, entity), entity), entity), entity)));
-
+        entity.addComponent(new ImageViewComponent(setImageViewOpacity(setImgViewHeight(setImgViewWidth(setImgViewY(setImgViewX(imageView, entity), entity), entity), entity),entity)));
     }
 
 
@@ -111,6 +110,11 @@ public class ImageViewSystem extends VoogaSystem {
 
     private ImageView setImgViewHeight(ImageView m, Entity e) {
         m.setFitHeight((Double) getComponentValue(HEIGHT_COMPONENT_CLASS, e));
+        return m;
+    }
+
+    private ImageView setImageViewOpacity(ImageView m, Entity e) {
+        m.setOpacity((Double) getComponentValue(OPACITY_COMPONENT_CLASS, e));
         return m;
     }
 
