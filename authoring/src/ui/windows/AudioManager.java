@@ -26,21 +26,17 @@ public class AudioManager extends AssetManager {
     private Map<Pane, ListView> myMap;
     private Propertable myPropertable;
 
-    /**
-     * Called when a user needs to select and audio asset
-     * @param objectManager provide the game info such as author/name for saving purposes
-     */
-//    public AudioManager(ObjectManager objectManager){
-//
-//    }
-
-    public AudioManager(Propertable propertable, ObjectManager objectManager){
-        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY, objectManager);
+    public AudioManager(Propertable propertable){
+        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
         myPropertable = propertable;
     }
 
-    public AudioManager(GameCenterData gameCenterData){
-        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY, gameCenterData);
+    public AudioManager(ObjectManager objectManager){
+        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
+    }
+
+    public AudioManager(){
+        super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
     }
 
     /**

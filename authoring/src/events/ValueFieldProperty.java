@@ -56,8 +56,8 @@ public class ValueFieldProperty extends TextField {
     public void addSoundFilePrompt(){
         resetValueField(SOUND);
         showFileOptions = (EventHandler<MouseEvent>) mouseEvent -> {
-//            AudioManager myManager = new AudioManager();  //TODO the constructor changed and we need to pass in either an objectmanager or a gameCenterData object
-//            myManager.show();
+            AudioManager myManager = new AudioManager();
+            myManager.show();
         };
         this.setOnMouseClicked(showFileOptions);
     }
@@ -65,8 +65,8 @@ public class ValueFieldProperty extends TextField {
     public void addImageFilePrompt(){
         resetValueField(IMAGE);
         showFileOptions = (EventHandler<MouseEvent>) mouseEvent -> {
-//            ImageManager myManager = new ImageManager();  //TODO: the constructor changed and we need to pass in either an objectManager or a gameCenterData object
-//            myManager.show();
+            ImageManager myManager = new ImageManager();
+            myManager.show();
         };
         this.setOnMouseClicked(showFileOptions);
     }

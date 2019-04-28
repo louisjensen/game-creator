@@ -47,23 +47,20 @@ public class ImageManager extends AssetManager {
     }
 
     /**
-     * This constructor is needed when the user is choosing an image
-     * @param gameCenterData associated with the game
-     */
-    public ImageManager(GameCenterData gameCenterData){
-        super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY, gameCenterData);
-        mySelectedImageView = null;
-        myProp = null;
-    }
-
-    /**
      * This constructor is needed when a user has already created an object and the image
      * is tied to a properties object
      * @param prop
      */
-    public ImageManager(Propertable prop, ObjectManager objectManager){
-        this(objectManager);
+    public ImageManager(Propertable prop){
+        super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
+        mySelectedImageView = null;
         myProp = prop;
+    }
+
+    public ImageManager(){
+        super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
+        mySelectedImageView = null;
+        myProp = null;
     }
 
     /**

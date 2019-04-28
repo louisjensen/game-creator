@@ -141,7 +141,7 @@ public class CreateNewTypeWindow extends Stage {
     }
 
     private void openImageAssetManager(){
-        ImageManager assetManager = new ImageManager(myGameCenterData);
+        ImageManager assetManager = new ImageManager();
         assetManager.showAndWait();
         if(assetManager.getImageView() != null){
             ImageView imageView = assetManager.getImageView();

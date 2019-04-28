@@ -91,7 +91,7 @@ public class InfoEditor extends Stage {
     }
 
     private void openAssetManager() {
-        ImageManager imageManager = new ImageManager(myData);
+        ImageManager imageManager = new ImageManager();
         imageManager.showAndWait();
         if (imageManager.getAssetName() != null) {
             myImage.setImage(new Image(imageManager.getAssetName()));
