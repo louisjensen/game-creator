@@ -130,3 +130,8 @@
 .borderpadding {
     -fx-padding: 20;
 }
+
+.gamepageratingbody {
+    -fx-fill: white;
+    -fx-font-size: 18;
+}

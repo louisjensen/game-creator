@@ -4,9 +4,11 @@ import data.external.DataManager;
 import data.external.GameCenterData;
 import frontend.Utilities;
 import frontend.ratings.RatingList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -17,7 +19,7 @@ public class GamePage extends Popup {
     private static final String SCROLLER_SELECTOR = "scroller";
     private static final String SUBTITLE_SELECTOR = "subtitlefont";
     private static final String PADDING_SELECTOR = "borderpadding";
-    private static final double POPUP_WIDTH = 750;
+    public static final double POPUP_WIDTH = 750;
     private static final double POPUP_HEIGHT = 500;
     private static final double IMAGE_SIZE = 500;
     private static final double WRAP_OFFSET = 20;
@@ -50,7 +52,9 @@ public class GamePage extends Popup {
     @Override
     protected void addBody() {
         BorderPane contentPane = new BorderPane();
-        contentPane.setTop(Utilities.getImagePane(myManager, myData.getImageLocation(), IMAGE_SIZE));
+        Pane gamePreview = Utilities.getImagePane(myManager, myData.getImageLocation(), IMAGE_SIZE);
+        gamePreview.setPadding(new Insets(20));
+        contentPane.setTop(gamePreview);
         Text body = new Text(myData.getDescription());
         body.getStyleClass().add(BODY_SELECTOR);
         body.setWrappingWidth(POPUP_WIDTH - WRAP_OFFSET);

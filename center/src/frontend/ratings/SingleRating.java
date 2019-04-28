@@ -3,6 +3,7 @@ package frontend.ratings;
 import data.external.DataManager;
 import data.external.GameCenterData;
 import data.external.GameRating;
+import frontend.popups.GamePage;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,6 +18,8 @@ import java.io.FileNotFoundException;
 public class SingleRating {
     private static final String BODY_SELECTOR = "bodyfont";
     private static final String PADDING_SELECTOR = "contentpadding";
+    private static final String RATING_SELECTOR = "gamepageratingbody";
+    private static final double WRAP_OFFSET = 100;
     private GameRating myRating;
     private DataManager myManager;
     private GameCenterData myData;
@@ -84,7 +87,8 @@ public class SingleRating {
 
     private void addText(BorderPane pane) {
         Text comment = new Text(myRating.getComment());
-        comment.getStyleClass().add(BODY_SELECTOR);
+        comment.setWrappingWidth(GamePage.POPUP_WIDTH - WRAP_OFFSET);
+        comment.getStyleClass().add(RATING_SELECTOR);
         pane.setBottom(comment);
     }
 
