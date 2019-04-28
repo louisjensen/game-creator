@@ -92,7 +92,7 @@ public class Viewer extends ScrollPane {
             FileInputStream fileInputStream = Utility.makeImageAssetInputStream(imagePath); //closed
             ImageWithEntity imageWithEntity = new ImageWithEntity(fileInputStream, authoringEntity); //closed
             Utility.closeInputStream(fileInputStream); //closed
-            myStackPane.getChildren().add(imageWithEntity);
+            addImage(imageWithEntity);
         }
     }
 
