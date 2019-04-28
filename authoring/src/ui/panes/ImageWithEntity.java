@@ -1,5 +1,6 @@
 package ui.panes;
 
+import engine.external.Entity;
 import javafx.collections.MapChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -48,6 +49,7 @@ public class ImageWithEntity extends ImageView {
     }
 
     private void updateWidth(String width){
+        updateImage(myAuthoringEntity.getPropertyMap().get(EntityField.IMAGE));
         Double widthDouble = Double.parseDouble(width);
         Double heightDouble = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.YSCALE));
         this.setFitWidth(widthDouble);
@@ -66,6 +68,7 @@ public class ImageWithEntity extends ImageView {
     }
 
     private void updateHeight(String height){
+        updateImage(myAuthoringEntity.getPropertyMap().get(EntityField.IMAGE));
         Double heightDouble = Double.parseDouble(height);
         Double widthDouble = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.XSCALE));
         this.setFitHeight(heightDouble);
