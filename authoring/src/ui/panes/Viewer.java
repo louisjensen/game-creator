@@ -102,7 +102,6 @@ public class Viewer extends ScrollPane {
         myBackgroundFileName = null;
         myStackPane.getChildren().addListener((ListChangeListener<Node>) change -> updateZField());
         myStackPane.getChildren().add(myLinesPane);
-        System.out.println("List size with just lines: " + myStackPane.getChildren().size());
         myStackPane.setAlignment(Pos.TOP_LEFT);
         this.setContent(myStackPane);
         this.getStyleClass().add(SHEET);
@@ -112,11 +111,8 @@ public class Viewer extends ScrollPane {
         int objectCount = 0;
         for(Node node : myStackPane.getChildren()){
             if(node instanceof ImageWithEntity){
-                System.out.println("*************");
                 AuthoringEntity authoringEntity = ((ImageWithEntity) node).getAuthoringEntity();
                 authoringEntity.getPropertyMap().put(EntityField.Z, Integer.toString(objectCount));
-                System.out.println("Label: " + authoringEntity.getPropertyMap().get(EntityField.LABEL) + "\t Index: " + authoringEntity.getPropertyMap().get(EntityField.Z));
-                System.out.println("****************");
                 objectCount++;
             }
         }

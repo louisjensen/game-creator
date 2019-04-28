@@ -31,7 +31,6 @@ public class AudioManager extends AssetManager {
 
     public AudioManager(Propertable propertable, ObjectManager manager){
         this();
-        System.out.println("Made it to constructor");
         myPropertable = propertable;
     }
 

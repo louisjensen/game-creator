@@ -50,7 +50,6 @@ public class DefaultTypesPane extends VBox{
             myEntityMenu.addDropDown(category);
             myEntityMenu.setDropDown(category, labelsList);
         }
-
     }
 
 
