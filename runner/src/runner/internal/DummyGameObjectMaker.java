@@ -30,21 +30,29 @@ public class DummyGameObjectMaker {
 
     private void initializeGame(Game dummyGame) {
         Level level1 = new Level();
+        level1.setHeight(myGame.getHeight());
+        level1.setWidth(myGame.getWidth());
         addDummyEntities(level1, 1.0);
         addDummyEvents(level1, 2.0);
         dummyGame.addLevel(level1);
 
         Level level2 = new Level();
+        level2.setHeight(myGame.getHeight());
+        level2.setWidth(myGame.getWidth());
         addDummyEntities(level2, 2.0);
         addDummyEvents(level2, 3.0);
         dummyGame.addLevel(level2);
 
         Level level3 = new Level();
+        level3.setHeight(myGame.getHeight());
+        level3.setWidth(myGame.getWidth());
         addDummyEntities(level3, 3.0);
         addDummyEvents(level3, 4.0);
         dummyGame.addLevel(level3);
 
         Level level4 = new Level();
+        level4.setHeight(myGame.getHeight());
+        level4.setWidth(myGame.getWidth());
         addDummyEntities(level4, 4.0);
         addDummyEvents(level4, 5.0);
         dummyGame.addLevel(level4);
