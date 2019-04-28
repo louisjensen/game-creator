@@ -31,6 +31,8 @@ import ui.panes.LevelsPane;
 import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
+import ui.windows.AudioManager;
+import ui.windows.ImageManager;
 import voogasalad.util.reflection.Reflection;
 
 import java.io.File;
@@ -186,7 +188,7 @@ public class MainGUI {
     private MenuBar addMenu() {
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(createMenu("File", "New", "Open", "Save"), //TODO make this better
-                createMenu("Edit", "Info", "Groups"), createMenu("View", "Fullscreen"));
+                createMenu("Edit", "Info", "Groups", "Images", "Audio"), createMenu("View", "Fullscreen"));
         return menuBar;
     }
 
@@ -221,13 +223,13 @@ public class MainGUI {
     private void openGame() {
         String authorName = "";
         DataManager dataManager = new DataManager();
-        /*try {
+        try {
             List<String> gameNames = dataManager.loadUserGameNames(authorName); //TODO
             myLoadedGame = (Game) dataManager.loadGameData(authorName, gameNames.get(0)); //TODO
             //myGameData = null; //TODO
         } catch (SQLException e) {
             ErrorBox error = new ErrorBox("Load", "Error loading from database");
-        }*/
+        }
 
         GameTranslator translator = new GameTranslator(myObjectManager);
         try {
@@ -287,6 +289,20 @@ public class MainGUI {
     private void openGameInfo() {
         InfoEditor infoEditor = new InfoEditor(myGameData);
         infoEditor.showAndWait();
+    }
+
+    @SuppressWarnings("unused")
+    private void openImageAssets() {
+        //TODO
+        //ImageManager manager = new ImageManager();
+        //manager.showAndWait();
+    }
+
+    @SuppressWarnings("unused")
+    private void openAudioAssets() {
+        //TODO
+        //AudioManager manager = new AudioManager();
+        //manager.showAndWait();
     }
 
     @SuppressWarnings("unused")

@@ -33,8 +33,15 @@ public class ButtonProperty extends Button implements ControlProperty {
             Constructor<?> constructor = clazz.getConstructor(Propertable.class, ObjectManager.class);
             Stage instance = (Stage) constructor.newInstance(prop, manager);
             this.setOnAction(e -> instance.show());
-        } catch (Exception e) {
-            throw new UIException("Error binding property control actions");
+        } catch (Exception e1) {
+            try {
+                Class<?> clazz = Class.forName(action);
+                Constructor<?> constructor = clazz.getConstructor(Propertable.class);
+                Stage instance = (Stage) constructor.newInstance(prop);
+                this.setOnAction(e -> instance.show());
+            } catch (Exception e2) {
+                throw new UIException("Error binding property control actions");
+            }
         }
     }
 }
