@@ -76,7 +76,7 @@ public class GameRunner {
         try {
            background = new Image(myDataManager.loadImage(currentLevel.getBackground()), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
         } catch (Exception e){
-            background = new Image(myDataManager.loadImage("mario_block.png"), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
+            background = new Image(myDataManager.loadImage("byteme_default_runnerBackground"), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
            // background = new Image(myDataManager.loadImage("byteme_default_runnerBackground"), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
         }
 
