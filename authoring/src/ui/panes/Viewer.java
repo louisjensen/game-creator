@@ -159,8 +159,10 @@ public class Viewer extends ScrollPane {
     private void setupDragDropped() {
         myStackPane.setOnDragDropped(dragEvent -> {
             AuthoringEntity authoringEntity;
+            ImageWithEntity imageWithEntity;
             if(isDragOnView){
                 authoringEntity = myDraggedAuthoringEntity;
+                imageWithEntity = Utility.createImageWithEntity(authoringEntity);
                 isDragOnView = false;
             }
             else{
@@ -169,10 +171,11 @@ public class Viewer extends ScrollPane {
                 authoringEntity = new AuthoringEntity(authoringEntity);
                 myObjectManager.addEntityInstance(authoringEntity);
                 authoringEntity.getPropertyMap().put(EntityField.IMAGE, imageName);
-                addImage(Utility.createImageWithEntity(authoringEntity));
+                imageWithEntity = Utility.createImageWithEntity(authoringEntity);
+                addImage(imageWithEntity);
             }
-            authoringEntity.getPropertyMap().put(EntityField.X, "" + snapToGrid(dragEvent.getX()));
-            authoringEntity.getPropertyMap().put(EntityField.Y, "" + snapToGrid(dragEvent.getY()));
+            authoringEntity.getPropertyMap().put(EntityField.X, "" + snapToGrid(dragEvent.getX(), imageWithEntity));
+            authoringEntity.getPropertyMap().put(EntityField.Y, "" + snapToGrid(dragEvent.getY(), imageWithEntity));
             mySelectedEntityProperty.setValue(authoringEntity);
         });
     }
@@ -182,7 +185,7 @@ public class Viewer extends ScrollPane {
      * @param value int to be snapped
      * @return int that is snapped
      */
-    private double snapToGrid(double value){
+    private double snapToGrid(double value, ImageWithEntity image){
         double valueRemainder = value % CELL_SIZE;
         double result;
         if(valueRemainder >= CELL_SIZE/2){
