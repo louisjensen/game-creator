@@ -365,4 +365,14 @@ public class MainGUI {
             e.printStackTrace();
         }
     }
+
+    public void clearFolder(String outerDirectoryPath){
+        DatabaseEngine.getInstance().close();
+        File outerDirectory = new File(outerDirectoryPath);
+        System.out.println("Directory: " + outerDirectory.getName());
+        for(File file : outerDirectory.listFiles()){
+            file.delete();
+        }
+        DatabaseEngine.getInstance().open();
+    }
 }
