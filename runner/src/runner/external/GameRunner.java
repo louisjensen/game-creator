@@ -30,6 +30,7 @@ public class GameRunner {
     private DataManager myDataManager;
     private Level myCurrentLevel;
     private Double myScore;
+    private String myUsername;
     private Double myLives;
 
     /**
@@ -41,6 +42,7 @@ public class GameRunner {
     public GameRunner(String gameName, String authorName, String username) throws FileNotFoundException {
         myGame = loadGameObject(gameName, authorName);
         myGameName = gameName;
+        myUsername = username;
         myAuthorName = authorName;
         myGameStage = new Stage();
         int firstLevel = 1;
@@ -86,7 +88,8 @@ public class GameRunner {
         }
 
         new LevelRunner(myCurrentLevel, mySceneWidth, mySceneHeight, myGameStage,
-                goToNext, gameToPlay.getLevels().size(), background, myScore, myLives);
+                goToNext, gameToPlay.getLevels().size(), background, myScore, myLives,
+                myAuthorName, myGameName, myUsername, myGame);
     }
 
     private void nextLevel(Double level) {

@@ -18,6 +18,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import runner.external.Game;
 import runner.internal.runnerSystems.*;
 import java.util.*;
 import java.util.function.Consumer;
@@ -51,6 +52,11 @@ public class LevelRunner {
     private AudioManager myAudioManager;
     private Image myBackground;
     private ImageView myImageViewBackgroud;
+    private Level myLevel;
+    private String myUsername;
+    private String myAuthorName;
+    private String myGameName;
+    private Game myGame;
 
     /**
      * Constructor for level runner
@@ -62,7 +68,13 @@ public class LevelRunner {
      * @param numLevels - total number of levels in the current game
      */
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext, int numLevels,
-                       Image image, Double score, Double lives){
+                       Image image, Double score, Double lives, String authorName, String gameName,
+                       String username, Game game){
+        myLevel = level;
+        myUsername = username;
+        myGameName = gameName;
+        myAuthorName = authorName;
+        myGame = game;
         myLevelCount = numLevels;
         mySceneWidth = width;
         mySceneHeight = height;
@@ -94,7 +106,8 @@ public class LevelRunner {
 
     private void initializeSystems() {
         SystemManager systems = new SystemManager(this, myGroup, myStage, myAnimation,
-                mySceneWidth, mySceneHeight, myLevelChanger, myScene, myHUD, myAudioManager, myLevelCount);
+                mySceneWidth, mySceneHeight, myLevelChanger, myScene, myHUD, myAudioManager, myLevelCount,
+                myAuthorName, myGameName, myUsername, myEngine, myLevel, myGame);
         mySystems = systems.getSystems();
     }
 
