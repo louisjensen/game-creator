@@ -4,6 +4,7 @@ import data.external.DataManager;
 import data.external.GameCenterData;
 import frontend.Utilities;
 import frontend.ratings.RatingList;
+import frontend.statistics.StatisticDisplay;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollBar;
@@ -77,8 +78,8 @@ public class GamePage extends Popup {
 
     private void addRatingsAndStatistics(BorderPane contentPane) {
         BorderPane extraPane = new BorderPane();
-        addGameStatistics(extraPane);
         addGameRatings(extraPane);
+        addGameStatistics(extraPane);
         contentPane.setBottom(extraPane);
     }
 
@@ -88,8 +89,8 @@ public class GamePage extends Popup {
         title.getStyleClass().add(SUBTITLE_SELECTOR);
         BorderPane.setAlignment(title, Pos.CENTER);
         statisticsPane.setTop(title);
-        //statisticsPane.setCenter(null); //todo: update this
-        extraPane.setCenter(statisticsPane);
+        statisticsPane.setCenter(new StatisticDisplay(myData, myManager).getDisplay());
+        extraPane.setTop(statisticsPane);
     }
 
     private void addGameRatings(BorderPane extraPane) {
@@ -100,7 +101,7 @@ public class GamePage extends Popup {
         BorderPane.setAlignment(title, Pos.CENTER);
         ratingPane.setCenter(new RatingList(myData, myManager).getDisplay());
         ratingPane.getStyleClass().add(PADDING_SELECTOR);
-        extraPane.setTop(ratingPane);
+        extraPane.setCenter(ratingPane);
     }
 
     @Override
