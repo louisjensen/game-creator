@@ -127,7 +127,7 @@ public class GameTranslator {
                     basisEntity.addComponent(new ValueComponent(0.0));
             }*/
         }
-        basisEntity.addComponent(new TimerComponent());
+        //basisEntity.addComponent(new TimerComponent()); //TODO
     }
 
     private void addComponent(EntityField field, Entity basisEntity, AuthoringEntity authEntity) {
