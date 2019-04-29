@@ -8,11 +8,10 @@ public class ValueComponent extends Component<Double> {
 
     private final static double DEFAULT = 1.0;
 
-    public ValueComponent() {
-        super(DEFAULT);
-    }
-
     public ValueComponent(Double t) {
         super(t);
+    }
+    public ValueComponent(){
+        super(DEFAULT);
     }
 }

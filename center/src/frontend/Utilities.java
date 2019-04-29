@@ -11,6 +11,7 @@ package frontend;
 
 import data.external.DataManager;
 import data.external.GameCenterData;
+import frontend.games.GameCard;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -54,23 +55,28 @@ public class Utilities {
         }
     }
 
-    public static Pane getImagePane(DataManager manager, String imageLocation, double gameSize) throws FileNotFoundException {
+    public static Pane getImagePane(DataManager manager, String imageLocation, double gameSize, double maxHeight) throws FileNotFoundException {
         ImageView gameImage;
         try {
             gameImage = new ImageView(new Image(manager.loadImage(imageLocation)));
         } catch (Exception e) { // if any exceptions come from this, it should just become a default image.
             gameImage = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
         }
+        double originalWidth = gameImage.getFitWidth();
         gameImage.setPreserveRatio(true);
         gameImage.setFitWidth(gameSize);
+        if(gameImage.getFitWidth() > maxHeight) {
+            gameImage.setFitWidth(originalWidth);
+            gameImage.setFitHeight(maxHeight);
+        }
         BorderPane imagePane = new BorderPane();
         imagePane.setCenter(gameImage);
         return imagePane;
     }
 
-    public static void launchGameRunner(String folderName) {
+    public static void launchGameRunner(String gameName, String authorName, String username) {
         try {
-            new GameRunner(folderName);
+            new GameRunner(gameName, authorName, username);
         } catch (FileNotFoundException e) {
             // todo: print error message
         }

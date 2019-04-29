@@ -26,6 +26,7 @@ public class GamePage extends Popup {
     private static final double IMAGE_SIZE = 500;
     private static final double WRAP_OFFSET = 20;
     private static final double SCROLL_OFFSET = 20;
+    private static final double MAX_HEIGHT = 200;
 
     private String myCurrentUser;
     private GameCenterData myData;
@@ -39,7 +40,7 @@ public class GamePage extends Popup {
     }
 
     public void playGameButton(GameCenterData data) {
-        Utilities.launchGameRunner(data.getFolderName());
+        Utilities.launchGameRunner(data.getTitle(), data.getAuthorName(), myCurrentUser);
     }
 
     public void rateGameButton(GameCenterData data) {
@@ -56,7 +57,7 @@ public class GamePage extends Popup {
         BorderPane contentPane = new BorderPane();
         Pane gamePreview = null;
         try {
-            gamePreview = Utilities.getImagePane(myManager, myData.getImageLocation(), IMAGE_SIZE);
+            gamePreview = Utilities.getImagePane(myManager, myData.getImageLocation(), IMAGE_SIZE, 200);
         } catch (FileNotFoundException e) {
             // do nothing
         }
