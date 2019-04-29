@@ -1,6 +1,7 @@
 package runner.internal;
 
 import data.external.DataManager;
+import data.external.GameCenterData;
 import engine.external.Entity;
 import engine.external.Level;
 import engine.external.actions.*;
@@ -26,6 +27,7 @@ public class DummyGameObjectMaker {
         public DummyGameObjectMaker(){
                 myGame = new Game();
                 initializeGame(myGame);
+                serializeObject();
         }
 
         private void initializeGame(Game dummyGame) {
@@ -99,12 +101,19 @@ public class DummyGameObjectMaker {
                 RightFlappyCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
                 RightFlappyCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
 
+                /**
+                 * Make bottom collision event between flappy and ghost1 and vice versa
+                 */
+                CollisionEvent BottomGhostCollisionWithFlappy = BottomCollisionEvent.makeBottomBounceEvent("flappy", "Ghost1", false);
+                CollisionEvent BottomFlappyCollisionWithGhost = BottomCollisionEvent.makeBottomBounceEvent("Ghost1", "flappy", false);
+
 
                 /**
                  * Event: Ghost collides with another Ghost from the Right (Right side of ghost hits ghost): (Ghosts colliding with each other)
                  * 1. set Ghost1 xVelocity to -2
                  * 2. modify Ghost1 xPosition by -5
                  */
+                //CollisionEvent RightGhostCollisionWithGhost = CollisionEvent.makeBounceEvent("Ghost1", "Ghost1", RightCollisionEvent.class, false);
                 CollisionEvent RightGhostCollisionWithGhost = new RightCollisionEvent("Ghost1", false);
                 RightGhostCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
                 RightGhostCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -2.0));
@@ -116,11 +125,7 @@ public class DummyGameObjectMaker {
                  * 2. modify Ghost1 yPosition by -5
                  * 3. modify Ghost1 Xposition by 10
                  */
-                CollisionEvent BottomGhostCollisionWithGhost = new BottomCollisionEvent("Ghost1", false);
-                BottomGhostCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
-                BottomGhostCollisionWithGhost.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -2.0));
-                BottomGhostCollisionWithGhost.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
-                BottomGhostCollisionWithGhost.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
+                CollisionEvent BottomGhostCollisionWithGhost = BottomCollisionEvent.makeBottomBounceEvent("Ghost1", "Ghost1", false);
 
                 /**
                  * Event: Basketball bb collides with Basketball "bb" from the Right (Right side of bb hits bb): (Basketballs colliding with each other)
@@ -233,8 +238,8 @@ public class DummyGameObjectMaker {
                 Ghost1Jump.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
                 Ghost1Jump.addInputs(KeyCode.J);
                 Ghost1Jump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
-                Ghost1Jump.addActions(new SoundAction("coin"));
-                Ghost1Jump.addActions((new SpriteAction("mushroom.png")));
+                Ghost1Jump.addActions(new SoundAction("jump"));
+                Ghost1Jump.addActions((new SpriteAction("ghost.png")));
 
 
                 /**
@@ -254,7 +259,7 @@ public class DummyGameObjectMaker {
                 //flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
                 flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
                 flappyJump.addActions(new ChangeScoreAction(NumericAction.ModifyType.RELATIVE, 100.0));
-                flappyJump.addActions(new SoundAction("coin"));
+                flappyJump.addActions(new SoundAction("jump"));
 
                 /**
                  * Event: Press M to:
@@ -314,8 +319,8 @@ public class DummyGameObjectMaker {
                  */
                 Event levelOver = new Event();
                 levelOver.addInputs(KeyCode.SPACE);
-                levelOver.addActions(new ProgressionAction(true));
-                levelOver.addActions(new NextLevelAction(next));
+                //levelOver.addActions(new ProgressionAction(true));
+                //levelOver.addActions(new NextLevelAction(next));
 
                 /**
                  * Event: When flappy collides with Basketball on the RIGHT:
@@ -323,8 +328,8 @@ public class DummyGameObjectMaker {
                  */
                 RightCollisionEvent rce = new RightCollisionEvent("Basketball", false);
                 rce.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-                rce.addActions(new ProgressionAction(true));
-                rce.addActions(new NextLevelAction(next));
+//                rce.addActions(new ProgressionAction(true));
+//                rce.addActions(new NextLevelAction(next));
 
                 /**
                  * Event: Spawn a new Mushroom when you press I:
@@ -433,6 +438,8 @@ public class DummyGameObjectMaker {
                 level1.addEvent(BottomBBcollisionWithGhost);
                 level1.addEvent(flappyFallsEvent);
                 level1.addEvent(lifeKeyInputEvent);
+                level1.addEvent(BottomGhostCollisionWithFlappy);
+                level1.addEvent(BottomFlappyCollisionWithGhost);
 
         }
 
@@ -462,7 +469,8 @@ public class DummyGameObjectMaker {
                  */
                 //Give Flappy the needed components
                 Flappy.addComponent(new NameComponent("flappy"));
-                Flappy.addComponent(new SpriteComponent("#defaults#hero#dangling.gif"));
+                //Flappy.addComponent(new SpriteComponent("#defaults#hero#dangling.gif"));
+                Flappy.addComponent(new SpriteComponent("ryan.png"));
                 Flappy.addComponent(new XPositionComponent(200.0));
                 Flappy.addComponent(new YPositionComponent(50.0));
                 Flappy.addComponent(new ZPositionComponent(0.0));
@@ -478,8 +486,8 @@ public class DummyGameObjectMaker {
                 //Give flappy a ValueComponent that will limit the number of jumps he can perform. We will use this so that flappy can only double jump.
                 Component flappyJumpCounter = new ValueComponent(0.0);
                 Flappy.addComponent(flappyJumpCounter);
-                Flappy.addComponent(new NextLevelComponent(current));
-                Flappy.addComponent(new ProgressionComponent(false));
+                //Flappy.addComponent(new NextLevelComponent(2.0));
+                //Flappy.addComponent(new ProgressionComponent(false));
                 Flappy.addComponent(new AssociatedEntityComponent(gameObject));
                 Flappy.addComponent(new SoundComponent("mario_theme"));
 
@@ -578,6 +586,7 @@ public class DummyGameObjectMaker {
          */
         public void serializeObject(){
                 DataManager dm = new DataManager();
-                dm.saveGameData("game1", myGame);
+                dm.saveGameInfo("game1", "DimaFayyad", new GameCenterData("game1", "FUN with RYAN", "ryan.png", "DimaFayyad"));
+                dm.saveGameData("game1", "DimaFayyad", myGame);
         }
 }
