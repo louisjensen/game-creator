@@ -5,7 +5,6 @@ import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.component.AudioComponent;
 import engine.external.component.Component;
-import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import voogasalad.util.reflection.ReflectionException;
 
@@ -39,7 +38,12 @@ public class AudioSystem extends VoogaSystem {
     }
 
 
-    protected void run() throws ReflectionException {
+    /**
+     * Loops through all Entities with a SoundComponent, retrieves the corresponding sound file from database and
+     * generates/updates the AudioComponent for this Entity to store the MediaPlayer for playing the sound
+     * All MediaPlayers are cached in the System to reduce database and I/O accesses
+     */
+    protected void run(){
         for (Entity entity : this.getEntities()) {
             generateAudio(entity);
         }
