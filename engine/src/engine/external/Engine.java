@@ -49,7 +49,6 @@ public class Engine {
         myEvents = level.getEvents();
         myLevelHeight = level.getHeight();
         myLevelWidth = level.getWidth();
-        System.out.println("engine: levelHeight = "+myLevelHeight+" levelWidth = "+myLevelWidth);
         initSystemMap();
     }
 
