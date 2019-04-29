@@ -33,6 +33,7 @@ import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
 import ui.windows.AudioManager;
 import ui.windows.ImageManager;
+import ui.windows.LoadGameSelector;
 import voogasalad.util.reflection.Reflection;
 
 import java.io.File;
@@ -42,6 +43,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -220,23 +222,23 @@ public class MainGUI {
 
     @SuppressWarnings("unused")
     private void openGame() {
-        String authorName = "";
+        String authorName = "Carrie"; //TODO
         DataManager dataManager = new DataManager();
-        /*try {
-            List<String> gameNames = dataManager.loadUserGameNames(authorName); //TODO
-            myLoadedGame = (Game) dataManager.loadGameData(authorName, gameNames.get(0)); //TODO
-            //myGameData = null; //TODO
+        try {
+            List<String> gameNames = dataManager.loadUserGameNames(authorName);
+            System.out.println(gameNames);
+            LoadGameSelector selector = new LoadGameSelector(gameNames);
+            selector.showAndWait();
+
+            if(selector.getSelectedGame() != null) {
+                String selectedGameTitle = selector.getSelectedGame();
+                Game loadedGame = (Game) dataManager.loadGameData(selectedGameTitle, authorName);
+                GameCenterData loadedGameData = dataManager.loadGameInfo(selectedGameTitle, authorName);
+                MainGUI newWorkspace = new MainGUI(loadedGame, loadedGameData);
+                newWorkspace.launch();
+            }
         } catch (SQLException e) {
             ErrorBox error = new ErrorBox("Load", "Error loading from database");
-        }*/
-
-        GameTranslator translator = new GameTranslator(myObjectManager);
-        try {
-            Game exportableGame = translator.translate();
-            MainGUI newWorkspace = new MainGUI(exportableGame, myGameData);
-            newWorkspace.launch();
-        } catch (Exception e) {
-            //TODO
         }
     }
 
@@ -269,8 +271,10 @@ public class MainGUI {
         try {
             Game exportableGame = translator.translate();
             myDataManager = new DataManager();
-            myDataManager.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
-            myDataManager.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
+            //String authorname = myGameData.getAuthorName(); //TODO
+            String authorname = "Carrie";
+            myDataManager.saveGameData(myGameData.getTitle(), authorname, exportableGame);
+            myDataManager.saveGameInfo(myGameData.getTitle(), authorname, myGameData);
 
             saveFolderToDataBase(GENERAL_RESOURCES.getString("images_filepath"));
             saveFolderToDataBase(GENERAL_RESOURCES.getString("audio_filepath"));
