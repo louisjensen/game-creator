@@ -26,13 +26,15 @@ import javafx.stage.Stage;
 import runner.external.GameRunner;
 import voogasalad.util.reflection.Reflection;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Utilities {
     private static final String ERROR_MESSAGE = "error";
-    private static final String DEFAULT_IMAGE_LOCATION = "default_game";
+    private static final String DEFAULT_IMAGE_LOCATION = "center/data/game_information/images/default_game.png";
     private static final String INDIVIDUAL_BUTTON_SELECTOR = "button";
     private static final String BUTTON_LIST_SELECTOR = "buttons";
 
@@ -52,12 +54,12 @@ public class Utilities {
         }
     }
 
-    public static Pane getImagePane(DataManager manager, String imageLocation, double gameSize) {
+    public static Pane getImagePane(DataManager manager, String imageLocation, double gameSize) throws FileNotFoundException {
         ImageView gameImage;
         try {
             gameImage = new ImageView(new Image(manager.loadImage(imageLocation)));
         } catch (Exception e) { // if any exceptions come from this, it should just become a default image.
-            gameImage = new ImageView(new Image(manager.loadImage(DEFAULT_IMAGE_LOCATION)));
+            gameImage = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
         }
         gameImage.setPreserveRatio(true);
         gameImage.setFitWidth(gameSize);
