@@ -3,8 +3,8 @@ package runner.internal;
 import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.Level;
-import engine.external.component.NameComponent;
-import engine.external.component.TimerComponent;
+import engine.external.component.LivesComponent;
+import engine.external.component.ScoreComponent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -18,6 +18,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import runner.external.Game;
 import runner.internal.runnerSystems.*;
 import java.util.*;
 import java.util.function.Consumer;
@@ -51,6 +52,11 @@ public class LevelRunner {
     private AudioManager myAudioManager;
     private Image myBackground;
     private ImageView myImageViewBackgroud;
+    private Level myLevel;
+    private String myUsername;
+    private String myAuthorName;
+    private String myGameName;
+    private Game myGame;
 
     /**
      * Constructor for level runner
@@ -61,7 +67,14 @@ public class LevelRunner {
      * @param playNext - consumer to change levels
      * @param numLevels - total number of levels in the current game
      */
-    public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext, int numLevels, Image image){
+    public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext, int numLevels,
+                       Image image, Double score, Double lives, String authorName, String gameName,
+                       String username, Game game){
+        myLevel = level;
+        myUsername = username;
+        myGameName = gameName;
+        myAuthorName = authorName;
+        myGame = game;
         myLevelCount = numLevels;
         mySceneWidth = width;
         mySceneHeight = height;
@@ -69,6 +82,7 @@ public class LevelRunner {
         myEngine = new Engine(level);
         myHUD = new HeadsUpDisplay(width);
         myEntities = myEngine.updateState(myCurrentKeys);
+        if(score!=null && lives!=null)keepScoreAndLives(score, lives);
         myAudioManager = new AudioManager(5);
         myLevelChanger = playNext;
         myAnimation = new Timeline();
@@ -79,9 +93,21 @@ public class LevelRunner {
         myStage.show();
     }
 
+    private void keepScoreAndLives(Double score, Double lives) {
+        for(Entity entity : myEntities){
+            if (entity.hasComponents(ScoreComponent.class)){
+                ((ScoreComponent)entity.getComponent(ScoreComponent.class)).setValue(score);
+            }
+            if (entity.hasComponents(LivesComponent.class)){
+                ((LivesComponent)entity.getComponent(LivesComponent.class)).setValue(lives);
+            }
+        }
+    }
+
     private void initializeSystems() {
         SystemManager systems = new SystemManager(this, myGroup, myStage, myAnimation,
-                mySceneWidth, mySceneHeight, myLevelChanger, myScene, myHUD, myAudioManager, myLevelCount);
+                mySceneWidth, mySceneHeight, myLevelChanger, myScene, myHUD, myAudioManager, myLevelCount,
+                myAuthorName, myGameName, myUsername, myEngine, myLevel, myGame);
         mySystems = systems.getSystems();
     }
 
@@ -98,6 +124,9 @@ public class LevelRunner {
 
     private void buildStage(Stage stage) {
         myStage = stage;
+        myStage.setOnCloseRequest(windowEvent -> {
+            myAnimation.stop();
+        });
         myStage.setResizable(false);
         myGroup = new Group();
         myScene = new Scene(myGroup, mySceneWidth, mySceneHeight);
@@ -130,11 +159,6 @@ public class LevelRunner {
 
     private void step (double elapsedTime) {
         myEntities = myEngine.updateState(myCurrentKeys);
-        for (Entity entity : myEntities) {
-            if (entity.hasComponents(TimerComponent.class)) {
-                System.out.println("name: " + entity.getComponent(NameComponent.class).getValue() + " time: " + entity.getComponent(TimerComponent.class).getValue());
-            }
-        }
 
         updateGUI();
     }
