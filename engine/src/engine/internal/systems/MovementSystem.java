@@ -3,7 +3,12 @@ package engine.internal.systems;
 import engine.external.Entity;
 
 import engine.external.Engine;
-import engine.external.component.*;
+import engine.external.component.Component;
+import engine.external.component.XPositionComponent;
+import engine.external.component.YPositionComponent;
+import engine.external.component.XVelocityComponent;
+import engine.external.component.YVelocityComponent;
+import engine.external.component.DestroyComponent;
 
 import java.util.Collection;
 
@@ -15,7 +20,7 @@ import java.util.Collection;
  */
 public class MovementSystem extends VoogaSystem {
 
-    private final Double OFF_SCREEN_TOLERANCE_RATIO = 2.0;
+    private static final Double OFF_SCREEN_TOLERANCE_RATIO = 2.0;
     private Double myLevelHeight;
     private Double myLevelWidth;
 
@@ -60,17 +65,8 @@ public class MovementSystem extends VoogaSystem {
                     e.hasComponents(Y_ACCELERATION_COMPONENT_CLASS)?
                             (Double) getComponentValue(Y_ACCELERATION_COMPONENT_CLASS,e):0.0);
 
-            ((XPositionComponent)e.getComponent(X_POSITION_COMPONENT_CLASS)).setValue(x);
-            ((YPositionComponent)e.getComponent(Y_POSITION_COMPONENT_CLASS)).setValue(y);
-            if(e.hasComponents(X_VELOCITY_COMPONENT_CLASS)){
-                ((XVelocityComponent)e.getComponent(X_VELOCITY_COMPONENT_CLASS)).setValue(vX);
-            }
-            if(e.hasComponents(Y_VELOCITY_COMPONENT_CLASS)){
-                ((YVelocityComponent)e.getComponent(Y_VELOCITY_COMPONENT_CLASS)).setValue(vY);
-            }
-            if(XOutOfScope(x)||YOutOfScope(y)){
-                e.addComponent(new DestroyComponent(true));
-            }
+            updateEntityParam(x,y,vX,vY,e);
+
 //            if(e.getComponent(SpriteComponent.class).getValue().equals("flappy_bird.png")){
 //                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x pos = "+x+ " y pos = "+y);
 //                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x vel = "+vX+ " y vel = "+vY);
@@ -87,6 +83,24 @@ public class MovementSystem extends VoogaSystem {
         return velocity+acceleration;
     }
 
+    private void updateEntityParam(double x, double y, double vX, double vY, Entity e){
+        ((XPositionComponent)e.getComponent(X_POSITION_COMPONENT_CLASS)).setValue(x);
+        ((YPositionComponent)e.getComponent(Y_POSITION_COMPONENT_CLASS)).setValue(y);
+        if(e.hasComponents(X_VELOCITY_COMPONENT_CLASS)){
+            ((XVelocityComponent)e.getComponent(X_VELOCITY_COMPONENT_CLASS)).setValue(vX);
+        }
+        if(e.hasComponents(Y_VELOCITY_COMPONENT_CLASS)){
+            ((YVelocityComponent)e.getComponent(Y_VELOCITY_COMPONENT_CLASS)).setValue(vY);
+        }
+        checkEntityOffScreen(x,y,e);
+    }
+
+    private void checkEntityOffScreen(double x, double y, Entity e){
+        if(XOutOfScope(x)||YOutOfScope(y)){
+            e.addComponent(new DestroyComponent(true));
+        }
+    }
+
     private boolean XOutOfScope(double x){
         return Math.abs(x)>(myLevelWidth*OFF_SCREEN_TOLERANCE_RATIO);
     }
@@ -94,4 +108,5 @@ public class MovementSystem extends VoogaSystem {
     private boolean YOutOfScope(double y){
         return Math.abs(y)>(myLevelHeight*OFF_SCREEN_TOLERANCE_RATIO);
     }
+
 }
