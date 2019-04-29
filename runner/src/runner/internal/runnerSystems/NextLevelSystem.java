@@ -9,6 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import runner.internal.GameBeatenScreen;
+import runner.internal.HeadsUpDisplay;
 import runner.internal.LevelRunner;
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -25,6 +26,7 @@ public class NextLevelSystem extends RunnerSystem {
     private int myHeight;
     private Consumer myLevelChanger;
     private int myLevelCount;
+    private HeadsUpDisplay myHUD;
 
     /**
      * Constructor for the progression system
@@ -40,7 +42,7 @@ public class NextLevelSystem extends RunnerSystem {
      */
     public NextLevelSystem(Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner,
                           Group group, Stage stage, Animation animation, int width, int height,
-                          Consumer consumer, int numLevels) {
+                          Consumer consumer, int numLevels, HeadsUpDisplay hud) {
         super(requiredComponents, levelRunner);
         myGroup = group;
         myStage = stage;
@@ -49,6 +51,7 @@ public class NextLevelSystem extends RunnerSystem {
         myHeight = height;
         myLevelChanger = consumer;
         myLevelCount = numLevels;
+        myHUD = hud;
     }
 
     /**
@@ -79,6 +82,7 @@ public class NextLevelSystem extends RunnerSystem {
         myGroup.getChildren().clear();
         myAnimation.stop();
         myStage.setScene(new Scene(new Group(), myWidth, myHeight));
+        myHUD.updateLevel(levelToProgressTo);
         myLevelChanger.accept(levelToProgressTo);
     }
 }
