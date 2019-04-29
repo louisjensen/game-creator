@@ -205,7 +205,7 @@ abstract public class AssetManager extends Stage {
         }
     }
 
-    public void addToTree(List<String> info, TreeNode root, File file){
+    private void addToTree(List<String> info, TreeNode root, File file){
         if(info.size() == 1){
             root.addChild(file);
             return;
