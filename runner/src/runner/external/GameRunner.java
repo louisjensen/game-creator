@@ -44,12 +44,15 @@ public class GameRunner {
     }
 
     private Game loadGameObject(String gameName, String authorName){
+
+        /**
+         * MAKE SURE TO KEEP THESE COMMENTED SO YOU DON'T OVERWRITE YOUR GAME
+         */
 //        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
 //        Game gameMade = dm2.getGame(gameName);
-        myDataManager = new DataManager();
+        DataManager dm = new DataManager();
 //        dm.saveGameData(gameName, authorName,gameMade);
-//        System.out.println("Serialization complete");
-
+        System.out.println("Serialization complete");
         try {
             return (Game) myDataManager.loadGameData(gameName, authorName);
         } catch (SQLException e) {
