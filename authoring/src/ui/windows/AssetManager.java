@@ -69,6 +69,7 @@ abstract public class AssetManager extends Stage {
     private static final int BUTTON_SPACING = 20;
     private String mySavingPrefix;
     protected static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
+    private boolean isFirstOpening;
 
     /**
      * This is a constructor that forces the coder to input info for creating the window
@@ -80,6 +81,7 @@ abstract public class AssetManager extends Stage {
         myAssetFolderPath = assetFolderPath;
         myTitleKey = titleKey;
         myExtensionKey = extensionKey;
+        isFirstOpening = true;
         mySelectedAssetName = "";
         mySavingPrefix = "";
         initializeVariables();
@@ -91,10 +93,13 @@ abstract public class AssetManager extends Stage {
     }
 
     private void handleOnShown() {
-        fillExtensionSet();
-        populateTabs();
-        createButtonPane();
-        setUpOuterPanes();
+        if(isFirstOpening){
+            fillExtensionSet();
+            populateTabs();
+            createButtonPane();
+            isFirstOpening = false;
+            setUpOuterPanes();
+        }
     }
 
     private void setUpOuterPanes() {
