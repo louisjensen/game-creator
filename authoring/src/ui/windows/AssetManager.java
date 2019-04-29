@@ -100,6 +100,9 @@ abstract public class AssetManager extends Stage {
             isFirstOpening = false;
             setUpOuterPanes();
         }
+        else{
+            populateTabs();
+        }
     }
 
     private void setUpOuterPanes() {
@@ -280,7 +283,6 @@ abstract public class AssetManager extends Stage {
             String prefix = SEPARATOR_RESOURCES.getString("userUploaded") + gameName + authorName;
             File dest = new File(myAssetFolderPath + prefix + selectedFile.getName()); //any location
             Files.copy(selectedFile.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("Asset saved");
         } catch (Exception e) {
             e.printStackTrace();
             String[] text = RESOURCES.getString(IO_ERROR).split(",");
