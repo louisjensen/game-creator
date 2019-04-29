@@ -95,7 +95,6 @@ public class MainGUI {
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
         myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
         myObjectManager.setGameCenterData(myGameData);
-        createMainGUI(false);
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
@@ -106,7 +105,8 @@ public class MainGUI {
         loadDatabaseGame();
     }
 
-    public void launch() {
+    public void launch(boolean load) {
+        createMainGUI(load);
         myStage.setTitle(STAGE_TITLE);
         myStage.setScene(myScene);
         myStage.setMinHeight(STAGE_MIN_HEIGHT);
@@ -217,7 +217,7 @@ public class MainGUI {
     @SuppressWarnings("unused")
     private void newGame() {
         MainGUI newWorkspace = new MainGUI();
-        newWorkspace.launch();
+        newWorkspace.launch(false);
     }
 
     @SuppressWarnings("unused")
@@ -234,7 +234,7 @@ public class MainGUI {
                 Game loadedGame = (Game) dataManager.loadGameData(selectedGameTitle, authorName);
                 GameCenterData loadedGameData = dataManager.loadGameInfo(selectedGameTitle, authorName);
                 MainGUI newWorkspace = new MainGUI(loadedGame, loadedGameData);
-                newWorkspace.launch();
+                newWorkspace.launch(true);
             }
         } catch (SQLException e) {
             ErrorBox error = new ErrorBox("Load", "Error loading from database");
