@@ -68,9 +68,9 @@ public class Utilities {
         return imagePane;
     }
 
-    public static void launchGameRunner(String gameName, String authorName) {
+    public static void launchGameRunner(String gameName, String authorName, String username) {
         try {
-            new GameRunner(gameName, authorName);
+            new GameRunner(gameName, authorName, username);
         } catch (FileNotFoundException e) {
             // todo: print error message
         }

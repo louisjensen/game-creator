@@ -39,7 +39,7 @@ public class GamePage extends Popup {
     }
 
     public void playGameButton(GameCenterData data) {
-        Utilities.launchGameRunner(data.getTitle(), data.getAuthorName());
+        Utilities.launchGameRunner(data.getTitle(), data.getAuthorName(), myCurrentUser);
     }
 
     public void rateGameButton(GameCenterData data) {
