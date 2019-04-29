@@ -254,7 +254,7 @@ public class DummyGameObjectMaker {
                 //flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
                 flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
                 flappyJump.addActions(new ChangeScoreAction(NumericAction.ModifyType.RELATIVE, 100.0));
-                //flappyJump.addActions(new SoundAction("bach_chaconne"));
+                flappyJump.addActions(new SoundAction("coin"));
 
                 /**
                  * Event: Press M to:
@@ -462,7 +462,7 @@ public class DummyGameObjectMaker {
                  */
                 //Give Flappy the needed components
                 Flappy.addComponent(new NameComponent("flappy"));
-                Flappy.addComponent(new SpriteComponent("flappy_bird"));
+                Flappy.addComponent(new SpriteComponent("#defaults#hero#dangling.gif"));
                 Flappy.addComponent(new XPositionComponent(200.0));
                 Flappy.addComponent(new YPositionComponent(50.0));
                 Flappy.addComponent(new ZPositionComponent(0.0));
