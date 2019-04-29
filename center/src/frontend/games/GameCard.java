@@ -121,7 +121,12 @@ public class GameCard {
         imageDescription.setWrappingWidth(DISPLAY_WIDTH - WRAP_OFFSET);
         contentPane.setCenter(imageDescription);
         try {
-            Text ratingText = new Text(Utilities.getValue(myLanguageBundle, "ratingStartText") + myManager.getAverageRating(myGame.getTitle()) + Utilities.getValue(myLanguageBundle, "ratingEndText"));
+            Text ratingText;
+            if(myManager.getAverageRating(myGame.getTitle()) == 0) {
+                ratingText = new Text (Utilities.getValue(myLanguageBundle, "ratingDefaultText"));
+            } else {
+                ratingText = new Text(Utilities.getValue(myLanguageBundle, "ratingStartText") + myManager.getAverageRating(myGame.getTitle()) + Utilities.getValue(myLanguageBundle, "ratingEndText"));
+            }
             ratingText.getStyleClass().add(BODY_SELECTOR);
             ratingText.getStyleClass().add(TEXT_SELECTOR + myIndex);
             BorderPane.setAlignment(ratingText, Pos.CENTER);
