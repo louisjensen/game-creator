@@ -50,7 +50,7 @@ public class GameRunner {
          */
 //        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
 //        Game gameMade = dm2.getGame(gameName);
-        DataManager dm = new DataManager();
+        myDataManager = new DataManager();
 //        dm.saveGameData(gameName, authorName,gameMade);
         System.out.println("Serialization complete");
         try {
