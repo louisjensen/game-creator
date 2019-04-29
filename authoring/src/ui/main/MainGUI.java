@@ -43,7 +43,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -351,7 +350,7 @@ public class MainGUI {
     }
 
     private void loadAllAssets(){
-        String prefix = myGameData.getTitle() + myGameData.getAuthorName();
+        String prefix = SAVING_ASSETS_RESOURCES.getString("userUploaded") + myGameData.getTitle() + myGameData.getAuthorName();
         try {
             Map<String, InputStream> defaultImages = myDataManager.loadAllImages(SAVING_ASSETS_RESOURCES.getString("defaults"));
             Map<String, InputStream> userUploadedImages = myDataManager.loadAllImages(prefix);
