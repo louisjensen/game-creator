@@ -202,7 +202,7 @@ public class MainGUI {
                 try {
                     this.getClass().getDeclaredMethod((String) bundle.getObject(option)).invoke(this);
                 } catch (Exception e) {
-                    // catch FIX
+                    e.printStackTrace();
                 }
             }));
         }
@@ -237,6 +237,7 @@ public class MainGUI {
                 newWorkspace.launch(true);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             ErrorBox error = new ErrorBox("Load", "Error loading from database");
         }
     }
