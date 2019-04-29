@@ -478,8 +478,8 @@ public class DummyGameObjectMaker {
                 //Give flappy a ValueComponent that will limit the number of jumps he can perform. We will use this so that flappy can only double jump.
                 Component flappyJumpCounter = new ValueComponent(0.0);
                 Flappy.addComponent(flappyJumpCounter);
-                Flappy.addComponent(new NextLevelComponent(current));
-                Flappy.addComponent(new ProgressionComponent(false));
+                //Flappy.addComponent(new NextLevelComponent(2.0));
+                //Flappy.addComponent(new ProgressionComponent(false));
                 Flappy.addComponent(new AssociatedEntityComponent(gameObject));
                 Flappy.addComponent(new SoundComponent("mario_theme"));
 
