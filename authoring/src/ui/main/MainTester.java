@@ -16,7 +16,7 @@ public class MainTester extends Application {
     @Override
     public void start(Stage stage) {
         MainGUI testGUI = new MainGUI();
-        testGUI.launch();
+        testGUI.launch(false);
     }
 
     public static void main(String[] args){

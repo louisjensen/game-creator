@@ -95,7 +95,6 @@ public class MainGUI {
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
         myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
         myObjectManager.setGameCenterData(myGameData);
-        createMainGUI(false);
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
@@ -106,7 +105,8 @@ public class MainGUI {
         loadDatabaseGame();
     }
 
-    public void launch() {
+    public void launch(boolean load) {
+        createMainGUI(load);
         myStage.setTitle(STAGE_TITLE);
         myStage.setScene(myScene);
         myStage.setMinHeight(STAGE_MIN_HEIGHT);
@@ -217,16 +217,15 @@ public class MainGUI {
     @SuppressWarnings("unused")
     private void newGame() {
         MainGUI newWorkspace = new MainGUI();
-        newWorkspace.launch();
+        newWorkspace.launch(false);
     }
 
     @SuppressWarnings("unused")
     private void openGame() {
-        String authorName = "Carrie"; //TODO
+        String authorName = "harry"; //TODO
         DataManager dataManager = new DataManager();
         try {
             List<String> gameNames = dataManager.loadUserGameNames(authorName);
-            System.out.println(gameNames);
             LoadGameSelector selector = new LoadGameSelector(gameNames);
             selector.showAndWait();
 
@@ -235,7 +234,7 @@ public class MainGUI {
                 Game loadedGame = (Game) dataManager.loadGameData(selectedGameTitle, authorName);
                 GameCenterData loadedGameData = dataManager.loadGameInfo(selectedGameTitle, authorName);
                 MainGUI newWorkspace = new MainGUI(loadedGame, loadedGameData);
-                newWorkspace.launch();
+                newWorkspace.launch(true);
             }
         } catch (SQLException e) {
             ErrorBox error = new ErrorBox("Load", "Error loading from database");
@@ -243,25 +242,16 @@ public class MainGUI {
     }
 
     private void loadDatabaseGame() {
-        // Populate ObjectManager (Translate Entities/Levels)
-        // Create labels for Entities, Groups, Levels in LabelManager
-        // Populate EventsMap
         GameTranslator translator = new GameTranslator(myObjectManager);
         myObjectManager.removeAllLevels();
-
         try {
             translator.populateObjectManager(myLoadedGame, myCurrentLevel);
         } catch (UIException e) {
             ErrorBox error = new ErrorBox("Load Error", e.getMessage());
             error.display();
         }
-
-        // Set selectedLevel to first level
         myCurrentLevel.setValue(myObjectManager.getLevels().get(0));
-        // Assign selectedEntity to something in the level, triggers Properties Panes
         mySelectedEntity.setValue(myObjectManager.getLevels().get(0).getEntities().get(0));
-        // Populate Levels Pane
-        // Create UI panes (Viewers, UserCreatedTypePane)
         createMainGUI(true);
     }
 
@@ -272,7 +262,7 @@ public class MainGUI {
             Game exportableGame = translator.translate();
             myDataManager = new DataManager();
             //String authorname = myGameData.getAuthorName(); //TODO
-            String authorname = "Carrie";
+            String authorname = "harry";
             myDataManager.saveGameData(myGameData.getTitle(), authorname, exportableGame);
             myDataManager.saveGameInfo(myGameData.getTitle(), authorname, myGameData);
 
@@ -333,7 +323,6 @@ public class MainGUI {
     }
 
     private void defaultGameData() {
-        myGameData.setFolderName("NewGame");
         myGameData.setImageLocation("");
         myGameData.setTitle("New Game");
         myGameData.setDescription("A fun new game");

@@ -43,7 +43,7 @@ public class LoadGameSelector extends Stage {
     }
 
     @SuppressWarnings("unused")
-    private void openGame() {
+    private void open() {
         if (!myListView.getSelectionModel().getSelectedItems().isEmpty()) {
             mySelectedGame = myListView.getSelectionModel().getSelectedItems().get(0);
             this.close();
