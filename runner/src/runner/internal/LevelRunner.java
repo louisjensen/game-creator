@@ -3,6 +3,8 @@ package runner.internal;
 import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.Level;
+import engine.external.component.LivesComponent;
+import engine.external.component.ScoreComponent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -59,7 +61,8 @@ public class LevelRunner {
      * @param playNext - consumer to change levels
      * @param numLevels - total number of levels in the current game
      */
-    public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext, int numLevels, Image image){
+    public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext, int numLevels,
+                       Image image, Double score, Double lives){
         myLevelCount = numLevels;
         mySceneWidth = width;
         mySceneHeight = height;
@@ -67,6 +70,7 @@ public class LevelRunner {
         myEngine = new Engine(level);
         myHUD = new HeadsUpDisplay(width);
         myEntities = myEngine.updateState(myCurrentKeys);
+        if(score!=null && lives!=null)keepScoreAndLives(score, lives);
         myAudioManager = new AudioManager(5);
         myLevelChanger = playNext;
         myAnimation = new Timeline();
@@ -75,6 +79,17 @@ public class LevelRunner {
         startAnimation();
         addButtonsAndHUD();
         myStage.show();
+    }
+
+    private void keepScoreAndLives(Double score, Double lives) {
+        for(Entity entity : myEntities){
+            if (entity.hasComponents(ScoreComponent.class)){
+                ((ScoreComponent)entity.getComponent(ScoreComponent.class)).setValue(score);
+            }
+            if (entity.hasComponents(LivesComponent.class)){
+                ((LivesComponent)entity.getComponent(LivesComponent.class)).setValue(lives);
+            }
+        }
     }
 
     private void initializeSystems() {
@@ -96,6 +111,9 @@ public class LevelRunner {
 
     private void buildStage(Stage stage) {
         myStage = stage;
+        myStage.setOnCloseRequest(windowEvent -> {
+            myAnimation.stop();
+        });
         myStage.setResizable(false);
         myGroup = new Group();
         myScene = new Scene(myGroup, mySceneWidth, mySceneHeight);
