@@ -107,6 +107,7 @@ public class DefaultTypeXMLReaderFactory {
     private void makeAndAddComponent(Entity resultEntity, Map.Entry<String, String> entry) {
         try {
             Class componentClass = Class.forName(PATH_RESOURCES.getString("component_folder_filepath") + entry.getKey());
+            System.out.println(componentClass.toString());
             Constructor[] constructors = componentClass.getConstructors();
             Class constructorParamClassType = constructors[0].getParameterTypes()[0];
             Constructor constructor = componentClass.getConstructor(constructorParamClassType);
@@ -126,6 +127,7 @@ public class DefaultTypeXMLReaderFactory {
             resultEntity.addComponent(component);
         } catch (Exception e) {
             makeAndDisplayError("ReflectionError");
+
         }
     }
 
