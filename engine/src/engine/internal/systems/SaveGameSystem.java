@@ -45,7 +45,7 @@ public class SaveGameSystem extends VoogaSystem {
      * @return the same Entities that have been passed in with Components cleaned up
      */
     public Collection<Entity> getSavedEntities(Collection<Entity> entities, Collection<Class<? extends Component>> componentClazz) {
-        this.myComponentsToRemove = componentClazz;
+        this.myComponentsToRemove = new ArrayList<>(componentClazz);
         this.update(entities,new ArrayList<>());
         return this.getEntities();
     }

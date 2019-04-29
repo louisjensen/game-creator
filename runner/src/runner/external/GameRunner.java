@@ -49,6 +49,7 @@ public class GameRunner {
         myDataManager = new DataManager();
 //        dm.saveGameData(gameName, authorName,gameMade);
 //        System.out.println("Serialization complete");
+
         try {
             return (Game) myDataManager.loadGameData(gameName, authorName);
         } catch (SQLException e) {
