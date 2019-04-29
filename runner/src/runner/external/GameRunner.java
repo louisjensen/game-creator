@@ -30,9 +30,9 @@ public class GameRunner {
      * @param authorName - name of the game's author
      * @throws FileNotFoundException if game is not found
      */
-    public GameRunner(String gameName) throws FileNotFoundException {
+    public GameRunner(String gameName, String authorName) throws FileNotFoundException {
         //TODO Change defualt author to actual author
-        String authorName = "DefaultAuthor";
+        //String authorName = "DefaultAuthor";
         myGame = loadGameObject(gameName, authorName);
         myGameName = gameName;
         myAuthorName = authorName;
