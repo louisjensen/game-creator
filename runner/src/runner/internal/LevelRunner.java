@@ -159,6 +159,7 @@ public class LevelRunner {
 
     private void step (double elapsedTime) {
         myEntities = myEngine.updateState(myCurrentKeys);
+
         updateGUI();
     }
 
