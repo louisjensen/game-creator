@@ -65,6 +65,7 @@ public class MainGUI {
     private ObjectProperty<Propertable> mySelectedEntity;
     private ObjectProperty<Propertable> myCurrentLevel;
     private Scene myScene;
+    private String myAuthorName = "harry";
 
     private static final double STAGE_MIN_HEIGHT = 600;
     private static final double PROP_PANE_HEIGHT = 210;
@@ -222,17 +223,16 @@ public class MainGUI {
 
     @SuppressWarnings("unused")
     private void openGame() {
-        String authorName = "harry"; //TODO
         DataManager dataManager = new DataManager();
         try {
-            List<String> gameNames = dataManager.loadUserGameNames(authorName);
+            List<String> gameNames = dataManager.loadUserGameNames(myAuthorName);
             LoadGameSelector selector = new LoadGameSelector(gameNames);
             selector.showAndWait();
 
             if(selector.getSelectedGame() != null) {
                 String selectedGameTitle = selector.getSelectedGame();
-                Game loadedGame = (Game) dataManager.loadGameData(selectedGameTitle, authorName);
-                GameCenterData loadedGameData = dataManager.loadGameInfo(selectedGameTitle, authorName);
+                Game loadedGame = (Game) dataManager.loadGameData(selectedGameTitle, myAuthorName);
+                GameCenterData loadedGameData = dataManager.loadGameInfo(selectedGameTitle, myAuthorName);
                 MainGUI newWorkspace = new MainGUI(loadedGame, loadedGameData);
                 newWorkspace.launch(true);
             }
@@ -261,10 +261,8 @@ public class MainGUI {
         try {
             Game exportableGame = translator.translate();
             myDataManager = new DataManager();
-            //String authorname = myGameData.getAuthorName(); //TODO
-            String authorname = "harry";
-            myDataManager.saveGameData(myGameData.getTitle(), authorname, exportableGame);
-            myDataManager.saveGameInfo(myGameData.getTitle(), authorname, myGameData);
+            myDataManager.saveGameData(myGameData.getTitle(), myAuthorName, exportableGame);
+            myDataManager.saveGameInfo(myGameData.getTitle(), myAuthorName, myGameData);
 
             saveFolderToDataBase(GENERAL_RESOURCES.getString("images_filepath"));
             saveFolderToDataBase(GENERAL_RESOURCES.getString("audio_filepath"));
@@ -326,10 +324,8 @@ public class MainGUI {
         myGameData.setImageLocation("");
         myGameData.setTitle("New Game");
         myGameData.setDescription("A fun new game");
-        myGameData.setAuthorName("Carrie");
+        myGameData.setAuthorName(myAuthorName);
     }
-
-
 
     private void saveFolderToDataBase(String outerDirectoryPath){
         File outerDirectory = new File(outerDirectoryPath);

@@ -158,10 +158,10 @@ public class GameTranslator {
     }
 
     public void populateObjectManager(Game game, ObjectProperty<Propertable> currentLevel) throws UIException {
-//        for (Entity type : game.getUserCreatedTypes().keySet()) {
-//            AuthoringEntity newType = new AuthoringEntity(type, myObjectManager);
-//            myObjectManager.addEntityType(newType, game.getUserCreatedTypes().get(type));
-//        }
+        for (Entity type : game.getUserCreatedTypes().keySet()) {
+            AuthoringEntity newType = new AuthoringEntity(type, myObjectManager);
+            myObjectManager.addEntityType(newType, game.getUserCreatedTypes().get(type));
+        }
         for (Level level : game.getLevels()) {
             AuthoringLevel newLevel = new AuthoringLevel(level.getLabel(), myObjectManager);
             newLevel.getPropertyMap().put(LevelField.HEIGHT, String.valueOf(level.getHeight()));
