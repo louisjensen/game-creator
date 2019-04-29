@@ -222,11 +222,10 @@ public class MainGUI {
 
     @SuppressWarnings("unused")
     private void openGame() {
-        String authorName = "Carrie"; //TODO
+        String authorName = "harry"; //TODO
         DataManager dataManager = new DataManager();
         try {
             List<String> gameNames = dataManager.loadUserGameNames(authorName);
-            System.out.println(gameNames);
             LoadGameSelector selector = new LoadGameSelector(gameNames);
             selector.showAndWait();
 
@@ -243,25 +242,16 @@ public class MainGUI {
     }
 
     private void loadDatabaseGame() {
-        // Populate ObjectManager (Translate Entities/Levels)
-        // Create labels for Entities, Groups, Levels in LabelManager
-        // Populate EventsMap
         GameTranslator translator = new GameTranslator(myObjectManager);
         myObjectManager.removeAllLevels();
-
         try {
             translator.populateObjectManager(myLoadedGame, myCurrentLevel);
         } catch (UIException e) {
             ErrorBox error = new ErrorBox("Load Error", e.getMessage());
             error.display();
         }
-
-        // Set selectedLevel to first level
         myCurrentLevel.setValue(myObjectManager.getLevels().get(0));
-        // Assign selectedEntity to something in the level, triggers Properties Panes
         mySelectedEntity.setValue(myObjectManager.getLevels().get(0).getEntities().get(0));
-        // Populate Levels Pane
-        // Create UI panes (Viewers, UserCreatedTypePane)
         createMainGUI(true);
     }
 
@@ -272,7 +262,7 @@ public class MainGUI {
             Game exportableGame = translator.translate();
             myDataManager = new DataManager();
             //String authorname = myGameData.getAuthorName(); //TODO
-            String authorname = "Carrie";
+            String authorname = "harry";
             myDataManager.saveGameData(myGameData.getTitle(), authorname, exportableGame);
             myDataManager.saveGameInfo(myGameData.getTitle(), authorname, myGameData);
 
@@ -333,7 +323,6 @@ public class MainGUI {
     }
 
     private void defaultGameData() {
-        myGameData.setFolderName("NewGame");
         myGameData.setImageLocation("");
         myGameData.setTitle("New Game");
         myGameData.setDescription("A fun new game");
