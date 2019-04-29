@@ -2,32 +2,7 @@ package engine.internal.systems;
 
 import engine.external.Entity;
 import engine.external.Engine;
-import engine.external.component.Component;
-import engine.external.component.XPositionComponent;
-import engine.external.component.YPositionComponent;
-import engine.external.component.XVelocityComponent;
-import engine.external.component.YVelocityComponent;
-import engine.external.component.XAccelerationComponent;
-import engine.external.component.YAccelerationComponent;
-import engine.external.component.BottomCollidedComponent;
-import engine.external.component.TopCollidedComponent;
-import engine.external.component.RightCollidedComponent;
-import engine.external.component.LeftCollidedComponent;
-import engine.external.component.AnyCollidedComponent;
-import engine.external.component.CollisionComponent;
-import engine.external.component.DestroyComponent;
-import engine.external.component.HealthComponent;
-import engine.external.component.ImageViewComponent;
-import engine.external.component.OpacityComponent;
-import engine.external.component.NameComponent;
-import engine.external.component.WidthComponent;
-import engine.external.component.HeightComponent;
-import engine.external.component.AudioComponent;
-import engine.external.component.SoundComponent;
-import engine.external.component.SpriteComponent;
-import engine.external.component.SpawnEntityComponent;
-import engine.external.component.TimerComponent;
-import engine.external.component.PlayAudioComponent;
+import engine.external.component.*;
 
 import javafx.scene.input.KeyCode;
 import voogasalad.util.reflection.Reflection;
@@ -68,6 +43,8 @@ public abstract class VoogaSystem {
     static final Class<? extends Component> SPAWN_ENTITY_COMPONENT_CLASS = SpawnEntityComponent.class;
     static final Class<? extends Component> TIMER_COMPONENT_CLASS = TimerComponent.class;
     static final Class<? extends Component> PLAY_AUDIO_COMPONENT_CLASS = PlayAudioComponent.class;
+    static final Class<? extends Component> LIVES_COMPONENT_CLASS = LivesComponent.class;
+    static final Class<? extends Component> SCORE_COMPONENT_CLASS = ScoreComponent.class;
 
     static final String GET_OLD_VALUE = "getOldValue";
 
