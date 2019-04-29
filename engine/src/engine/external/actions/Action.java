@@ -2,6 +2,7 @@ package engine.external.actions;
 
 import engine.external.Entity;
 import engine.external.component.Component;
+import engine.external.component.NameComponent;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
@@ -20,12 +21,12 @@ import java.util.function.Consumer;
 public abstract class Action<T> {
 
     private Consumer<Entity> myAction;
-    private Class<? extends Component<T>> myComponentClass;
+    protected Class<? extends Component<T>> myComponentClass;
 
 
     public void checkComponents(Entity entity) {
         if (!entity.hasComponents(myComponentClass)) {
-            System.out.println("Action adding missing component");
+            System.out.println("Action adding missing component "+myComponentClass.toString()+" for "+entity.getComponent(NameComponent.class).getValue());
             try {
                 entity.addComponent(myComponentClass.getConstructor().newInstance());
             } catch (Exception e) {

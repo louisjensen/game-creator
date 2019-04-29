@@ -19,8 +19,6 @@ import java.util.function.Consumer;
 public abstract class NumericAction extends Action<Double> {
     private ModifyType myModifier;
     private Double myArgument;
-
-    private Class<? extends Component<Double>> myComponentClass;
     private static final String COMPONENT = "Component";
 
     /**

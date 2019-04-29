@@ -33,6 +33,7 @@ public abstract class VoogaSystem {
     protected final Class<? extends Component> DESTROY_COMPONENT_CLASS = DestroyComponent.class;
     protected final Class<? extends Component> HEALTH_COMPONENT_CLASS = HealthComponent.class;
     protected final Class<? extends Component> IMAGEVIEW_COMPONENT_CLASS = ImageViewComponent.class;
+    protected final Class<? extends Component> OPACITY_COMPONENT_CLASS = OpacityComponent.class;
     protected final Class<? extends Component> NAME_COMPONENT_CLASS = NameComponent.class;
     protected final Class<? extends Component> WIDTH_COMPONENT_CLASS = WidthComponent.class;
     protected final Class<? extends Component> HEIGHT_COMPONENT_CLASS = HeightComponent.class;
