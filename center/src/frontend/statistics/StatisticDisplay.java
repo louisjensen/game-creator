@@ -71,7 +71,7 @@ public class StatisticDisplay {
             Text username = new Text(score.getUserName());
             username.getStyleClass().add(BODY_SELECTOR);
             scores.add(username, 1, i);
-            Text scoreValue = new Text("" + score.getScore());
+            Text scoreValue = new Text("" + Math.round(score.getScore()));
             scoreValue.getStyleClass().add(BODY_SELECTOR);
             scores.add(scoreValue, 2, i);
             i++;
