@@ -3,16 +3,10 @@ package engine.internal.systems;
 import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.component.Component;
-import engine.external.component.DestroyComponent;
-import voogasalad.util.reflection.Reflection;
-import voogasalad.util.reflection.ReflectionException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.ResourceBundle;
 
-import static engine.external.Engine.COMPONENTS_PACKAGE_PATH;
 
 /**
  * @author Hsingchih Tang

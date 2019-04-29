@@ -19,6 +19,13 @@ public class MovementSystem extends VoogaSystem {
     private Double myLevelHeight;
     private Double myLevelWidth;
 
+    /**
+     * Accepts a reference to the Engine in charge of all Systems in current game, and a Collection of Component classes
+     * that this System would require from an Entity in order to interact with its relevant Components
+     *
+     * @param requiredComponents collection of Component classes required for an Entity to be processed by this System
+     * @param engine             the main Engine which initializes all Systems for a game and makes update() calls on each game loop
+     */
     public MovementSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         super(requiredComponents, engine);
         myLevelHeight = myEngine.getRoomHeight();
