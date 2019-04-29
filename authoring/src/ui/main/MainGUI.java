@@ -270,7 +270,6 @@ public class MainGUI {
 
             DatabaseEngine.getInstance().open();
         } catch (UIException e) {
-            e.printStackTrace();
             ErrorBox errorBox = new ErrorBox("Save Error", e.getMessage());
             errorBox.showAndWait();
         }

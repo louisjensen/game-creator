@@ -10,6 +10,7 @@ import engine.external.component.LivesComponent;
 import engine.external.component.NameComponent;
 import engine.external.component.OpacityComponent;
 import engine.external.component.ScoreComponent;
+import engine.external.component.TimerComponent;
 import engine.external.conditions.Condition;
 import engine.external.conditions.StringEqualToCondition;
 import engine.external.events.CollisionEvent;
@@ -126,6 +127,7 @@ public class GameTranslator {
                     basisEntity.addComponent(new ValueComponent(0.0));
             }*/
         }
+        basisEntity.addComponent(new TimerComponent());
     }
 
     private void addComponent(EntityField field, Entity basisEntity, AuthoringEntity authEntity) {
