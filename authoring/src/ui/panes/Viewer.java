@@ -26,11 +26,13 @@ import ui.Propertable;
 import ui.Utility;
 import ui.manager.ObjectManager;
 
+import java.awt.*;
 import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -174,18 +176,14 @@ public class Viewer extends ScrollPane {
                 imageWithEntity = Utility.createImageWithEntity(authoringEntity);
                 addImage(imageWithEntity);
             }
-            authoringEntity.getPropertyMap().put(EntityField.X, "" + snapToGrid(dragEvent.getX(), imageWithEntity));
-            authoringEntity.getPropertyMap().put(EntityField.Y, "" + snapToGrid(dragEvent.getY(), imageWithEntity));
+            Image image = imageWithEntity.getImage();
+            authoringEntity.getPropertyMap().put(EntityField.X, "" + snapToGrid(dragEvent.getX() - image.getWidth()/2));
+            authoringEntity.getPropertyMap().put(EntityField.Y, "" + snapToGrid(dragEvent.getY() - image.getHeight()/2));
             mySelectedEntityProperty.setValue(authoringEntity);
         });
     }
 
-    /**
-     * Snaps the point to the closest gridline
-     * @param value int to be snapped
-     * @return int that is snapped
-     */
-    private double snapToGrid(double value, ImageWithEntity image){
+    private double snapToGrid(double value){
         double valueRemainder = value % CELL_SIZE;
         double result;
         if(valueRemainder >= CELL_SIZE/2){
@@ -196,6 +194,7 @@ public class Viewer extends ScrollPane {
         }
         return result;
     }
+
 
     private void addImage(ImageWithEntity imageView){
         applyLeftClickHandler(imageView);
