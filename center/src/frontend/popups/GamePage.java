@@ -57,7 +57,7 @@ public class GamePage extends Popup {
         BorderPane contentPane = new BorderPane();
         Pane gamePreview = null;
         try {
-            gamePreview = Utilities.getImagePane(myManager, myData.getImageLocation(), IMAGE_SIZE, 200);
+            gamePreview = Utilities.getImagePane(myManager, myData.getImageLocation(), IMAGE_SIZE, MAX_HEIGHT);
         } catch (FileNotFoundException e) {
             // do nothing
         }
@@ -67,7 +67,7 @@ public class GamePage extends Popup {
         body.getStyleClass().add(BODY_SELECTOR);
         body.setWrappingWidth(POPUP_WIDTH - WRAP_OFFSET);
         contentPane.setCenter(body);
-        addRatings(contentPane);
+        addRatingsAndStatistics(contentPane);
         ScrollPane scroller = new ScrollPane(contentPane);
         scroller.getStylesheets().add("center.css");
         scroller.getStyleClass().add(SCROLLER_SELECTOR);
@@ -75,16 +75,32 @@ public class GamePage extends Popup {
         myDisplay.setCenter(scroller);
     }
 
-    private void addRatings(BorderPane contentPane) {
-        BorderPane ratingsPane = new BorderPane();
-        Text title = new Text(myData.getTitle() + Utilities.getValue(myLanguageBundle, "ratingsTitle"));
+    private void addRatingsAndStatistics(BorderPane contentPane) {
+        BorderPane extraPane = new BorderPane();
+        addGameStatistics(extraPane);
+        addGameRatings(extraPane);
+        contentPane.setBottom(extraPane);
+    }
+
+    private void addGameStatistics(BorderPane extraPane) {
+        BorderPane statisticsPane = new BorderPane();
+        Text title = new Text(myData.getTitle() + Utilities.getValue(myLanguageBundle, "statisticsTitle"));
         title.getStyleClass().add(SUBTITLE_SELECTOR);
         BorderPane.setAlignment(title, Pos.CENTER);
-        ratingsPane.setTop(title);
-        ratingsPane.getStyleClass().add(PADDING_SELECTOR);
-        RatingList gameRatings = new RatingList(myData, myManager);
-        ratingsPane.setCenter(gameRatings.getDisplay());
-        contentPane.setBottom(ratingsPane);
+        statisticsPane.setTop(title);
+        //statisticsPane.setCenter(null); //todo: update this
+        extraPane.setCenter(statisticsPane);
+    }
+
+    private void addGameRatings(BorderPane extraPane) {
+        BorderPane ratingPane = new BorderPane();
+        Text title = new Text(myData.getTitle() + Utilities.getValue(myLanguageBundle, "ratingsTitle"));
+        title.getStyleClass().add(SUBTITLE_SELECTOR);
+        ratingPane.setTop(title);
+        BorderPane.setAlignment(title, Pos.CENTER);
+        ratingPane.setCenter(new RatingList(myData, myManager).getDisplay());
+        ratingPane.getStyleClass().add(PADDING_SELECTOR);
+        extraPane.setTop(ratingPane);
     }
 
     @Override
