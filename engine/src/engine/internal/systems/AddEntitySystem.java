@@ -3,7 +3,6 @@ package engine.internal.systems;
 import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.component.Component;
-import engine.external.component.ImageViewComponent;
 import engine.external.component.SpawnEntityComponent;
 
 import java.util.Collection;
