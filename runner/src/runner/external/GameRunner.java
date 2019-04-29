@@ -50,6 +50,7 @@ public class GameRunner {
         try {
             return (Game) dm.loadGameData(gameName, authorName);
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
