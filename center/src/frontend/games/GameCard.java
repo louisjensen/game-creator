@@ -22,6 +22,7 @@ import frontend.Utilities;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 public class GameCard {
@@ -37,6 +38,7 @@ public class GameCard {
     private static final String BODY_SELECTOR = "cardbody";
     private static final String FOREGROUND_SELECTOR = "cardpadding";
     private static final String CONTENT_SELECTOR = "contentpadding";
+    private static final double MAX_HEIGHT = 100;
     private int myIndex;
     private ResourceBundle myLanguageBundle;
     private GameCenterData myGame;
@@ -72,7 +74,7 @@ public class GameCard {
     }
 
     public void playGameButton(GameCenterData data) {
-        Utilities.launchGameRunner(data.getTitle(), data.getAuthorName());
+        Utilities.launchGameRunner(data.getTitle(), data.getAuthorName(), myCurrentUser);
     }
 
     private void initializeDisplay() {
@@ -125,7 +127,10 @@ public class GameCard {
             if(myManager.getAverageRating(myGame.getTitle()) == 0) {
                 ratingText = new Text (Utilities.getValue(myLanguageBundle, "ratingDefaultText"));
             } else {
-                ratingText = new Text(Utilities.getValue(myLanguageBundle, "ratingStartText") + myManager.getAverageRating(myGame.getTitle()) + Utilities.getValue(myLanguageBundle, "ratingEndText"));
+                double rating = myManager.getAverageRating(myGame.getTitle());
+                DecimalFormat df2 = new DecimalFormat("###.##");
+                rating = Double.valueOf(df2.format(rating));
+                ratingText = new Text(Utilities.getValue(myLanguageBundle, "ratingStartText") + rating + Utilities.getValue(myLanguageBundle, "ratingEndText"));
             }
             ratingText.getStyleClass().add(BODY_SELECTOR);
             ratingText.getStyleClass().add(TEXT_SELECTOR + myIndex);
@@ -140,7 +145,7 @@ public class GameCard {
 
     private void addImage(BorderPane contentPane) {
         try {
-            contentPane.setTop(Utilities.getImagePane(myManager, myGame.getImageLocation(), GAME_IMAGE_SIZE));
+            contentPane.setTop(Utilities.getImagePane(myManager, myGame.getImageLocation(), GAME_IMAGE_SIZE, MAX_HEIGHT));
         } catch (FileNotFoundException e) {
             // do nothing, in this case there just won't be an image which is fine
         }
