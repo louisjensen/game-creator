@@ -72,7 +72,7 @@ public class GameCard {
     }
 
     public void playGameButton(GameCenterData data) {
-        Utilities.launchGameRunner(data.getTitle(), data.getAuthorName());
+        Utilities.launchGameRunner(data.getTitle(), data.getAuthorName(), myCurrentUser);
     }
 
     private void initializeDisplay() {
