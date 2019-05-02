@@ -159,7 +159,6 @@ public class MainGUI {
         return new Viewer(levelBasis, myCreatedTypesPane, mySelectedEntity, myObjectManager);
     }
 
-    @SuppressWarnings("Duplicates")
     private void createPropertiesPanes(HBox propPaneBox, Scene mainScene) {
         try {
             LevelsPane levelsPane = new LevelsPane(myObjectManager, myCurrentLevel);
@@ -283,7 +282,6 @@ public class MainGUI {
     @SuppressWarnings("unused")
     private void openImageAssets() {
         ImageManager manager = new ImageManager(myObjectManager);
-        //System.out.println("object manager is null: " + myObjectManager == null);
         manager.show();
     }
 
@@ -364,7 +362,6 @@ public class MainGUI {
     public void clearFolder(String outerDirectoryPath){
         DatabaseEngine.getInstance().close();
         File outerDirectory = new File(outerDirectoryPath);
-        //System.out.println("Directory: " + outerDirectory.getName());
         for(File file : outerDirectory.listFiles()){
             file.delete();
         }

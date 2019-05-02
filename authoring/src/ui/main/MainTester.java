@@ -4,12 +4,7 @@ import data.external.DatabaseEngine;
 import data.external.GameCenterData;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import runner.external.Game;
-import ui.ErrorBox;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainTester extends Application {

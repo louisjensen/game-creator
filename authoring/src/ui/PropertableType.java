@@ -25,7 +25,7 @@ public enum PropertableType {
 
     /**
      * Returns properties file path for Propertable enum that defines the contents of its display in a PropertiesPane
-     * @return
+     * @return Properties file path
      */
     public String getPropFile() {
         return myPropFile;

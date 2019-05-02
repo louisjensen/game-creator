@@ -114,11 +114,9 @@ abstract public class AssetManager extends Stage {
     private void createButtonPane() {
         String buttonString;
         if(myObjectManager == null){
-            //System.out.println("object manager null");
             buttonString = RESOURCES.getString(SELECT_BUTTONS);
         }
         else{
-            //System.out.println("object manager not null");
             buttonString = RESOURCES.getString(UPLOAD_BUTTONS);
         }
         String[] buttonInfo = buttonString.split(",");
