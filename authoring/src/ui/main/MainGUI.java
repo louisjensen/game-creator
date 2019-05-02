@@ -23,8 +23,8 @@ import ui.ErrorBox;
 import ui.Propertable;
 import ui.PropertableType;
 import ui.UIException;
-import ui.manager.GroupManager;
-import ui.manager.InfoEditor;
+import ui.windows.GroupManager;
+import ui.windows.InfoEditor;
 import ui.manager.ObjectManager;
 import ui.panes.DefaultTypesPane;
 import ui.panes.LevelsPane;
@@ -189,7 +189,7 @@ public class MainGUI {
 
     private MenuBar addMenu() {
         MenuBar menuBar = new MenuBar();
-        menuBar.getMenus().addAll(createMenu("File", "New", "Open", "Save"), //TODO make this better
+        menuBar.getMenus().addAll(createMenu("File", "New", "Open", "Save"),
                 createMenu("Edit", "Info", "Groups", "Images", "Audio"), createMenu("View", "Fullscreen"));
         return menuBar;
     }

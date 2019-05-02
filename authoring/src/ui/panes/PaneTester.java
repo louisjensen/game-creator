@@ -11,7 +11,7 @@ import ui.AuthoringLevel;
 import ui.Propertable;
 import ui.PropertableType;
 import ui.UIException;
-import ui.manager.GroupManager;
+import ui.windows.GroupManager;
 import ui.manager.LabelManager;
 import ui.manager.ObjectManager;
 

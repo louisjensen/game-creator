@@ -1,4 +1,4 @@
-package ui.manager;
+package ui.windows;
 
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import ui.EntityField;
 import ui.Utility;
+import ui.manager.ObjectManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
