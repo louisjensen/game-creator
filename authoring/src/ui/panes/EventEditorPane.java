@@ -114,6 +114,7 @@ class EventEditorPane extends Stage {
         VBox myDisplay = getEventControls(event,parent,eventComponentName);
         myDisplay.getStylesheets().add(STYLE);
         myPopUpStage = new Stage();
+        myPopUpStage.sizeToScene();
         myPopUpStage.setScene(new Scene(myDisplay));
         myPopUpStage.show();
 
@@ -121,12 +122,16 @@ class EventEditorPane extends Stage {
 
     private VBox getEventControls(Event myEvent,VBox parent, String eventComponentName){
         VBox myDisplay = new VBox();
+        myDisplay.getStyleClass().add("event-builder");
         String promptText = eventComponentResource.getString(eventComponentName + PROMPT);
         String resourceName = eventComponentResource.getString(eventComponentName + RESOURCE);
 
         HBox controls = EventFactory.createEventComponentOptions(promptText,resourceName,componentName,conditionOperator,triggerValue);
+        controls.getStyleClass().add("event-options");
         myDisplay.getChildren().add(controls);
-        myDisplay.getChildren().add(saveButton(myEvent, parent, eventComponentName));
+        HBox buttonBar = new HBox(saveButton(myEvent, parent, eventComponentName));
+        buttonBar.getStyleClass().add("buttons-bar");
+        myDisplay.getChildren().add(buttonBar);
         return myDisplay;
     }
 
