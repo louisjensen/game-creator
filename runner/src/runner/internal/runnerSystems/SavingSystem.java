@@ -22,6 +22,7 @@ public class SavingSystem extends RunnerSystem {
     private String myUsername;
     private String myGamename;
     private String myAuthorname;
+    private final String CANNOT_SAVE = "Unable to save game";
 
     /**
      * Constructor for SoundSystem
@@ -60,7 +61,7 @@ public class SavingSystem extends RunnerSystem {
         try {
             dataManager.saveCheckpoint(myUsername, myGamename, myAuthorname, myGame);
         } catch (SQLException e){
-            System.out.println("Unable to save game");
+            System.out.println(CANNOT_SAVE);
         }
     }
 }

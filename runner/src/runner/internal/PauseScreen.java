@@ -19,6 +19,14 @@ public class PauseScreen {
     private Consumer myToggler;
     private Stage myStage;
     private LevelRunner myLevelRunner;
+    private final String PAUSE_ID = "PauseMenu";
+    private final String BUTTON_ID = "button";
+    private final double VBOX_SPACING = 8.0;
+    private final double PAUSE_X_POSITION = 160.0;
+    private final double PAUSE_Y_POSITION = 180.0;
+    private final String RESUME = "Resume";
+    private final String RESTART = "Restart Level";
+    private final String EXIT = "Exit Game";
 
     /**
      * Constructor for PauseScreen
@@ -28,33 +36,33 @@ public class PauseScreen {
      * @param translatedX - Current translateX value so that pause menu can be initialized in correct location
      */
     public PauseScreen(LevelRunner levelRunner, Consumer toggle, Stage stage, Double translatedX){
-        myPauseMenu = new VBox(8); // spacing = 8
-        myPauseMenu.setId("PauseMenu");
+        myPauseMenu = new VBox(VBOX_SPACING);
+        myPauseMenu.setId(PAUSE_ID);
         myLevelRunner = levelRunner;
         initializeButtons();
         myPauseMenu.getChildren().addAll(myResumeButton, myRestartButton, myExitButton);
-        myPauseMenu.setLayoutX(160 - translatedX);
-        myPauseMenu.setLayoutY(180);
+        myPauseMenu.setLayoutX(PAUSE_X_POSITION - translatedX);
+        myPauseMenu.setLayoutY(PAUSE_Y_POSITION);
         myToggler = toggle;
         myStage = stage;
     }
 
     private void initializeButtons() {
-        myResumeButton = new Button("Resume");
+        myResumeButton = new Button(RESUME);
         myResumeButton.setOnMouseClicked(event ->{
             myToggler.accept(null);
         });
-        myResumeButton.setId("button");
-        myRestartButton = new Button("Restart Level");
+        myResumeButton.setId(BUTTON_ID);
+        myRestartButton = new Button(RESTART);
         myRestartButton.setOnMouseClicked(event ->{
             restartLevel();
         });
-        myRestartButton.setId("button");
-        myExitButton = new Button("Exit Game");
+        myRestartButton.setId(BUTTON_ID);
+        myExitButton = new Button(EXIT);
         myExitButton.setOnMouseClicked(event ->{
             myStage.close();
         });
-        myExitButton.setId("button");
+        myExitButton.setId(BUTTON_ID);
     }
 
     private void restartLevel() {

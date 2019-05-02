@@ -21,7 +21,6 @@ import java.util.function.Consumer;
 public class GameRunner {
     private int mySceneWidth;
     private int mySceneHeight;
-    private List<Level> myLevels;
     private Game myGame;
     private Stage myGameStage;
     private String myGameName;

@@ -19,6 +19,7 @@ public class PauseButton extends ImageView {
     private final Double Y_LOCATION = 6.0;
     private static final Double WIDTH = 30.0;
     private static final Double HEIGHT = 30.0;
+    private static final String PAUSE_BUTTON = "pause.png";
     private Group myGroup;
     private Stage myStage;
     private Consumer myToggle;
@@ -33,7 +34,7 @@ public class PauseButton extends ImageView {
      * @param audioManager - AudioManager that pauses and resumes sounds
      */
     public PauseButton(LevelRunner levelRunner, Animation animation, Group group, Stage stage, AudioManager audioManager){
-        super(new Image("pause.png", WIDTH, HEIGHT, true, false));
+        super(new Image(PAUSE_BUTTON, WIDTH, HEIGHT, true, false));
         this.setLayoutX(X_LOCATION);
         this.setLayoutY(Y_LOCATION);
         myLevelRunner = levelRunner;
