@@ -1,15 +1,26 @@
 package runner.internal;
 
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * This creates the screen that appears when the level is completed
+ * Boolean value input into constructor tells screen whether to display
+ * won or lost
+ * @author Louis Jensen
+ */
 public class GameBeatenScreen {
     private Stage myStage;
     private VBox myNode;
 
+    /**
+     * Constructor for the game over screen
+     * @param stage - Stage to put screen
+     * @param translatedX - Main group's translateX value to ensure screen is placed correctly
+     * @param win - Boolean win or lose the game
+     */
     public GameBeatenScreen(Stage stage, Double translatedX, Boolean win) {
         myStage = stage;
         Button exit = new Button("Exit Game");
@@ -32,6 +43,10 @@ public class GameBeatenScreen {
         myNode.getChildren().addAll(congrats, exit);
     }
 
+    /**
+     * Gets the VBox of the screen
+     * @return VBox to display on stage
+     */
     public VBox getNode(){
         return myNode;
     }
