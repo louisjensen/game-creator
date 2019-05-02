@@ -22,7 +22,7 @@ public class PauseScreen {
     private final String PAUSE_ID = "PauseMenu";
     private final String BUTTON_ID = "button";
     private final double VBOX_SPACING = 8.0;
-    private final double PAUSE_X_POSITION = 160.0;
+    private final double PAUSE_X_POSITION = 310.0;
     private final double PAUSE_Y_POSITION = 180.0;
     private final String RESUME = "Resume";
     private final String RESTART = "Restart Level";

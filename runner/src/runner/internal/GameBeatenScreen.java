@@ -21,7 +21,7 @@ public class GameBeatenScreen {
     private final String YOU_WIN = "Congratulations! \n you have completed \n the game";
     private final String YOU_LOSE = "You have lost the game \n good luck next time!";
     private final Integer VBOX_SPACING = 8;
-    private final Double X_POSITION = 180.0;
+    private final Double X_POSITION = 260.0;
 
     /**
      * Constructor for the game over screen
