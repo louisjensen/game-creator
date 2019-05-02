@@ -6,7 +6,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -16,7 +15,6 @@ import javafx.scene.layout.VBox;
 import ui.panes.ImageWithEntity;
 
 
-import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,6 +30,7 @@ import java.util.ResourceBundle;
 /**
  * @author Carrie
  * @author Harry Ross
+ * @author Anna Darwish
  * This class was created to provide general methods that can be used across the UI.
  * It's a place to hold reflection code that may be needed across multiple classes.
  */
@@ -68,6 +67,14 @@ public class Utility {
         return button;
     }
 
+    /**
+     * Creates and return a button whose invoked method takes any nonzero number of parameters
+     * @param o The Object whose class the invoked method can be found within
+     * @param methodName String name of method in Object O to invoke
+     * @param buttonText Label text to display on button
+     * @param methodParams Arguments to be passed into invoked method
+     * @return Button whose action is set to specified method invocation
+     */
     public static Button makeButton(Object o, String methodName, String buttonText, Object... methodParams){
         ResourceBundle resources = ResourceBundle.getBundle(UTILITY_RESOURCES);
         Button button = new Button();
@@ -139,6 +146,13 @@ public class Utility {
 
     }
 
+    /**
+     * Creates a dialog pane with specified header, content, and buttons, returns Scene containing defined content
+     * @param header Node to be displayed at top of dialog
+     * @param content Node to be displayed at center of dialog
+     * @param buttonsList List of buttons to populate a button bar at the bottom of dialog
+     * @return Scene containing newly created dialog pane
+     */
     public static Scene createDialogPane(Node header, Node content, List<Button> buttonsList) {
         if (header == null)
             header = new HBox();
@@ -156,6 +170,11 @@ public class Utility {
         return scene;
     }
 
+    /**
+     * Creates a bar of buttons that can be placed anywhere in UI as a Node. Buttons are displayed in the order passed.
+     * @param buttonList List of Buttons to display in bar
+     * @return Node of Buttons as a bar
+     */
     public static Node createButtonBar(List<Button> buttonList) {
         HBox rtn = new HBox();
         rtn.getChildren().addAll(buttonList);

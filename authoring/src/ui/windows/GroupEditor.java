@@ -22,12 +22,12 @@ import java.util.TreeMap;
 /**
  * @author Harry Ross
  */
-public class GroupManager extends Stage {
+public class GroupEditor extends Stage {
 
     private ObjectManager myObjectManager;
     private ListView<String> myListView;
 
-    public GroupManager(ObjectManager objectManager) {
+    public GroupEditor(ObjectManager objectManager) {
         this.setResizable(false);
         this.setTitle("Group Manager");
         myObjectManager = objectManager;

@@ -39,24 +39,23 @@ public class GameTranslator {
         myObjectManager = objectManager;
     }
 
-    public Game translate() throws UIException {
+    public Game saveGame() throws UIException {
         Game translatedGame = new Game();
         Map<Entity, String> typeMap = new HashMap<>();
 
         for (AuthoringLevel authLevel : myObjectManager.getLevels()) { // Translate Levels
-            translatedGame.addLevel(translateLevel(authLevel));
+            translatedGame.addLevel(saveLevel(authLevel));
         }
         for (AuthoringEntity key : myObjectManager.getTypeMap().keySet()) { // Translate Entity type map
-            Entity translatedType = translateEntity(key);
+            Entity translatedType = saveEntity(key);
             typeMap.put(translatedType, myObjectManager.getTypeMap().get(key));
         }
         translatedGame.addUserCreatedTypes(typeMap);
         return translatedGame;
     }
 
-    private Level translateLevel(AuthoringLevel authLevel) throws UIException {
+    private Level saveLevel(AuthoringLevel authLevel) throws UIException {
         Level newLevel = new Level();
-        boolean mainCharExists = false;
         if (authLevel.getEntities().isEmpty()) {
             throw new UIException("All levels must have at least one Entity");
         }
@@ -67,22 +66,23 @@ public class GameTranslator {
         newLevel.setHeight(Double.parseDouble(authLevel.getPropertyMap().get(LevelField.HEIGHT)));
 
         saveLevelEntities(authLevel, newLevel);
-        checkRequiredComponents(newLevel, mainCharExists);
+        checkRequiredComponents(newLevel);
         return newLevel;
     }
 
     private void saveLevelEntities(AuthoringLevel authLevel, Level newLevel) throws UIException {
         for (AuthoringEntity authEntity : authLevel.getEntities()) { // Level entities!!!
-            newLevel.addEntity(translateEntity(authEntity));
+            newLevel.addEntity(saveEntity(authEntity));
             for (Event event : myObjectManager.getEvents(authEntity.getPropertyMap().get(EntityField.LABEL))) // Events!!!
                 newLevel.addEvent(event);
         }
         for (Entity entity : newLevel.getEntities()) { // Additional Components based on Events!!!
-            addAdditionalComponents(entity, newLevel);
+            saveAdditionalComponents(entity, newLevel);
         }
     }
 
-    private void checkRequiredComponents(Level newLevel, boolean mainCharExists) throws UIException {
+    private void checkRequiredComponents(Level newLevel) throws UIException {
+        boolean mainCharExists = false;
         for (Entity entity : newLevel.getEntities()) { // Make sure a main character exists in translated level's Entity set
             if (entity.hasComponents(CameraComponent.class)) {
                 mainCharExists = true;
@@ -94,12 +94,12 @@ public class GameTranslator {
         }
     }
 
-    private Entity translateEntity(AuthoringEntity authEntity) throws UIException {
+    private Entity saveEntity(AuthoringEntity authEntity) throws UIException {
         Entity basisEntity = new Entity();
 
         for (EntityField field : EntityField.values()) {
             if (authEntity.getPropertyMap().containsKey(field) && !field.equals(EntityField.VISIBLE) && !field.equals(EntityField.FOCUS) && !field.equals(EntityField.EVENTS)) {
-                addComponent(field, basisEntity, authEntity);
+                saveComponent(field, basisEntity, authEntity);
             }
             else if (field.equals(EntityField.FOCUS) && Boolean.parseBoolean(authEntity.getPropertyMap().get(EntityField.FOCUS))) { // Main character found
                 basisEntity.addComponent(new CameraComponent(true));
@@ -116,7 +116,7 @@ public class GameTranslator {
         return basisEntity;
     }
 
-    private void addComponent(EntityField field, Entity basisEntity, AuthoringEntity authEntity) throws UIException {
+    private void saveComponent(EntityField field, Entity basisEntity, AuthoringEntity authEntity) throws UIException {
         Class<?> dataType = field.getComponentDataType();
         Class<? extends Component> componentClass = field.getComponentClass();
 
@@ -145,7 +145,7 @@ public class GameTranslator {
         }
     }
 
-    private void addAdditionalComponents(Entity basisEntity, Level newLevel) {
+    private void saveAdditionalComponents(Entity basisEntity, Level newLevel) {
         //TODO group events, group collision events?
         for (Event event : myObjectManager.getEvents((String) basisEntity.getComponent(NameComponent.class).getValue())) { // Cycle through each Entity for its Events in OM
             if (CollisionEvent.class.isAssignableFrom(event.getClass())) {
@@ -159,7 +159,7 @@ public class GameTranslator {
         }
     }
 
-    public void populateObjectManager(Game game, ObjectProperty<Propertable> currentLevel) throws UIException {
+    public void loadGame(Game game, ObjectProperty<Propertable> currentLevel) throws UIException {
         for (Entity type : game.getUserCreatedTypes().keySet()) {
             AuthoringEntity newType = new AuthoringEntity(type, myObjectManager);
             myObjectManager.addEntityType(newType, game.getUserCreatedTypes().get(type));

@@ -1,7 +1,9 @@
 package ui.panes;
 
 import engine.external.actions.Action;
+import engine.external.component.NameComponent;
 import engine.external.conditions.Condition;
+import engine.external.conditions.StringEqualToCondition;
 import engine.external.events.Event;
 import events.EventBuilder;
 import events.EventFactory;
@@ -87,9 +89,10 @@ class EventEditorPane extends Stage {
         eventSubInformation.getStyleClass().add(VBOX_STYE);
         Button removeButton = new Button(REMOVE);
         eventSubInformation.getChildren().add(EventFactory.createLabel(eventComponent.toString()));
-        eventSubInformation.getChildren().add(removeButton);
-        myParent.getChildren().add(childIndex,eventSubInformation);
-        setUpRemoveButton(removeButton,eventComponent,event,eventComponentName,myParent,eventSubInformation);
+        if (!(eventComponent.getClass().equals(StringEqualToCondition.class) && ((StringEqualToCondition) eventComponent).getComponentClass().equals(NameComponent.class)))
+            eventSubInformation.getChildren().add(removeButton);
+        myParent.getChildren().add(childIndex, eventSubInformation);
+        setUpRemoveButton(removeButton, eventComponent, event, eventComponentName, myParent, eventSubInformation);
     }
 
 
