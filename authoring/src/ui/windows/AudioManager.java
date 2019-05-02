@@ -58,9 +58,9 @@ public class AudioManager extends AssetManager {
         vBox.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
                 mySelectedAssetName = file.getName();
-                System.out.println("Single click registered");
+                //System.out.println("Single click registered");
                 if(mouseEvent.getClickCount() == 2){
-                    System.out.println("Double click registered");
+                    //System.out.println("Double click registered");
                     Media sound = new Media(file.toURI().toString());
                     MediaPlayer mediaPlayer = new MediaPlayer(sound);
                     mediaPlayer.play();

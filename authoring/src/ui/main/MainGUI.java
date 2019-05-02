@@ -202,7 +202,7 @@ public class MainGUI {
                 try {
                     this.getClass().getDeclaredMethod((String) bundle.getObject(option)).invoke(this);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    ErrorBox error = new ErrorBox("Menu Reflection Error", "Error in reflected Menu method");
                 }
             }));
         }
@@ -237,7 +237,6 @@ public class MainGUI {
                 newWorkspace.launch(true);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             ErrorBox error = new ErrorBox("Load", "Error loading from database");
         }
     }
@@ -290,7 +289,7 @@ public class MainGUI {
     @SuppressWarnings("unused")
     private void openImageAssets() {
         ImageManager manager = new ImageManager(myObjectManager);
-        System.out.println("object manager is null: " + myObjectManager == null);
+        //System.out.println("object manager is null: " + myObjectManager == null);
         manager.show();
     }
 
@@ -348,7 +347,6 @@ public class MainGUI {
             loadAssets((GENERAL_RESOURCES.getString("audio_filepath")), userUploadedAudio);
         } catch (SQLException e) {
             //TODO deal with this
-            e.printStackTrace();
         }
     }
 
@@ -362,14 +360,13 @@ public class MainGUI {
             }
         } catch (IOException e) {
             //TODO: handle error
-            e.printStackTrace();
         }
     }
 
     public void clearFolder(String outerDirectoryPath){
         DatabaseEngine.getInstance().close();
         File outerDirectory = new File(outerDirectoryPath);
-        System.out.println("Directory: " + outerDirectory.getName());
+        //System.out.println("Directory: " + outerDirectory.getName());
         for(File file : outerDirectory.listFiles()){
             file.delete();
         }

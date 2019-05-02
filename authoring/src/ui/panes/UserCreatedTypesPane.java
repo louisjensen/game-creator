@@ -89,7 +89,7 @@ public class UserCreatedTypesPane extends VBox {
         AuthoringEntity originalAuthoringEntity = new AuthoringEntity(originalEntity, myObjectManager);
         if(shouldAddEntity(originalAuthoringEntity)){
             myObjectManager.addEntityType(originalAuthoringEntity, defaultName);
-            System.out.println("Should add entity? " + shouldAddEntity(originalAuthoringEntity));
+            //System.out.println("Should add entity? " + shouldAddEntity(originalAuthoringEntity));
         }
         originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
         ImageWithEntity imageWithEntity = new ImageWithEntity(Utility.makeImageAssetInputStream(imageName), originalAuthoringEntity); //closed

@@ -62,7 +62,6 @@ public class Utility {
                 buttonMethod.setAccessible(true);
                 buttonMethod.invoke(o);
             } catch (Exception e1) {
-                e1.printStackTrace();
                 button.setText(resources.getString("ButtonFail"));
             }});
         button.setText(buttonText);
@@ -210,12 +209,9 @@ public class Utility {
                     result = new FileInputStream(file.getPath());   //closed
                     return result;
                 } catch (FileNotFoundException e) {
-                    System.out.println("File not found in trying to create an image with entity in Utility");
                     String[] info = pathResources.getString("FileException").split(",");
                     ErrorBox errorBox = new ErrorBox(info[0], info[1]);
                     errorBox.display();
-                    //TODO: get rid of this stack trace. rn it's just in case this happens and we need to know where
-                    e.printStackTrace();
                     return result;
                 }
             }
@@ -227,7 +223,6 @@ public class Utility {
         try {
             fileInputStream.close();    //closed
         } catch (IOException e) {
-            e.printStackTrace();
             ResourceBundle resourceBundle = ResourceBundle.getBundle(UTILITY_RESOURCES);
             String header = resourceBundle.getString("CloseInputStreamError");
             String content = resourceBundle.getString("CloseInputStreamErrorContent");
@@ -253,15 +248,11 @@ public class Utility {
      */
     public static void makeAndCallMethod(ResourceBundle resourceBundle, MapChangeListener.Change<? extends Enum,? extends String> change, Object o){
         String methodName = resourceBundle.getString(change.getKey().toString());
-        System.out.println(methodName);
         try {
             Method method = o.getClass().getDeclaredMethod(methodName, String.class);
-            System.out.println("Value Added: " + change.getValueAdded());
             method.setAccessible(true);
             method.invoke(o, change.getValueAdded());
         } catch (Exception e) {
-            //TODO: get rid of the stack trace once confirmed working
-            e.printStackTrace();
             String header = resourceBundle.getString("MethodReflectionError");
             String content = resourceBundle.getString("MethodReflectionErrorContent");
             ErrorBox errorBox = new ErrorBox(header, content);
