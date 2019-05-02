@@ -20,6 +20,7 @@ public class PauseScreen {
     private Consumer myToggler;
     private Stage myStage;
     private LevelRunner myLevelRunner;
+    private HeadsUpDisplay myHUD;
     private final String PAUSE_ID = "PauseMenu";
     private final String BUTTON_ID = "button";
     private final double VBOX_SPACING = 8.0;
@@ -36,10 +37,11 @@ public class PauseScreen {
      * @param stage - Stage to be closed on game exit
      * @param translatedX - Current translateX value so that pause menu can be initialized in correct location
      */
-    public PauseScreen(LevelRunner levelRunner, Consumer toggle, Stage stage, Double translatedX){
+    public PauseScreen(LevelRunner levelRunner, Consumer toggle, Stage stage, Double translatedX, HeadsUpDisplay hud){
         myPauseMenu = new VBox(VBOX_SPACING);
         myPauseMenu.setId(PAUSE_ID);
         myLevelRunner = levelRunner;
+        myHUD = hud;
         initializeButtons();
         myPauseMenu.getChildren().addAll(myResumeButton, myRestartButton, myExitButton);
         myPauseMenu.setLayoutX(PAUSE_X_POSITION - translatedX);
@@ -68,7 +70,7 @@ public class PauseScreen {
 
     private void restartLevel() {
         for(Entity entity : myLevelRunner.getEntities()){
-            entity.addComponent(new NextLevelComponent(1.0));
+            entity.addComponent(new NextLevelComponent(myHUD.getLevel()));
             break;
         }
         myToggler.accept(null);

@@ -117,7 +117,7 @@ public class LevelRunner {
     private void addButtonsAndHUD() {
         myHudBackground = new Rectangle(0,0, mySceneWidth, HUD_HEIGHT);
         myGroup.getChildren().add(myHudBackground);
-        myPauseButton = new PauseButton(this, myAnimation, myGroup, myStage, myAudioManager);
+        myPauseButton = new PauseButton(this, myAnimation, myGroup, myStage, myAudioManager, myHUD);
         myPause = myPauseButton.getPauseButton();
         myGroup.getChildren().add(myPause);
         canPause = true;

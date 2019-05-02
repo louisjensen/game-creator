@@ -94,4 +94,7 @@ public class HeadsUpDisplay extends Node {
         myScore = score;
     }
 
+    public Double getLevel() {
+        return myLevel;
+    }
 }

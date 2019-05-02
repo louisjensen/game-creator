@@ -21,6 +21,7 @@ public class PauseButton extends ImageView {
     private static final Double HEIGHT = 30.0;
     private static final String PAUSE_BUTTON = "pause.png";
     private Group myGroup;
+    private HeadsUpDisplay myHUD;
     private Stage myStage;
     private Consumer myToggle;
     private LevelRunner myLevelRunner;
@@ -33,11 +34,12 @@ public class PauseButton extends ImageView {
      * @param stage - Stage to be closed on game exit
      * @param audioManager - AudioManager that pauses and resumes sounds
      */
-    public PauseButton(LevelRunner levelRunner, Animation animation, Group group, Stage stage, AudioManager audioManager){
+    public PauseButton(LevelRunner levelRunner, Animation animation, Group group, Stage stage, AudioManager audioManager, HeadsUpDisplay hud){
         super(new Image(PAUSE_BUTTON, WIDTH, HEIGHT, true, false));
         this.setLayoutX(X_LOCATION);
         this.setLayoutY(Y_LOCATION);
         myLevelRunner = levelRunner;
+        myHUD = hud;
         myAnimation = animation;
         myAudioManager = audioManager;
         this.setOnMouseClicked(event ->{
@@ -61,7 +63,7 @@ public class PauseButton extends ImageView {
 
     private void pauseGame() {
         myAnimation.pause();
-        myGroup.getChildren().add(new PauseScreen(myLevelRunner, myToggle, myStage, myGroup.getTranslateX()).getPauseMenu());
+        myGroup.getChildren().add(new PauseScreen(myLevelRunner, myToggle, myStage, myGroup.getTranslateX(), myHUD).getPauseMenu());
         myAudioManager.pauseAllSound();
     }
 
