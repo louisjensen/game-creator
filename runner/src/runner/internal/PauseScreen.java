@@ -1,6 +1,7 @@
 package runner.internal;
 
 import engine.external.Entity;
+import engine.external.component.NextLevelComponent;
 import engine.external.component.ProgressionComponent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -67,10 +68,8 @@ public class PauseScreen {
 
     private void restartLevel() {
         for(Entity entity : myLevelRunner.getEntities()){
-            if(entity.hasComponents(ProgressionComponent.class)){
-                ((ProgressionComponent)entity.getComponent(ProgressionComponent.class)).setValue(true);
-                break;
-            }
+            entity.addComponent(new NextLevelComponent(1.0));
+            break;
         }
         myToggler.accept(null);
     }
